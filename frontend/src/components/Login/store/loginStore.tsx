@@ -1,33 +1,57 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useReducer, useState } from 'react'
 
 export interface LoginContextData {
-    password: string
-    setPassword: (password: string) => void
     showPassword: boolean
     setShowPassword: (showPassword: boolean) => void
+    showConfirmPassword: boolean
+    setShowConfirmPassword: (showConfirmPassword: boolean) => void
+    loginForm: LoginForm
+    setLoginForm: (loginForm: LoginForm) => void
 }
 
-export const initLoginStore: LoginContextData = {
+export interface LoginForm {
+    name: string
+    email: string
+    password: string
+    confirmPassword: string
+}
+const initLoginForm = {
+    name: '',
+    email: '',
     password: '',
-    setPassword: (password: string) => {},
+    confirmPassword: ''
+} 
+export const initLoginStore: LoginContextData = {
     showPassword: false,
-    setShowPassword: (showPassword: boolean) => {}
+    setShowPassword: () => {},
+    showConfirmPassword: false,
+    setShowConfirmPassword: () => {},
+
+    loginForm: initLoginForm,
+    setLoginForm: () => {}
+
 }
 export const LoginStore = createContext<LoginContextData>(initLoginStore);
 export const useLoginStore = () => useContext(LoginStore);
 
-
-export const StyleSturdyActProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
-  const [password,setPassword] = useState<string>('');
+export const LoginProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+  const [loginForm, setLoginForm] = useReducer(
+    (state: any, newState: any) => ({ ...state, ...newState }),
+    initLoginForm
+); 
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   return (
       <LoginStore.Provider
           value={{
-            password,
-            setPassword,
             showPassword,
-            setShowPassword
+            setShowPassword,
+            showConfirmPassword,
+            setShowConfirmPassword,
+            loginForm,
+            setLoginForm,
+
           }}>
           {children}
       </LoginStore.Provider>

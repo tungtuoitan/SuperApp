@@ -3,11 +3,11 @@ import { ISideMenuProps, IconWrapper, ItemLabel, MenuItemWrapper } from "./SideM
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { ListItem, Tooltip } from "@mui/material";
 import { useNavigationStore } from "./store/NavigationStore";
-import { useAppMenuHelper } from "./hooks/SideMenuHelper";
+import { useSideMenuHelper } from "./hooks/SideMenuHelper";
 
 
 export const SingleMenuItem = (props: ISideMenuProps) => {
-    const { menuItemIcon } = useAppMenuHelper();
+    const { menuItemIcon } = useSideMenuHelper();
     const { expanded, menuItems, setSideMenuOpen } = useNavigationStore();
     return (
         <MenuItemWrapper

@@ -1,4 +1,4 @@
-import { Alert, AppBar, IconButton, Snackbar, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Button, Grow, IconButton, Snackbar, Toolbar, Typography } from '@mui/material';
 
 const classes =  
   {
@@ -70,6 +70,7 @@ export const TopNavigation = () => {
               <h1 style={{ color: 'red' }}>UAT</h1>
             </div>} */}
           <div style={classes.grow} />
+          <Button color="inherit" sx={{color: 'black'}} variant='outlined' href='/login'>Login</Button>
         </Toolbar>
         {/* <Snackbar
           open={false}

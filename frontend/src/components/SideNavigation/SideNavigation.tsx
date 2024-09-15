@@ -1,14 +1,19 @@
 import styled from "@emotion/styled";
 import { useNavigationStore } from "./store/NavigationStore";
-import { Drawer, Switch } from "@mui/material";
+import { Drawer } from "@mui/material";
+import { Route, Routes } from 'react-router-dom'
+
 import { SideMenu } from "./SideMenu";
+import LoginContainer from "../Login/LoginContainer";
 
 export const SideNavRoot = styled('div')({
   //flexGrow: 1,
   backgroundColor: '#f6f6f6',
   display: 'flex',
-  width: '48px',
+  width: '100%',
+  height: '100%',
   flexDirection: 'row',
+  flexGrow: 1,
   '& .expanded': {
     transitionDuration: '500ms',
     width: '200px',
@@ -50,10 +55,9 @@ export const SideNavRoot = styled('div')({
 export const BodyWrapper = styled('div')({
   display: 'flex',
   flexGrow: 1,
-  height: '93.3vh',
+  width: '100%',
+  height: '100%',
 })
-
-
 
 const SideNavigation: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = () => {
   const { expanded, sideNavigationRef, bodyWrapperRef, moduleName } = useNavigationStore();
@@ -78,13 +82,14 @@ const SideNavigation: React.FC<React.PropsWithChildren<React.PropsWithChildren<u
           >
             <SideMenu />
           </Drawer>
-        {/* <BodyWrapper
+        <BodyWrapper
           className='body-wrapper'
           ref={bodyWrapperRef} >
-          <Switch>
-              <Route path="/plmcache/clearall" component={PlmClearCacheAll} />
-          </Switch>
-        </BodyWrapper> */}
+          <Routes>
+              <Route path="/login" Component={LoginContainer} />
+              <Route path="/signup" Component={LoginContainer} />
+          </Routes>
+        </BodyWrapper>
       </SideNavRoot>
     </>
   )

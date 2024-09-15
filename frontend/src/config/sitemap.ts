@@ -61,6 +61,22 @@ export const sitemaps = [
         items: [
             {
                 id: (sitemapId++).toString(),
+                name: 'signup',
+                code: 'signup',
+                componentCode: constants.accessRightsComponents.finShark,
+                link: '/signup',
+                isPublic: true,
+            } as SAComponent,
+            {
+                id: (sitemapId++).toString(),
+                name: 'login',
+                code: 'login',
+                componentCode: constants.accessRightsComponents.finShark,
+                link: '/login',
+                isPublic: true,
+            } as SAComponent,
+            {
+                id: (sitemapId++).toString(),
                 name: 'finShark',
                 code: 'finShark',
                 componentCode: constants.accessRightsComponents.finShark,

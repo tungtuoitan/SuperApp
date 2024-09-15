@@ -3,14 +3,14 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import { ListItem, Tooltip } from "@mui/material";
 import { forwardRef, useEffect, useState } from "react";
 import { SAModule, sitemaps } from "../../config/sitemap";
-import { useAppMenuHelper } from "./hooks/SideMenuHelper";
+import { useSideMenuHelper } from "./hooks/SideMenuHelper";
 import { useNavigationStore } from "./store/NavigationStore";
 import { IconWrapper, ItemLabel, MenuItemWrapper } from "./SideMenuItem";
 
 
 export const HomeLink = () => {
     const [home, setHome] = useState<SAModule>({} as SAModule);
-    const { menuItemIcon } = useAppMenuHelper();
+    const { menuItemIcon } = useSideMenuHelper();
     const { expanded, menuItems, setSideMenuOpen } = useNavigationStore();
     useEffect(() => {
         setHome(sitemaps.filter(x => x.code === 'home')[0])

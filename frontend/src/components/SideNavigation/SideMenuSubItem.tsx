@@ -1,7 +1,7 @@
 import { ListItem, Tooltip, styled } from "@mui/material";
 import { SAComponent } from "../../config/sitemap";
 import { useNavigationStore } from "./store/NavigationStore";
-import { useAppMenuHelper } from "./hooks/SideMenuHelper";
+import { useSideMenuHelper } from "./hooks/SideMenuHelper";
 import { forwardRef, useEffect, useState } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { useSideMenuSubItemEvents } from "./hooks/SideMenuSubItemEvents";
@@ -70,7 +70,7 @@ export const SubItemLabel = styled('div')({
 export const SideMenuSubItem = (props: ISideSubMenuProps) => {
     const {item,popupMenu} = props;
     const {expanded} = useNavigationStore();
-    const {menuItemIcon} = useAppMenuHelper();
+    const {menuItemIcon} = useSideMenuHelper();
     const {onClickHandlerSubItem,onMouseEnterHandlerSubItem} = useSideMenuSubItemEvents();
     const [isActive,setIsActive] = useState(item.active);
     useEffect(() => {

@@ -1,12 +1,12 @@
+import { useLoginStore } from "../store/loginStore"
 
 export function useLoginEvent() {
-    const handleClickShowPassword = () => { }
+  
     const handleMouseDownPassword = () => { }
     const handleMouseUpPassword = () => { }
     
 
     return {
-        handleClickShowPassword,
         handleMouseDownPassword,
         handleMouseUpPassword,
     }

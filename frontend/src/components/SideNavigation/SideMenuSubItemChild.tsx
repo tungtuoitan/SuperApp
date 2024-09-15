@@ -4,7 +4,7 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import { useSideMenuSubItemEvents } from "./hooks/SideMenuSubItemEvents";
 import { SAComponent } from "../../config/sitemap";
 import { useNavigationStore } from "./store/NavigationStore";
-import { useAppMenuHelper } from "./hooks/SideMenuHelper";
+import { useSideMenuHelper } from "./hooks/SideMenuHelper";
 
 export interface ISideSubMenuProps{
     item: SAComponent
@@ -79,7 +79,7 @@ export const SubItemLabel = styled('div')({
 export const SideMenuSubItemChild = (props: ISideSubMenuProps) => {
     const {item,popupMenu} = props;
     const {expanded} = useNavigationStore();
-    const {menuItemIcon} = useAppMenuHelper();
+    const {menuItemIcon} = useSideMenuHelper();
     const {onClickHandlerSubItem,onMouseEnterHandlerSubItem} = useSideMenuSubItemEvents();
     const [isActive,setIsActive] = useState(item.active);
     useEffect(() => {

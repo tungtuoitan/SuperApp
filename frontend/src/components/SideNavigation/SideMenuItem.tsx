@@ -1,13 +1,12 @@
 import { ListItem, styled } from "@mui/material";
 import { SAComponent, SAModule } from "../../config/sitemap";
 import { useNavigationStore } from "./store/NavigationStore";
-import { useAppMenuHelper } from "./hooks/SideMenuHelper";
 import { useEffect, useState } from "react";
-import { useSideMenuSubItemEvents } from "./hooks/SideMenuSubItemEvents";
 import { SideMenuExpander } from "./SideMenuExpander";
 import { SideMenuSubItemChild } from "./SideMenuSubItemChild";
 import { useSideMenuItemEvents } from "./hooks/SideMenuItemEvents";
 import { SideMenuSubItem } from "./SideMenuSubItem";
+import { useSideMenuHelper } from "./hooks/SideMenuHelper";
 
 
 
@@ -109,13 +108,12 @@ export const SideMenuItemDetail = ({item}:{item: SAComponent}) => {
 export const SideMenuItem = (props: ISideMenuProps) => {
     const {item} = props;
     const {expanded} = useNavigationStore();
-    const {menuItemIcon} = useAppMenuHelper();
+    const {menuItemIcon} = useSideMenuHelper();
     const {onMouseEnterHandlerSideMenu,onMouseLeaveHandlerSideMenu,onClickHandlerSideMenu} = useSideMenuItemEvents();
     const [isExpanded,setIsExpanded] = useState(expanded);
     useEffect(() => {
         setIsExpanded(expanded);
     },[expanded])
-    console.log('item',item)
 
     return (
         <>
