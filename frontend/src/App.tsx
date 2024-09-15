@@ -1,6 +1,6 @@
 import './App.css';
 import { Main } from './components/Main';
-import { NavigationProvider } from './components/Navigation/store/NavigationStore';
+import { NavigationProvider } from './components/SideNavigation/store/NavigationStore';
 
 function App() {
   

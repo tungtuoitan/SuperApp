@@ -3,7 +3,7 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import { ListItem, Tooltip } from "@mui/material";
 import { forwardRef, useEffect, useState } from "react";
 import { SAModule, sitemaps } from "../../config/sitemap";
-import { useAppMenuHelper } from "./hooks/AppMenuHelper";
+import { useAppMenuHelper } from "./hooks/SideMenuHelper";
 import { useNavigationStore } from "./store/NavigationStore";
 import { IconWrapper, ItemLabel, MenuItemWrapper } from "./SideMenuItem";
 

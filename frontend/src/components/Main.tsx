@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom"
-import SideNavigation from "./Navigation/SideNavigation"
-import { MainBody } from "./Navigation/MainBody"
+import SideNavigation from "./SideNavigation/SideNavigation"
+import { MainBody } from "./MainBody"
 import { TopNavigation } from "./TopNavigation/TopNavigation"
 
 

@@ -35,7 +35,7 @@ import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined';
 import DeviceHubIcon from '@mui/icons-material/DeviceHub';
 import ArchitectureIcon from '@mui/icons-material/Architecture';
 
-export const useAppMenuHelper = () => {
+export const useSideMenuHelper = () => {
     const menuItemIcon = (code: string) => {
         switch(code){
             case 'home': { return <CottageOutlinedIcon/>}

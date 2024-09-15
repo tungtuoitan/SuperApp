@@ -1,7 +1,7 @@
 import { ListItem, styled } from "@mui/material";
 import { SAComponent, SAModule } from "../../config/sitemap";
 import { useNavigationStore } from "./store/NavigationStore";
-import { useAppMenuHelper } from "./hooks/AppMenuHelper";
+import { useAppMenuHelper } from "./hooks/SideMenuHelper";
 import { useEffect, useState } from "react";
 import { useSideMenuSubItemEvents } from "./hooks/SideMenuSubItemEvents";
 import { SideMenuExpander } from "./SideMenuExpander";
