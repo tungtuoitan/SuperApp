@@ -59,16 +59,21 @@ export const MenuItemLine = styled('div')({
     display: 'flex',
     width: '100%',
     flexDirection: 'row',
+
+
 })
 
 export const IconWrapper = styled('div')({
-    height: '1.5rem',
+    height: '100%',
     width: '1.5rem',
     paddingBottom: '12px',
     paddingTop: '12px',
     color: '#fff',
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+
+
 })
 
 export const ItemLink = styled('div')({
@@ -137,7 +142,6 @@ export const SideMenuItem = (props: ISideMenuProps) => {
                         padding: '0 12px',
                         height: '40px',
                         color: '#fff',
-
                     }}
                     id={item.code} 
                     className="item-link">

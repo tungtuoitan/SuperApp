@@ -1,16 +1,25 @@
 import { BrowserRouter } from "react-router-dom"
-import SideNavigation from "./SideNavigation/SideNavigation"
 import { MainBody } from "./MainBody"
 import { TopNavigation } from "./TopNavigation/TopNavigation"
+import SideNavAndBody from "./SideNavigation/SideNavAndBody"
 
 
 export const Main = () =>  {
     return (
         <BrowserRouter>
-                <div className="main-container" style={{ overflow: 'hidden', height: '100%', width: '100%' }}>
+                <div 
+                  style={{ 
+                    overflow: 'hidden', 
+                    height: '100%',  
+                    // border: '4px solid red',
+                    width: '100%', 
+                    margin: 0,
+                    padding: 0,
+                    overflowX: 'hidden',
+                    }}>
                     <MainBody>
                         <TopNavigation />
-                        <SideNavigation />
+                        <SideNavAndBody />
                     </MainBody>
                 </div>
         </BrowserRouter>

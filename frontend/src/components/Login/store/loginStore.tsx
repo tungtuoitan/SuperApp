@@ -1,12 +1,42 @@
 import React, { createContext, useContext, useReducer, useState } from 'react'
 
-export interface LoginContextData {
+export interface FormHelper {
+    nameError: boolean
+    nameErrorMessage: string
+
+    emailError: boolean
+    emailErrorMessage: string
+
+    passwordError: boolean
+    passwordErrorMessage: string
     showPassword: boolean
-    setShowPassword: (showPassword: boolean) => void
+    
+    confirmPasswordError: boolean
+    confirmPassErrorMessage: string
     showConfirmPassword: boolean
-    setShowConfirmPassword: (showConfirmPassword: boolean) => void
+}
+
+const initFormHelper = {
+    nameError: false,
+    nameErrorMessage: '',
+    
+    emailError: false,  
+    emailErrorMessage: '',
+
+    passwordError: false,
+    passwordErrorMessage: '',
+    showPassword: false,
+
+    confirmPasswordError: false,
+    confirmPassErrorMessage: '',
+    showConfirmPassword: false,
+}
+
+export interface LoginContextData {
     loginForm: LoginForm
     setLoginForm: (loginForm: LoginForm) => void
+    formHelper: FormHelper
+    setFormHelper: (formHelper: FormHelper) => void
 }
 
 export interface LoginForm {
@@ -14,6 +44,7 @@ export interface LoginForm {
     email: string
     password: string
     confirmPassword: string
+
 }
 const initLoginForm = {
     name: '',
@@ -22,13 +53,23 @@ const initLoginForm = {
     confirmPassword: ''
 } 
 export const initLoginStore: LoginContextData = {
-    showPassword: false,
-    setShowPassword: () => {},
-    showConfirmPassword: false,
-    setShowConfirmPassword: () => {},
-
     loginForm: initLoginForm,
-    setLoginForm: () => {}
+    setLoginForm: () => {},
+    formHelper: {
+        emailError: false,
+        emailErrorMessage: '',
+        nameError: false,
+        nameErrorMessage: '',
+
+        passwordError: false,
+        showPassword: false,
+        passwordErrorMessage: '',
+
+        confirmPasswordError: false,
+        confirmPassErrorMessage: '',
+        showConfirmPassword: false,
+    },
+    setFormHelper: () => {},
 
 }
 export const LoginStore = createContext<LoginContextData>(initLoginStore);
@@ -39,18 +80,18 @@ export const LoginProvider: React.FC<React.PropsWithChildren<React.PropsWithChil
     (state: any, newState: any) => ({ ...state, ...newState }),
     initLoginForm
 ); 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [formHelper, setFormHelper] = useReducer(
+    (state: any, newState: any) => ({ ...state, ...newState }),
+    initFormHelper
+);
 
   return (
       <LoginStore.Provider
           value={{
-            showPassword,
-            setShowPassword,
-            showConfirmPassword,
-            setShowConfirmPassword,
             loginForm,
             setLoginForm,
+            formHelper,
+            setFormHelper,
 
           }}>
           {children}

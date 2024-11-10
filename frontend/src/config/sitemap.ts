@@ -1,4 +1,4 @@
-import { constants } from "./settings";
+import { constants } from "./constants";
 
 export type SAModule = {
     id: string;
@@ -55,42 +55,38 @@ export const sitemaps = [
         id: (sitemapId++).toString(),
         name: 'GENERAL',
         code: 'general',
-        link: '/finShark',
-        componentCode: constants.accessRightsComponents.learnCSharp,
+        // link: '/general',
+        componentCode: constants.setting.accessRightsComponents.learnCSharp,
         admin: true,
         items: [
             {
-                id: (sitemapId++).toString(),
-                name: 'signup',
-                code: 'signup',
-                componentCode: constants.accessRightsComponents.finShark,
-                link: '/signup',
-                isPublic: true,
+              id: (sitemapId++).toString(),
+              name: 'signup',
+              code: 'signup',
+              componentCode: constants.setting.accessRightsComponents.finShark,
+              link: '/signup',
+              isPublic: true,
             } as SAComponent,
             {
-                id: (sitemapId++).toString(),
-                name: 'login',
-                code: 'login',
-                componentCode: constants.accessRightsComponents.finShark,
-                link: '/login',
-                isPublic: true,
+              id: (sitemapId++).toString(),
+              name: 'login',
+              code: 'login',
+              componentCode: constants.setting.accessRightsComponents.finShark,
+              link: '/login',
+              isPublic: true,
+            } as SAComponent,
+            {
+             
             } as SAComponent,
             {
                 id: (sitemapId++).toString(),
                 name: 'finShark',
                 code: 'finShark',
-                componentCode: constants.accessRightsComponents.finShark,
+                componentCode: constants.setting.accessRightsComponents.finShark,
                 link: '/finShark',
                 isPublic: true,
             } as SAComponent,
-            {
-                id: (sitemapId++).toString(),
-                name: 'nothing',
-                code: 'nothing',
-                componentCode: constants.accessRightsComponents.nothing,
-                link: '/nothing',
-                isPublic: true,
-            } as SAComponent,
+           
         ],
         open: false,
         isPublic: true,
@@ -98,6 +94,14 @@ export const sitemaps = [
         popup: false,
         hover: false,
     } as SAModule,
+    {
+      id: (sitemapId++).toString(),
+      name: 'Timeline',
+      code: 'timeline',
+      componentCode: constants.setting.accessRightsComponents.nothing,
+      link: '/timeline',
+      isPublic: true,
+  } as SAComponent,
 ] as SAModule[];
 
 export const getBreadcrumbs = (link: string) => {

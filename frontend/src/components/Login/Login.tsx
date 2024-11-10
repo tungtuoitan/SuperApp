@@ -7,7 +7,7 @@ type Props = {}
 
 function Login({}: Props) {
   const  {handleMouseDownPassword,handleMouseUpPassword} = useLoginEvent()
-  const {loginForm, setLoginForm, showPassword, setShowPassword} = useLoginStore()
+  const {loginForm, setLoginForm, formHelper, setFormHelper} = useLoginStore()
  
   return (
       <Stack
@@ -25,20 +25,20 @@ function Login({}: Props) {
         fullWidth />
 
         <FormControl variant="standard" fullWidth>
-          <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+          <InputLabel htmlFor="login-standard-adornment-password">Password</InputLabel>
           <Input
-            id="standard-adornment-password"
-            type={showPassword ? 'password' : 'text'}
+            id="login-standard-adornment-password"
+            type={formHelper.showPassword ? 'password' : 'text'}
             onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setFormHelper({...formHelper, showPassword: !formHelper.showPassword})}
                   onMouseDown={handleMouseDownPassword}
                   onMouseUp={handleMouseUpPassword}
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {formHelper.showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
             }

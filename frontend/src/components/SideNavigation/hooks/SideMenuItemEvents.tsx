@@ -60,7 +60,6 @@ export const useSideMenuItemEvents = () => {
                 if (x.code === code) x.open = isOpened.length===0;
                 return x;
             })
-            console.log(3, menuitems)
             setMenuItems(menuitems)
         }
     }
