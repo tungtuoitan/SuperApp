@@ -25,6 +25,8 @@
 - id phải luôn là string nếu có thể, khi bắt buộc number thì mới dùng number,
 - giờ ở DB là UTC, ở backend thì convert thành localTime rồi gửi lên FE
 
+- id luôn bắt đầu từ 0, tức id luôn bằng index trong array
+
 # 3.logic
 - khi di chuột, update spotlightmoment
 - khi wheeling, ta update TIList, và spotlightTI trở thành newTIMid

@@ -4,7 +4,7 @@ import { useTLBaseStore } from "./Store/TLBaseStore";
 export function useTLBaseHelpers() {
     const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, curTIL } = useTLBaseStore();
 
-    const getNewDate = (baseDate: Date, plusValue: number): Date => {
+    const getNewDate = (baseDate: Date, plusValue: number): Date => { //plusValue: vd: plusValue = 1, thì 1 có thể là 1 phút, 1 giờ, 1 ngày, 1 tháng, 1 năm, 1 thế kỷ... tùy vào curTIL
         const newDate = new Date(baseDate);
         if (_TLL[curTIL].value === timeValue.min) {
             newDate.setDate(newDate.getDate() + plusValue);
@@ -68,7 +68,7 @@ export function useTLBaseHelpers() {
         }
     }
 
-    const updateTIList = () => {
+    const updateTIList$WhenTouchEdge = () => {
         /// Nguyên tắc của logic: TILeft của curTIList === TIMid của new TIList, nhờ vào công thức này để tính ra newTIList 
         const maxScrollLeft = (TLBaseContainerRef.current?.scrollWidth ?? 0) - (TLBaseContainerRef.current?.clientWidth ?? 0);
 
@@ -82,6 +82,7 @@ export function useTLBaseHelpers() {
         const newTIList: TI[] = [];
         if (TLBaseContainerRef.current?.scrollLeft === 0 ||
             TLBaseContainerRef.current?.scrollLeft === maxScrollLeft) {
+                console.log('updateTIList$WhenTouchEdge');
             for (let i = 0; i <= totalTI; i++) {
                 const TI = {
                     id: i.toString(),
@@ -112,7 +113,7 @@ export function useTLBaseHelpers() {
 return {
     getNewDate,
     getTIValue,
-    updateTIList,
+    updateTIList$WhenTouchEdge,
 }
 
 }

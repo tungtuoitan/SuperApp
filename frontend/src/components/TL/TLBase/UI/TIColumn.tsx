@@ -8,8 +8,9 @@ type CellProps = {
     isMilestone?: boolean,
 }
 
-type ColumnProps = {
+type TLColumnProps = {
     val: string,
+    id: string,
     val2?: string,
     width: string,
 }
@@ -25,8 +26,7 @@ export const Cell = (props: CellProps) => {
                 : '1px solid transparent ',
             borderRight: borderRight ? '1px solid #bfbfbf' : '1px solid transparent ',
             borderTop: borderTop ? '1px solid #bfbfbf' : '1px solid transparent ',
-            borderBottom: borderBottom ? '1px solid #bfbfbf' : '1px solid transparent ',
-            // border: '1px solid #bfbfbf', // TODO: create theme
+            borderBottom: borderBottom ? '1px solid #bfbfbf' : '1px solid transparent ', // TODO: create theme
             width: '100%',
             height: '30px',
             textAlign: 'left',
@@ -37,12 +37,13 @@ export const Cell = (props: CellProps) => {
         }}>{val}</div>
 }
 
-export const Column = ({ val, val2, width,  }: ColumnProps) => {
+export const TLColumn = ({ val, val2, width, id  }: TLColumnProps) => {
     return (
         <>
-            <div style={{
-                // border: '1px solid #bfbfbf',
-                width: width, // TODO: make this dynamic, dựa vào độ zoom
+            <div 
+            id={id}
+            style={{
+                width: width,
             }}>
                 <Cell borderLeft isMilestone={val2 !== ''} />
                 <Cell borderLeft isMilestone={val2 !== ''} />
@@ -54,11 +55,11 @@ export const Column = ({ val, val2, width,  }: ColumnProps) => {
 
 
 
-export const GroupColumn = ({ val, width }: ColumnProps) => {
+export const GroupColumn = ({ val, width, id }: TLColumnProps) => {
     return (<>
         <div
             style={{
-                width: '100px',
+                width: width,
             }}
         >
             <Cell borderRight val={val} />

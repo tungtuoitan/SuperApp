@@ -65,3 +65,12 @@ code {
     display: flex;
     flex-wrap: nowrap;
 }
+
+/* ẩn scrollbar */
+#TLBaseContainer {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+#TLBaseContainer::-webkit-scrollbar {
+display: none ; /* Chrome, Safari, Edge */
+}
