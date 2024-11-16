@@ -1,0 +1,7 @@
+# Node modules
+frontend/node_modules/
+
+# Build directories
+frontend/dist/
+frontend/build/
+

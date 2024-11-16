@@ -1,7 +1,7 @@
 import { PopoverPosition } from "@mui/material";
-import { useNavigationStore } from "../store/NavigationStore";
+import { useNavigationStore } from "../Store/NavigationStore";
 import { useSideMenuExpanderEvents } from "./SideMenuExpanderEvents";
-import { SAModule } from "../../../config/sitemap";
+import { SAModule } from "../../../Config/Sitemap";
 
 
 export const useSideMenuItemEvents = () => {

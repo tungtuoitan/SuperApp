@@ -1,7 +1,7 @@
 import styled from "@emotion/styled"
-import { useNavigationStore } from "./store/NavigationStore"
-import { useSideMenuEvents } from "./hooks/SideMenuEvents"
-import { sitemaps } from "../../config/sitemap"
+import { useNavigationStore } from "./Store/NavigationStore"
+import { useSideMenuEvents } from "./Hooks/SideMenuEvents"
+import { sitemaps } from "../../Config/Sitemap"
 import { useEffect } from "react"
 import { Tooltip } from "@mui/material"
 import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';

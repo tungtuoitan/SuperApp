@@ -2,8 +2,8 @@ import { forwardRef, useEffect, useState } from "react"
 import { ISideMenuProps, IconWrapper, ItemLabel, MenuItemWrapper } from "./SideMenuItem";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { ListItem, Tooltip } from "@mui/material";
-import { useNavigationStore } from "./store/NavigationStore";
-import { useSideMenuHelper } from "./hooks/SideMenuHelper";
+import { useNavigationStore } from "./Store/NavigationStore";
+import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 
 
 export const SingleMenuItem = (props: ISideMenuProps) => {

@@ -1,12 +1,12 @@
 import { ListItem, styled } from "@mui/material";
-import { SAComponent, SAModule } from "../../config/sitemap";
-import { useNavigationStore } from "./store/NavigationStore";
+import { SAComponent, SAModule } from "../../Config/Sitemap";
+import { useNavigationStore } from "./Store/NavigationStore";
 import { useEffect, useState } from "react";
 import { SideMenuExpander } from "./SideMenuExpander";
 import { SideMenuSubItemChild } from "./SideMenuSubItemChild";
-import { useSideMenuItemEvents } from "./hooks/SideMenuItemEvents";
+import { useSideMenuItemEvents } from "./Hooks/SideMenuItemEvents";
 import { SideMenuSubItem } from "./SideMenuSubItem";
-import { useSideMenuHelper } from "./hooks/SideMenuHelper";
+import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 
 
 

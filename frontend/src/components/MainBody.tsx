@@ -1,6 +1,6 @@
 import { SnackbarKey, SnackbarProvider } from "notistack"
-import { CloseNotiBtn } from "./helper/CloseNotiBtn"
 import { LoginProvider } from "./Login/store/loginStore"
+import { CloseNotiBtn } from "./Helper/CloseNotiBtn"
 
 
 export const MainBody = ({ children }: { children: React.ReactNode }) => {

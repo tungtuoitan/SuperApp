@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
-import { useNavigationStore } from "./store/NavigationStore";
+import { useNavigationStore } from "./Store/NavigationStore";
 import { Drawer } from "@mui/material";
 import { Route, Routes } from 'react-router-dom'
 
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
-import Timeline from "../Timeline/Timeline";
+import Timeline from "../TL/UI/TLContainer";
 
 export const SideNavRoot = styled('div')({
   flexGrow: 1,

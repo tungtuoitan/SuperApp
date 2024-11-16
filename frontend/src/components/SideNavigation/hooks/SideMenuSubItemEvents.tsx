@@ -1,5 +1,5 @@
-import { sitemaps } from "../../../config/sitemap";
-import { useNavigationStore } from "../store/NavigationStore";
+import { sitemaps } from "../../../Config/Sitemap";
+import { useNavigationStore } from "../Store/NavigationStore";
 import { useSideMenuPopupEvents } from "./SideMenuPopupEvents";
 
 

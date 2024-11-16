@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigationStore } from "../store/NavigationStore";
+import { useNavigationStore } from "../Store/NavigationStore";
 
 export const useSideMenuPopupEvents = () => {
     const {menuItems,sideMenuOpen} = useNavigationStore();

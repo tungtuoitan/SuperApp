@@ -7,7 +7,10 @@
         "name": "Launch Edge",
         "url": "http://localhost:3000/timeline", // Đảm bảo đây là URL ứng dụng của bạn
         "webRoot": "${workspaceFolder}",
-        "port": 9222
+        "port": 9222,
+        // "breakOnLoad": true,
+        "sourceMaps": true,
+        "trace": true,
       }
     ]
   }

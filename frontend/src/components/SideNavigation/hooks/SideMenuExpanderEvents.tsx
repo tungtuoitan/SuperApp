@@ -1,4 +1,4 @@
-import { useNavigationStore } from "../store/NavigationStore";
+import { useNavigationStore } from "../Store/NavigationStore";
 
 export const useSideMenuExpanderEvents = () => {
     const {menuItems,setMenuItems} = useNavigationStore();
