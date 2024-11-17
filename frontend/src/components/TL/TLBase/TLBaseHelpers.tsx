@@ -4,24 +4,24 @@ import { useTLBaseStore } from "./Store/TLBaseStore";
 export function useTLBaseHelpers() {
     const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, curL } = useTLBaseStore();
 
-    const getNewDate = (baseDate: Date, plusValue: number): Date => { //plusValue: vd: plusValue = 1, thì 1 có thể là 1 phút, 1 giờ, 1 ngày, 1 tháng, 1 năm, 1 thế kỷ... tùy vào curTIL
+    const getNewDate = (baseDate: Date, plusValue: number, timeType: TimeType = _TLL[curL.TILid].timeType): Date => { //plusValue: vd: plusValue = 1, thì 1 có thể là 1 phút, 1 giờ, 1 ngày, 1 tháng, 1 năm, 1 thế kỷ... tùy vào curTIL
         const newDate = new Date(baseDate);
-        if (_TLL[curL.TILid].timeType === 'min') {
+        if (timeType === 'min') {
             newDate.setDate(newDate.getDate()         + plusValue);
         }
-        if (_TLL[curL.TILid].timeType === 'hour') {
+        if (timeType === 'hour') {
             newDate.setHours(newDate.getHours()       + plusValue);
         }
-        if (_TLL[curL.TILid].timeType === 'day') {
+        if (timeType === 'day') {
             newDate.setDate(newDate.getDate()         + plusValue);
         }
-        if (_TLL[curL.TILid].timeType === 'month') {
+        if (timeType === 'month') {
             newDate.setMonth(newDate.getMonth()       + plusValue);
         }
-        if (_TLL[curL.TILid].timeType === 'year') {
+        if (timeType === 'year') {
             newDate.setFullYear(newDate.getFullYear() + plusValue);
         }
-        if (_TLL[curL.TILid].timeType === 'century') {
+        if (timeType === 'century') {
             newDate.setFullYear(newDate.getFullYear() + plusValue * 100);
         }
         return newDate;

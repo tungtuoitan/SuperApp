@@ -43,7 +43,6 @@ export const TLBase = () => {
         if (!curL.timeTypeChange) {
             // keep spotlight (khi zoomLv tăng, TILid giữ nguyên)
             const mili$TLBaseContentLeft_spotlight = mili$70_spotlight.current - curTIList[0]?.date?.getTime() // value này k đổi trước và sau khi zoom
-            // console.log("mili$TLBaseContentLeft_spotlight:", mili$TLBaseContentLeft_spotlight);
             const px$TLBaseContentLeft_spotlight = mili$TLBaseContentLeft_spotlight * _TLL[curL.TILid].pxPerMili * curL.zoomLv
             TLBaseContainerRef.current.scrollLeft = px$TLBaseContentLeft_spotlight - px$TLBaseContainerLeft_spotlight.current;
         } else {
@@ -57,16 +56,26 @@ export const TLBase = () => {
             for (let i = 0; i < totalTI; i++) {
                 const TI = {
                     id: i.toString(),
-                    date: getNewDate(newDateLeft, i),
+                    date: getNewDate(newDateLeft, i, _TLL[curL.TILid].timeType),
                 } as TI;
                 newTIList.push(TI);
             }
             setCurTIList(newTIList);
-
         }
 
 
     }, [curL]);
+
+    useEffect(() => {
+        if (!TLBaseContainerRef.current || isFirstTimeInit) return;
+        if (curL.timeTypeChange) {
+            // keep spotlight (khi TILid thay đổi)
+            const mili$TLBaseContentLeft_spotlight = mili$70_spotlight.current - curTIList[0]?.date?.getTime() // value này k đổi trước và sau khi zoom
+            const px$TLBaseContentLeft_spotlight = mili$TLBaseContentLeft_spotlight * _TLL[curL.TILid].pxPerMili * curL.zoomLv
+            TLBaseContainerRef.current.scrollLeft = px$TLBaseContentLeft_spotlight - px$TLBaseContainerLeft_spotlight.current;
+        } 
+
+    }, [curTIList]);
 
     return (
         <div
@@ -79,7 +88,7 @@ export const TLBase = () => {
             }}>
             <GroupColumn val={'Group 1'} width="100px" id="" />
             <MouseTooltip />
-            <div
+            <div 
                 id="TLBaseContainer"
                 ref={TLBaseContainerRef}
                 style={{

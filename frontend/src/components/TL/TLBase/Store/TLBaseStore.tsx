@@ -95,7 +95,7 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const [spotlightMoment, setSpotlightMoment] = useState<Date>(new Date()); // là TI mà chuột hover vào
     const ratio = useRef<number>(0.5);
     
-    const [curL, setCurL] = useState<curL>({TILid: 2, timeTypeChange: false, zoomLv: 5}); //!
+    const [curL, setCurL] = useState<curL>({TILid: 2, timeTypeChange: false, zoomLv: 6}); //!
     
     const [infiniteScrollLoading, setInfiniteScrollLoading] = useState<boolean>(false);
     const wheeling = useRef<boolean>(false);
