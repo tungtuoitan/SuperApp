@@ -36,9 +36,9 @@ export const totalTI = 100; // hard code (tính luôn số 0 thì sẽ là 100 T
 export const px$PerMili_Init = 50/60
 export const _TLL: TIL[] = [ // đây là array chứa các timelineLevel
     { id: 0, wi: maxWs.century, timeType: 'century', pxPerMili: 50/miliPer.hou },
-    { id: 1, wi: maxWs.day, timeType: 'day',         pxPerMili: 50/miliPer.hou },
-    { id: 2, wi: maxWs.year, timeType: 'year',       pxPerMili: 50/miliPer.hou },
-    { id: 3, wi: maxWs.month, timeType: 'month',     pxPerMili: 50/miliPer.hou/500 },
+    { id: 1, wi: maxWs.year, timeType: 'year',       pxPerMili: 50/miliPer.hou },
+    { id: 2, wi: maxWs.month, timeType: 'month',     pxPerMili: 50/miliPer.hou/500 },
+    { id: 3, wi: maxWs.day, timeType: 'day',         pxPerMili: 50/miliPer.hou/10 },
     { id: 4, wi: maxWs.hour, timeType: 'hour',       pxPerMili: 50/miliPer.hou }, 
     { id: 5, wi: maxWs.min, timeType: 'min',         pxPerMili: 50/miliPer.hou }, // id của TI === index của chính nó
 ]

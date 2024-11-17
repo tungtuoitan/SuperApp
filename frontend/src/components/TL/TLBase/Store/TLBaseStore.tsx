@@ -41,6 +41,8 @@ export interface TLBaseContextData {
     setMouseEnter: Dispatch<SetStateAction<boolean>>;
     position: { x: number, y: number };
     setPosition: Dispatch<SetStateAction<{ x: number; y: number; }>>
+    isFirstTimeInit: boolean;
+    setIsFirstTimeInit: Dispatch<SetStateAction<boolean>>;
 };
 
 export const TLBaseContextDefaultValue: TLBaseContextData = {
@@ -78,6 +80,8 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
 
     position: { x: 0, y: 0 },
     setPosition: () => {},
+    isFirstTimeInit: true,
+    setIsFirstTimeInit: () => {},
 
 
 
@@ -87,11 +91,11 @@ const TLBaseStore = createContext<TLBaseContextData>(TLBaseContextDefaultValue);
 export const useTLBaseStore = () => useContext(TLBaseStore);
 
 export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
-    const [ curTIList, setCurTIList] = useState<TI[]>( Array(50).fill([]));
+    const [ curTIList, setCurTIList] = useState<TI[]>( Array(100).fill([]));
     const [spotlightMoment, setSpotlightMoment] = useState<Date>(new Date()); // là TI mà chuột hover vào
     const ratio = useRef<number>(0.5);
     
-    const [curL, setCurL] = useState<curL>({TILid: 3, timeTypeChange: false, zoomLv: 1}); //!
+    const [curL, setCurL] = useState<curL>({TILid: 2, timeTypeChange: false, zoomLv: 5}); //!
     
     const [infiniteScrollLoading, setInfiniteScrollLoading] = useState<boolean>(false);
     const wheeling = useRef<boolean>(false);
@@ -117,6 +121,7 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const [mouseEnter, setMouseEnter] = useState<boolean>(false);
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isFirstTimeInit, setIsFirstTimeInit] = useState<boolean>(true);
     
 
     return (
@@ -137,7 +142,7 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
 
                 w$TLBaseContent,
                 mili$TLBaseContentLeft_spotlight,
-                
+
                 mili$70_spotlight,
 
                 TLBaseContainerRef,
@@ -156,6 +161,8 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
 
                 position,
                 setPosition,
+                isFirstTimeInit,
+                setIsFirstTimeInit,
             }}>
             {children}
         </TLBaseStore.Provider>

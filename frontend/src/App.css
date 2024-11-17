@@ -68,10 +68,10 @@ code {
 }
 
 /* ẩn scrollbar */
-#TLBaseContainer {
+/* #TLBaseContainer {
     scrollbar-width: none; 
     -ms-overflow-style: none; 
   }
 #TLBaseContainer::-webkit-scrollbar {
 display: none ; 
-}
+} */

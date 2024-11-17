@@ -8,7 +8,7 @@ import { MouseTooltip } from "../../UI/MouseTooltip";
 
 export const TLBase = () => {
     const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, ratio, mili$TLBaseContainer_spotlight, mili$70_spotlight, mili$TLBaseContentLeft_spotlight,
-        curL, setCurL, w$TLBaseContent, px$TLBaseContainerLeft_spotlight,
+        curL, setCurL, w$TLBaseContent, px$TLBaseContainerLeft_spotlight, isFirstTimeInit, setIsFirstTimeInit,
         startX, startScrollX, mouseDown, setMouseDown, mouseEnter, setMouseEnter, spotlightMoment, setSpotlightMoment, setPosition } = useTLBaseStore();
     const { getNewDate, getTIValue, updateTIList$WhenTouchEdge, floorDate, mili$70_TILeft, getMili$DateA_DateB } = useTLBaseHelpers();
 
@@ -24,7 +24,7 @@ export const TLBase = () => {
         // set curTIList
         const newDateLeft = floorDate(new Date(2024, 10, 17, 12, 59, 59), _TLL[curL.TILid].timeType);
         const newTIList = [] as TI[];
-        for (let i = 1; i <= totalTI; i++) {
+        for (let i = 0; i < totalTI; i++) {
             const TI = {
                 id: i.toString(),
                 date: getNewDate(newDateLeft, i),
@@ -34,29 +34,35 @@ export const TLBase = () => {
 
         setCurTIList(newTIList);
         // console.log("newTIList:", newTIList);
+        setIsFirstTimeInit(false);
 
     }, []);
 
     useEffect(() => {
-        if (!TLBaseContainerRef.current) return;
+        if (!TLBaseContainerRef.current || isFirstTimeInit) return;
         if (!curL.timeTypeChange) {
             // keep spotlight (khi zoomLv tăng, TILid giữ nguyên)
-            const mili$TLBaseContentLeft_spotlight = mili$70_spotlight.current  - curTIList[0]?.date?.getTime() // value này k đổi trước và sau khi zoom
+            const mili$TLBaseContentLeft_spotlight = mili$70_spotlight.current - curTIList[0]?.date?.getTime() // value này k đổi trước và sau khi zoom
+            // console.log("mili$TLBaseContentLeft_spotlight:", mili$TLBaseContentLeft_spotlight);
             const px$TLBaseContentLeft_spotlight = mili$TLBaseContentLeft_spotlight * _TLL[curL.TILid].pxPerMili * curL.zoomLv
             TLBaseContainerRef.current.scrollLeft = px$TLBaseContentLeft_spotlight - px$TLBaseContainerLeft_spotlight.current;
         } else {
-            // // 2.tính TIBaseTimeFirst và TIBaseTimeLast
-            // const TIBaseTimeFirst = curTIList[0].date
-            // const TIBaseTimeLast = getNewDate(TIBaseTimeFirst ?? new Date(), totalTI);
-            // const time1 = (TIBaseTimeFirst?.getTime() ?? 0) / 1000 / 60;
-            // const time2 = TIBaseTimeLast.getTime() / 1000 / 60;
+            // update TIList
+            // 1. lấy spotlightMoment làm newDateMid và floor nó
+            const newDateMid = floorDate(new Date(mili$70_spotlight.current), _TLL[curL.TILid].timeType)
+            // 2. lấy newDateLeft
+            const newDateLeft = getNewDate(newDateMid, -totalTI / 2);
+            // 3. update TIList
+            const newTIList = [] as TI[];
+            for (let i = 0; i < totalTI; i++) {
+                const TI = {
+                    id: i.toString(),
+                    date: getNewDate(newDateLeft, i),
+                } as TI;
+                newTIList.push(TI);
+            }
+            setCurTIList(newTIList);
 
-            // // 3. // Tính thời điểm của X
-            // const totalmin = time1 + (time2 - time1) * ratio.current + 24 * 60;
-
-            // const newSpotlightMoment = new Date(totalmin * 60 * 1000);
-            // console.log("newSpotlightMoment:", newSpotlightMoment);
-            // // setSpotlightMoment(newSpotlightMoment);
         }
 
 
@@ -133,34 +139,38 @@ export const TLBase = () => {
 
                     // 1.calc newL
                     let newL = { ...curL }
-                    const px$TI0_TI1 = _TLL[curL.TILid].pxPerMili * curL.zoomLv * (
-                                        getMili$DateA_DateB(
-                                            getNewDate(curTIList[0].date ?? new Date(), 1), curTIList[0].date ?? new Date())
-                    )
+                    // const px$TI0_TI1 = _TLL[curL.TILid].pxPerMili * curL.zoomLv * (
+                    //     getMili$DateA_DateB(
+                    //         getNewDate(curTIList[0].date ?? new Date(), 1), curTIList[0].date ?? new Date())
+                    // )
 
                     if (e.deltaY > 0) { // ~ zoom out
-                        if (px$TI0_TI1 <= 50) {
-                            newL.TILid -= 1;
+                        if (newL.zoomLv <= 1) {
+                            newL.zoomLv = 6;
+                            newL.TILid = newL.TILid > 0 ? newL.TILid - 1 : newL.TILid;
                             newL.timeTypeChange = true
                             console.log('out1')
                         } else {
                             newL.zoomLv -= 1;
                             newL.timeTypeChange = false
-                            console.log('out2', px$TI0_TI1)
+                            console.log('out2')
                         }
                     }
                     else { // ~ zoom in
-                        if (px$TI0_TI1 > 300) {
-                            newL.TILid += 1;
+                        if (newL.zoomLv >= 6) {
+                            newL.TILid = newL.TILid < 6 ? newL.TILid + 1 : newL.TILid;
+                            newL.zoomLv = 1;
                             newL.timeTypeChange = true
+                            console.log('in1')
                         } else {
                             newL.zoomLv += 1;
                             newL.timeTypeChange = false
-
-                            // lưu lại, để dùng trong useEffect (trong useEffect k có e.clientX)
-                            px$TLBaseContainerLeft_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0) // value này k đổi trước và sau khi zoom
+                            console.log('in2')
                         }
                     }
+
+                    // lưu lại, để dùng trong useEffect (trong useEffect k có e.clientX)
+                    px$TLBaseContainerLeft_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0) // value này k đổi trước và sau khi zoom
 
                     setCurL(newL);
                 }}
@@ -177,9 +187,16 @@ export const TLBase = () => {
                         <TLColumn
                             id={'TLColumn-' + i.toString()}
                             key={TI.id}
-                            val={getTIValue(TI, curL.TILid) ?? ''}
+                            val={_TLL[curL.TILid].timeType + (getTIValue(TI, curL.TILid) ?? '')}
                             val2={
                                 (() => {
+                                    const x = _TLL[curL.TILid].pxPerMili * curL.zoomLv * (
+                                        getMili$DateA_DateB(
+                                            getNewDate(TI.date ?? new Date(), 1), TI.date ?? new Date())
+                                    )
+                                    // console.log(_TLL[curL.TILid].pxPerMili, curL.zoomLv, getMili$DateA_DateB(
+                                    //     getNewDate(TI.date ?? new Date(), 1), TI.date ?? new Date()))
+                                    // console.log('x:', x)
                                     const val = getTIValue(TI, curL.TILid) ?? '';
                                     if (_TLL[curL.TILid].timeType === 'min' && val === '0')
                                         return new Date(TI.date).getHours().toString() + 'h ' + new Date(TI.date).getDate().toString() + ' ' + new Date(TI.date).toLocaleDateString('en-US', { month: 'long' })
