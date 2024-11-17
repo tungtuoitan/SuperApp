@@ -17,6 +17,7 @@ export interface TLBaseContextData {
 
     ratio: React.MutableRefObject<number>;
     X$TLBaseContainer_spotlight: React.MutableRefObject<number>;
+    w$TLBaseContent: React.MutableRefObject<number>;
 
     mili$TLBaseContentLeft_spotlight: React.MutableRefObject<number>;
     mili$70_spotlight: React.MutableRefObject<number>;
@@ -35,6 +36,8 @@ export interface TLBaseContextData {
     setMouseDown: Dispatch<SetStateAction<boolean>>;
     mouseEnter: boolean;
     setMouseEnter: Dispatch<SetStateAction<boolean>>;
+    position: { x: number, y: number };
+    setPosition: Dispatch<SetStateAction<{ x: number; y: number; }>>
 };
 
 export const TLBaseContextDefaultValue: TLBaseContextData = {
@@ -43,12 +46,13 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
     curTIList: Array(50).fill([]),
     setCurTIList: () => {},
 
-    curL: {TILid: 3, timeTypeChange: false},
+    curL: {TILid: 3, timeTypeChange: false, zoomLv: 1},
     setCurL: () => {},
 
     ratio: {current: 0.5},
     X$TLBaseContainer_spotlight: {current: 0},
 
+    w$TLBaseContent: {current: 0},
     mili$TLBaseContentLeft_spotlight: {current: 0},
     mili$70_spotlight: {current: 0},
 
@@ -66,6 +70,9 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
     mouseEnter: false,
     setMouseEnter: () => {},
 
+    position: { x: 0, y: 0 },
+    setPosition: () => {},
+
 
 
 };
@@ -77,16 +84,18 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const [ curTIList, setCurTIList] = useState<TI[]>( Array(50).fill([]));
     const [spotlightMoment, setSpotlightMoment] = useState<Date>(new Date()); // là TI mà chuột hover vào
     const ratio = useRef<number>(0.5);
-    const X$TLBaseContainer_spotlight = useRef<number>(0);
     
-    const [curL, setCurL] = useState<curL>({TILid: 3, timeTypeChange: false});
-
+    const [curL, setCurL] = useState<curL>({TILid: 3, timeTypeChange: false, zoomLv: 1}); //!
+    
     const [infiniteScrollLoading, setInfiniteScrollLoading] = useState<boolean>(false);
     const wheeling = useRef<boolean>(false);
     const scrollByHand = useRef<boolean>(true);
-
+    
+    const X$TLBaseContainer_spotlight = useRef<number>(0);
+    const w$TLBaseContent = useRef<number>(0);
     const mili$TLBaseContentLeft_spotlight = useRef<number>(0);
     const mili$70_spotlight = useRef<number>(0);
+
     
     const TLBaseContainerRef = useRef<null| HTMLDivElement>(null);
     const TLBaseContentRef = useRef<null| HTMLDivElement>(null);
@@ -96,6 +105,9 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
 
     const [mouseDown, setMouseDown] = useState<boolean>(false);
     const [mouseEnter, setMouseEnter] = useState<boolean>(false);
+
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    
 
     return (
         <TLBaseStore.Provider
@@ -110,7 +122,7 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
 
                 ratio,
                 X$TLBaseContainer_spotlight,
-
+                w$TLBaseContent,
                 mili$TLBaseContentLeft_spotlight,
                 mili$70_spotlight,
 
@@ -127,6 +139,9 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
                 setMouseDown,
                 mouseEnter,
                 setMouseEnter,
+
+                position,
+                setPosition,
             }}>
             {children}
         </TLBaseStore.Provider>

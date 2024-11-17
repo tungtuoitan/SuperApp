@@ -1,4 +1,4 @@
-import { _TLL, TI, TimeType, timeValue, totalTI } from "../TLConfigs";
+import { _TLL, TI, TimeType, miliPer, totalTI } from "../TLConfigs";
 import { useTLBaseStore } from "./Store/TLBaseStore";
 
 export function useTLBaseHelpers() {
@@ -27,22 +27,22 @@ export function useTLBaseHelpers() {
         return newDate;
     }
 
-    const getTIValue = (TI: TI, curTIL: number) =>  { // value ở đây là value sẽ hiển thị trên UI
-        switch (_TLL[curTIL].timeType) {
+    const getTIValue = (TI: TI, curL: number) =>  { // value ở đây là value sẽ hiển thị trên UI
+        switch (_TLL[curL].timeType) {
             case 'min': 
-                return TI.date?.getMinutes().toString();
+                return new Date(TI.date).getMinutes().toString() + 'm';
             case 'hour': 
-                return TI.date?.getHours().toString();
+                return (new Date(TI.date).getHours()).toString() + 'h';
             case 'day': 
-                return TI.date?.getDate().toString();
+                return new Date(TI.date).getDate().toString();
             case 'month': 
-                return (TI.date?.getMonth()+1).toString();
+                return (new Date(TI.date).getMonth()+1).toString();
             case 'year': 
-                return TI.date?.getFullYear().toString();
+                return new Date(TI.date).getFullYear().toString();
             case 'century': 
-                return TI.date?.getFullYear().toString();
+                return new Date(TI.date).getFullYear().toString();
             default: 
-                return TI.date?.toLocaleDateString();
+                return new Date(TI.date).toLocaleDateString();
         }
     }
 
@@ -108,16 +108,19 @@ export function useTLBaseHelpers() {
 
     }
 
-    const mili$TLBaseContentLeft_TILeft = curTIList[0].date?.getTime() ?? 0;
+    const mili$70_TILeft = curTIList[0].date?.getTime() ?? 0;
+    const getMili$DateA_DateB = (dateA: Date, dateB: Date) => {
+        return Math.abs(dateA.getTime() - dateB.getTime());
+    }
 
     
-
 return {
     getNewDate,
     getTIValue,
     updateTIList$WhenTouchEdge,
     floorDate,
-    mili$TLBaseContentLeft_TILeft,
+    mili$70_TILeft,
+    getMili$DateA_DateB,
 }
 
 }

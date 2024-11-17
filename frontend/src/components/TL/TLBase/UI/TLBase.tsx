@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { TLColumn, GroupColumn } from "./TIColumn";
 import { useTLBaseStore } from "../Store/TLBaseStore";
-import { _TLL, TI, timeValue, totalTI } from "../../TLConfigs";
+import { _TLL, TI, miliPer, totalTI } from "../../TLConfigs";
 import { useTLBaseHelpers } from "../TLBaseHelpers";
+import { Mouse } from "@mui/icons-material";
+import { MouseTooltip } from "../../UI/MouseTooltip";
 
 export const TLBase = () => {
-    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, ratio, X$TLBaseContainer_spotlight,
-        curL, setCurL,
-        startX, startScrollX, mouseDown, setMouseDown, mouseEnter, setMouseEnter, spotlightMoment, setSpotlightMoment } = useTLBaseStore();
-    const { getNewDate, getTIValue, updateTIList$WhenTouchEdge, floorDate, mili$TLBaseContentLeft_TILeft } = useTLBaseHelpers();
+    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, ratio, X$TLBaseContainer_spotlight, mili$70_spotlight,
+        curL, setCurL, w$TLBaseContent,
+        startX, startScrollX, mouseDown, setMouseDown, mouseEnter, setMouseEnter, spotlightMoment, setSpotlightMoment, setPosition } = useTLBaseStore();
+    const { getNewDate, getTIValue, updateTIList$WhenTouchEdge, floorDate, mili$70_TILeft, getMili$DateA_DateB } = useTLBaseHelpers();
 
 
     // when init
@@ -20,7 +22,7 @@ export const TLBase = () => {
         }
 
         // set curTIList
-        const newDateLeft = floorDate(new Date(2024, 10, 17, 12, 59), _TLL[curL.TILid].timeType);
+        const newDateLeft = floorDate(new Date(2024, 10, 17, 12, 59, 59), _TLL[curL.TILid].timeType);
         const newTIList = [] as TI[];
         for (let i = 0; i < totalTI; i++) {
             const TI = {
@@ -31,6 +33,7 @@ export const TLBase = () => {
         }
 
         setCurTIList(newTIList);
+        console.log("newTIList:", newTIList);
 
     }, []);
 
@@ -68,6 +71,7 @@ export const TLBase = () => {
                 display: 'flex',
             }}>
             <GroupColumn val={'Group 1'} width="100px" id="" />
+            <MouseTooltip />
             <div
                 id="TLBaseContainer"
                 ref={TLBaseContainerRef}
@@ -97,13 +101,14 @@ export const TLBase = () => {
                     }
                 }}
                 onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                    setPosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 });
                     // 1. tính ratio
                     const X$TLBaseContent_spotlight = e.clientX - (TLBaseContentRef.current?.getBoundingClientRect()?.left ?? 0);
-                    const TLBaseContentWidth = TLBaseContentRef.current?.getBoundingClientRect()?.width ?? 0;
-                    ratio.current = X$TLBaseContent_spotlight / TLBaseContentWidth;
+                    w$TLBaseContent.current = TLBaseContentRef.current?.getBoundingClientRect()?.width ?? 0;
+                    ratio.current = X$TLBaseContent_spotlight / w$TLBaseContent.current;
 
                     // 2. tính spotlightMoment
-                    console.log(new Date(mili$TLBaseContentLeft_TILeft))
+                    // mili$70_spotlight.current = mili$70_TILeft
 
 
                     // 2.scroll khi mousedownmousemove
@@ -126,7 +131,7 @@ export const TLBase = () => {
                     if (curL.TILid === 0 || curL.TILid === _TLL.length - 1) return;
 
                     // 1.calc newTIL
-                    let newL = {...curL}
+                    let newL = { ...curL }
                     if (e.deltaY > 0)
                         newL.TILid = curL.TILid + 1;
                     else
@@ -135,9 +140,11 @@ export const TLBase = () => {
                     // 2. update
                     if (_TLL[curL.TILid].timeType !== _TLL[newL.TILid].timeType) {
                         newL.timeTypeChange = true;
+                        newL.zoomLv = 1;
                     }
                     else {
                         newL.timeTypeChange = false;
+                        newL.zoomLv++;
                         X$TLBaseContainer_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0);
                     }
                     setCurL(newL);
@@ -151,9 +158,9 @@ export const TLBase = () => {
                         // width: '100%',
                     }}
                 >
-                    {curTIList.map((TI, index) => (
+                    {curTIList.map((TI, i) => (
                         <TLColumn
-                            id={'TLColumn-' + index.toString()}
+                            id={'TLColumn-' + i.toString()}
                             key={TI.id}
                             val={getTIValue(TI, curL.TILid) ?? ''}
                             val2={
@@ -172,11 +179,17 @@ export const TLBase = () => {
                                     return ''
                                 })()
                             }
-                            width={_TLL[curL.TILid].wi + 'px'} />
+                            width={
+                                (_TLL[curL.TILid].pxPerMili * curL.zoomLv * (
+                                    getMili$DateA_DateB(
+                                        getNewDate(TI.date ?? new Date(), 1), TI.date ?? new Date())
+                                    ))
+                                        // (getNewDate(TI.date ?? new Date(), 1).getTime() - (TI.date ?? new Date()).getTime()) / 1000 / 60)) 
+                                + 'px'}
+                             />
                     ))}
                 </div>
             </div>
         </div>
     );
 };
- 
