@@ -7,8 +7,8 @@ import { Mouse } from "@mui/icons-material";
 import { MouseTooltip } from "../../UI/MouseTooltip";
 
 export const TLBase = () => {
-    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, ratio, X$TLBaseContainer_spotlight, mili$70_spotlight,
-        curL, setCurL, w$TLBaseContent,
+    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, ratio, mili$TLBaseContainer_spotlight, mili$70_spotlight, mili$TLBaseContentLeft_spotlight,
+        curL, setCurL, w$TLBaseContent, px$TLBaseContainerLeft_spotlight,
         startX, startScrollX, mouseDown, setMouseDown, mouseEnter, setMouseEnter, spotlightMoment, setSpotlightMoment, setPosition } = useTLBaseStore();
     const { getNewDate, getTIValue, updateTIList$WhenTouchEdge, floorDate, mili$70_TILeft, getMili$DateA_DateB } = useTLBaseHelpers();
 
@@ -24,7 +24,7 @@ export const TLBase = () => {
         // set curTIList
         const newDateLeft = floorDate(new Date(2024, 10, 17, 12, 59, 59), _TLL[curL.TILid].timeType);
         const newTIList = [] as TI[];
-        for (let i = 0; i < totalTI; i++) {
+        for (let i = 1; i <= totalTI; i++) {
             const TI = {
                 id: i.toString(),
                 date: getNewDate(newDateLeft, i),
@@ -33,16 +33,17 @@ export const TLBase = () => {
         }
 
         setCurTIList(newTIList);
-        console.log("newTIList:", newTIList);
+        // console.log("newTIList:", newTIList);
 
     }, []);
 
     useEffect(() => {
+        if (!TLBaseContainerRef.current) return;
         if (!curL.timeTypeChange) {
-            // giữ spotlight
-            const newTLBaseContentWidth = _TLL[curL.TILid].wi * totalTI;
-            if (!TLBaseContainerRef.current) return;
-            TLBaseContainerRef.current.scrollLeft = ratio.current * newTLBaseContentWidth - X$TLBaseContainer_spotlight.current //! bug: nếu giữ nguyên mouse, F5 + wheel thì spotlight sẽ sai, vì ratio sai, nhưng bug này k đáng kể, 
+            // keep spotlight (khi zoomLv tăng, TILid giữ nguyên)
+            const mili$TLBaseContentLeft_spotlight = mili$70_spotlight.current  - curTIList[0]?.date?.getTime() // value này k đổi trước và sau khi zoom
+            const px$TLBaseContentLeft_spotlight = mili$TLBaseContentLeft_spotlight * _TLL[curL.TILid].pxPerMili * curL.zoomLv
+            TLBaseContainerRef.current.scrollLeft = px$TLBaseContentLeft_spotlight - px$TLBaseContainerLeft_spotlight.current;
         } else {
             // // 2.tính TIBaseTimeFirst và TIBaseTimeLast
             // const TIBaseTimeFirst = curTIList[0].date
@@ -59,7 +60,7 @@ export const TLBase = () => {
         }
 
 
-    }, [curL.TILid]);
+    }, [curL]);
 
     return (
         <div
@@ -103,12 +104,12 @@ export const TLBase = () => {
                 onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                     setPosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 });
                     // 1. tính ratio
-                    const X$TLBaseContent_spotlight = e.clientX - (TLBaseContentRef.current?.getBoundingClientRect()?.left ?? 0);
+                    const mili$TLBaseContent_spotlight = e.clientX - (TLBaseContentRef.current?.getBoundingClientRect()?.left ?? 0);
                     w$TLBaseContent.current = TLBaseContentRef.current?.getBoundingClientRect()?.width ?? 0;
-                    ratio.current = X$TLBaseContent_spotlight / w$TLBaseContent.current;
+                    ratio.current = mili$TLBaseContent_spotlight / w$TLBaseContent.current;
 
                     // 2. tính spotlightMoment
-                    // mili$70_spotlight.current = mili$70_TILeft
+                    mili$70_spotlight.current = mili$70_TILeft + ratio.current * w$TLBaseContent.current / (_TLL[curL.TILid].pxPerMili * curL.zoomLv)
 
 
                     // 2.scroll khi mousedownmousemove
@@ -119,7 +120,7 @@ export const TLBase = () => {
                     TLBaseContainerRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
 
                     // 3. update TIList
-                    updateTIList$WhenTouchEdge();
+                    // updateTIList$WhenTouchEdge();
                 }}
                 onMouseLeave={() => {
                     setMouseDown(false);
@@ -130,23 +131,37 @@ export const TLBase = () => {
                     e.preventDefault();
                     if (curL.TILid === 0 || curL.TILid === _TLL.length - 1) return;
 
-                    // 1.calc newTIL
+                    // 1.calc newL
                     let newL = { ...curL }
-                    if (e.deltaY > 0)
-                        newL.TILid = curL.TILid + 1;
-                    else
-                        newL.TILid = curL.TILid - 1;
+                    const px$TI0_TI1 = _TLL[curL.TILid].pxPerMili * curL.zoomLv * (
+                                        getMili$DateA_DateB(
+                                            getNewDate(curTIList[0].date ?? new Date(), 1), curTIList[0].date ?? new Date())
+                    )
 
-                    // 2. update
-                    if (_TLL[curL.TILid].timeType !== _TLL[newL.TILid].timeType) {
-                        newL.timeTypeChange = true;
-                        newL.zoomLv = 1;
+                    if (e.deltaY > 0) { // ~ zoom out
+                        if (px$TI0_TI1 <= 50) {
+                            newL.TILid -= 1;
+                            newL.timeTypeChange = true
+                            console.log('out1')
+                        } else {
+                            newL.zoomLv -= 1;
+                            newL.timeTypeChange = false
+                            console.log('out2', px$TI0_TI1)
+                        }
                     }
-                    else {
-                        newL.timeTypeChange = false;
-                        newL.zoomLv++;
-                        X$TLBaseContainer_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0);
+                    else { // ~ zoom in
+                        if (px$TI0_TI1 > 300) {
+                            newL.TILid += 1;
+                            newL.timeTypeChange = true
+                        } else {
+                            newL.zoomLv += 1;
+                            newL.timeTypeChange = false
+
+                            // lưu lại, để dùng trong useEffect (trong useEffect k có e.clientX)
+                            px$TLBaseContainerLeft_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0) // value này k đổi trước và sau khi zoom
+                        }
                     }
+
                     setCurL(newL);
                 }}
             >
@@ -183,10 +198,10 @@ export const TLBase = () => {
                                 (_TLL[curL.TILid].pxPerMili * curL.zoomLv * (
                                     getMili$DateA_DateB(
                                         getNewDate(TI.date ?? new Date(), 1), TI.date ?? new Date())
-                                    ))
-                                        // (getNewDate(TI.date ?? new Date(), 1).getTime() - (TI.date ?? new Date()).getTime()) / 1000 / 60)) 
+                                ))
+                                // (getNewDate(TI.date ?? new Date(), 1).getTime() - (TI.date ?? new Date()).getTime()) / 1000 / 60)) 
                                 + 'px'}
-                             />
+                        />
                     ))}
                 </div>
             </div>

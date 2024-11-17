@@ -6,6 +6,7 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -67,10 +68,10 @@ code {
 }
 
 /* ẩn scrollbar */
-/* #TLBaseContainer {
+#TLBaseContainer {
     scrollbar-width: none; 
     -ms-overflow-style: none; 
   }
 #TLBaseContainer::-webkit-scrollbar {
 display: none ; 
-} */
+}

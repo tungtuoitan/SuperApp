@@ -25,7 +25,8 @@ export const MouseTooltip = () => {
         }}
       >
         <p>
-            70_TIleft: {new Date(mili$70_TILeft + ratio.current * w$TLBaseContent.current / (_TLL[curL.TILid].pxPerMili * curL.zoomLv)).toLocaleString()}
+            70_spotlight: {new Date(mili$70_spotlight.current).toLocaleString()}
+            {/* 70_spotlight: {new Date(mili$70_TILeft + ratio.current * w$TLBaseContent.current / (_TLL[curL.TILid].pxPerMili * curL.zoomLv)).toLocaleString()} */}
         </p>
         {/* <p>
             70_spl: {new Date(mili$70_spotlight.current).toLocaleString()}

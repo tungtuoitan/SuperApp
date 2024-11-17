@@ -113,6 +113,12 @@ export function useTLBaseHelpers() {
         return Math.abs(dateA.getTime() - dateB.getTime());
     }
 
+    // đây là kích thước của 1 item TRUNG BÌNH,
+    const px$TI0_TI1 = _TLL[curL.TILid].pxPerMili * curL.zoomLv * (
+                                                                    getMili$DateA_DateB(
+                                                                        getNewDate(curTIList[0].date ?? new Date(), 1), curTIList[1].date ?? new Date())
+                                                                    )
+
     
 return {
     getNewDate,
@@ -120,6 +126,7 @@ return {
     updateTIList$WhenTouchEdge,
     floorDate,
     mili$70_TILeft,
+    px$TI0_TI1,
     getMili$DateA_DateB,
 }
 

@@ -16,10 +16,13 @@ export interface TLBaseContextData {
     setCurL: Dispatch<SetStateAction<curL>>;
 
     ratio: React.MutableRefObject<number>;
-    X$TLBaseContainer_spotlight: React.MutableRefObject<number>;
-    w$TLBaseContent: React.MutableRefObject<number>;
 
+    mili$TLBaseContainer_spotlight: React.MutableRefObject<number>;
+    px$TLBaseContainerLeft_spotlight: React.MutableRefObject<number>;
+
+    w$TLBaseContent: React.MutableRefObject<number>;
     mili$TLBaseContentLeft_spotlight: React.MutableRefObject<number>;
+
     mili$70_spotlight: React.MutableRefObject<number>;
     
 
@@ -50,10 +53,13 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
     setCurL: () => {},
 
     ratio: {current: 0.5},
-    X$TLBaseContainer_spotlight: {current: 0},
+
+    mili$TLBaseContainer_spotlight: {current: 0},
+    px$TLBaseContainerLeft_spotlight: {current: 0},
 
     w$TLBaseContent: {current: 0},
     mili$TLBaseContentLeft_spotlight: {current: 0},
+
     mili$70_spotlight: {current: 0},
 
     TLBaseContainerRef: {current: null},
@@ -91,10 +97,14 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const wheeling = useRef<boolean>(false);
     const scrollByHand = useRef<boolean>(true);
     
-    const X$TLBaseContainer_spotlight = useRef<number>(0);
-    const w$TLBaseContent = useRef<number>(0);
-    const mili$TLBaseContentLeft_spotlight = useRef<number>(0);
+    //
     const mili$70_spotlight = useRef<number>(0);
+    //
+    const mili$TLBaseContentLeft_spotlight = useRef<number>(0);
+    const w$TLBaseContent = useRef<number>(0);
+    //
+    const mili$TLBaseContainer_spotlight = useRef<number>(0);
+    const px$TLBaseContainerLeft_spotlight = useRef<number>(0);
 
     
     const TLBaseContainerRef = useRef<null| HTMLDivElement>(null);
@@ -121,9 +131,13 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
                 setCurL,
 
                 ratio,
-                X$TLBaseContainer_spotlight,
+
+                mili$TLBaseContainer_spotlight,
+                px$TLBaseContainerLeft_spotlight,
+
                 w$TLBaseContent,
                 mili$TLBaseContentLeft_spotlight,
+                
                 mili$70_spotlight,
 
                 TLBaseContainerRef,
