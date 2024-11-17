@@ -67,10 +67,10 @@ code {
 }
 
 /* ẩn scrollbar */
-#TLBaseContainer {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+/* #TLBaseContainer {
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
   }
 #TLBaseContainer::-webkit-scrollbar {
-display: none ; /* Chrome, Safari, Edge */
-}
+display: none ; 
+} */

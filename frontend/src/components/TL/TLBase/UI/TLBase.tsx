@@ -5,9 +5,10 @@ import { _TLL, TI, timeValue, totalTI } from "../../TLConfigs";
 import { useTLBaseHelpers } from "../TLBaseHelpers";
 
 export const TLBase = () => {
-    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, timeTypeChange, setTimeTypeChange, ratio, X$TLBaseContainer_spotlight,
-        startX, startScrollX, mouseDown, setMouseDown, mouseEnter, setMouseEnter, spotlightMoment, setSpotlightMoment, curTIL, setCurTIL } = useTLBaseStore();
-    const { getNewDate, getTIValue, updateTIList$WhenTouchEdge } = useTLBaseHelpers();
+    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, TLBaseContentRef, ratio, X$TLBaseContainer_spotlight,
+        curL, setCurL,
+        startX, startScrollX, mouseDown, setMouseDown, mouseEnter, setMouseEnter, spotlightMoment, setSpotlightMoment } = useTLBaseStore();
+    const { getNewDate, getTIValue, updateTIList$WhenTouchEdge, floorDate, mili$TLBaseContentLeft_TILeft } = useTLBaseHelpers();
 
 
     // when init
@@ -19,7 +20,7 @@ export const TLBase = () => {
         }
 
         // set curTIList
-        const newDateLeft = new Date();
+        const newDateLeft = floorDate(new Date(2024, 10, 17, 12, 59), _TLL[curL.TILid].timeType);
         const newTIList = [] as TI[];
         for (let i = 0; i < totalTI; i++) {
             const TI = {
@@ -34,12 +35,12 @@ export const TLBase = () => {
     }, []);
 
     useEffect(() => {
-        if (!timeTypeChange) {
+        if (!curL.timeTypeChange) {
             // giữ spotlight
-            const newTLBaseContentWidth = _TLL[curTIL].wi * totalTI;
+            const newTLBaseContentWidth = _TLL[curL.TILid].wi * totalTI;
             if (!TLBaseContainerRef.current) return;
             TLBaseContainerRef.current.scrollLeft = ratio.current * newTLBaseContentWidth - X$TLBaseContainer_spotlight.current //! bug: nếu giữ nguyên mouse, F5 + wheel thì spotlight sẽ sai, vì ratio sai, nhưng bug này k đáng kể, 
-        }else {
+        } else {
             // // 2.tính TIBaseTimeFirst và TIBaseTimeLast
             // const TIBaseTimeFirst = curTIList[0].date
             // const TIBaseTimeLast = getNewDate(TIBaseTimeFirst ?? new Date(), totalTI);
@@ -55,7 +56,7 @@ export const TLBase = () => {
         }
 
 
-    }, [curTIL]);
+    }, [curL.TILid]);
 
     return (
         <div
@@ -101,6 +102,9 @@ export const TLBase = () => {
                     const TLBaseContentWidth = TLBaseContentRef.current?.getBoundingClientRect()?.width ?? 0;
                     ratio.current = X$TLBaseContent_spotlight / TLBaseContentWidth;
 
+                    // 2. tính spotlightMoment
+                    console.log(new Date(mili$TLBaseContentLeft_TILeft))
+
 
                     // 2.scroll khi mousedownmousemove
                     if (!mouseDown || !scrollByHand.current) return;
@@ -119,24 +123,24 @@ export const TLBase = () => {
                 onMouseEnter={() => { setMouseEnter(true) }}
                 onWheel={(e: React.WheelEvent) => {
                     e.preventDefault();
-                    if (curTIL === 0 || curTIL === _TLL.length - 1) return;
+                    if (curL.TILid === 0 || curL.TILid === _TLL.length - 1) return;
 
                     // 1.calc newTIL
-                    let newTIL;
+                    let newL = {...curL}
                     if (e.deltaY > 0)
-                        newTIL = curTIL + 1;
+                        newL.TILid = curL.TILid + 1;
                     else
-                        newTIL = curTIL - 1;
+                        newL.TILid = curL.TILid - 1;
 
                     // 2. update
-                    if (_TLL[curTIL].timeType !== _TLL[newTIL].timeType) {
-                        setTimeTypeChange(true);
-                    } 
+                    if (_TLL[curL.TILid].timeType !== _TLL[newL.TILid].timeType) {
+                        newL.timeTypeChange = true;
+                    }
                     else {
-                        setTimeTypeChange(false);
+                        newL.timeTypeChange = false;
                         X$TLBaseContainer_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0);
                     }
-                    setCurTIL(newTIL);
+                    setCurL(newL);
                 }}
             >
                 <div
@@ -151,37 +155,28 @@ export const TLBase = () => {
                         <TLColumn
                             id={'TLColumn-' + index.toString()}
                             key={TI.id}
-                            val={getTIValue(TI, curTIL) ?? ''}
+                            val={getTIValue(TI, curL.TILid) ?? ''}
                             val2={
                                 (() => {
-                                    const val = getTIValue(TI, curTIL) ?? '';
-                                    if (
-                                        _TLL[curTIL].value === timeValue.min && val === '0' ||
-                                        _TLL[curTIL].value === timeValue.min * 5 && val === '0' ||
-                                        _TLL[curTIL].value === timeValue.min * 10 && val === '0' ||
-                                        _TLL[curTIL].value === timeValue.min * 15 && val === '0'
-                                    ) return TI.date?.getHours().toString();
-                                    if (
-                                        _TLL[curTIL].value === timeValue.hour && val === '00' ||
-                                        _TLL[curTIL].value === timeValue.hour * 4 && val === '00'
-                                    ) return TI.date?.getDate().toString();
-                                    if (
-                                        _TLL[curTIL].value === timeValue.day && val === '1' ||
-                                        _TLL[curTIL].value === timeValue.day * 2 && val === '1'
-                                    ) return TI.date?.toLocaleDateString('en-US', { month: 'long' }) + ' ' + TI.date?.getFullYear().toString();
-                                    // if(
-                                    //     _TLL[curTIL].value === timeValue.year    && val === '0' ||
-                                    //     _TLL[curTIL].value === timeValue.year*5  && val === '0' ||
-                                    //     _TLL[curTIL].value === timeValue.year*10 && val === '0' ||
-                                    //     _TLL[curTIL].value === timeValue.year*50 && val === '0' 
-                                    // ) return TI.date?.getMinutes().toString();
+                                    const val = getTIValue(TI, curL.TILid) ?? '';
+                                    if (_TLL[curL.TILid].timeType === 'min' && val === '0')
+                                        return new Date(TI.date).getHours().toString() + 'h ' + new Date(TI.date).getDate().toString() + ' ' + new Date(TI.date).toLocaleDateString('en-US', { month: 'long' })
+                                    if (_TLL[curL.TILid].timeType === 'hour' && val === '0')
+                                        return new Date(TI.date).getDate().toString() + ' ' + new Date(TI.date).toLocaleDateString('en-US', { month: 'long' }) + ' ' + new Date(TI.date).getFullYear().toString();
+                                    if (_TLL[curL.TILid].timeType === 'day' && val === '1')
+                                        return new Date(TI.date).toLocaleDateString('en-US', { month: 'long' }) + ' ' + new Date(TI.date).getFullYear().toString();
+                                    if (_TLL[curL.TILid].timeType === 'month' && val === '1')
+                                        return new Date(TI.date).getFullYear().toString();
+                                    if (_TLL[curL.TILid].timeType === 'year' && val[val.length - 1] === '0'
+                                    ) return new Date(TI.date).getFullYear().toString();
                                     return ''
                                 })()
                             }
-                            width={_TLL[curTIL].wi + 'px'} />
+                            width={_TLL[curL.TILid].wi + 'px'} />
                     ))}
                 </div>
             </div>
         </div>
     );
 };
+ 

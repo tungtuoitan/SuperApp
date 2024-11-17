@@ -1,7 +1,7 @@
 
 import React, { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import { Ev } from "../../TLTypes";
-import { TI } from "../../TLConfigs";
+import { curL, TI } from "../../TLConfigs";
 
 
 
@@ -11,12 +11,15 @@ export interface TLBaseContextData {
     setSpotlightMoment: Dispatch<SetStateAction<Date>>;
     curTIList: TI[];
     setCurTIList: Dispatch<SetStateAction<TI[]>>;
-    curTIL: number;
-    setCurTIL: Dispatch<SetStateAction<number>>;
-    timeTypeChange: boolean;
-    setTimeTypeChange: Dispatch<SetStateAction<boolean>>
+
+    curL: curL;
+    setCurL: Dispatch<SetStateAction<curL>>;
+
     ratio: React.MutableRefObject<number>;
     X$TLBaseContainer_spotlight: React.MutableRefObject<number>;
+
+    mili$TLBaseContentLeft_spotlight: React.MutableRefObject<number>;
+    mili$70_spotlight: React.MutableRefObject<number>;
     
 
     TLBaseContainerRef: React.RefObject<HTMLDivElement>;
@@ -39,12 +42,15 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
     setSpotlightMoment: () => {},
     curTIList: Array(50).fill([]),
     setCurTIList: () => {},
-    curTIL: 27,
-    setCurTIL: () => {},
-    timeTypeChange: false,
-    setTimeTypeChange: () => {},
+
+    curL: {TILid: 3, timeTypeChange: false},
+    setCurL: () => {},
+
     ratio: {current: 0.5},
     X$TLBaseContainer_spotlight: {current: 0},
+
+    mili$TLBaseContentLeft_spotlight: {current: 0},
+    mili$70_spotlight: {current: 0},
 
     TLBaseContainerRef: {current: null},
     TLBaseContentRef: {current: null},
@@ -73,13 +79,14 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const ratio = useRef<number>(0.5);
     const X$TLBaseContainer_spotlight = useRef<number>(0);
     
-    const [curTIL, setCurTIL] = useState<number>(18); 
-    const [timeTypeChange, setTimeTypeChange] = useState<boolean>(false); // là TIL mà chuột hover vào
+    const [curL, setCurL] = useState<curL>({TILid: 3, timeTypeChange: false});
 
-    
     const [infiniteScrollLoading, setInfiniteScrollLoading] = useState<boolean>(false);
     const wheeling = useRef<boolean>(false);
     const scrollByHand = useRef<boolean>(true);
+
+    const mili$TLBaseContentLeft_spotlight = useRef<number>(0);
+    const mili$70_spotlight = useRef<number>(0);
     
     const TLBaseContainerRef = useRef<null| HTMLDivElement>(null);
     const TLBaseContentRef = useRef<null| HTMLDivElement>(null);
@@ -98,12 +105,14 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
                 curTIList,
                 setCurTIList,
 
-                curTIL,
-                setCurTIL,
-                timeTypeChange,
-                setTimeTypeChange,
+                curL,
+                setCurL,
+
                 ratio,
                 X$TLBaseContainer_spotlight,
+
+                mili$TLBaseContentLeft_spotlight,
+                mili$70_spotlight,
 
                 TLBaseContainerRef,
                 TLBaseContentRef,

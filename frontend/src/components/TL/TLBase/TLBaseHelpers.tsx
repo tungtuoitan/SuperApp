@@ -1,67 +1,45 @@
-import { _TLL, TI, timeValue, totalTI } from "../TLConfigs";
+import { _TLL, TI, TimeType, timeValue, totalTI } from "../TLConfigs";
 import { useTLBaseStore } from "./Store/TLBaseStore";
 
 export function useTLBaseHelpers() {
-    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, curTIL } = useTLBaseStore();
+    const { TLBaseContainerRef, curTIList, setCurTIList, scrollByHand, curL } = useTLBaseStore();
 
     const getNewDate = (baseDate: Date, plusValue: number): Date => { //plusValue: vd: plusValue = 1, thì 1 có thể là 1 phút, 1 giờ, 1 ngày, 1 tháng, 1 năm, 1 thế kỷ... tùy vào curTIL
         const newDate = new Date(baseDate);
-        if (_TLL[curTIL].value === timeValue.min) {
-            newDate.setDate(newDate.getDate() + plusValue);
-        } else if (_TLL[curTIL].value === timeValue.min * 5) {
-            newDate.setDate(newDate.getDate() + plusValue * 5);
-        } else if (_TLL[curTIL].value === timeValue.min * 15) {
-            newDate.setDate(newDate.getDate() + plusValue * 15);
-        } else if (_TLL[curTIL].value === timeValue.hour) {
-            newDate.setHours(newDate.getHours() + plusValue);
-        } else if (_TLL[curTIL].value === timeValue.hour * 4) {
-            newDate.setHours(newDate.getHours() + plusValue * 4);
-        } else if (_TLL[curTIL].value === timeValue.day) {
-            newDate.setDate(newDate.getDate() + plusValue);
-        } else if (_TLL[curTIL].value === timeValue.day * 2) {
-            newDate.setDate(newDate.getDate() + plusValue * 2);
-        } else if (_TLL[curTIL].value === timeValue.month) {
-            newDate.setMonth(newDate.getMonth() + plusValue);
-        } else if (_TLL[curTIL].value === timeValue.month * 3) {
-            newDate.setMonth(newDate.getMonth() + plusValue * 3);
-        } else if (_TLL[curTIL].value === timeValue.year) {
+        if (_TLL[curL.TILid].timeType === 'min') {
+            newDate.setDate(newDate.getDate()         + plusValue);
+        }
+        if (_TLL[curL.TILid].timeType === 'hour') {
+            newDate.setHours(newDate.getHours()       + plusValue);
+        }
+        if (_TLL[curL.TILid].timeType === 'day') {
+            newDate.setDate(newDate.getDate()         + plusValue);
+        }
+        if (_TLL[curL.TILid].timeType === 'month') {
+            newDate.setMonth(newDate.getMonth()       + plusValue);
+        }
+        if (_TLL[curL.TILid].timeType === 'year') {
             newDate.setFullYear(newDate.getFullYear() + plusValue);
-        } else if (_TLL[curTIL].value === timeValue.year * 5) {
-            newDate.setFullYear(newDate.getFullYear() + plusValue * 5);
-        } else if (_TLL[curTIL].value === timeValue.year * 10) {
-            newDate.setFullYear(newDate.getFullYear() + plusValue * 10);
-        } else if (_TLL[curTIL].value === timeValue.year * 50) {
-            newDate.setFullYear(newDate.getFullYear() + plusValue * 50);
-        } else if (_TLL[curTIL].value === timeValue.century) {
+        }
+        if (_TLL[curL.TILid].timeType === 'century') {
             newDate.setFullYear(newDate.getFullYear() + plusValue * 100);
-        } else if (_TLL[curTIL].value === timeValue.century * 5) {
-            newDate.setFullYear(newDate.getFullYear() + plusValue * 500);
         }
         return newDate;
     }
 
     const getTIValue = (TI: TI, curTIL: number) =>  { // value ở đây là value sẽ hiển thị trên UI
-        switch (_TLL[curTIL].value) {
-            case timeValue.min: 
-            case timeValue.min*5:
-            case timeValue.min*15: 
+        switch (_TLL[curTIL].timeType) {
+            case 'min': 
                 return TI.date?.getMinutes().toString();
-            case timeValue.hour: 
-            case timeValue.hour*4: 
+            case 'hour': 
                 return TI.date?.getHours().toString();
-            case timeValue.day: 
-            case timeValue.day*2: 
+            case 'day': 
                 return TI.date?.getDate().toString();
-            case timeValue.month: 
-            case timeValue.month*3: 
-                return TI.date?.getMonth().toString();
-            case timeValue.year: 
-            case timeValue.year*5: 
-            case timeValue.year*10: 
-            case timeValue.year*50: 
+            case 'month': 
+                return (TI.date?.getMonth()+1).toString();
+            case 'year': 
                 return TI.date?.getFullYear().toString();
-            case timeValue.century: 
-            case timeValue.century*5: 
+            case 'century': 
                 return TI.date?.getFullYear().toString();
             default: 
                 return TI.date?.toLocaleDateString();
@@ -98,15 +76,39 @@ export function useTLBaseHelpers() {
             if (TLBaseContainerRef.current?.scrollLeft === 0) {
                 TLBaseContainerRef.current.scrollLeft = maxScrollLeft / 2 +
                     TLBaseContainerRef.current.clientWidth / 2 -
-                    0.5 * _TLL[curTIL].wi
+                    0.5 * _TLL[curL.TILid].wi
             }
             if (TLBaseContainerRef.current?.scrollLeft === maxScrollLeft) {
                 TLBaseContainerRef.current.scrollLeft = maxScrollLeft / 2 -
                     TLBaseContainerRef.current.clientWidth / 2 +
-                    0.5 * _TLL[curTIL].wi
+                    0.5 * _TLL[curL.TILid].wi
             }
         }
     };
+
+    const floorDate = (date: Date, keepLv: TimeType): Date => { // đưa các timeType nhỏ hơn keepLv về 0 hoặc 1
+        let _date = new Date(date);
+        if(keepLv === 'year') {
+            return new Date(_date.getFullYear(), 0, 1, 0, 0, 0, 0);
+        }
+        if(keepLv === 'month') {
+            return new Date(_date.getFullYear(), _date.getMonth(), 1, 0, 0, 0, 0);
+        }
+        if(keepLv === 'day') {
+            return new Date(_date.getFullYear(), _date.getMonth(), _date.getDate(), 0, 0, 0, 0);
+        }
+        if(keepLv === 'hour') {
+            return new Date(_date.getFullYear(), _date.getMonth(), _date.getDate(), _date.getHours(), 0, 0, 0);
+        }
+        if(keepLv === 'min') {
+            return new Date(_date.getFullYear(), _date.getMonth(), _date.getDate(), _date.getHours(), _date.getMinutes(), 0, 0);
+        }
+
+        return _date;
+
+    }
+
+    const mili$TLBaseContentLeft_TILeft = curTIList[0].date?.getTime() ?? 0;
 
     
 
@@ -114,6 +116,8 @@ return {
     getNewDate,
     getTIValue,
     updateTIList$WhenTouchEdge,
+    floorDate,
+    mili$TLBaseContentLeft_TILeft,
 }
 
 }
