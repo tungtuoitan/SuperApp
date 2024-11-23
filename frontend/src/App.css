@@ -60,7 +60,7 @@ code {
 
 
 
-/* 2------TLBase------ */
+/* 2------TLContainer------ */
 /* make timelinebar scrolls horizontally */
 .infinite-scroll-component {
     display: flex;
@@ -74,4 +74,4 @@ code {
   }
 #TLBaseContainer::-webkit-scrollbar {
 display: none ; 
-}
+} */

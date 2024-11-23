@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
-import Timeline from "../TL/UI/TLContainer";
+import TLContainer from "../TL/UI/TLContainer";
 
 export const SideNavRoot = styled('div')({
   flexGrow: 1,
@@ -101,7 +101,7 @@ const SideNavAndBody: React.FC<React.PropsWithChildren<React.PropsWithChildren<u
           <Routes>
               <Route path="/login" Component={LoginContainer} />
               <Route path="/signup" Component={LoginContainer} />
-              <Route path="/timeline" Component={Timeline} />
+              <Route path="/timeline" Component={TLContainer} />
           </Routes>
         </BodyWrapper>
       </SideNavRoot>
