@@ -2,7 +2,7 @@ import { ListItem, Tooltip, styled } from "@mui/material";
 import { forwardRef, useEffect, useState } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { useSideMenuSubItemEvents } from "./Hooks/SideMenuSubItemEvents";
-import { SAComponent } from "../../Config/Sitemap";
+import { SAComponent } from "../../Config/sitemap";
 import { useNavigationStore } from "./Store/NavigationStore";
 import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 

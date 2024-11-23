@@ -1,5 +1,5 @@
 import { ListItem, Tooltip, styled } from "@mui/material";
-import { SAComponent } from "../../Config/Sitemap";
+import { SAComponent } from "../../Config/sitemap";
 import { useNavigationStore } from "./Store/NavigationStore";
 import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 import { forwardRef, useEffect, useState } from "react";

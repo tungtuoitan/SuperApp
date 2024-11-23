@@ -1,7 +1,7 @@
 
 import { PopoverPosition } from "@mui/material";
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import { Breadcrumb, SAModule, sitemaps } from "../../../Config/Sitemap";
+import { Breadcrumb, SAModule, sitemaps } from "../../../Config/sitemap";
 
 export interface NavigationContextData {
     tabValue: number;

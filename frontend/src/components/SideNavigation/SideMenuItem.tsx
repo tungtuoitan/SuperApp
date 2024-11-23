@@ -1,5 +1,5 @@
 import { ListItem, styled } from "@mui/material";
-import { SAComponent, SAModule } from "../../Config/Sitemap";
+import { SAComponent, SAModule } from "../../Config/sitemap";
 import { useNavigationStore } from "./Store/NavigationStore";
 import { useEffect, useState } from "react";
 import { SideMenuExpander } from "./SideMenuExpander";

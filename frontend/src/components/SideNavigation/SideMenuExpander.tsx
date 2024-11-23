@@ -2,7 +2,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useEffect, useState } from 'react';
 import { useNavigationStore } from './Store/NavigationStore';
-import { SAModule } from '../../Config/Sitemap';
+import { SAModule } from '../../Config/sitemap';
 import styled from '@emotion/styled';
 import { useSideMenuExpanderEvents } from './Hooks/SideMenuExpanderEvents';
 import { IconButton } from '@mui/material';

@@ -2,7 +2,7 @@
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { ListItem, Tooltip } from "@mui/material";
 import { forwardRef, useEffect, useState } from "react";
-import { SAModule, sitemaps } from "../../Config/Sitemap";
+import { SAModule, sitemaps } from "../../Config/sitemap";
 import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 import { useNavigationStore } from "./Store/NavigationStore";
 import { IconWrapper, ItemLabel, MenuItemWrapper } from "./SideMenuItem";
