@@ -1,3 +1,4 @@
+import { cDate } from "./TLConfigs";
 
 
 export type Ev = {
@@ -5,9 +6,12 @@ export type Ev = {
   name: string,
   type: string,
   level: number,
-  shortDesc: string,
-  linkMainPage: string,
+  shortDesc?: string,
+  linkMainPage?: string,
+  content?: string,
+//   width: number,
 
-  timeStart: Date,
-  timeEnd?: Date,
+  timeStart: Date | number | cDate,
+  timeEnd?: Date | number | cDate,
 }
+

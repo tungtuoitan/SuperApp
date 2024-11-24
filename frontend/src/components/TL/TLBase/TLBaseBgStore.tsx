@@ -1,7 +1,11 @@
 
 import React, { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
+import { TI } from "../TLConfigs";
 
-export interface TLBaseContextData {
+export interface TLBaseBgContextData {
+    TIList: TI[];
+    setTIList: Dispatch<SetStateAction<TI[]>>;
+
     spotlightMoment: Date;
     setSpotlightMoment: Dispatch<SetStateAction<Date>>;
 
@@ -10,15 +14,15 @@ export interface TLBaseContextData {
 
     ratio: React.MutableRefObject<number>;
 
-    mili$TLBaseContainer_spotlight: React.MutableRefObject<number>;
-    px$TLBaseContainerLeft_spotlight: React.MutableRefObject<number>;
-    w$TLBaseContent: React.MutableRefObject<number>;
-    mili$TLBaseContentLeft_spotlight: React.MutableRefObject<number>;
+    mili$TLBaseBgContainer_spotlight: React.MutableRefObject<number>;
+    px$TLBaseBgContainerLeft_spotlight: React.MutableRefObject<number>;
+    w$TIList: React.MutableRefObject<number>;
+    mili$TLBaseBgBackgroundLeft_spotlight: React.MutableRefObject<number>;
     mili$70_spotlight: React.MutableRefObject<number>;
     
 
     TLBaseContainerRef: React.RefObject<HTMLDivElement>;
-    TLBaseContentRef: React.RefObject<HTMLDivElement>;
+    TLBaseBackgroundRef: React.RefObject<HTMLDivElement>;
     scrollByHand: React.MutableRefObject<boolean>;
 
     startX: React.MutableRefObject<number>;
@@ -35,7 +39,10 @@ export interface TLBaseContextData {
 
 };
 
-export const TLBaseContextDefaultValue: TLBaseContextData = {
+export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
+
+    TIList: [],
+    setTIList: () => {},
     spotlightMoment: new Date(),
     setSpotlightMoment: () => {},
 
@@ -44,14 +51,14 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
 
     ratio: {current: 0.5},
 
-    mili$TLBaseContainer_spotlight: {current: 0},
-    px$TLBaseContainerLeft_spotlight: {current: 0},
-    w$TLBaseContent: {current: 0},
-    mili$TLBaseContentLeft_spotlight: {current: 0},
+    mili$TLBaseBgContainer_spotlight: {current: 0},
+    px$TLBaseBgContainerLeft_spotlight: {current: 0},
+    w$TIList: {current: 0},
+    mili$TLBaseBgBackgroundLeft_spotlight: {current: 0},
     mili$70_spotlight: {current: 0},
 
     TLBaseContainerRef: {current: null},
-    TLBaseContentRef: {current: null},
+    TLBaseBackgroundRef: {current: null},
 
     scrollByHand: {current: true},
 
@@ -67,10 +74,11 @@ export const TLBaseContextDefaultValue: TLBaseContextData = {
     loadingTL: false,
     setLoadingTL: () => {},
 };
-const TLBaseStore = createContext<TLBaseContextData>(TLBaseContextDefaultValue);
+const TLBaseBgStore = createContext<TLBaseBgContextData>(TLBaseBgContextDefaultValue);
 
-export const useTLBaseStore = () => useContext(TLBaseStore);
-export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+export const useTLBaseBgStore = () => useContext(TLBaseBgStore);
+export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+    const [TIList, setTIList] = useState<TI[]>([]);
     const [spotlightMoment, setSpotlightMoment] = useState<Date>(new Date()); // là TI mà chuột hover vào
     const ratio = useRef<number>(0.5);
     
@@ -79,14 +87,14 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const scrollByHand = useRef<boolean>(true);
     
     const mili$70_spotlight = useRef<number>(0);
-    const mili$TLBaseContentLeft_spotlight = useRef<number>(0);
-    const w$TLBaseContent = useRef<number>(0);
-    const mili$TLBaseContainer_spotlight = useRef<number>(0);
-    const px$TLBaseContainerLeft_spotlight = useRef<number>(0);
+    const mili$TLBaseBgBackgroundLeft_spotlight = useRef<number>(0);
+    const w$TIList = useRef<number>(0);
+    const mili$TLBaseBgContainer_spotlight = useRef<number>(0);
+    const px$TLBaseBgContainerLeft_spotlight = useRef<number>(0);
 
     
     const TLBaseContainerRef = useRef<null| HTMLDivElement>(null);
-    const TLBaseContentRef = useRef<null| HTMLDivElement>(null);
+    const TLBaseBackgroundRef = useRef<null| HTMLDivElement>(null);
 
     const startX = useRef<number>(0);
     const startScrollX = useRef<number>(0);
@@ -97,8 +105,11 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const [loadingTL, setLoadingTL] = useState<boolean>(false);
 
     return (
-        <TLBaseStore.Provider
+        <TLBaseBgStore.Provider
             value={{
+                TIList,
+                setTIList,
+
                 spotlightMoment,
                 setSpotlightMoment,
 
@@ -106,15 +117,14 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
                 setZoomLv,
 
                 ratio,
-
-                mili$TLBaseContainer_spotlight,
-                px$TLBaseContainerLeft_spotlight,
-                w$TLBaseContent,
-                mili$TLBaseContentLeft_spotlight,
+                mili$TLBaseBgContainer_spotlight,
+                px$TLBaseBgContainerLeft_spotlight,
+                w$TIList,
+                mili$TLBaseBgBackgroundLeft_spotlight,
                 mili$70_spotlight,
 
                 TLBaseContainerRef,
-                TLBaseContentRef,
+                TLBaseBackgroundRef,
                 scrollByHand,
 
                 startX,
@@ -131,6 +141,6 @@ export const TLBaseProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
 
             }}>
             {children}
-        </TLBaseStore.Provider>
+        </TLBaseBgStore.Provider>
     )
 }

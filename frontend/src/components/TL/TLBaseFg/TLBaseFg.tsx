@@ -1,0 +1,53 @@
+import React, { useEffect, useState } from "react";
+import { TIc } from "../TLBase/TIc";
+import { baseWofTI, cDate, hper, lvList, TI, } from "../TLConfigs";
+import { useTLBaseBgStore } from "../TLBase/TLBaseBgStore";
+import { cDateToGh, parseCDate, toCDate, useTLBaseHelpers } from "../TLBase/TLBaseHelpers";
+import { v4 as uuidv4 } from 'uuid';
+import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
+import { useTLBaseFgStore } from "./TLBaseFgStore";
+import { Evc } from "./Evc";
+import { Ev } from "../TLTypes";
+
+export const TLBaseFg = () => {
+    const {RhToPx, h$God_R} = useTLBaseHelpers();
+    const {allEvs, setAllEvs} = useTLBaseFgStore();
+
+    useEffect(() => {
+        const evsInit :Ev[] = [
+            { id: '1', name: 'World  War I', type: 'war', level: 1, timeStart: '1914/6/28/1', timeEnd: '1918/11/11/1' }, 
+            { id: '2', name: 'World War II', type: 'war', level: 1, timeStart: '1939/9/1/1',  timeEnd: '1945/9/2/1' }, 
+            { id: '3', name: 'VietName War', type: 'war', level: 1, timeStart: '1955/11/1/1', timeEnd: '1975/4/30/1' }, 
+        ];
+        setAllEvs(evsInit);
+    }, []);
+
+
+    return (
+        <div style={{
+            width: '100%',
+            height: 60,
+
+            flexDirection: 'column',
+            gap: 1,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 100,
+            // background: '#00000050',
+        }}>
+            {allEvs?.map((ev: Ev, index) => {
+                return <Evc 
+                        key={ev.id} 
+                        content={ev.name} 
+                        width={RhToPx(
+                            cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
+                        )} 
+                        left={RhToPx(
+                            cDateToGh(ev.timeStart as cDate) - (h$God_R() ?? 0)
+                        )} 
+                        />
+            })}
+        </div>
+    );
+}

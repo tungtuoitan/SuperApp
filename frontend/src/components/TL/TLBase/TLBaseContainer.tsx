@@ -1,8 +1,15 @@
 import { TLColumn, GroupColumn } from "./TIColumn";
-import { useTLBaseStore } from "./TLBaseStore";
-import { TLBaseContent } from "./TLBaseContent";
+import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
-import { useSettingTimeStore } from "../SettingTime/SettingTimeStore";
+import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
+import { Evc } from "../TLBaseFg/Evc";
+import { Ev } from "../TLTypes";
+import { cDate, hper } from "../TLConfigs";
+import { cDateToGh, parseCDate, useTLBaseHelpers } from "./TLBaseHelpers";
+import { useEffect } from "react";
+import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
+import { TLBaseBg } from "./TLBaseBg";
+import { TLBaseFg } from "../TLBaseFg/TLBaseFg";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -41,10 +48,12 @@ export const TLLoading = () => {
     );
 }
 export const TLBaseContainer = () => {
-    const { TLBaseContainerRef, TLBaseContentRef, mouseDown, setMouseDown, setPosition, w$TLBaseContent, ratio, px$TLBaseContainerLeft_spotlight, mili$70_spotlight,
+    const { TLBaseContainerRef, mouseDown, setMouseDown, setPosition,
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv
-    } = useTLBaseStore();
-    const { timeConfig, setTimeConfig } = useSettingTimeStore();
+    } = useTLBaseBgStore();
+    const { timeConfig, setTimeConfig } = useTimeConfigStore();
+    const {RhToPx, h$God_R} = useTLBaseHelpers();
+    
 
     return (
         <div
@@ -90,12 +99,12 @@ export const TLBaseContainer = () => {
                         onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                             setPosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 });
                             // 1. tính ratio
-                            // const mili$TLBaseContent_spotlight = e.clientX - (TLBaseContentRef.current?.getBoundingClientRect()?.left ?? 0);
-                            // w$TLBaseContent.current = TLBaseContentRef.current?.getBoundingClientRect()?.width ?? 0;
-                            // ratio.current = mili$TLBaseContent_spotlight / w$TLBaseContent.current;
+                            // const mili$TLBaseBackground_spotlight = e.clientX - (TLBaseBackgroundRef.current?.getBoundingClientRect()?.left ?? 0);
+                            // w$TIList.current = TLBaseBackgroundRef.current?.getBoundingClientRect()?.width ?? 0;
+                            // ratio.current = mili$TLBaseBackground_spotlight / w$TIList.current;
 
                             // 2. tính spotlightMoment
-                            // mili$70_spotlight.current = mili$70_Lveft + ratio.current * w$TLBaseContent.current / (lvList[timeConfig.level].initw * zoomLv)
+                            // mili$70_spotlight.current = mili$70_Lveft + ratio.current * w$TIList.current / (lvList[timeConfig.level].initw * zoomLv)
 
 
                             // 2.scroll khi mousedownmousemove
@@ -129,8 +138,8 @@ export const TLBaseContainer = () => {
                                     //         break;
                                     //     }
                                     // }
-                                    // if(lvList[newTimeConfig.level].levelName === 'year' && timeConfig.in1000YearsVal) {
-                                    //     const newInYearsList = getInYearsList(timeConfig.in1000YearsVal.date);
+                                    // if(lvList[newTimeConfig.level].levelName === 'year' && timeConfig.period) {
+                                    //     const newInYearsList = getInYearsList(timeConfig.period.date);
                                     //     newTimeConfig.inYearsVal = newInYearsList[0];
                                     // }
                                    
@@ -169,7 +178,13 @@ export const TLBaseContainer = () => {
                                 setTimeConfig(newTimeConfig);
                         }}
                     >
-                            <TLBaseContent />
+                        <div style={{
+                            // border: '1px solid red',
+                            position: 'relative',
+                        }}>
+                            <TLBaseBg/>
+                            <TLBaseFg/>
+                        </div>
                     </div>
             }
         </div>

@@ -1,9 +1,9 @@
 
-import { TLProvider } from './TLStore'
-import { TLBaseProvider } from './TLBase/TLBaseStore'
+import { TLBaseFgProvider } from './TLBaseFg/TLBaseFgStore'
+import { TLBaseBgProvider } from './TLBase/TLBaseBgStore'
 import { TLBaseContainer } from './TLBase/TLBaseContainer'
-import { SettingTimeBar } from './SettingTime/SettingTimeBar'
-import { SettingTimeProvider } from './SettingTime/SettingTimeStore'
+import { TimeConfigBar } from './TimeConfig/TimeConfigBar'
+import { TimeConfigProvider } from './TimeConfig/TimeConfigStore'
 
 export default function TLContainer() {
 
@@ -12,16 +12,16 @@ export default function TLContainer() {
       width: '100%',
       marginTop: '50px',
     }}>
-      <TLProvider>
-        <TLBaseProvider>
-            <SettingTimeProvider>
+      <TLBaseFgProvider>
+        <TLBaseBgProvider>
+            <TimeConfigProvider>
                 <div style={{margin: '10px', display: 'flex', flexDirection: 'column'}}>
-                    <SettingTimeBar/>
+                    <TimeConfigBar/>
                     <TLBaseContainer />
                 </div>
-            </SettingTimeProvider>
-        </TLBaseProvider>
-      </TLProvider>
+            </TimeConfigProvider>
+        </TLBaseBgProvider>
+      </TLBaseFgProvider>
     </div>
   )
 }

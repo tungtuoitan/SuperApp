@@ -5,10 +5,8 @@
 - Mo: Model
 
 - Ev: Event
-- El: element
-- IS: InfinityScroll
 - Cur: Current
-- TI: TI
+- TI: Timeline Item
 
 - TILeft:    là TI ở bên trái màn hình mà mình thấy được
 - TIRight:             phải_
@@ -18,6 +16,9 @@
 - wi: width
 - he: height
 
+- Gh: God hour, tức thời gian tính theo mốc God, năm 0 Sau Công Nguyên
+- Rh: Root hour, tức thời gian tính từ mốc của TLBaseBgContent
+
 # 2.convention
 - mỗi đơn vị UI là 1 component và tương ứng với 1 folder, 
 - tất cả mọi thứ phải gói trong folder đó
@@ -26,6 +27,8 @@
 - giờ ở DB là UTC, ở backend thì convert thành localTime rồi gửi lên FE
 
 - id luôn bắt đầu từ 0, tức id luôn bằng index trong array
+- mặc định thì dùng loại giờ: Gh, và time: cDate
+
 
 # 3.logic
 - khi di chuột, update spotlightmoment
@@ -33,8 +36,14 @@
 - khi scroll to leftEdge,  TILeft của curTIList sẽ trở thành newTIMid
 - _             right,      right_
 
+# 4. chuyện về type của date
+- dùng cDate trong db, vì nó sẽ trực quan, ta sẽ đọc và hiểu được data
+- cái chính là chuyển từ cDate <-> width
+- 
+- k dùng newDate, vì cái này bổ sung sau cũng dc,
+- về tính chính xác của cDate, nó có nghiêm trọng không? --> không, vì chỉ cần thêm 1 thuộc tính exactDate để lưu newDateString là xong
+
 # 4.note
-- max trên screen: 50TI (tuỳ vào screen lớn/nhỏ)
 - URL gồm: https + domain + API endpoint + params
 
 ## 4.1.câu hỏi

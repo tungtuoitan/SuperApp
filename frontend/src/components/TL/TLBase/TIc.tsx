@@ -1,7 +1,10 @@
-import { lvList, TI, inMonthsList } from "../TLConfigs";
+import { lvList, TI, cDate, getMonthShortName, baseWofTI } from "../TLConfigs";
 import { styled } from "@mui/styles";
 import { parseCDate, toCDate } from "./TLBaseHelpers";
-import { useTLStore } from "../TLStore";
+import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
+import { get } from "http";
+import { Evc } from "../TLBaseFg/Evc";
+import { Ev } from "../TLTypes";
 
 const ContainerTI = styled('div')({
     // borderRight: '1px solid #bfbfbf',
@@ -19,39 +22,30 @@ const ContainerTI = styled('div')({
     overflow: 'hidden',
 })
 
-
-export const TIc = (props: { TI: TI, index: number, level: number, zoomLv: number }) => {
-    const { TI, index, level, zoomLv } = props;
+// TIc: TI component
+export const TIc = (props: {date: cDate, index: number, level: number, zoomLv: number, evs?: Ev[]|null }) => { // TODO: item này re-render rất nhiều, sau 
+    const { date, index, level, zoomLv, evs } = props;
 
     return (
         <ContainerTI
             className="TIc"
             style={{
                 display: 'flex',
-                width: 60 * zoomLv,
+                width: baseWofTI * zoomLv,
                 color: '#202020 !important',
 
                 borderLeft: (() => {
-                        const { y, m, d, h } = parseCDate(TI.date);
-                        if ((lvList[level].levelName === '1000years' && y % 100 === 0) || 
-                            (lvList[level].levelName === 'year' && d === 1)) return '1px solid #00000050'
-                        return '1px solid transparent'
-                    })()
+                    const { y, m, d, h } = parseCDate(date);
+                    if ((lvList[level].levelName === '1000years' && y % 100 === 0) ||
+                        (lvList[level].levelName === 'year' && d === 1)) return '1px solid #00000050'
+                    return '1px solid transparent'
+                })()
             }}>
             {
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%'
-                    }}
-                >
-                    {/* //! 1.content */}
-                    <div style={{
-                        borderLeft: '1px solid #bfbfbf50',
-                    }}>
-                        <div style={{height: 60}}>
-                            {/* content */}
-                        </div>
+                <div style={{width: '100%',height: '100%'}}>
+                    <div style={{borderLeft: '1px solid #bfbfbf50'}}>
+                        {/* //! 1.content */}   
+                        <div style={{ height: 60, position: 'relative' }}></div>
                         {/* //! 2.time */}
                         <div
                             style={{
@@ -61,13 +55,12 @@ export const TIc = (props: { TI: TI, index: number, level: number, zoomLv: numbe
                                 padding: '5px',
                                 height: 30,
                                 color: '#202020',
-                            }}
-                        >
+                            }}>
                             {(() => {
-                                const { y, m, d, h } = parseCDate(TI.date);
+                                const { y, m, d, h } = parseCDate(date);
                                 switch (lvList[level].unitName) {
                                     case 'year': return y
-                                    case 'month': return m;
+                                    case 'month': return getMonthShortName(m);
                                     case 'day': return d;
                                     case 'hour': return h > 12 ? (h - 12) + 'pm' : h + 'am';
                                     default: return '';
@@ -88,21 +81,19 @@ export const TIc = (props: { TI: TI, index: number, level: number, zoomLv: numbe
                     >
                         {
                             (() => {
-                                const { y, m, d, h } = parseCDate(TI.date);
+                                const { y, m, d, h } = parseCDate(date);
                                 let text = ''
                                 if (lvList[level].levelName === '1000years' && y % 100 === 0) text = y.toString()
-                                // if (lvList[level].levelName === 'century' && y % 10 === 0) return y
-                                if (lvList[level].levelName === 'year' && d === 1) text = y + '.' + inMonthsList[m - 1].label
-                                // if (lvList[level].levelName === 'month' && d === 1) {
-                                //     return y + inMonthsList[m - 1]?.label
-                                // }
+                                if (lvList[level].levelName === 'century' && m === 1) return y 
+                                if (lvList[level].levelName === 'year' && d === 1) text = y + '.' + getMonthShortName(m)
+                              
 
-                                if(text.length < 10) {
+                                if (text.length < 7) {
                                     return <span>{text}</span>
                                 } else {
-                                    return <span style={{fontSize: 11}}>{text}</span>
+                                    return <span style={{ fontSize: 11 }}>{text}</span>
                                 }
-                                
+
                             })()
                         }
                     </div>
