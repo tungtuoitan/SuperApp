@@ -53,11 +53,8 @@ code {
 *::before,
 *::after {
     box-sizing: border-box;
-    color: #202020;
     user-select: none;
 }
-
-
 
 
 /* 2------TLContainer------ */
@@ -68,10 +65,10 @@ code {
 }
 
 /* ẩn scrollbar */
-/* #TLBaseContainer {
+#TLBaseContainer3 {
     scrollbar-width: none; 
     -ms-overflow-style: none; 
   }
-#TLBaseContainer::-webkit-scrollbar {
+#TLBaseContainer3::-webkit-scrollbar {
 display: none ; 
-} */
+}

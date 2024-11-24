@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
-import TLContainer from "../TL/UI/TLContainer";
+import TLContainer from "../TL/TLContainer";
 
 export const SideNavRoot = styled('div')({
   flexGrow: 1,

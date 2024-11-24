@@ -76,7 +76,6 @@ export const LoginStore = createContext<LoginContextData>(initLoginStore);
 export const useLoginStore = () => useContext(LoginStore);
 
 export const LoginProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
-    console.log('re-render LoginStore')
   const [loginForm, setLoginForm] = useReducer(
     (state: any, newState: any) => ({ ...state, ...newState }),
     initLoginForm
