@@ -37,6 +37,9 @@ export interface TLBaseBgContextData {
     loadingTL: boolean;
     setLoadingTL: Dispatch<SetStateAction<boolean>>;
 
+    dateReal: Date;
+    setDateReal: Dispatch<SetStateAction<Date>>;
+
 };
 
 export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
@@ -73,6 +76,9 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
 
     loadingTL: false,
     setLoadingTL: () => {},
+
+    dateReal: new Date(),
+    setDateReal: () => {},
 };
 const TLBaseBgStore = createContext<TLBaseBgContextData>(TLBaseBgContextDefaultValue);
 
@@ -102,7 +108,10 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [mouseDown, setMouseDown] = useState<boolean>(false);
 
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [loadingTL, setLoadingTL] = useState<boolean>(false);
+    const [loadingTL, setLoadingTL] = useState<boolean>(true);
+
+    const [dateReal, setDateReal] = useState<Date>(new Date());
+
 
     return (
         <TLBaseBgStore.Provider
@@ -138,6 +147,9 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
                 loadingTL,
                 setLoadingTL,
+
+                dateReal,
+                setDateReal,
 
             }}>
             {children}

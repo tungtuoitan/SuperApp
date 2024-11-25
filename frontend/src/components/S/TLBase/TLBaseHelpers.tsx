@@ -5,8 +5,9 @@ import { useTLBaseBgStore } from "./TLBaseBgStore";
 
 
 export const useTLBaseHelpers = () => {
-    const { TIList, zoomLv } = useTLBaseBgStore();
+    const { TIList, zoomLv, TLBaseContainerRef } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
+    const {dateReal} = useTLBaseBgStore();
 
     const h$God_R = () => { // God ở đây là mốc 0, R là Root (tức gốc của TIList)
         if (TIList && TIList[0] && TIList[0].date) {
@@ -25,10 +26,34 @@ export const useTLBaseHelpers = () => {
         return h / RhPerPx();
     }
 
+    const w$R_Red = () => {
+        const y = dateReal.getFullYear();
+        const m = dateReal.getMonth() + 1
+        const d = dateReal.getDate();
+        const h = Number((dateReal.getHours() + dateReal.getMinutes() / 60).toFixed(2))
+        const realCDate = toCDate(y, m, d, h);
+        return RhToPx(
+            cDateToGh(realCDate) - (h$God_R() ?? 0)
+        )
+    }
+
+    const maxScrollLeft = () => {
+        if(!TLBaseContainerRef.current) return 0;
+        return TLBaseContainerRef.current?.scrollWidth - TLBaseContainerRef.current?.clientWidth;
+    }
+    const w$TLContainerBase = () => {
+        if(!TLBaseContainerRef.current) return 0;
+        return TLBaseContainerRef.current?.clientWidth;
+    }
+
+
     return {
         h$God_R,
+        w$R_Red,
         RhPerPx,
         RhToPx,
+        maxScrollLeft,
+        w$TLContainerBase,
     }
 }
 

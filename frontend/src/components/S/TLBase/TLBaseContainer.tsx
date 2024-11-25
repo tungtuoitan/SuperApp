@@ -16,7 +16,9 @@ const LoadingWrapper = () => (
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-        background: 'transparent',
+        background: 'white',
+        position: 'absolute',
+        zIndex: 100000,
     }}>
         <div
             className="loadingWrapper"
@@ -42,18 +44,25 @@ export const TLLoading = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
             }}
-        >
-
-        </div>
+        />
     );
 }
 export const TLBaseContainer = () => {
     const { TLBaseContainerRef, mouseDown, setMouseDown, setPosition,
-        startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv
+        startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
-    const {RhToPx, h$God_R} = useTLBaseHelpers();
-    
+    const { w$R_Red, h$God_R, maxScrollLeft, w$TLContainerBase } = useTLBaseHelpers();
+
+    useEffect(() => {
+        if (TLBaseContainerRef.current) {
+            if(maxScrollLeft() > w$R_Red()){
+                TLBaseContainerRef.current.scrollLeft = w$R_Red() - w$TLContainerBase()/2;
+                // setLoadingTL(false)
+            }
+
+        }
+    }, [TIList])
 
     return (
         <div
@@ -63,10 +72,11 @@ export const TLBaseContainer = () => {
                 width: '100%',
                 height: '150px', // TODO: make this dynamic,
                 display: 'flex',
+                position: 'relative',
             }}>
             <GroupColumn val={'zoomLv:' + zoomLv} width="100px" id="" />
+            {/* { loadingTL ? <LoadingWrapper /> : <></>}  */}
             {
-                loadingTL ? <LoadingWrapper /> :
                     <div
                         id="TLBaseContainer"
                         ref={TLBaseContainerRef}
@@ -125,10 +135,10 @@ export const TLBaseContainer = () => {
                             e.preventDefault();
                             let newTimeConfig = { ...timeConfig };
                             let newZoomLv = zoomLv;
-                            
+
                             // 1.calc newL
                             // ~zoom in
-                            if(e.deltaY < 0) { 
+                            if (e.deltaY < 0) {
                                 if (zoomLv >= 6) {
                                     // console.log('uplevel')
                                     // uplevel nếu có thể
@@ -142,16 +152,16 @@ export const TLBaseContainer = () => {
                                     //     const newInYearsList = getInYearsList(timeConfig.period.date);
                                     //     newTimeConfig.inYearsVal = newInYearsList[0];
                                     // }
-                                   
+
                                     // newZoomLv = 1;
                                 } else {
                                     // console.log('upzoom')
                                     newZoomLv += 1;
                                 }
                             }
-                            
+
                             // ~zoom out
-                            if(e.deltaY > 0) {
+                            if (e.deltaY > 0) {
                                 if (zoomLv <= 1) {
                                     // console.log('downlevel')
                                     // newZoomLv = 6;
@@ -174,16 +184,15 @@ export const TLBaseContainer = () => {
 
                             setZoomLv(newZoomLv);
                             // console.log("newZoomLv:", newZoomLv);
-                            if(newTimeConfig.level !== timeConfig.level)
+                            if (newTimeConfig.level !== timeConfig.level)
                                 setTimeConfig(newTimeConfig);
                         }}
                     >
                         <div style={{
-                            // border: '1px solid red',
                             position: 'relative',
                         }}>
-                            <TLBaseBg/>
-                            <TLBaseFg/>
+                            <TLBaseBg />
+                            <TLBaseFg />
                         </div>
                     </div>
             }

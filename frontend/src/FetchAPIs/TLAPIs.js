@@ -1,5 +1,5 @@
-import { constants } from "../Config/Constants";
-import { getLocaleLanguage } from "../Utilities";
+import { constants } from "../Config/Constants.js";
+import { getLocaleLanguage } from "../Utilities.js";
 
 
 export const getEvs = async (token, skip) => {

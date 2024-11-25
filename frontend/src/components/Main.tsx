@@ -11,7 +11,6 @@ export const Main = () =>  {
                   style={{ 
                     overflow: 'hidden', 
                     height: '100%',  
-                    // border: '4px solid red',
                     width: '100%', 
                     margin: 0,
                     padding: 0,
