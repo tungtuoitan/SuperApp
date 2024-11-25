@@ -36,7 +36,7 @@ export const TIc = (props: {date: cDate, index: number, level: number, zoomLv: n
 
                 borderLeft: (() => {
                     const { y, m, d, h } = parseCDate(date);
-                    if ((lvList[level].levelName === '1000years' && y % 100 === 0) ||
+                    if ((lvList[level].levelName === '100years' && y % 100 === 0) ||
                         (lvList[level].levelName === 'year' && d === 1)) return '1px solid #00000050'
                     return '1px solid transparent'
                 })()
@@ -62,7 +62,7 @@ export const TIc = (props: {date: cDate, index: number, level: number, zoomLv: n
                                     case 'year': return y
                                     case 'month': return getMonthShortName(m);
                                     case 'day': return d;
-                                    case 'hour': return h > 12 ? (h - 12) + 'pm' : h + 'am';
+                                    case 'hour': return h > 12 ? <span>{h-12}</span> : <span >{h}</span>;
                                     default: return '';
                                 }
                             })()}
@@ -83,16 +83,21 @@ export const TIc = (props: {date: cDate, index: number, level: number, zoomLv: n
                             (() => {
                                 const { y, m, d, h } = parseCDate(date);
                                 let text = ''
-                                if (lvList[level].levelName === '1000years' && y % 100 === 0) text = y.toString()
-                                if (lvList[level].levelName === 'century' && m === 1) return y 
-                                if (lvList[level].levelName === 'year' && d === 1) text = y + '.' + getMonthShortName(m)
+                                if (lvList[level].levelName === '100years' && y % 10 === 0) text = y.toString()
+                                if (lvList[level].levelName === 'year') {
+                                    if(d === 1 && m === 1) text = y.toString() + ' ' + getMonthShortName(m)
+                                    if(d === 1 && m !== 1) text = getMonthShortName(m)
+                                }
+                                if (lvList[level].levelName === 'month') {
+                                    if(d === 1 && h === 1) text = getMonthShortName(m) + ' ' + d.toString()
+                                    if(d !== 1 && h === 1) text = d.toString()}
                               
 
-                                if (text.length < 7) {
-                                    return <span>{text}</span>
-                                } else {
+                                // if (text.length < 7) {
+                                //     return <span>{text}</span>
+                                // } else {
                                     return <span style={{ fontSize: 11 }}>{text}</span>
-                                }
+                                // }
 
                             })()
                         }

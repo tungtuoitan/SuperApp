@@ -19,24 +19,14 @@ export const TLBaseBg = () => {
         const { y, m, d, h } = parseCDate(timeConfig.period.date);
 
 
-        if (lvList[timeConfig.level].levelName === '1000years') {
-            for (let i = 0; i < 1000; i++) {
+        if (lvList[timeConfig.level].levelName === '100years') {
+            for (let i = 0; i < 100; i++) {
+                const year = y + i;
+                if(year > 2100) break;
                 const TI = {
                     id: uuidv4(),
-                    date: toCDate(y + i, 1, 1, 0)
-                } as TI;
+                    date: toCDate(year, 1, 1, 1)} as TI;
                 newTIList.push(TI);
-            }
-        }
-        else if (lvList[timeConfig.level].levelName === 'century') {
-            for (let i = 0; i < 100; i++) {
-                for (let j = 1; j <= 12; j++) {
-                    const TI = {
-                        id: uuidv4(),
-                        date: toCDate(y + i, j, 1, 0)
-                    } as TI;
-                    newTIList.push(TI);
-                }
             }
         }
         else if (lvList[timeConfig.level].levelName === 'year') {
@@ -44,7 +34,18 @@ export const TLBaseBg = () => {
                 for (let j = 1; j <= 30; j++) {
                     const TI = {
                         id: uuidv4(),
-                        date: toCDate(y, i, j, 0)
+                        date: toCDate(y, i, j, 1)
+                    } as TI;
+                    newTIList.push(TI);
+                }
+            }
+        }
+        else if (lvList[timeConfig.level].levelName === 'month') {
+            for (let i = 1; i <= 30; i++) {
+                for (let j = 1; j <= 24; j++) {
+                    const TI = {
+                        id: uuidv4(),
+                        date: toCDate(y, m, i, j)
                     } as TI;
                     newTIList.push(TI);
                 }

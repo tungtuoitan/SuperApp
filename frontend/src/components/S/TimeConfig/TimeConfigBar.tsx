@@ -1,7 +1,7 @@
 import { Autocomplete, Button, FormControl, FormGroup, FormLabel, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { lvList, cDateOption, cDate, in1000YearsList } from "../TLConfigs";
-import { getPeriodListUnit1000y, getInYearsList, getPeriodListUnit100y, parseCDate, getPeriodListUnit1y } from "../TLBase/TLBaseHelpers";
-import { useTimeConfigStore } from "./TimeConfigStore";
+import { getPeriodListUnit1000y, getInYearsList, getPeriodListUnit100y, parseCDate, getPeriodListUnit1y, getPeriodListUnit1m } from "../TLBase/TLBaseHelpers";
+import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
 
 export const TimeConfigBar = () => {
@@ -17,12 +17,11 @@ export const TimeConfigBar = () => {
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
-        const list = getPeriodListUnit100y()
-        const timeConfigInit = { level: 0, period: list[119] };
+        const list = getPeriodListUnit1m()
+        const timeConfigInit = { level: 2, period: list[10]} as timeConfig
 
-        if (timeConfigInit.level === 0) setAllPeriods(getPeriodListUnit1000y());
-        if (timeConfigInit.level === 1) setAllPeriods(getPeriodListUnit100y());
-        if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1y());
+        if (timeConfigInit.level === 1) setAllPeriods(getPeriodListUnit1y());
+        if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1m());
 
         setTimeConfig(timeConfigInit);
         setTimeConfig2(timeConfigInit);
@@ -53,10 +52,16 @@ export const TimeConfigBar = () => {
                     onChange={(e) => {
                         if (e.target.value !== timeConfig2.level) {
                             const newLv = e.target.value as number;
-                            setTimeConfig2({ ...timeConfig2, level: newLv, period: null });
-                            if (newLv === 0) setAllPeriods(getPeriodListUnit1000y());
-                            if (newLv === 1) setAllPeriods(getPeriodListUnit100y());
-                            if (newLv === 2) setAllPeriods(getPeriodListUnit1y());
+                            if (newLv === 0) {
+                                const periodList = getPeriodListUnit1000y();
+                                setAllPeriods(periodList);
+                                setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
+                            }
+                            if (newLv === 1) {
+                                const periodList = getPeriodListUnit1y();
+                                setAllPeriods(periodList);
+                                setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
+                            }
                         }
 
                     }}
@@ -77,6 +82,7 @@ export const TimeConfigBar = () => {
                     options={allPeriods}
                     sx={{ width: 200 }}
                     value={timeConfig2.period}
+                    disabled={timeConfig2.level === 0}
                     onChange={(e, value) => {
                         if (value && value?.date !== timeConfig2.period?.date) {
                             setTimeConfig2({ ...timeConfig2, period: value as cDateOption });

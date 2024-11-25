@@ -86,8 +86,8 @@ export const getInYearsList = (date: cDate) => {
 }
 
 export const getPeriodListUnit1000y = () => {
-    const { y, m, d, h } = parseCDate('-10000/1/1/1' as cDate);
-    const newIn100YearsList = [] as cDateOption[];
+    const { y, m, d, h } = parseCDate('2024/1/1/1' as cDate);
+    const new100yList = [] as cDateOption[];
     for (let i = 0; i < 15; i++) {
         const year = y + i * 1000;
         if (year >= 3000) break;
@@ -96,33 +96,21 @@ export const getPeriodListUnit1000y = () => {
             label: `${year} -> ${y + (i + 1) * 1000}`,
             date: `${year}/1/1/1` as cDate,
         } as cDateOption;
-        newIn100YearsList.push(period);
+        new100yList.push(period);
     }
-    return newIn100YearsList;
+    return new100yList;
 }
 
 export const getPeriodListUnit100y = () => {
-    const { y, m, d, h } = parseCDate('-10000/1/1/1' as cDate);
-    const periodList = [] as cDateOption[];
-    for (let i = 0; i < 200; i++) {
-        const year = y + i * 100;
-        if (year >= 3000) break;
-        const period = {
-            id: `${uuidv4()}-${i}`,
-            label: `${year} -> ${year + 100}`,
-            date: `${year}/1/1/1` as cDate,
-        } as cDateOption;
-        periodList.push(period);
-    }
-    return periodList;
+    return [{ id: `0`,label: `${2024} -> 2100`, date: `${2024}/1/1/1`}] as cDateOption[];
 }
 
 export const getPeriodListUnit1y = () => {
-    const { y, m, d, h } = parseCDate('-10000/1/1/1' as cDate);
+    const { y, m, d, h } = parseCDate('2024/1/1/1' as cDate);
     const periodList = [] as cDateOption[];
-    for (let i = 0; i < 14000; i++) {
+    for (let i = 0; i < 100; i++) {
         const year = y + i;
-        if (year >= 3000) break;
+        if (year >= 2100) break;
         const period = {
             id: `${uuidv4()}-${i}`,
             label: `${year}`,
@@ -133,4 +121,22 @@ export const getPeriodListUnit1y = () => {
     return periodList;
 }
 
+
+export const getPeriodListUnit1m = () => {
+    const { y, m, d, h } = parseCDate('2024/1/1/1' as cDate);
+    const periodList = [] as cDateOption[];
+    for (let i = 0; i < 100; i++) {
+        const year = y + i;
+        if(year >= 2100) break;
+        for(let j = 1; j <= 12; j++) {
+            const period = {
+                id: `${uuidv4()}-${i}`,
+                label: `${year}-${j}`,
+                date: `${year}/${j}/1/1` as cDate,
+            } as cDateOption;
+            periodList.push(period);
+        }
+    }
+    return periodList;
+}
 

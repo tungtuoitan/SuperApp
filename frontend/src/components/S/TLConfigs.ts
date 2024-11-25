@@ -85,14 +85,12 @@ export type TI = { // mỗi TI là 1 Date + levelName
 
 export type BigLevelOption = {label: string, id: string, unitName: string}
 
-export type levelName = 'hour' | 'day' | 'month' | 'year' | 'century' | '1000years'
+export type levelName = 'month' | 'year' | '100years'
 
 export const lvList: Lv[] = [ // đây là array chứa các timelineLevel
-    { id: 0, levelName: '1000years',     unitName: 'year',  status:  'on', hPerUnit: hper.y }, 
-    { id: 1, levelName: 'century',       unitName: 'month', status:  'on', hPerUnit: hper.m }, 
-    { id: 2, levelName: 'year',          unitName: 'day',   status:  'on', hPerUnit: hper.d },
-    { id: 3, levelName: 'month',         unitName: 'hour',  status:  'on', hPerUnit: hper.h },
-    { id: 4, levelName: 'day',           unitName: 'min',   status:  'off',hPerUnit: 1/60 },
+    { id: 0, levelName: '100years',      unitName: 'year',  status:  'on', hPerUnit: hper.y }, 
+    { id: 1, levelName: 'year',          unitName: 'day',   status:   'on', hPerUnit: hper.d },
+    { id: 2, levelName: 'month',         unitName: 'hour',  status:  'on', hPerUnit: hper.h },
 ]
 
 export type cDateOption = {id: string, label: string, date: cDate};
