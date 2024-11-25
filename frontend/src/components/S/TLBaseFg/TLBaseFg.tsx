@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { TIc } from "../TLBase/TIc";
+import { TIc } from "../TLBaseBg/TIc";
 import { baseWofTI, cDate, hper, lvList, TI, } from "../TLConfigs";
-import { useTLBaseBgStore } from "../TLBase/TLBaseBgStore";
-import { cDateToGh, parseCDate, toCDate, useTLBaseHelpers } from "../TLBase/TLBaseHelpers";
+import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
+import { cDateToGh, parseCDate, toCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Evc } from "./Evc";
 import { Ev } from "../TLTypes";
 import { getEvs } from "../../../FetchAPIs/TLAPIs";
-import { RedLine } from "../TLBase/RedLine";
+import { RedLine } from "../TLBaseBg/RedLine";
 
 export const TLBaseFg = () => {
-    const { RhToPx, h$God_R } = useTLBaseHelpers();
+    const { RhToPx, h$God_R } = useTLBaseBgHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { dateReal, setDateReal } = useTLBaseBgStore();
 

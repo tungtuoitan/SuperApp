@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 
 
-export const useTLBaseHelpers = () => {
+export const useTLBaseBgHelpers = () => {
     const { TIList, zoomLv, TLBaseContainerRef } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const {dateReal} = useTLBaseBgStore();

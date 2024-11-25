@@ -1,7 +1,7 @@
 
 import { TLBaseFgProvider } from './TLBaseFg/TLBaseFgStore'
-import { TLBaseBgProvider } from './TLBase/TLBaseBgStore'
-import { TLBaseContainer } from './TLBase/TLBaseContainer'
+import { TLBaseBgProvider } from './TLBaseBg/TLBaseBgStore'
+import { TLBaseContainer } from './TLBaseContainer'
 import { TimeConfigBar } from './TimeConfig/TimeConfigBar'
 import { TimeConfigProvider } from './TimeConfig/TimeConfigStore'
 

@@ -1,15 +1,15 @@
-import { TLColumn, GroupColumn } from "./TIColumn";
-import { useTLBaseBgStore } from "./TLBaseBgStore";
+import { TLColumn, GroupColumn } from "./TLBaseBg/TIColumn";
+import { useTLBaseBgStore } from "./TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
-import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { Evc } from "../TLBaseFg/Evc";
-import { Ev } from "../TLTypes";
-import { cDate, hper } from "../TLConfigs";
-import { cDateToGh, parseCDate, useTLBaseHelpers } from "./TLBaseHelpers";
+import { useTimeConfigStore } from "./TimeConfig/TimeConfigStore";
+import { Evc } from "./TLBaseFg/Evc";
+import { Ev } from "./TLTypes";
+import { cDate, hper } from "./TLConfigs";
+import { cDateToGh, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
 import { useEffect } from "react";
-import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
-import { TLBaseBg } from "./TLBaseBg";
-import { TLBaseFg } from "../TLBaseFg/TLBaseFg";
+import { useTLBaseFgStore } from "./TLBaseFg/TLBaseFgStore";
+import { TLBaseBg } from "./TLBaseBg/TLBaseBg";
+import { TLBaseFg } from "./TLBaseFg/TLBaseFg";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -52,7 +52,7 @@ export const TLBaseContainer = () => {
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
-    const { w$R_Red, h$God_R, maxScrollLeft, w$TLContainerBase } = useTLBaseHelpers();
+    const { w$R_Red, h$God_R, maxScrollLeft, w$TLContainerBase } = useTLBaseBgHelpers();
 
     useEffect(() => {
         if (TLBaseContainerRef.current) {
