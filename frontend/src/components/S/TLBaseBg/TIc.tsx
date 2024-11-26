@@ -58,7 +58,9 @@ export const TIc = (props: {date: cDate, level: number, zoomLv: number }) => { /
                                     case 'year': return y
                                     case 'month': return getMonthShortName(m);
                                     case 'day': return d;
-                                    case 'hour': return h > 12 ? <span>{h-12}</span> : <span >{h}</span>;
+                                    case 'hour': return h > 12 
+                                                ? <span>{h-12}"</span>
+                                                : <span>{h}"</span>
                                     default: return '';
                                 }
                             })()}
