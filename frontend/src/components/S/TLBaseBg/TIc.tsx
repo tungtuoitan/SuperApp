@@ -1,10 +1,6 @@
 import { lvList, TI, cDate, getMonthShortName, baseWofTI } from "../TLConfigs";
 import { styled } from "@mui/styles";
 import { parseCDate, toCDate } from "./TLBaseBgHelpers";
-import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
-import { get } from "http";
-import { Evc } from "../TLBaseFg/Evc";
-import { Ev } from "../TLTypes";
 
 const ContainerTI = styled('div')({
     // borderRight: '1px solid #bfbfbf',
@@ -23,8 +19,8 @@ const ContainerTI = styled('div')({
 })
 
 // TIc: TI component
-export const TIc = (props: {date: cDate, index: number, level: number, zoomLv: number, evs?: Ev[]|null }) => { // TODO: item này re-render rất nhiều, sau 
-    const { date, index, level, zoomLv, evs } = props;
+export const TIc = (props: {date: cDate, level: number, zoomLv: number }) => { // TODO: item này re-render rất nhiều, sau 
+    const { date, level, zoomLv } = props;
 
     return (
         <ContainerTI

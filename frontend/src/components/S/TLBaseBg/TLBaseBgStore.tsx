@@ -5,27 +5,20 @@ import { TI } from "../TLConfigs";
 export interface TLBaseBgContextData {
     TIList: TI[];
     setTIList: Dispatch<SetStateAction<TI[]>>;
-
-    spotlightMoment: Date;
-    setSpotlightMoment: Dispatch<SetStateAction<Date>>;
-
     zoomLv: number;
     setZoomLv: Dispatch<SetStateAction<number>>;
+    dateReal: Date;
+    setDateReal: Dispatch<SetStateAction<Date>>;
 
     spotRatio: React.MutableRefObject<number>;
+    w$FrameLeft_spot: React.MutableRefObject<number>;
 
-    w$TIList: React.MutableRefObject<number>;
-    w$BgLeft_spot: React.MutableRefObject<number>;
-    w$70_spot: React.MutableRefObject<number>;
-    
-
-    TLBaseContainerRef: React.RefObject<HTMLDivElement>;
+    TLBaseFrameRef: React.RefObject<HTMLDivElement>;
     TLBaseBgRef: React.RefObject<HTMLDivElement>;
     scrollByHand: React.MutableRefObject<boolean>;
 
     startX: React.MutableRefObject<number>;
     startScrollX: React.MutableRefObject<number>;
-
     mouseDown: boolean;
     setMouseDown: Dispatch<SetStateAction<boolean>>;
     
@@ -34,36 +27,26 @@ export interface TLBaseBgContextData {
 
     loadingTL: boolean;
     setLoadingTL: Dispatch<SetStateAction<boolean>>;
-
-    dateReal: Date;
-    setDateReal: Dispatch<SetStateAction<Date>>;
-
+    
 };
 
 export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
-
     TIList: [],
     setTIList: () => {},
-    spotlightMoment: new Date(),
-    setSpotlightMoment: () => {},
-
     zoomLv: 1,
     setZoomLv: () => {},
+    dateReal: new Date(),
+    setDateReal: () => {},
 
     spotRatio: {current: 0.5},
+    w$FrameLeft_spot: {current: 0},
 
-    w$TIList: {current: 0},
-    w$BgLeft_spot: {current: 0},
-    w$70_spot: {current: 0},
-
-    TLBaseContainerRef: {current: null},
+    TLBaseFrameRef: {current: null},
     TLBaseBgRef: {current: null},
-
     scrollByHand: {current: true},
 
     startX: {current: 0},
     startScrollX: {current: 0},
-
     mouseDown: false,
     setMouseDown: () => {},
 
@@ -73,63 +56,50 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
     loadingTL: false,
     setLoadingTL: () => {},
 
-    dateReal: new Date(),
-    setDateReal: () => {},
 };
 const TLBaseBgStore = createContext<TLBaseBgContextData>(TLBaseBgContextDefaultValue);
 
 export const useTLBaseBgStore = () => useContext(TLBaseBgStore);
 export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [TIList, setTIList] = useState<TI[]>([]);
-    const [spotlightMoment, setSpotlightMoment] = useState<Date>(new Date()); // là TI mà chuột hover vào
-    const spotRatio = useRef<number>(0.5);
-    
     const [zoomLv, setZoomLv] = useState<number>(1);
-    
-    const scrollByHand = useRef<boolean>(true);
-    
-    const w$70_spot = useRef<number>(0);
-    const w$BgLeft_spot = useRef<number>(0);
-
-    const w$TIList = useRef<number>(0);
-    const TLBaseContainerRef = useRef<null| HTMLDivElement>(null);
+    const spotRatio = useRef<number>(0.5);
+    const TLBaseFrameRef = useRef<null| HTMLDivElement>(null);
     const TLBaseBgRef = useRef<null| HTMLDivElement>(null);
-
+    const [dateReal, setDateReal] = useState<Date>(new Date());
+    
+    const w$FrameLeft_spot = useRef<number>(0);
+    
     const startX = useRef<number>(0);
     const startScrollX = useRef<number>(0);
-
+    const scrollByHand = useRef<boolean>(true);
     const [mouseDown, setMouseDown] = useState<boolean>(false);
+
 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [loadingTL, setLoadingTL] = useState<boolean>(true);
 
-    const [dateReal, setDateReal] = useState<Date>(new Date());
 
 
     return (
         <TLBaseBgStore.Provider
-            value={{
+        value={{
                 TIList,
                 setTIList,
-
-                spotlightMoment,
-                setSpotlightMoment,
-
                 zoomLv,
                 setZoomLv,
+                dateReal,
+                setDateReal,
 
                 spotRatio,
-                w$TIList,
-                w$BgLeft_spot,
-                w$70_spot,
+                w$FrameLeft_spot,
 
-                TLBaseContainerRef,
+                TLBaseFrameRef,
                 TLBaseBgRef,
                 scrollByHand,
 
                 startX,
                 startScrollX,
-
                 mouseDown,
                 setMouseDown,
 
@@ -139,8 +109,6 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 loadingTL,
                 setLoadingTL,
 
-                dateReal,
-                setDateReal,
 
             }}>
             {children}

@@ -5,7 +5,7 @@ import { useTLBaseBgStore } from "./TLBaseBgStore";
 
 
 export const useTLBaseBgHelpers = () => {
-    const { TIList, zoomLv, TLBaseContainerRef, TLBaseBgRef, spotRatio } = useTLBaseBgStore();
+    const { TIList, zoomLv, TLBaseFrameRef, TLBaseBgRef, spotRatio } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
@@ -26,9 +26,9 @@ export const useTLBaseBgHelpers = () => {
             cDateToGh(realCDate) - (h$G_BgStart() ?? 0)
         )
     }
-    const w$TLContainerBase = () => {
-        if (!TLBaseContainerRef.current) return 0;
-        return TLBaseContainerRef.current?.clientWidth;
+    const w$TLBaseFrame = () => {
+        if (!TLBaseFrameRef.current) return 0;
+        return TLBaseFrameRef.current?.clientWidth;
     }
     const w$Bg = () => {
         if (!TLBaseBgRef.current) return 0;
@@ -36,10 +36,10 @@ export const useTLBaseBgHelpers = () => {
     }
     const w$R_spot = () => w$Bg() * spotRatio.current;
 
-    
+
     const maxScrollLeft = () => {
-        if (!TLBaseContainerRef.current) return 0;
-        return TLBaseContainerRef.current?.scrollWidth - TLBaseContainerRef.current?.clientWidth;
+        if (!TLBaseFrameRef.current) return 0;
+        return TLBaseFrameRef.current?.scrollWidth - TLBaseFrameRef.current?.clientWidth;
     }
 
 
@@ -82,10 +82,11 @@ export const useTLBaseBgHelpers = () => {
         RhPerPx,
         RhToPx,
         maxScrollLeft,
-        w$TLContainerBase,
+        w$TLBaseFrame,
         w$R_spot,
         h$G_BgEnd,
         dateToCDate,
+        w$Bg,
     }
 }
 

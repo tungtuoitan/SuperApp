@@ -48,24 +48,24 @@ export const TLLoading = () => {
     );
 }
 export const TLBaseContainer = () => {
-    const { TLBaseContainerRef, mouseDown, setMouseDown, setMousePosition,
-        startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, w$TIList, spotRatio, w$BgLeft_spot
+    const { TLBaseFrameRef, mouseDown, setMouseDown, setMousePosition,
+        startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, spotRatio, w$FrameLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
-    const { w$R_Red, h$G_BgStart, maxScrollLeft, w$TLContainerBase, w$R_spot } = useTLBaseBgHelpers();
+    const { w$R_Red, w$TLBaseFrame, w$R_spot, w$Bg } = useTLBaseBgHelpers();
 
     useEffect(() => {
-        if (TLBaseContainerRef.current) {
-            if(timeConfig.period) {
+        if (TLBaseFrameRef.current) {
+            if (timeConfig.period) {
                 const { y, m, d, h } = parseCDate(timeConfig.period.date);
                 // nếu đang có dateReal
-                if(timeConfig.level === 1 && y === dateReal.getFullYear() ||
-                    timeConfig.level === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1){
-                    TLBaseContainerRef.current.scrollLeft = w$R_Red() - w$TLContainerBase() / 2;
+                if (timeConfig.level === 1 && y === dateReal.getFullYear() ||
+                    timeConfig.level === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
+                    TLBaseFrameRef.current.scrollLeft = w$R_Red() - w$TLBaseFrame() / 2;
                 }
                 // nếu k có dateReal 
-                else { 
-                    TLBaseContainerRef.current.scrollLeft = 0
+                else {
+                    TLBaseFrameRef.current.scrollLeft = 0
                 }
             }
             // setLoadingTL(false)
@@ -74,8 +74,8 @@ export const TLBaseContainer = () => {
 
     // giữ spotlight 
     useEffect(() => {
-        if (TLBaseContainerRef.current) {
-            TLBaseContainerRef.current.scrollLeft = w$R_spot() - w$BgLeft_spot.current
+        if (TLBaseFrameRef.current) {
+            TLBaseFrameRef.current.scrollLeft = w$R_spot() - w$FrameLeft_spot.current
         }
     }, [zoomLv])
 
@@ -93,8 +93,8 @@ export const TLBaseContainer = () => {
             {/* { loadingTL ? <LoadingWrapper /> : <></>}  */}
             {
                 <div
-                    id="TLBaseContainer"
-                    ref={TLBaseContainerRef}
+                    id="TLBaseFrame"
+                    ref={TLBaseFrameRef}
                     style={{
                         width: 'calc(100% - 100px)',
                         // width: 'calc(400px)',
@@ -109,11 +109,11 @@ export const TLBaseContainer = () => {
                             scrollByHand.current = true;
 
                             if (!e.target) return;
-                            if (!TLBaseContainerRef.current) return;
+                            if (!TLBaseFrameRef.current) return;
 
-                            const ISPosition = TLBaseContainerRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
+                            const ISPosition = TLBaseFrameRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
                             startX.current = e.pageX - ISPosition;
-                            startScrollX.current = TLBaseContainerRef.current.scrollLeft;
+                            startScrollX.current = TLBaseFrameRef.current.scrollLeft;
                         }
                     }}
                     onMouseUp={() => {
@@ -122,36 +122,29 @@ export const TLBaseContainer = () => {
                         }
                     }}
                     onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                        if (!TLBaseContainerRef.current) return;
+                        if (!TLBaseFrameRef.current) return;
                         // setMousePosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 }); (dùng cho MouseTooltip)
 
                         // 1. tính spotRatio
                         const w$Bg_spot = e.clientX - (TLBaseBgRef.current?.getBoundingClientRect()?.left ?? 0);
-                        w$TIList.current = TLBaseBgRef.current?.getBoundingClientRect()?.width ?? 0;
-                        spotRatio.current = w$Bg_spot / w$TIList.current;
+                        spotRatio.current = w$Bg_spot / w$Bg();
 
-                        const rect = TLBaseContainerRef.current.getBoundingClientRect(); // Lấy tọa độ container
-                        w$BgLeft_spot.current = e.clientX - rect.left;
-
-                        // 2. tính spotlightMoment
-                        // w$70_spot.current = w$70_Lveft + spotRatio.current * w$TIList.current / (lvList[timeConfig.level].initw * zoomLv)
-
+                        const rect = TLBaseFrameRef.current.getBoundingClientRect(); 
+                        w$FrameLeft_spot.current = e.clientX - rect.left;
 
                         // 2.scroll khi mousedownmousemove
                         if (!mouseDown || !scrollByHand.current) return;
-                        const ISPosition = TLBaseContainerRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
+                        const ISPosition = TLBaseFrameRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
                         const endX = e.pageX - ISPosition;
-                        TLBaseContainerRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
+                        TLBaseFrameRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
 
-                        // 3. update Lvist
-                        // updateLvist$WhenTouchEdge();
                     }}
                     onMouseLeave={() => {
                         setMouseDown(false);
                     }}
                     // onMouseEnter={() => { setMouseEnter(true) }}
                     onWheel={(e: React.WheelEvent) => {
-                        if(!TLBaseContainerRef.current) return;
+                        if (!TLBaseFrameRef.current) return;
                         e.preventDefault();
                         let newTimeConfig = { ...timeConfig };
                         let newZoomLv = zoomLv;
@@ -199,9 +192,6 @@ export const TLBaseContainer = () => {
                                 newZoomLv -= 1;
                             }
                         }
-
-                        // lưu lại, để dùng trong useEffect (trong useEffect k có e.clientX)
-                        // px$TLBaseContainerLeft_spot.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0) // value này k đổi trước và sau khi zoom
 
                         setZoomLv(newZoomLv);
                         if (newTimeConfig.level !== timeConfig.level)

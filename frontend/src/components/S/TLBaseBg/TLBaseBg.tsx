@@ -69,7 +69,6 @@ export const TLBaseBg = () => {
                     <TIc
                         key={TI.id}
                         date={TI.date}
-                        index={index}
                         level={timeConfig.level}
                         zoomLv={zoomLv}
                     />

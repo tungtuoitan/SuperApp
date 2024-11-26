@@ -33,6 +33,8 @@ export const TLBaseFg = () => {
         const interval = setInterval(() => setDateReal(new Date()), 60 * 1000);
         return () => clearInterval(interval);
     }, []);
+
+    // loại bỏ Ev nằm ngoài Timeline
     const filterEvs = allEvs
         .filter(ev => {
             const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
