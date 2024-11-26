@@ -62,6 +62,11 @@ export const TimeConfigBar = () => {
                                 setAllPeriods(periodList);
                                 setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
                             }
+                            if (newLv === 2) {
+                                const periodList = getPeriodListUnit1m();
+                                setAllPeriods(periodList);
+                                setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
+                            }
                         }
 
                     }}

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { TIc } from "../TLBaseBg/TIc";
-import { baseWofTI, cDate, hper, lvList, TI, } from "../TLConfigs";
+import { baseWofTI, cDate } from "../TLConfigs";
 import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
 import { cDateToGh, parseCDate, toCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
-import { v4 as uuidv4 } from 'uuid';
-import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Evc } from "./Evc";
 import { Ev } from "../TLTypes";
@@ -12,7 +10,7 @@ import { getEvs } from "../../../FetchAPIs/TLAPIs";
 import { RedLine } from "../TLBaseBg/RedLine";
 
 export const TLBaseFg = () => {
-    const { RhToPx, h$God_R } = useTLBaseBgHelpers();
+    const { RhToPx, h$G_BgStart, h$G_BgEnd, dateToCDate } = useTLBaseBgHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { dateReal, setDateReal } = useTLBaseBgStore();
 
@@ -24,7 +22,7 @@ export const TLBaseFg = () => {
         ];
         getEvs()
             .then((data: Ev[]) => {
-                setAllEvs(data);
+                setAllEvs([data[0]]);
             })
 
     }, []);
@@ -32,36 +30,47 @@ export const TLBaseFg = () => {
 
     // mỗi 1 phút cập nhật lại thời gian thực
     useEffect(() => {
-        const interval = setInterval(() => setDateReal(new Date()), 60*1000);
+        const interval = setInterval(() => setDateReal(new Date()), 60 * 1000);
         return () => clearInterval(interval);
     }, []);
+    const filterEvs = allEvs
+        .filter(ev => {
+            const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
+            const Gh_timeEnd = cDateToGh(ev.timeEnd as cDate);
+            if (h$G_BgEnd() > Gh_timeStart && Gh_timeStart > (h$G_BgStart() ?? 0) ||
+            h$G_BgEnd() > Gh_timeEnd && Gh_timeEnd > (h$G_BgStart() ?? 0)) return true;
+})
 
-    return (
-        <div style={{
-            width: '100%',
-            height: 60,
+const h$G_Red = cDateToGh(dateToCDate(dateReal));
+const displayRedLine =  (h$G_BgEnd() >= h$G_Red && h$G_Red >= (h$G_BgStart() ?? 0)) // display redLine when its in current Timeline
 
-            flexDirection: 'column',
-            gap: 1,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 100,
-            // background: '#00000050',
-        }}>
-            {allEvs?.map((ev: Ev, index) => {
-                return <Evc
-                    key={ev.id}
-                    content={ev.name}
-                    width={RhToPx(
-                        cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
-                    )}
-                    left={RhToPx(
-                        cDateToGh(ev.timeStart as cDate) - (h$God_R() ?? 0)
-                    )}
-                />
-            })}
-            <RedLine />
-        </div>
-    );
+return (
+    <div style={{
+        width: '100%',
+        height: 60,
+
+        flexDirection: 'column',
+        gap: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 100,
+        // background: '#00000050',
+    }}>
+        {filterEvs?.map((ev: Ev, index) => {
+            const left = RhToPx(
+                cDateToGh(ev.timeStart as cDate) - (h$G_BgStart() ?? 0)
+            )
+            return <Evc
+                key={ev.id}
+                content={ev.name}
+                width={RhToPx(
+                    cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
+                )}
+                left={left}
+            />
+        })}
+        {displayRedLine && <RedLine />}
+    </div>
+);
 }

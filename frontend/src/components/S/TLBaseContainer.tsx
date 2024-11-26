@@ -48,21 +48,36 @@ export const TLLoading = () => {
     );
 }
 export const TLBaseContainer = () => {
-    const { TLBaseContainerRef, mouseDown, setMouseDown, setPosition,
-        startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL
+    const { TLBaseContainerRef, mouseDown, setMouseDown, setMousePosition,
+        startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, w$TIList, spotRatio, w$BgLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
-    const { w$R_Red, h$God_R, maxScrollLeft, w$TLContainerBase } = useTLBaseBgHelpers();
+    const { w$R_Red, h$G_BgStart, maxScrollLeft, w$TLContainerBase, w$R_spot } = useTLBaseBgHelpers();
 
     useEffect(() => {
         if (TLBaseContainerRef.current) {
-            if(maxScrollLeft() > w$R_Red()){
-                TLBaseContainerRef.current.scrollLeft = w$R_Red() - w$TLContainerBase()/2;
-                // setLoadingTL(false)
+            if(timeConfig.period) {
+                const { y, m, d, h } = parseCDate(timeConfig.period.date);
+                // nếu đang có dateReal
+                if(timeConfig.level === 1 && y === dateReal.getFullYear() ||
+                    timeConfig.level === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1){
+                    TLBaseContainerRef.current.scrollLeft = w$R_Red() - w$TLContainerBase() / 2;
+                }
+                // nếu k có dateReal 
+                else { 
+                    TLBaseContainerRef.current.scrollLeft = 0
+                }
             }
-
+            // setLoadingTL(false)
         }
     }, [TIList])
+
+    // giữ spotlight 
+    useEffect(() => {
+        if (TLBaseContainerRef.current) {
+            TLBaseContainerRef.current.scrollLeft = w$R_spot() - w$BgLeft_spot.current
+        }
+    }, [zoomLv])
 
     return (
         <div
@@ -77,124 +92,129 @@ export const TLBaseContainer = () => {
             <GroupColumn val={'zoomLv:' + zoomLv} width="100px" id="" />
             {/* { loadingTL ? <LoadingWrapper /> : <></>}  */}
             {
-                    <div
-                        id="TLBaseContainer"
-                        ref={TLBaseContainerRef}
-                        style={{
-                            width: 'calc(100% - 100px)',
-                            // width: 'calc(400px)',
-                            // height: '200px', // TODO: make this dynamic,
-                            overflow: 'auto',
-                            display: 'flex',
-                        }}
-                        onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { // event: mousedown luôn chạy 2 lần, có thể do touchStart 
-                            e.stopPropagation();
-                            if (!mouseDown) {
-                                setMouseDown(true)
-                                scrollByHand.current = true;
+                <div
+                    id="TLBaseContainer"
+                    ref={TLBaseContainerRef}
+                    style={{
+                        width: 'calc(100% - 100px)',
+                        // width: 'calc(400px)',
+                        // height: '200px', // TODO: make this dynamic,
+                        overflow: 'auto',
+                        display: 'flex',
+                    }}
+                    onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { // event: mousedown luôn chạy 2 lần, có thể do touchStart 
+                        e.stopPropagation();
+                        if (!mouseDown) {
+                            setMouseDown(true)
+                            scrollByHand.current = true;
 
-                                if (!e.target) return;
-                                if (!TLBaseContainerRef.current) return;
-
-                                const ISPosition = TLBaseContainerRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
-                                startX.current = e.pageX - ISPosition;
-                                startScrollX.current = TLBaseContainerRef.current.scrollLeft;
-                            }
-                        }}
-                        onMouseUp={() => {
-                            if (mouseDown) {
-                                setMouseDown(false);
-                            }
-                        }}
-                        onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                            setPosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 });
-                            // 1. tính ratio
-                            // const mili$TLBaseBackground_spotlight = e.clientX - (TLBaseBackgroundRef.current?.getBoundingClientRect()?.left ?? 0);
-                            // w$TIList.current = TLBaseBackgroundRef.current?.getBoundingClientRect()?.width ?? 0;
-                            // ratio.current = mili$TLBaseBackground_spotlight / w$TIList.current;
-
-                            // 2. tính spotlightMoment
-                            // mili$70_spotlight.current = mili$70_Lveft + ratio.current * w$TIList.current / (lvList[timeConfig.level].initw * zoomLv)
-
-
-                            // 2.scroll khi mousedownmousemove
-                            if (!mouseDown || !scrollByHand.current) return;
+                            if (!e.target) return;
                             if (!TLBaseContainerRef.current) return;
+
                             const ISPosition = TLBaseContainerRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
-                            const endX = e.pageX - ISPosition;
-                            TLBaseContainerRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
-
-                            // 3. update Lvist
-                            // updateLvist$WhenTouchEdge();
-                        }}
-                        onMouseLeave={() => {
+                            startX.current = e.pageX - ISPosition;
+                            startScrollX.current = TLBaseContainerRef.current.scrollLeft;
+                        }
+                    }}
+                    onMouseUp={() => {
+                        if (mouseDown) {
                             setMouseDown(false);
-                        }}
-                        // onMouseEnter={() => { setMouseEnter(true) }}
-                        onWheel={(e: React.WheelEvent) => {
-                            e.preventDefault();
-                            let newTimeConfig = { ...timeConfig };
-                            let newZoomLv = zoomLv;
+                        }
+                    }}
+                    onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                        if (!TLBaseContainerRef.current) return;
+                        // setMousePosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 }); (dùng cho MouseTooltip)
 
-                            // 1.calc newL
-                            // ~zoom in
-                            if (e.deltaY < 0) {
-                                if (zoomLv >= 6) {
-                                    // console.log('uplevel')
-                                    // uplevel nếu có thể
-                                    // for(let i= newTimeConfig.level+1; i<lvList.length; i++) {
-                                    //     if(lvList[i].status === 'on') {
-                                    //         newTimeConfig.level = i;
-                                    //         break;
-                                    //     }
-                                    // }
-                                    // if(lvList[newTimeConfig.level].levelName === 'year' && timeConfig.period) {
-                                    //     const newInYearsList = getInYearsList(timeConfig.period.date);
-                                    //     newTimeConfig.inYearsVal = newInYearsList[0];
-                                    // }
+                        // 1. tính spotRatio
+                        const w$Bg_spot = e.clientX - (TLBaseBgRef.current?.getBoundingClientRect()?.left ?? 0);
+                        w$TIList.current = TLBaseBgRef.current?.getBoundingClientRect()?.width ?? 0;
+                        spotRatio.current = w$Bg_spot / w$TIList.current;
 
-                                    // newZoomLv = 1;
-                                } else {
-                                    // console.log('upzoom')
-                                    newZoomLv += 1;
-                                }
+                        const rect = TLBaseContainerRef.current.getBoundingClientRect(); // Lấy tọa độ container
+                        w$BgLeft_spot.current = e.clientX - rect.left;
+
+                        // 2. tính spotlightMoment
+                        // w$70_spot.current = w$70_Lveft + spotRatio.current * w$TIList.current / (lvList[timeConfig.level].initw * zoomLv)
+
+
+                        // 2.scroll khi mousedownmousemove
+                        if (!mouseDown || !scrollByHand.current) return;
+                        const ISPosition = TLBaseContainerRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
+                        const endX = e.pageX - ISPosition;
+                        TLBaseContainerRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
+
+                        // 3. update Lvist
+                        // updateLvist$WhenTouchEdge();
+                    }}
+                    onMouseLeave={() => {
+                        setMouseDown(false);
+                    }}
+                    // onMouseEnter={() => { setMouseEnter(true) }}
+                    onWheel={(e: React.WheelEvent) => {
+                        if(!TLBaseContainerRef.current) return;
+                        e.preventDefault();
+                        let newTimeConfig = { ...timeConfig };
+                        let newZoomLv = zoomLv;
+
+                        // 1.calc newL
+                        // ~zoom in
+                        if (e.deltaY < 0) {
+                            if (zoomLv >= 6) {
+                                // console.log('uplevel')
+                                // uplevel nếu có thể
+                                // for(let i= newTimeConfig.level+1; i<lvList.length; i++) {
+                                //     if(lvList[i].status === 'on') {
+                                //         newTimeConfig.level = i;
+                                //         break;
+                                //     }
+                                // }
+                                // if(lvList[newTimeConfig.level].levelName === 'year' && timeConfig.period) {
+                                //     const newInYearsList = getInYearsList(timeConfig.period.date);
+                                //     newTimeConfig.inYearsVal = newInYearsList[0];
+                                // }
+
+                                // newZoomLv = 1;
+                            } else {
+                                // console.log('upzoom')
+                                newZoomLv += 1;
+
                             }
+                        }
 
-                            // ~zoom out
-                            if (e.deltaY > 0) {
-                                if (zoomLv <= 1) {
-                                    // console.log('downlevel')
-                                    // newZoomLv = 6;
+                        // ~zoom out
+                        if (e.deltaY > 0) {
+                            if (zoomLv <= 1) {
+                                // console.log('downlevel')
+                                // newZoomLv = 6;
 
-                                    // downlevel nếu có thể
-                                    // for(let i= timeConfig.level-1; i >= 0; i--) {
-                                    //     if(lvList[i].status === 'on') {
-                                    //         newTimeConfig.level = i;
-                                    //         break;
-                                    //     }
-                                    // }
-                                } else {
-                                    // console.log('downzoom')
-                                    newZoomLv -= 1;
-                                }
+                                // downlevel nếu có thể
+                                // for(let i= timeConfig.level-1; i >= 0; i--) {
+                                //     if(lvList[i].status === 'on') {
+                                //         newTimeConfig.level = i;
+                                //         break;
+                                //     }
+                                // }
+                            } else {
+                                // console.log('downzoom')
+                                newZoomLv -= 1;
                             }
+                        }
 
-                            // // lưu lại, để dùng trong useEffect (trong useEffect k có e.clientX)
-                            // px$TLBaseContainerLeft_spotlight.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0) // value này k đổi trước và sau khi zoom
+                        // lưu lại, để dùng trong useEffect (trong useEffect k có e.clientX)
+                        // px$TLBaseContainerLeft_spot.current = e.clientX - (TLBaseContainerRef.current?.getBoundingClientRect()?.left ?? 0) // value này k đổi trước và sau khi zoom
 
-                            setZoomLv(newZoomLv);
-                            // console.log("newZoomLv:", newZoomLv);
-                            if (newTimeConfig.level !== timeConfig.level)
-                                setTimeConfig(newTimeConfig);
-                        }}
-                    >
-                        <div style={{
-                            position: 'relative',
-                        }}>
-                            <TLBaseBg />
-                            <TLBaseFg />
-                        </div>
+                        setZoomLv(newZoomLv);
+                        if (newTimeConfig.level !== timeConfig.level)
+                            setTimeConfig(newTimeConfig);
+                    }}
+                >
+                    <div style={{
+                        position: 'relative',
+                    }}>
+                        <TLBaseBg />
+                        <TLBaseFg />
                     </div>
+                </div>
             }
         </div>
     );

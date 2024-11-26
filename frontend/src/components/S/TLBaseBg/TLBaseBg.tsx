@@ -9,7 +9,7 @@ import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
 
 export const TLBaseBg = () => {
     
-    const { zoomLv, TLBaseBackgroundRef, TIList, setTIList } = useTLBaseBgStore();
+    const { zoomLv, TLBaseBgRef, TIList, setTIList } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
 
@@ -60,7 +60,7 @@ export const TLBaseBg = () => {
     return (
         <div
             id="TIList"
-            ref={TLBaseBackgroundRef}
+            ref={TLBaseBgRef}
             style={{
                 display: 'flex',
             }}>
