@@ -43,9 +43,6 @@ export const TLBaseFg = () => {
             h$G_BgEnd() > Gh_timeEnd && Gh_timeEnd > (h$G_BgStart() ?? 0)) return true;
 })
 
-const h$G_Red = cDateToGh(dateToCDate(dateReal));
-const displayRedLine =  (h$G_BgEnd() >= h$G_Red && h$G_Red >= (h$G_BgStart() ?? 0)) // display redLine when its in current Timeline
-
 return (
     <div style={{
         width: '100%',
@@ -72,7 +69,6 @@ return (
                 left={left}
             />
         })}
-        {displayRedLine && <RedLine />}
     </div>
 );
 }

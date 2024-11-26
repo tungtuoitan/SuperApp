@@ -65,10 +65,10 @@ code {
 }
 
 /* ẩn scrollbar */
-#TLBaseContainer3 {
+#TLBaseFrame {
     scrollbar-width: none; 
     -ms-overflow-style: none; 
   }
-#TLBaseContainer3::-webkit-scrollbar {
+#TLBaseFrame::-webkit-scrollbar {
 display: none ; 
 }

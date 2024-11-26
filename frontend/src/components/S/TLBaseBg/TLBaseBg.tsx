@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { TIc } from "./TIc";
 import { baseWofTI, cDate, hper, lvList, TI, } from "../TLConfigs";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { parseCDate, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { cDateToGh, parseCDate, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
+import { RedLine } from "./RedLine";
 
 export const TLBaseBg = () => {
     
-    const { zoomLv, TLBaseBgRef, TIList, setTIList } = useTLBaseBgStore();
+    const { zoomLv, TLBaseBgRef, TIList, setTIList, dateReal  } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
+    const { h$G_BgStart, h$G_BgEnd, dateToCDate } = useTLBaseBgHelpers();
 
     useEffect(() => {
         if (!timeConfig.period) return;
@@ -57,6 +59,9 @@ export const TLBaseBg = () => {
         if (isFirstTime) setIsFirstTime(false);
     }, [timeConfig]);
 
+    const h$G_Red = cDateToGh(dateToCDate(dateReal));
+    const displayRedLine =  (h$G_BgEnd() >= h$G_Red && h$G_Red >= (h$G_BgStart() ?? 0)) // display redLine when its in current Timeline
+
     return (
         <div
             id="TIList"
@@ -74,6 +79,7 @@ export const TLBaseBg = () => {
                     />
                 )
             })}
+            {displayRedLine && <RedLine />}
         </div>
     );
 }
