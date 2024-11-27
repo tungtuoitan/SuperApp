@@ -16,8 +16,6 @@ export const useTLBaseBgHelpers = () => {
     const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
     const w$BgStart_spot = w$Bg * spotRatio.current;
 
-
-    const { y, m, d, h } = (TIList[0] && TIList[0].date) ? parseCDate(TIList[0].date) : { y: 0, m: 0, d: 0, h: 0 };
     const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
 
     const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
@@ -84,9 +82,8 @@ export const cDateToGh = (date: cDate) => new Date(date).getTime() / miliperh
 
 export const GhToCDate = (h: number) => dateToCDate(new Date(h * miliperh));
 
-export const pxToRh = (px: number, hPerPx: number) => {
-    return px * hPerPx;
-}
+export const pxToRh = (px: number, hPerPx: number) =>  px * hPerPx;
+
 
 
 

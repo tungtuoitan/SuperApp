@@ -198,7 +198,7 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <div style={{position: 'relative'}}>
+                    <div style={{ position: 'relative' }}>
                         <TLBaseBg />
                         <TLBaseFg />
                     </div>
