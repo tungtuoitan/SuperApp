@@ -52,7 +52,7 @@ export const TLBaseContainer = () => {
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, spotRatio, w$FrameLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
-    const { w$R_Red, w$TLBaseFrame, w$R_spot, w$Bg } = useTLBaseBgHelpers();
+    const { w$BgStart_red, w$TLBaseFrame, w$BgStart_spot, w$Bg } = useTLBaseBgHelpers();
 
     useEffect(() => {
         if (TLBaseFrameRef.current) {
@@ -61,7 +61,7 @@ export const TLBaseContainer = () => {
                 // nếu đang có dateReal
                 if (timeConfig.level === 1 && y === dateReal.getFullYear() ||
                     timeConfig.level === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
-                    TLBaseFrameRef.current.scrollLeft = w$R_Red() - w$TLBaseFrame() / 2;
+                    TLBaseFrameRef.current.scrollLeft = w$BgStart_red - w$TLBaseFrame / 2;
                 }
                 // nếu k có dateReal 
                 else {
@@ -75,7 +75,7 @@ export const TLBaseContainer = () => {
     // giữ spotlight 
     useEffect(() => {
         if (TLBaseFrameRef.current) {
-            TLBaseFrameRef.current.scrollLeft = w$R_spot() - w$FrameLeft_spot.current
+            TLBaseFrameRef.current.scrollLeft = w$BgStart_spot - w$FrameLeft_spot.current
         }
     }, [zoomLv])
 
@@ -127,9 +127,9 @@ export const TLBaseContainer = () => {
 
                         // 1. tính spotRatio
                         const w$Bg_spot = e.clientX - (TLBaseBgRef.current?.getBoundingClientRect()?.left ?? 0);
-                        spotRatio.current = w$Bg_spot / w$Bg();
+                        spotRatio.current = w$Bg_spot / w$Bg;
 
-                        const rect = TLBaseFrameRef.current.getBoundingClientRect(); 
+                        const rect = TLBaseFrameRef.current.getBoundingClientRect();
                         w$FrameLeft_spot.current = e.clientX - rect.left;
 
                         // 2.scroll khi mousedownmousemove
@@ -198,9 +198,7 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <div style={{
-                        position: 'relative',
-                    }}>
+                    <div style={{position: 'relative'}}>
                         <TLBaseBg />
                         <TLBaseFg />
                     </div>

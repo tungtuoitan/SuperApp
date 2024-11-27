@@ -1,7 +1,7 @@
 import { cDateToGh, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 
 export const RedLine = () => {
-    const { w$R_Red } = useTLBaseBgHelpers();
+    const { w$BgStart_red } = useTLBaseBgHelpers();
 
     return (
         <div
@@ -11,7 +11,7 @@ export const RedLine = () => {
                 background: 'red',
                 position: 'absolute',
                 // top: 0,
-                left: w$R_Red(),
+                left: w$BgStart_red,
             }}/>
     )
 }

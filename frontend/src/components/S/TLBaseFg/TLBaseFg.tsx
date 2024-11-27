@@ -8,11 +8,14 @@ import { Evc } from "./Evc";
 import { Ev } from "../TLTypes";
 import { getEvs } from "../../../FetchAPIs/TLAPIs";
 import { RedLine } from "../TLBaseBg/RedLine";
+import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
+import { time } from "console";
 
 export const TLBaseFg = () => {
     const { RhToPx, h$G_BgStart, h$G_BgEnd, dateToCDate } = useTLBaseBgHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { dateReal, setDateReal } = useTLBaseBgStore();
+    const { dateReal, setDateReal, zoomLv } = useTLBaseBgStore();
+    const { timeConfig } = useTimeConfigStore();
 
     useEffect(() => {
         const evsInit: Ev[] = [
@@ -39,36 +42,36 @@ export const TLBaseFg = () => {
         .filter(ev => {
             const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
             const Gh_timeEnd = cDateToGh(ev.timeEnd as cDate);
-            if (h$G_BgEnd() > Gh_timeStart && Gh_timeStart > (h$G_BgStart() ?? 0) ||
-            h$G_BgEnd() > Gh_timeEnd && Gh_timeEnd > (h$G_BgStart() ?? 0)) return true;
-})
+            if (h$G_BgEnd > Gh_timeStart && Gh_timeStart > h$G_BgStart ||
+                h$G_BgEnd > Gh_timeEnd && Gh_timeEnd > h$G_BgStart) return true;
+        })
 
-return (
-    <div style={{
-        width: '100%',
-        height: 60,
+    return (
+        <div style={{
+            width: '100%',
+            height: 60,
 
-        flexDirection: 'column',
-        gap: 1,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        zIndex: 100,
-        // background: '#00000050',
-    }}>
-        {filterEvs?.map((ev: Ev, index) => {
-            const left = RhToPx(
-                cDateToGh(ev.timeStart as cDate) - (h$G_BgStart() ?? 0)
-            )
-            return <Evc
-                key={ev.id}
-                content={ev.name}
-                width={RhToPx(
-                    cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
-                )}
-                left={left}
-            />
-        })}
-    </div>
-);
+            flexDirection: 'column',
+            gap: 1,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 100,
+            // background: '#00000050',
+        }}>
+            {filterEvs?.map((ev: Ev, index) => {
+                const left = RhToPx(
+                    cDateToGh(ev.timeStart as cDate) - h$G_BgStart
+                )
+                return <Evc
+                    key={ev.id}
+                    content={ev.name}
+                    width={RhToPx(
+                        cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
+                    )}
+                    left={left}
+                />
+            })}
+        </div>
+    );
 }

@@ -3,93 +3,55 @@ import { cDate, y, m, d, h, cDateOption, hper, lvList, baseWofTI } from "../TLCo
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 
-
 export const useTLBaseBgHelpers = () => {
-    const { TIList, zoomLv, TLBaseFrameRef, TLBaseBgRef, spotRatio } = useTLBaseBgStore();
+    const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
-    // 1.Khoảng cách tính sẵn
-    const h$G_BgStart = () => { 
-        if (TIList && TIList[0] && TIList[0].date) {
-            const { y, m, d, h } = parseCDate(TIList[0].date);
-            return d + y * hper.y + m * hper.m + d * hper.h;
-        }
-    }
-    const h$G_BgEnd = () => {
-        return (h$G_BgStart() ?? 0) + w$Bg() * RhPerPx();
-    }
+    const hourPerTI = lvList[timeConfig.level].hPerUnit;
+    const pxPerTI = baseWofTI * zoomLv;
+    const RhPerPx = hourPerTI / pxPerTI;
 
-    const w$R_Red = () => {
-        const realCDate = dateToCDate(dateReal);
-        return RhToPx(
-            cDateToGh(realCDate) - (h$G_BgStart() ?? 0)
-        )
-    }
-    const w$TLBaseFrame = () => {
-        if (!TLBaseFrameRef.current) return 0;
-        return TLBaseFrameRef.current?.clientWidth;
-    }
-    const w$Bg = () => {
-        if (!TLBaseBgRef.current) return 0;
-        return TLBaseBgRef.current.clientWidth;
-    }
-    const w$R_spot = () => w$Bg() * spotRatio.current;
+    const w$Bg = baseWofTI * zoomLv * TIList.length
+    const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
+    const w$BgStart_spot = w$Bg * spotRatio.current;
 
 
-    const maxScrollLeft = () => {
-        if (!TLBaseFrameRef.current) return 0;
-        return TLBaseFrameRef.current?.scrollWidth - TLBaseFrameRef.current?.clientWidth;
-    }
+    const { y, m, d, h } = (TIList[0] && TIList[0].date) ? parseCDate(TIList[0].date) : { y: 0, m: 0, d: 0, h: 0 };
+    const h$G_BgStart = (TIList[0] && TIList[0].date) ? y * hper.y + m * hper.m + d * hper.d + h : 0;
 
+    const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
+    const h$G_red = cDateToGh(dateToCDate(dateReal));
 
+    const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
 
+    const realCDate = dateToCDate(dateReal);
+    const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
 
-
-
-
-    // 2. hàm chuyển đổi
-    const RhPerPx = () => {
-        const hourPerTI = lvList[timeConfig.level].hPerUnit;
-        const pxPerTI = baseWofTI * zoomLv;
-        return hourPerTI / pxPerTI;
-    }
-
-    const RhToPx = (h: number) => {
-        return h / RhPerPx();
-    }
-
-    const dateToCDate = (date: Date) => {
-        const y = date.getFullYear();
-        const m = date.getMonth() + 1;
-        const d = date.getDate();
-        const h = Number((date.getHours() + date.getMinutes() / 60).toFixed(2));
-        return toCDate(y, m, d, h);
-    }
-
-    
-
-
-
-
-
-
-  
+    const RhToPx = (h: number) => h / RhPerPx
 
     return {
         h$G_BgStart,
-        w$R_Red,
+        w$BgStart_red,
         RhPerPx,
         RhToPx,
         maxScrollLeft,
         w$TLBaseFrame,
-        w$R_spot,
+        w$BgStart_spot,
         h$G_BgEnd,
         dateToCDate,
         w$Bg,
+        h$G_red,
     }
 }
 
+const dateToCDate = (date: Date) => {
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const h = Number((date.getHours() + date.getMinutes() / 60).toFixed(2));
+    return toCDate(y, m, d, h);
+}
 
 // 3. hàm chuyển đổi 2
 export const parseCDate = (date: cDate): { y: y, m: m, d: d, h: h } => {
@@ -146,8 +108,10 @@ export const getInYearsList = (date: cDate) => {
     return newInYearsList;
 }
 
+const currentYearcDate = `${(new Date()).getFullYear()}/1/1/1` as cDate;
+
 export const getPeriodListUnit1000y = () => {
-    const { y, m, d, h } = parseCDate('2024/1/1/1' as cDate);
+    const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
     const new100yList = [] as cDateOption[];
     for (let i = 0; i < 15; i++) {
         const year = y + i * 1000;
@@ -167,7 +131,7 @@ export const getPeriodListUnit100y = () => {
 }
 
 export const getPeriodListUnit1y = () => {
-    const { y, m, d, h } = parseCDate('2024/1/1/1' as cDate);
+    const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
     let periodList = [] as cDateOption[];
     for (let i = 0; i < 100; i++) {
         const year = y + i;
@@ -186,7 +150,7 @@ export const getPeriodListUnit1y = () => {
 
 
 export const getPeriodListUnit1m = () => {
-    const { y, m, d, h } = parseCDate('2024/1/1/1' as cDate);
+    const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
     let periodList = [] as cDateOption[];
     for (let i = 0; i < 100; i++) {
         const year = y + i;
@@ -200,7 +164,7 @@ export const getPeriodListUnit1m = () => {
             periodList.push(period);
         }
     }
-    // const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: `${(new Date()).getMonth() + 1}/1/1/1` as cDate }
-    // periodList = [curMonth, ...periodList];
+    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: `${y}/${(new Date()).getMonth() + 1}/1/1` as cDate }
+    periodList = [curMonth, ...periodList];
     return periodList;
 }
