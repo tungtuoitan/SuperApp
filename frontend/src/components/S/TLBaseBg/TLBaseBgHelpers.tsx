@@ -1,5 +1,5 @@
 import { timeConfig, useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { cDate, y, m, d, h, cDateOption, hper, lvList, baseWofTI, p } from "../TLConfigs";
+import { cDate, y, m, d, h, cDateOption, hper, lvList, baseWofTI, p, miliperh } from "../TLConfigs";
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 
@@ -18,7 +18,7 @@ export const useTLBaseBgHelpers = () => {
 
 
     const { y, m, d, h } = (TIList[0] && TIList[0].date) ? parseCDate(TIList[0].date) : { y: 0, m: 0, d: 0, h: 0 };
-    const h$G_BgStart = (TIList[0] && TIList[0].date) ? y * hper.y + m * hper.m + d * hper.d + h : 0;
+    const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
 
     const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
     const h$G_red = cDateToGh(dateToCDate(dateReal));
@@ -54,39 +54,35 @@ export const toCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
     const minute = pad(p);
 
     return `${year}-${month}-${day}T${hour}:${minute}:00.000+07:00` as cDate;
-};  
-export const currentYearcDate = toCDate(2024,1,1,0,0);
-
+};
 const dateToCDate = (date: Date) => {
     const y = date.getFullYear();
     const m = date.getMonth() + 1;
     const d = date.getDate();
-    const h = Number((date.getHours() + date.getMinutes() / 60).toFixed(2));
+    const h = date.getHours();
     const p = date.getMinutes();
     return toCDate(y, m, d, h, p);
 }
 
+export const currentYearcDate = toCDate(2024, 1, 1, 0, 0);
+
+
 // 3. hàm chuyển đổi 2
-export const parseCDate = (date: cDate) => {
-    return parseDate(new Date(date));
+export const parseCDate = (date: cDate) => parseDate(new Date(date));
+export const parseDate = (date: Date) => {
+    return {
+        y: date.getFullYear(),
+        m: date.getMonth() + 1, // Tháng bắt đầu từ 0, nên cần +1
+        d: date.getDate(),
+        h: date.getHours(),
+        p: date.getMinutes(),
+    };
 };
 
 
-export const cDateToGh = (date: cDate) => {
-    const { y, m, d, h } = parseCDate(date);
-    const totalH = y * hper.y + m * hper.m + d * hper.d + h;
-    return totalH;
-}
+export const cDateToGh = (date: cDate) => new Date(date).getTime() / miliperh
 
-export const GhToCDate = (h: number) => {
-    const y = Math.floor(h / hper.y);
-    h = h % hper.y;
-    const m = Math.floor(h / hper.m);
-    h = h % hper.m;
-    const d = Math.floor(h / hper.d);
-    h = h % hper.d;
-    return `${y}/${m}/${d}/${h}`;
-}
+export const GhToCDate = (h: number) => dateToCDate(new Date(h * miliperh));
 
 export const pxToRh = (px: number, hPerPx: number) => {
     return px * hPerPx;
@@ -117,7 +113,7 @@ export const getInYearsList = (date: cDate) => {
 
 
 export const getPeriodListUnit1000y = () => {
-    const { y, m, d, h,p } = parseCDate(currentYearcDate as cDate);
+    const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
     const new100yList = [] as cDateOption[];
     for (let i = 0; i < 15; i++) {
         const year = y + i * 1000;
@@ -133,7 +129,7 @@ export const getPeriodListUnit1000y = () => {
 }
 
 export const getPeriodListUnit100y = () => {
-    return [{ id: `0`, label: `${2024} -> 2100`, date: toCDate(2024,1,1,0,0) }] as cDateOption[];
+    return [{ id: `0`, label: `${2024} -> 2100`, date: toCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
 }
 
 export const getPeriodListUnit1y = () => {
@@ -149,7 +145,7 @@ export const getPeriodListUnit1y = () => {
         } as cDateOption;
         periodList.push(period);
     }
-    const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date:  toCDate(y,1,1,0,0) as cDate }
+    const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date: toCDate(y, 1, 1, 0, 0) as cDate }
     periodList = [curYearItem, ...periodList];
     return periodList;
 }
@@ -164,13 +160,13 @@ export const getPeriodListUnit1m = () => {
         for (let _m = 0; _m < 12; _m++) {
             const period = {
                 id: `${uuidv4()}-${i}`,
-                label: `${year}-${_m+1}`,
+                label: `${year}-${_m + 1}`,
                 date: toCDate(year, m + _m, 1, 0, 0) as cDate,
             } as cDateOption;
             periodList.push(period);
         }
     }
-    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: toCDate(y,1,1,0,0) as cDate }
+    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: toCDate(new Date().getFullYear(), new Date().getMonth()+1,1,0,0) as cDate }
     periodList = [curMonth, ...periodList];
     return periodList;
 }
@@ -214,13 +210,4 @@ export const toLocalISOString = (date: Date): string => {
     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}${sign}${offsetHour}:${offsetMinute}`;
 };
 
-export const parseDate = (date: Date) => {
-    return {
-        y: date.getFullYear(),
-        m: date.getMonth() + 1, // Tháng bắt đầu từ 0, nên cần +1
-        d: date.getDate(),
-        h: date.getHours(),
-        p: date.getMinutes(),
-    };
-};
 

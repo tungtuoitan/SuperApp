@@ -18,7 +18,7 @@ export const TimeConfigBar = () => {
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
         const list = getPeriodListUnit1m()
-        const timeConfigInit = { level: 0, period: list[0] } as timeConfig
+        const timeConfigInit = { level: 2, period: list[0] } as timeConfig
 
         if (timeConfigInit.level === 1) setAllPeriods(getPeriodListUnit1y());
         if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1m());

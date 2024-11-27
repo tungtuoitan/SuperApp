@@ -19,7 +19,7 @@ const ContainerTI = styled('div')({
 })
 
 // TIc: TI component
-export const TIc = (props: {date: cDate, level: number, zoomLv: number }) => { // TODO: item này re-render rất nhiều, sau 
+export const TIc = (props: { date: cDate, level: number, zoomLv: number }) => { // TODO: item này re-render rất nhiều, sau 
     const { date, level, zoomLv } = props;
 
     return (
@@ -31,16 +31,16 @@ export const TIc = (props: {date: cDate, level: number, zoomLv: number }) => { /
                 color: '#202020 !important',
 
                 borderLeft: (() => {
-                    const { y, m, d, h } = parseCDate(date);
+                    const { y, m, d, h, p } = parseCDate(date);
                     if ((lvList[level].levelName === '100years' && y % 100 === 0) ||
                         (lvList[level].levelName === 'year' && d === 1)) return '1px solid #00000050'
                     return '1px solid transparent'
                 })()
             }}>
             {
-                <div style={{width: '100%',height: '100%'}}>
-                    <div style={{borderLeft: '1px solid #bfbfbf50'}}>
-                        {/* //! 1.content */}   
+                <div style={{ width: '100%', height: '100%' }}>
+                    <div style={{ borderLeft: '1px solid #bfbfbf50' }}>
+                        {/* //! 1.content */}
                         <div style={{ height: 60, position: 'relative' }}></div>
                         {/* //! 2.time */}
                         <div
@@ -53,14 +53,14 @@ export const TIc = (props: {date: cDate, level: number, zoomLv: number }) => { /
                                 color: '#202020',
                             }}>
                             {(() => {
-                                const { y, m, d, h } = parseCDate(date);
+                                const { y, m, d, h, p } = parseCDate(date);
                                 switch (lvList[level].unitName) {
                                     case 'year': return y
                                     case 'month': return getMonthShortName(m);
                                     case 'day': return d;
-                                    case 'hour': return h > 11 
-                                                ? <span>{h-11}"</span>
-                                                : <span>{h}"</span>
+                                    case 'hour': return h > 11
+                                        ? <span>{h - 12}"</span>
+                                        : <span>{h}"</span>
                                     default: return '';
                                 }
                             })()}
@@ -83,18 +83,18 @@ export const TIc = (props: {date: cDate, level: number, zoomLv: number }) => { /
                                 let text = ''
                                 if (lvList[level].levelName === '100years' && y % 10 === 0) text = y.toString()
                                 if (lvList[level].levelName === 'year') {
-                                    if(d === 1 && m === 1) text = y.toString() + ' ' + getMonthShortName(m)
-                                    if(d === 1 && m !== 1) text = getMonthShortName(m)
+                                    if (d === 1 && m === 1) text = y.toString() + ' ' + getMonthShortName(m)
+                                    if (d === 1 && m !== 1) text = getMonthShortName(m)
                                 }
                                 if (lvList[level].levelName === 'month') {
-                                    if(d === 1 && h === 1) text = getMonthShortName(m) + ' ' + d.toString()
-                                    if(d !== 1 && h === 1) text = d.toString()}
-                              
+                                    if (d === 1 && h === 0) text = getMonthShortName(m) + ' ' + d.toString()
+                                    if (d !== 1 && h === 0) text = d.toString()
+                                }
 
                                 // if (text.length < 7) {
                                 //     return <span>{text}</span>
                                 // } else {
-                                    return <span style={{ fontSize: 11 }}>{text}</span>
+                                return <span style={{ fontSize: 11 }}>{text}</span>
                                 // }
 
                             })()

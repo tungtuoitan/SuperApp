@@ -7,6 +7,9 @@ export const hper = {
     y: 12*30*24,
     c: 100*12*30*24,
 }
+
+export const miliperh = 1000*60*60
+
 export const baseWofTI = 30
 // export const val = {
 //     // '1tby':  1000*bilion,
