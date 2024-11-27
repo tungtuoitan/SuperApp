@@ -59,11 +59,12 @@ export const baseWofTI = 30
 //     {label: 'period', id: 'period', unitName: 'year'}
 // ]
 
-export type cDate = `${y}/${m}/${d}/${h}`
+export type cDate = `${y}-${m}-${d}T${h}:${p}:00.000+07:00`;
 export type y = number
 export type m = number
 export type d = number
 export type h = number
+export type p = number
 
 export type curLv = {
     id: number,
@@ -94,21 +95,21 @@ export const lvList: Lv[] = [ // đây là array chứa các timelineLevel
 ]
 
 export type cDateOption = {id: string, label: string, date: cDate};
-export const in1000YearsList = [
-        {label: '-10000 -> -9000' ,id: 'period-0', date: '-10000/1/1/1' as cDate} as cDateOption,
-        {label: '-9000 -> -8000', id: 'period-1', date: '-9000/1/1/1' as cDate}, 
-        {label: '-8000 -> -7000', id: 'period-2', date: '-8000/1/1/1' as cDate},
-        {label: '-7000 -> -6000', id: 'period-3', date: '-7000/1/1/1' as cDate},
-        {label: '-6000 -> -5000', id: 'period-4', date: '-6000/1/1/1' as cDate},
-        {label: '-5000 -> -4000', id: 'period-5', date: '-5000/1/1/1' as cDate},
-        {label: '-4000 -> -3000', id: 'period-6', date: '-4000/1/1/1' as cDate},
-        {label: '-3000 -> -2000', id: 'period-7', date: '-3000/1/1/1' as cDate},
-        {label: '-2000 -> -1000', id: 'period-8', date: '-2000/1/1/1' as cDate},
-        {label: '-1000 -> 0',     id: 'period-9', date: '-1000/1/1/1' as cDate},
-        {label: '0 -> 1000',      id: 'period-10', date: '0/1/1/1'    as cDate},
-        {label: '1000 -> 2000',   id: 'period-11', date: '1000/1/1/1' as cDate},
-        {label: '2000 -> 3000',   id: 'period-12', date: '2000/1/1/1' as cDate},
-]
+// export const in1000YearsList = [
+//         {label: '-10000 -> -9000' ,id: 'period-0', date: '-10000/1/1/1' as cDate} as cDateOption,
+//         {label: '-9000 -> -8000', id: 'period-1', date: '-9000/1/1/1' as cDate}, 
+//         {label: '-8000 -> -7000', id: 'period-2', date: '-8000/1/1/1' as cDate},
+//         {label: '-7000 -> -6000', id: 'period-3', date: '-7000/1/1/1' as cDate},
+//         {label: '-6000 -> -5000', id: 'period-4', date: '-6000/1/1/1' as cDate},
+//         {label: '-5000 -> -4000', id: 'period-5', date: '-5000/1/1/1' as cDate},
+//         {label: '-4000 -> -3000', id: 'period-6', date: '-4000/1/1/1' as cDate},
+//         {label: '-3000 -> -2000', id: 'period-7', date: '-3000/1/1/1' as cDate},
+//         {label: '-2000 -> -1000', id: 'period-8', date: '-2000/1/1/1' as cDate},
+//         {label: '-1000 -> 0',     id: 'period-9', date: '-1000/1/1/1' as cDate},
+//         {label: '0 -> 1000',      id: 'period-10', date: '0/1/1/1'    as cDate},
+//         {label: '1000 -> 2000',   id: 'period-11', date: '1000/1/1/1' as cDate},
+//         {label: '2000 -> 3000',   id: 'period-12', date: '2000/1/1/1' as cDate},
+// ]
 
 
 

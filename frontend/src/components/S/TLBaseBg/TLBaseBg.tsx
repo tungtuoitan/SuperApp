@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TIc } from "./TIc";
 import { baseWofTI, cDate, hper, lvList, TI, } from "../TLConfigs";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { cDateToGh, parseCDate, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { addTime, cDateToGh, parseCDate, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
@@ -16,45 +16,42 @@ export const TLBaseBg = () => {
     const { h$G_BgStart, h$G_BgEnd, h$G_red } = useTLBaseBgHelpers();
 
     useEffect(() => {
-        if (!timeConfig.period) return;
         const newTIList = [] as TI[];
-        const { y, m, d, h } = parseCDate(timeConfig.period.date);
+        if (!timeConfig.period) return;
+        const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
+        if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
 
         if (lvList[timeConfig.level].levelName === '100years') {
-            for (let i = 0; i < 100; i++) {
-                const year = y + i;
-                if (year > 2100) break;
+            for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: toCDate(year, 1, 1, 1)
+                    date: addTime(timeConfig.period.date, i, 0, 0, 0, 0) as cDate
                 } as TI;
+                if (new Date(TI.date).getFullYear() >= 2100) break;
                 newTIList.push(TI);
             }
         }
         else if (lvList[timeConfig.level].levelName === 'year') {
-            for (let i = 1; i <= 12; i++) {
-                for (let j = 1; j <= 30; j++) {
-                    const TI = {
-                        id: uuidv4(),
-                        date: toCDate(y, i, j, 1)
-                    } as TI;
-                    newTIList.push(TI);
-                }
+            for (let i = 0; i <= 1000; i++) {
+                const TI = {
+                    id: uuidv4(),
+                    date: addTime(timeConfig.period.date, 0, 0, i, 0, 0) as cDate
+                } as TI;
+                if (new Date(TI.date).getFullYear() > y) break;
+                newTIList.push(TI);
             }
         }
         else if (lvList[timeConfig.level].levelName === 'month') {
-            for (let i = 1; i <= 30; i++) {
-                for (let j = 1; j <= 24; j++) {
-                    const TI = {
-                        id: uuidv4(),
-                        date: toCDate(y, m, i, j)
-                    } as TI;
-                    newTIList.push(TI);
-                }
+            for (let i = 0; i <= 1000; i++) {
+                const TI = {
+                    id: uuidv4(),
+                    date: addTime(timeConfig.period.date, 0, 0, 0, i, 0) as cDate
+                } as TI;
+                if (new Date(TI.date).getMonth() + 1 > m) break;
+                newTIList.push(TI);
             }
         }
-
 
         setTIList(newTIList);
         if (isFirstTime) setIsFirstTime(false);

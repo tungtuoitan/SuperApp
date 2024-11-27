@@ -14,7 +14,7 @@ export interface TimeConfigContextData {
 
 export const timeConfigInit = {
     level: 0,
-    period: {label: '-10000 -> -9000' ,id: 'period-0', date: '-10000/1/1/1' as cDate},
+    period: {label: '-10000 -> -9000' ,id: 'period-0', date: '2024-01-01T00:00:00.000+07:00' as cDate},
 }
 
 export const TimeConfigContextDefaultValue: TimeConfigContextData = {

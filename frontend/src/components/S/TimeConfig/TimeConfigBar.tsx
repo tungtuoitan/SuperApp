@@ -1,5 +1,5 @@
 import { Autocomplete, Button, FormControl, FormGroup, FormLabel, InputLabel, MenuItem, Select, TextField } from "@mui/material"
-import { lvList, cDateOption, cDate, in1000YearsList } from "../TLConfigs";
+import { lvList, cDateOption } from "../TLConfigs";
 import { getPeriodListUnit1000y, getInYearsList, getPeriodListUnit100y, parseCDate, getPeriodListUnit1y, getPeriodListUnit1m } from "../TLBaseBg/TLBaseBgHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ export const TimeConfigBar = () => {
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
         const list = getPeriodListUnit1m()
-        const timeConfigInit = { level: 2, period: list[0]} as timeConfig
+        const timeConfigInit = { level: 0, period: list[0] } as timeConfig
 
         if (timeConfigInit.level === 1) setAllPeriods(getPeriodListUnit1y());
         if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1m());
@@ -53,7 +53,7 @@ export const TimeConfigBar = () => {
                         if (e.target.value !== timeConfig2.level) {
                             const newLv = e.target.value as number;
                             if (newLv === 0) {
-                                const periodList = getPeriodListUnit1000y();
+                                const periodList = getPeriodListUnit100y();
                                 setAllPeriods(periodList);
                                 setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
                             }

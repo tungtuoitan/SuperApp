@@ -19,14 +19,13 @@ export const TLBaseFg = () => {
 
     useEffect(() => {
         const evsInit: Ev[] = [
-            { id: '1', name: 'World  War I', type: 'war', level: 1, timeStart: '1914/6/28/1', timeEnd: '1918/11/11/1' },
-            { id: '2', name: 'World War II', type: 'war', level: 1, timeStart: '1939/9/1/1', timeEnd: '1945/9/2/1' },
-            { id: '3', name: 'VietName War', type: 'war', level: 1, timeStart: '1955/11/1/1', timeEnd: '1975/4/30/1' },
+            { id: '1', name: 'World  War I', type: 'war', level: 1, timeStart: toCDate(1918,3,12,1,0), timeEnd: toCDate(1922,3,12,1,0) },
         ];
-        getEvs()
-            .then((data: Ev[]) => {
-                setAllEvs([data[0]]);
-            })
+        setAllEvs(evsInit);
+        // getEvs()
+        //     .then((data: Ev[]) => {
+        //         setAllEvs([data[0]]);
+        //     })
 
     }, []);
 
