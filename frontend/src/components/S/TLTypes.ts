@@ -9,9 +9,10 @@ export type Ev = {
   shortDesc?: string,
   linkMainPage?: string,
   content?: string,
+  lineOrder?: number,
 //   width: number,
 
-  timeStart: Date | number | cDate,
-  timeEnd?: Date | number | cDate,
+  timeStart: cDate,
+  timeEnd: cDate,
 }
 

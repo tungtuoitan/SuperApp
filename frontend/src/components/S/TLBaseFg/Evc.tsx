@@ -1,16 +1,26 @@
 
-
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 type EvProps = {
+    id: string
     content: string
     width: number
     left: number
+    top: number
+    height: number
 }
 export const Evc = (props: EvProps) => {
-    const { content, width, left } = props;
+    const { id, content, width, left, top, height } = props;
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+        id: id,
+    });
     return (
         <div
+            ref={setNodeRef}
+            {...listeners}
+            {...attributes}
             style={{
-                height: 20,
+                height: height,
                 width: width,
                 textAlign: 'left',
                 padding: '5px',
@@ -21,12 +31,11 @@ export const Evc = (props: EvProps) => {
                 alignItems: 'center',
                 borderRadius: '50px 50px',
                 position: 'absolute',
-                // top: 0,
+                top: top,
                 left: left,
-                // inset: 0,
-                // zIndex: 100,
+                transform: CSS.Transform.toString(transform),
 
             }}>
-                {content}</div>
+            {content}</div>
     )
 }
