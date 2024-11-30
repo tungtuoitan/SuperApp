@@ -19,13 +19,13 @@ export const TLBaseFg = () => {
 
     useEffect(() => {
         const evsInit: Ev[] = [
-            { id: '1', name: 'World  War I', type: 'war', level: 1, timeStart: toCDate(1918,3,12,1,0), timeEnd: toCDate(1922,3,12,1,0) },
+            { id: '1', name: 'World  War I', type: 'war', level: 1, timeStart: toCDate(2030, 3, 12, 1, 0), timeEnd: toCDate(2032, 3, 12, 1, 0) },
         ];
-        setAllEvs(evsInit);
-        // getEvs()
-        //     .then((data: Ev[]) => {
-        //         setAllEvs([data[0]]);
-        //     })
+        // setAllEvs(evsInit);
+        getEvs()
+            .then((data: Ev[]) => {
+                setAllEvs(data);
+            })
 
     }, []);
 
@@ -48,7 +48,7 @@ export const TLBaseFg = () => {
     return (
         <div style={{
             width: '100%',
-            height: 60,
+            height: 0,
 
             flexDirection: 'column',
             gap: 1,

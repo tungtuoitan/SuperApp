@@ -96,10 +96,10 @@ export const sitemaps = [
     } as SAModule,
     {
       id: (sitemapId++).toString(),
-      name: 'Timeline',
-      code: 'timeline',
+      name: 'Schedule',
+      code: 'schedule',
       componentCode: constants.setting.accessRightsComponents.nothing,
-      link: '/timeline',
+      link: '/schedule',
       isPublic: true,
   } as SAComponent,
 ] as SAModule[];

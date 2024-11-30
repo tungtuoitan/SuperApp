@@ -44,6 +44,7 @@ export const TLColumn = ({ val, val2, width, id  }: TLColumnProps) => {
             id={id}
             style={{
                 width: width,
+                
             }}>
                 <Cell borderLeft isMilestone={val2 !== ''} />
                 <Cell borderLeft isMilestone={val2 !== ''} />
@@ -60,12 +61,13 @@ export const GroupColumn = ({ val, width, id }: TLColumnProps) => {
         <div
             style={{
                 width: width,
+                borderRight: '1px solid #bfbfbf',
             }}
         >
-            <Cell borderRight val={val} />
-            <Cell borderRight />
+            <Cell  val={val} />
+            {/* <Cell borderRight />
             <Cell borderTop borderRight />
-            <Cell borderRight/>
+            <Cell borderRight/> */}
         </div>
     </>)
 }

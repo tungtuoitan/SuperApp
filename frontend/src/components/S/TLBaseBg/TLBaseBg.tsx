@@ -63,6 +63,8 @@ export const TLBaseBg = () => {
             ref={TLBaseBgRef}
             style={{
                 display: 'flex',
+                height: '100%',
+                // border: '1px solid blue',
             }}>
             {TIList.map((TI, index) => {
                 return (

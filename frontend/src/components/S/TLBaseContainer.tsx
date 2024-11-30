@@ -85,7 +85,7 @@ export const TLBaseContainer = () => {
             style={{
                 border: '1px solid #bfbfbf',
                 width: '100%',
-                height: '150px', // TODO: make this dynamic,
+                height: '450px', //^ modify height of content here,
                 display: 'flex',
                 position: 'relative',
             }}>
@@ -198,7 +198,7 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <div style={{ position: 'relative' }}>
+                    <div id='FgBgContainer' style={{ position: 'relative',}}>
                         <TLBaseBg />
                         <TLBaseFg />
                     </div>
