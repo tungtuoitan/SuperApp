@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TIc } from "./TIc";
-import { baseWofTI, cDate, hper, lvList, TI, } from "../TLConfigs";
+import { lvList } from "../TLHardcode";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { addTime, cDateToGh, parseCDate, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { addTime, parseCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
 import { RedLine } from "./RedLine";
+import { cDate, TI } from "../TLTypes";
 
 export const TLBaseBg = () => {
 
@@ -73,6 +74,7 @@ export const TLBaseBg = () => {
                         date={TI.date}
                         level={timeConfig.level}
                         zoomLv={zoomLv}
+                        index={index}
                     />
                 )
             })}

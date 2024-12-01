@@ -1,15 +1,11 @@
-import { timeConfig, useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { cDate, y, m, d, h, cDateOption, hper, lvList, baseWofTI, p, miliperh } from "../TLConfigs";
 import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
-import { Ev } from "../TLTypes";
+import { cDate, Ev } from "../TLTypes";
 import { addTime, cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { debounce } from "lodash";
 
 export const useTLBaseFgHelpers = () => {
-    const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
-    const { timeConfig } = useTimeConfigStore();
-    const { dateReal } = useTLBaseBgStore();
+    const { TIList } = useTLBaseBgStore();
     const {allEvs, setAllEvs} = useTLBaseFgStore();
     const {RhToPx, h$G_BgStart, h$G_BgEnd, dateToCDate} = useTLBaseBgHelpers();
 
@@ -23,7 +19,7 @@ export const useTLBaseFgHelpers = () => {
         })
 
     // 2. group
-    const getAllGroups = () => {
+    const getAllEvGroups = () => {
         const parentIds = Array.from(new Set(filterEvs
             .map(ev => ev.parentId)
             .filter(parentId => typeof parentId === 'string' && parentId !== '' && parentId !== undefined)
@@ -37,16 +33,16 @@ export const useTLBaseFgHelpers = () => {
         return allGroups;
     }
 
-    // 3. lấy fiveLines
+    // 2.1
     const getFiveLines = (group: Ev[]): Ev[][] => {
         const allLines: Ev[][] = [];
-        let remainEvs: Ev[] = group.sort((a, b) => { // sort: TI.timeStart increase
+        let remainEvs: Ev[] = group.sort((a, b) => { // sort: TI.timeStart tăng dần
                                             const startDiff = cDateToGh(a.timeStart) - cDateToGh(b.timeStart);
                                             if (startDiff !== 0) return startDiff;
                                             return cDateToGh(a.timeEnd) - cDateToGh(b.timeEnd);
                                         });
 
-        const getNextLine = (remainEvs: Ev[]): Ev[] => {
+        const getLine = (remainEvs: Ev[]): Ev[] => {
             const nextLine: Ev[] = []
             for (let i = 0; i < remainEvs.length; i++) {
                 if (nextLine.length === 0 || !isOverlap(nextLine[nextLine.length - 1], remainEvs[i])) {
@@ -58,7 +54,7 @@ export const useTLBaseFgHelpers = () => {
 
         while(remainEvs.length > 0 ) { // maximun 5 lines
             if(allLines.length > 5 ) return [...allLines, remainEvs];
-            const line = getNextLine(remainEvs);
+            const line = getLine(remainEvs);
             allLines.push(line);
             remainEvs = remainEvs.filter(rEv => !line.filter(e => e.id === rEv.id).length);
         }
@@ -66,7 +62,7 @@ export const useTLBaseFgHelpers = () => {
         return allLines;
     }
 
-    // 4. update Ev (khi Grab)
+    // 3. update Ev (khi Grab)
     const debounce$UpdateEv = debounce((id, position, roundedH, roundedM) => {
         const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM)
         const newAllEvs = allEvs.map(ev => {
@@ -84,12 +80,13 @@ export const useTLBaseFgHelpers = () => {
 
     return {
         filterEvs,
-        getAllGroups,
+        getAllEvGroups,
         getFiveLines,
         debounce$UpdateEv
     }
 }
 
+// B1. check overlap
 export const isOverlap = (ev1: Ev, ev2: Ev):boolean=> {
     return (cDateToGh(ev1.timeEnd) > cDateToGh(ev2.timeStart))
 }

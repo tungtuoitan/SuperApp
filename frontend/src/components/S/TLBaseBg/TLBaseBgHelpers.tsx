@@ -1,7 +1,8 @@
-import { timeConfig, useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { cDate, y, m, d, h, cDateOption, hper, lvList, baseWofTI, p, miliperh } from "../TLConfigs";
+import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
+import { lvList, baseWofTI, miliperh, currentYearcDate } from "../TLHardcode";
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
+import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
 
 export const useTLBaseBgHelpers = () => {
     const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
@@ -43,9 +44,10 @@ export const useTLBaseBgHelpers = () => {
         h$G_red,
     }
 }
-export const pad = (num: number): string => num.toString().padStart(2, '0');
 
-export const toCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
+// B1. to CDate
+export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
+    const pad = (num: number): string => num.toString().padStart(2, '0');
     const year = y.toString();
     const month = pad(m);
     const day = pad(d);
@@ -54,19 +56,19 @@ export const toCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
 
     return `${year}-${month}-${day}T${hour}:${minute}:00.000+07:00` as cDate;
 };
-const dateToCDate = (date: Date) => {
+export const dateToCDate = (date: Date) => {
     const y = date.getFullYear();
     const m = date.getMonth() + 1;
     const d = date.getDate();
     const h = date.getHours();
     const p = date.getMinutes();
-    return toCDate(y, m, d, h, p);
+    return numbToCDate(y, m, d, h, p);
 }
+export const GhToCDate = (h: number) => dateToCDate(new Date(h * miliperh));
 
-export const currentYearcDate = toCDate(2024, 1, 1, 0, 0);
 
 
-// 3. hàm chuyển đổi 2
+// B2. parse
 export const parseCDate = (date: cDate) => parseDate(new Date(date));
 export const parseDate = (date: Date) => {
     return {
@@ -78,11 +80,8 @@ export const parseDate = (date: Date) => {
     };
 };
 
-
+// B3. to h
 export const cDateToGh = (date: cDate) => new Date(date).getTime() / miliperh
-
-export const GhToCDate = (h: number) => dateToCDate(new Date(h * miliperh));
-
 export const pxToRh = (px: number, hPerPx: number) => px * hPerPx;
 
 
@@ -127,7 +126,7 @@ export const getPeriodListUnit1000y = () => {
 }
 
 export const getPeriodListUnit100y = () => {
-    return [{ id: `0`, label: `${2024} -> 2100`, date: toCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
+    return [{ id: `0`, label: `${2024} -> 2100`, date: numbToCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
 }
 
 export const getPeriodListUnit1y = () => {
@@ -143,7 +142,7 @@ export const getPeriodListUnit1y = () => {
         } as cDateOption;
         periodList.push(period);
     }
-    const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date: toCDate(y, 1, 1, 0, 0) as cDate }
+    const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date: numbToCDate(y, 1, 1, 0, 0) as cDate }
     periodList = [curYearItem, ...periodList];
     return periodList;
 }
@@ -159,12 +158,12 @@ export const getPeriodListUnit1m = () => {
             const period = {
                 id: `${uuidv4()}-${i}`,
                 label: `${year}-${_m + 1}`,
-                date: toCDate(year, m + _m, 1, 0, 0) as cDate,
+                date: numbToCDate(year, m + _m, 1, 0, 0) as cDate,
             } as cDateOption;
             periodList.push(period);
         }
     }
-    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: toCDate(new Date().getFullYear(), new Date().getMonth() + 1, 1, 0, 0) as cDate }
+    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: numbToCDate(new Date().getFullYear(), new Date().getMonth() + 1, 1, 0, 0) as cDate }
     periodList = [curMonth, ...periodList];
     return periodList;
 }
@@ -208,14 +207,14 @@ export const toLocalISOString = (date: Date): string => {
     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}${sign}${offsetHour}:${offsetMinute}`;
 };
 
-export const hToRoundedHM = (h: number, isRoundM? : boolean): { roundedH: number, roundedM: number } => {
+export const hToRoundedHM = (h: number, isRoundM?: boolean): { roundedH: number, roundedM: number } => {
     let roundedH = Math.floor(h);
     const decimalPart = h - roundedH;
     const rawMinutes = decimalPart * 60;
     let roundedM = rawMinutes;
     if (isRoundM) {
         roundedM = Math.round(rawMinutes / 15) * 15;
-    } 
+    }
 
     // Nếu số phút là 60, đặt lại thành 0 và tăng giờ lên 1
     if (roundedM === 60) {
@@ -225,3 +224,41 @@ export const hToRoundedHM = (h: number, isRoundM? : boolean): { roundedH: number
 
     return { roundedH, roundedM };
 };
+
+
+// B4. get Month's name
+export const getMonthShortName = (month: number) => {
+    switch (month) {
+        case 1: return 'Jan'
+        case 2: return 'Feb'
+        case 3: return 'Mar'
+        case 4: return 'Apr'
+        case 5: return 'May'
+        case 6: return 'Jun'
+        case 7: return 'Jul'
+        case 8: return 'Aug'
+        case 9: return 'Sep'
+        case 10: return 'Oct'
+        case 11: return 'Nov'
+        case 12: return 'Dec'
+        default: return ''
+    }
+}
+
+export const getMonthFullName = (month: number) => {
+    switch (month) {
+        case 1: return 'January'
+        case 2: return 'February'
+        case 3: return 'March'
+        case 4: return 'April'
+        case 5: return 'May'
+        case 6: return 'June'
+        case 7: return 'July'
+        case 8: return 'August'
+        case 9: return 'September'
+        case 10: return 'October'
+        case 11: return 'November'
+        case 12: return 'December'
+        default: return ''
+    }
+}

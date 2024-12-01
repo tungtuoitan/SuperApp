@@ -8,12 +8,6 @@ type CellProps = {
     isMilestone?: boolean,
 }
 
-type TLColumnProps = {
-    val: string,
-    id: string,
-    val2?: string,
-    width: string,
-}
 
 export const Cell = (props: CellProps) => {
     const { val,isMilestone = false, borderLeft, borderTop, borderBottom, borderRight } = props;
@@ -37,6 +31,12 @@ export const Cell = (props: CellProps) => {
         }}>{val}</div>
 }
 
+type TLColumnProps = {
+    val: string,
+    id: string,
+    val2?: string,
+    width: string,
+}
 export const TLColumn = ({ val, val2, width, id  }: TLColumnProps) => {
     return (
         <>

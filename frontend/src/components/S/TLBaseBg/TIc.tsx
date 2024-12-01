@@ -1,13 +1,11 @@
-import { lvList, TI, cDate, getMonthShortName, baseWofTI } from "../TLConfigs";
+import { lvList, baseWofTI } from "../TLHardcode";
 import { styled } from "@mui/styles";
-import { parseCDate, toCDate } from "./TLBaseBgHelpers";
+import { parseCDate, numbToCDate, getMonthShortName } from "./TLBaseBgHelpers";
+import { cDate } from "../TLTypes";
 
 const ContainerTI = styled('div')({
-    // borderRight: '1px solid #bfbfbf',
-    // width: '100%',
     height: '100%',
     display: 'flex',
-    // flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     boxSizing: 'border-box',
@@ -18,9 +16,15 @@ const ContainerTI = styled('div')({
     overflow: 'hidden',
 })
 
+type TIcProps = {
+    date: cDate;
+    level: number;
+    zoomLv: number;
+    index: number;
+}
 // TIc: TI component
-export const TIc = (props: { date: cDate, level: number, zoomLv: number }) => { // TODO: item này re-render rất nhiều, sau 
-    const { date, level, zoomLv } = props;
+export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhiều, sau 
+    const { date, level, zoomLv, index } = props;
 
     return (
         <ContainerTI
@@ -39,8 +43,8 @@ export const TIc = (props: { date: cDate, level: number, zoomLv: number }) => { 
                         borderLeft: (() => {
                                 const { y, m, d, h, p } = parseCDate(date);
                                 if ((lvList[level].levelName === '100years' && y % 100 === 0) ||
-                                    (lvList[level].levelName === 'year'     && d === 1) ||
-                                    (lvList[level].levelName === 'month'    && h === 1)) return '1px solid #00000050'
+                                    (lvList[level].levelName === 'year'     && d === 1)       ||
+                                    (lvList[level].levelName === 'month'    && h === 0 && index !== 0)) return '1px solid #00000050'
                                 return '1px solid #bfbfbf50'
                             })()
                          }}>
@@ -55,8 +59,8 @@ export const TIc = (props: { date: cDate, level: number, zoomLv: number }) => { 
                             borderLeft: (() => {
                                 const { y, m, d, h, p } = parseCDate(date);
                                 if ((lvList[level].levelName === '100years' && y % 100 === 0) ||
-                                    (lvList[level].levelName === 'year' && d === 1) ||
-                                    (lvList[level].levelName === 'month' && h === 1)) return '1px solid #00000050'
+                                    (lvList[level].levelName === 'year' && d === 1)           ||
+                                    (lvList[level].levelName === 'month' && h === 0 && index !== 0)) return '1px solid #00000050'
                                 return '1px solid transparent'
                             })()
                         }}

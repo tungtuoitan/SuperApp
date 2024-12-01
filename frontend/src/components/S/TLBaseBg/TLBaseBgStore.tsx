@@ -1,6 +1,6 @@
 
 import React, { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import { TI } from "../TLConfigs";
+import { TI } from "../TLTypes";
 
 export interface TLBaseBgContextData {
     TIList: TI[];

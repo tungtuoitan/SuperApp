@@ -1,4 +1,4 @@
-import { cDateToGh, toCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { cDateToGh, numbToCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 
 export const RedLine = () => {
     const { w$BgStart_red } = useTLBaseBgHelpers();

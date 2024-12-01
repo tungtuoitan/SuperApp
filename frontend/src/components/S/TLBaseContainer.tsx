@@ -143,7 +143,6 @@ export const TLBaseContainer = () => {
                         // 3. resize TI
                         if (mouseDown && scrollByHand.current && grabEdge.mousedownAtGE) {
                             const { id, position } = grabEdge;
-                            console.log(id)
                             const { roundedH, roundedM } = hToRoundedHM(RpxToRh(w$BgStart_spot()), true)
                             debounce$UpdateEv(id, position, roundedH, roundedM);
                         }

@@ -1,6 +1,6 @@
 
 import React, { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import { cDate, cDateOption, curLv } from "../TLConfigs";
+import { cDate, cDateOption } from "../TLTypes";
 
 export interface TimeConfigContextData {
     allPeriods: cDateOption[];
