@@ -4,7 +4,6 @@ import { TLBaseContainer } from './TLBaseContainer'
 import { useTLBaseFgStore } from './TLBaseFg/TLBaseFgStore';
 import TLToolsPopup from './TLTools/TLToolsPopup'
 import { closestCorners, DndContext } from '@dnd-kit/core'
-import { useState } from 'react'
 import {v4 as uuid} from 'uuid';
 
 export default function DNDContainer() {
@@ -14,18 +13,15 @@ export default function DNDContainer() {
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id);
-        // console.log('dragStart', event.active.id);
       };
     
       // Xử lý khi thả
       const handleDragEnd = (event: any) => {
         const { over } = event;
         const timeStart = dateToCDate(new Date());
-        // console.log('dragEnd', over);
     
         if (over) {
-        //   console.log(`Thả vào: ${over.id}`);
-          setAllEvs([...allEvs, {id: uuid(), name: 'New Event', type: 'war', level: 1, timeStart, timeEnd: addTime(timeStart, 0,0,0,3,0)}]);
+          setAllEvs([...allEvs, {id: uuid(), name: 'New Event', type: 'war', parentId: over.id, level: 1, timeStart, timeEnd: addTime(timeStart, 0,0,0,3,0)}]);
         }
     
         setActiveId(null);

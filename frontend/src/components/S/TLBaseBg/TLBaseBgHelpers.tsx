@@ -14,10 +14,9 @@ export const useTLBaseBgHelpers = () => {
 
     const w$Bg = baseWofTI * zoomLv * TIList.length
     const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
-    const w$BgStart_spot = w$Bg * spotRatio.current;
+    const w$BgStart_spot = () => w$Bg * spotRatio.current; //! những value thế này, nếu viết theo kiểu hàm, thì đôi lúc nó sẽ không reset value
 
     const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
-
     const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
     const h$G_red = cDateToGh(dateToCDate(dateReal));
 
@@ -27,12 +26,14 @@ export const useTLBaseBgHelpers = () => {
     const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
 
     const RhToPx = (h: number) => h / RhPerPx
+    const RpxToRh = (px: number) => px * RhPerPx
 
     return {
         h$G_BgStart,
         w$BgStart_red,
         RhPerPx,
         RhToPx,
+        RpxToRh,
         maxScrollLeft,
         w$TLBaseFrame,
         w$BgStart_spot,
@@ -82,7 +83,7 @@ export const cDateToGh = (date: cDate) => new Date(date).getTime() / miliperh
 
 export const GhToCDate = (h: number) => dateToCDate(new Date(h * miliperh));
 
-export const pxToRh = (px: number, hPerPx: number) =>  px * hPerPx;
+export const pxToRh = (px: number, hPerPx: number) => px * hPerPx;
 
 
 
@@ -163,7 +164,7 @@ export const getPeriodListUnit1m = () => {
             periodList.push(period);
         }
     }
-    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: toCDate(new Date().getFullYear(), new Date().getMonth()+1,1,0,0) as cDate }
+    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: toCDate(new Date().getFullYear(), new Date().getMonth() + 1, 1, 0, 0) as cDate }
     periodList = [curMonth, ...periodList];
     return periodList;
 }
@@ -207,4 +208,20 @@ export const toLocalISOString = (date: Date): string => {
     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}${sign}${offsetHour}:${offsetMinute}`;
 };
 
+export const hToRoundedHM = (h: number, isRoundM? : boolean): { roundedH: number, roundedM: number } => {
+    let roundedH = Math.floor(h);
+    const decimalPart = h - roundedH;
+    const rawMinutes = decimalPart * 60;
+    let roundedM = rawMinutes;
+    if (isRoundM) {
+        roundedM = Math.round(rawMinutes / 15) * 15;
+    } 
 
+    // Nếu số phút là 60, đặt lại thành 0 và tăng giờ lên 1
+    if (roundedM === 60) {
+        roundedM = 0;
+        roundedH += 1;
+    }
+
+    return { roundedH, roundedM };
+};

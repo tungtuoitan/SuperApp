@@ -3,6 +3,14 @@ import { createContext, Dispatch, SetStateAction, useContext, useRef, useState }
 import { Ev } from "../TLTypes";
 import { v4 as uuid } from 'uuid';
 
+export type GragEdge = {
+    id: string|null;
+    position: 'left' | 'right';
+    mouseenter: boolean;
+    mousedownAtGE: boolean;
+}
+const defaultGrabEdge: GragEdge = {id: null, position: 'left', mouseenter: false, mousedownAtGE: false};
+
 export interface TLBaseFgContextData {
     allEvs: Ev[];
     setAllEvs: Dispatch<SetStateAction<any[]>>;
@@ -12,6 +20,13 @@ export interface TLBaseFgContextData {
     setActiveId: Dispatch<SetStateAction<string | null>>;
     newEvId: string;
     setNewEvId: Dispatch<SetStateAction<string>>;
+
+    mouseenter: boolean;
+    setEnterGrabEdge: Dispatch<SetStateAction<boolean>>;
+    mousedownAtGE: boolean;
+    setGrabbing: Dispatch<SetStateAction<boolean>>;
+    grabEdge: GragEdge;
+    setGrabEdge: Dispatch<SetStateAction<GragEdge>>;
 };
 
 export const TLBaseFgContextDefaultValue: TLBaseFgContextData = {
@@ -23,6 +38,13 @@ export const TLBaseFgContextDefaultValue: TLBaseFgContextData = {
     setActiveId: () => { },
     newEvId: uuid(),
     setNewEvId: () => {},
+
+    mouseenter: false,
+    setEnterGrabEdge: () => {},
+    mousedownAtGE: false,
+    setGrabbing: () => {},
+    grabEdge: defaultGrabEdge,
+    setGrabEdge: () => {},
 };
 
 const TLBaseFgStore = createContext<TLBaseFgContextData>(TLBaseFgContextDefaultValue);
@@ -33,6 +55,10 @@ export const TLBaseFgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
     const [activeId, setActiveId] = useState<string|null>(null); 
     const [newEvId, setNewEvId] = useState<string>(uuid());
+
+    const [mouseenter, setEnterGrabEdge] = useState<boolean>(false);
+    const [mousedownAtGE, setGrabbing] = useState<boolean>(false);
+    const [grabEdge, setGrabEdge] = useState<GragEdge>(defaultGrabEdge);
 
     return (
         <TLBaseFgStore.Provider
@@ -45,6 +71,13 @@ export const TLBaseFgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 setActiveId,
                 newEvId,
                 setNewEvId,
+
+                mouseenter,
+                setEnterGrabEdge,
+                mousedownAtGE,
+                setGrabbing,
+                grabEdge,
+                setGrabEdge,
             }}>
             {children}
         </TLBaseFgStore.Provider>

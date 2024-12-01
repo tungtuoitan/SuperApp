@@ -10,7 +10,7 @@ export type Ev = {
   linkMainPage?: string,
   content?: string,
   lineOrder?: number,
-//   width: number,
+  parentId: string,
 
   timeStart: cDate,
   timeEnd: cDate,

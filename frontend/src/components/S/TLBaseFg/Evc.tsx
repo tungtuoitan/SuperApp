@@ -1,6 +1,8 @@
 
 import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
+import GrabEdge from './GrabEdge';
+import { useTLBaseFgStore } from './TLBaseFgStore';
+
 type EvProps = {
     id: string
     content: string
@@ -9,33 +11,37 @@ type EvProps = {
     top: number
     height: number
 }
+
 export const Evc = (props: EvProps) => {
     const { id, content, width, left, top, height } = props;
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    const { grabEdge } = useTLBaseFgStore();
+    const { transform } = useDraggable({
         id: id,
     });
+
     return (
         <div
-            ref={setNodeRef}
-            {...listeners}
-            {...attributes}
+            // ref={setNodeRef}
+            // {...listeners}
+            // {...attributes}
             style={{
                 height: height,
                 width: width,
+                background: grabEdge.id === id && grabEdge.mousedownAtGE ? 'red' : 'black',
+                transform: `translateX(${left + (transform?.x ?? 0)}px)`,
+                top: top,
+                position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
                 textAlign: 'left',
                 padding: '5px',
-                background: 'black',
                 color: 'white',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: '50px 50px',
-                position: 'absolute',
-                top: top,
-                left: left,
-                transform: CSS.Transform.toString(transform),
 
             }}>
+            <GrabEdge position='left' id={id} />
+            <GrabEdge position='right' id={id} />
             {content}</div>
     )
 }

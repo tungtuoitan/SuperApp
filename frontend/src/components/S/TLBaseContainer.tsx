@@ -2,14 +2,12 @@ import { TLColumn, GroupColumn } from "./TLBaseBg/TIColumn";
 import { useTLBaseBgStore } from "./TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./TimeConfig/TimeConfigStore";
-import { Evc } from "./TLBaseFg/Evc";
-import { Ev } from "./TLTypes";
-import { cDate, hper } from "./TLConfigs";
-import { cDateToGh, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
+import { addTime, cDateToGh, hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
 import { useEffect } from "react";
 import { useTLBaseFgStore } from "./TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./TLBaseBg/TLBaseBg";
 import { TLBaseFg } from "./TLBaseFg/TLBaseFg";
+import { useTLBaseFgHelpers } from "./TLBaseFg/TLBaseFgHelpers";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -52,7 +50,9 @@ export const TLBaseContainer = () => {
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, spotRatio, w$FrameLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
-    const { w$BgStart_red, w$TLBaseFrame, w$BgStart_spot, w$Bg } = useTLBaseBgHelpers();
+    const { w$BgStart_red, w$TLBaseFrame, w$BgStart_spot, w$Bg, RpxToRh } = useTLBaseBgHelpers();
+    const { debounce$UpdateEv } = useTLBaseFgHelpers();
+    const { grabEdge, setGrabEdge } = useTLBaseFgStore();
 
     useEffect(() => {
         if (TLBaseFrameRef.current) {
@@ -75,7 +75,7 @@ export const TLBaseContainer = () => {
     // giữ spotlight 
     useEffect(() => {
         if (TLBaseFrameRef.current) {
-            TLBaseFrameRef.current.scrollLeft = w$BgStart_spot - w$FrameLeft_spot.current
+            TLBaseFrameRef.current.scrollLeft = w$BgStart_spot() - w$FrameLeft_spot.current
         }
     }, [zoomLv])
 
@@ -117,6 +117,7 @@ export const TLBaseContainer = () => {
                         }
                     }}
                     onMouseUp={() => {
+                        setGrabEdge({ ...grabEdge, id: null, mousedownAtGE: false }); // phải set mousedownAtGE = false tại đây, vì  khi dragging, mouse có thể k nằm trong GE nữa
                         if (mouseDown) {
                             setMouseDown(false);
                         }
@@ -133,10 +134,19 @@ export const TLBaseContainer = () => {
                         w$FrameLeft_spot.current = e.clientX - rect.left;
 
                         // 2.scroll khi mousedownmousemove
-                        if (!mouseDown || !scrollByHand.current) return;
-                        const ISPosition = TLBaseFrameRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
-                        const endX = e.pageX - ISPosition;
-                        TLBaseFrameRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
+                        if (mouseDown && scrollByHand.current && !grabEdge.mousedownAtGE) {
+                            const ISPosition = TLBaseFrameRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
+                            const endX = e.pageX - ISPosition;
+                            TLBaseFrameRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
+                        }
+
+                        // 3. resize TI
+                        if (mouseDown && scrollByHand.current && grabEdge.mousedownAtGE) {
+                            const { id, position } = grabEdge;
+                            console.log(id)
+                            const { roundedH, roundedM } = hToRoundedHM(RpxToRh(w$BgStart_spot()), true)
+                            debounce$UpdateEv(id, position, roundedH, roundedM);
+                        }
 
                     }}
                     onMouseLeave={() => {
@@ -198,9 +208,9 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <div id='FgBgContainer' style={{ 
+                    <div id='FgBgContainer' style={{
                         position: 'relative'
-                        }}>
+                    }}>
                         <TLBaseBg />
                         <TLBaseFg />
                     </div>

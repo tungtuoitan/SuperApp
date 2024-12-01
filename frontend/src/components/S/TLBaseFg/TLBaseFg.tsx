@@ -9,24 +9,24 @@ import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import TISample from "../TLTools/TISample";
-
+import { EvGroup } from "./EvGroup";
 
 export const TLBaseFg = () => {
     const { RhToPx, h$G_BgStart, h$G_BgEnd, dateToCDate } = useTLBaseBgHelpers();
     const { dateReal, setDateReal, zoomLv } = useTLBaseBgStore();
     const { allEvs, setAllEvs, activeId, setActiveId } = useTLBaseFgStore();
-    const { filterEvs, getAllLines } = useTLBaseFgHelpers();
+    const { filterEvs, getAllGroups, getFiveLines } = useTLBaseFgHelpers();
     const {isOver, setNodeRef} = useDroppable({ id: 'droppablex'});
-    
-    const allLines : Ev[][] = getAllLines();
+    const allGroups = getAllGroups();
 
     useEffect(() => {
         const evsInit: Ev[] = [
-            { id: '1', name: '1', type: 'war', level: 1, timeStart: toCDate(2024, 11, 30, 1, 0), timeEnd: toCDate(2024, 11, 30, 5, 0) },
-            { id: '2', name: '2', type: 'war', level: 1, timeStart: toCDate(2024, 11, 30, 1, 0), timeEnd: toCDate(2024, 11, 30, 3, 0) },
-            { id: '3', name: '3', type: 'war', level: 1, timeStart: toCDate(2024, 11, 30, 5, 0), timeEnd: toCDate(2024, 11, 30, 7, 0) },
-            { id: '4', name: '4', type: 'war', level: 1, timeStart: toCDate(2024, 11, 30, 4, 0), timeEnd: toCDate(2024, 11, 30, 8, 0) },
-            { id: '5', name: '5', type: 'war', level: 1, timeStart: toCDate(2024, 11, 30, 0, 0), timeEnd: toCDate(2024, 11, 30, 1, 0) },
+            { id: '1', name: '1', type: 'war', parentId: 'learn-it', level: 1, timeStart: toCDate(2024, 12, 1, 3, 0), timeEnd: toCDate(2024, 12, 1, 7, 0) },
+            { id: '2', name: '2', type: 'war', parentId: 'learn-it', level: 1, timeStart: toCDate(2024, 12, 1, 3, 0), timeEnd: toCDate(2024, 12, 1, 5, 0) },
+            { id: '6', name: '6', type: 'war', parentId: 'none',     level: 1, timeStart: toCDate(2024, 12, 1, 6, 0), timeEnd: toCDate(2024, 12, 1, 9, 0) },
+            { id: '3', name: '3', type: 'war', parentId: 'learn-it', level: 1, timeStart: toCDate(2024, 12, 1, 7, 0), timeEnd: toCDate(2024, 12, 1, 9, 0) },
+            { id: '4', name: '4', type: 'war', parentId: 'activity', level: 1, timeStart: toCDate(2024, 12, 1, 6, 0), timeEnd: toCDate(2024, 12, 1, 10, 0) },
+            { id: '5', name: '5', type: 'war', parentId: 'activity', level: 1, timeStart: toCDate(2024, 12, 1, 2, 0), timeEnd: toCDate(2024, 12, 1, 3, 0) },
         ];
 
         setAllEvs(evsInit);
@@ -36,34 +36,14 @@ export const TLBaseFg = () => {
         //     })
 
     }, []);
-
-
     // mỗi 1 phút cập nhật lại thời gian thực
     useEffect(() => {
         const interval = setInterval(() => setDateReal(new Date()), 60 * 1000);
         return () => clearInterval(interval);
     }, []);
 
-    const renderEv = (ev: Ev, index: number, lineOrder: number) => {
-        const left = RhToPx(cDateToGh(ev.timeStart as cDate) - h$G_BgStart)
-        const paddingTop = 20;
-        const height = 20;
 
-        const top = paddingTop + (20 + 2)*lineOrder; // 20 là height của Ev, 2 là gap giữa các line
-        return <Evc
-            key={ev.id}
-            id={ev.id}
-            content={ev.name}
-            width={RhToPx(
-                cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
-            )}
-            left={left}
-            top={top}
-            height={height}
-        />
-    }
-
-    // data flow: allEvs --> filterEvs --> allLines --> renderEv --> Evc
+    // data flow: allEvs --> filterEvs --> allGroups --> EvGroup --> fiveLines --> renderEv --> Evc
     return (
         <div 
         ref={setNodeRef} 
@@ -75,18 +55,16 @@ export const TLBaseFg = () => {
                 flexDirection: 'column',
                 gap: 1,
                 position: 'absolute',
+                overflowY: 'hidden',
                 top: 0,
                 left: 0,
                 zIndex: 100,
                 // transform: CSS.Transform.toString([0, 0]),
                 // background: '#00000050',
             }}>
-                {allLines[0]?.map((ev: Ev, index) => renderEv(ev, index, 0))}
-                {allLines[1]?.map((ev: Ev, index) => renderEv(ev, index, 1))}
-                {allLines[2]?.map((ev: Ev, index) => renderEv(ev, index, 2))}
-                {allLines[3]?.map((ev: Ev, index) => renderEv(ev, index, 3))}
-                {allLines[4]?.map((ev: Ev, index) => renderEv(ev, index, 4))}
-                {allLines[5]?.map((ev: Ev, index) => renderEv(ev, index, 5))}
+                {Object.keys(allGroups)
+                    .sort((a, b) => (a === "none" ? 1 : b === "none" ? -1 : 0)) // noneParent sẽ nằm cuối
+                    .map((groupKey) => <EvGroup id={groupKey} group={allGroups[groupKey]} />)}
                 <DragOverlay> 
                     {activeId ? (
                         <TISample id={activeId} /> 
