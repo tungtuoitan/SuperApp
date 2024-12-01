@@ -1,17 +1,16 @@
 
 export type Ev = {
-  id: string,
+  id: number,
   name: string,
-  type: string,
-  level: number,
-  shortDesc?: string,
-  linkMainPage?: string,
-  content?: string,
-  lineOrder?: number,
-  parentId: string,
-
+  parentId: number | null,
   timeStart: cDate,
   timeEnd: cDate,
+
+  type: string,
+  level: number,
+  content?: string,
+
+  lineOrder?: number,
 }
 
 export type cDateOption = {id: string, label: string, date: cDate};

@@ -3,7 +3,7 @@ import { useTLBaseBgStore } from "./TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./TimeConfig/TimeConfigStore";
 import { addTime, cDateToGh, hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useTLBaseFgStore } from "./TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./TLBaseBg/TLBaseBg";
 import { TLBaseFg } from "./TLBaseFg/TLBaseFg";
@@ -73,7 +73,7 @@ export const TLBaseContainer = () => {
     }, [TIList])
 
     // giữ spotlight 
-    useEffect(() => {
+    useLayoutEffect(() => { // khi wheeling hơi bị giật, nên phải dùng useLayoutEffect
         if (TLBaseFrameRef.current) {
             TLBaseFrameRef.current.scrollLeft = w$BgStart_spot() - w$FrameLeft_spot.current
         }
@@ -154,7 +154,7 @@ export const TLBaseContainer = () => {
                     // onMouseEnter={() => { setMouseEnter(true) }}
                     onWheel={(e: React.WheelEvent) => {
                         if (!TLBaseFrameRef.current) return;
-                        e.preventDefault();
+                        // e.preventDefault();
                         let newTimeConfig = { ...timeConfig };
                         let newZoomLv = zoomLv;
 

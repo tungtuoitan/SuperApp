@@ -1,8 +1,8 @@
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 
 type GrabEdgeProps = {
+    id: number,
     position: 'left' | 'right'
-    id: string
 }
 
 export default function GrabEdge (props: GrabEdgeProps) {

@@ -4,7 +4,7 @@ import { Ev } from "../TLTypes";
 import { v4 as uuid } from 'uuid';
 
 export type GragEdge = {
-    id: string|null;
+    id: number | null;
     position: 'left' | 'right';
     mouseenter: boolean;
     mousedownAtGE: boolean;

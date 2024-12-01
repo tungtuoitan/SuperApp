@@ -1,4 +1,4 @@
-import { cDateToGh, numbToCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 
 export const RedLine = () => {
     const { w$BgStart_red } = useTLBaseBgHelpers();
@@ -12,6 +12,6 @@ export const RedLine = () => {
                 position: 'absolute',
                 // top: 0,
                 left: w$BgStart_red,
-            }}/>
+            }} />
     )
 }

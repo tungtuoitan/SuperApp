@@ -22,13 +22,17 @@ export const useTLBaseFgHelpers = () => {
     const getAllEvGroups = () => {
         const parentIds = Array.from(new Set(filterEvs
             .map(ev => ev.parentId)
-            .filter(parentId => typeof parentId === 'string' && parentId !== '' && parentId !== undefined)
+            .filter(parentId => typeof parentId === 'number' || parentId == null)
         ));
 
         const allGroups: {[key:string]: Ev[]} = {};
         parentIds.forEach(parentId => {
-            if(!parentId) return;
-            allGroups[parentId] = filterEvs.filter(ev => ev.parentId === parentId);
+            if(parentId === null) {
+                allGroups['null'] = filterEvs.filter(ev => ev.parentId === null);
+            }
+            else {
+                allGroups[parentId] = filterEvs.filter(ev => ev.parentId === parentId);
+            }
         })
         return allGroups;
     }

@@ -29,11 +29,11 @@ export const EvGroup = (props: EvGroupProps) => {
                 position: 'relative',
                 marginBottom: 10,
             }}>
-                {fiveLines[0]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={0}/>)}
-                {fiveLines[1]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={1}/>)}
-                {fiveLines[2]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={2}/>)}
-                {fiveLines[3]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={3}/>)}
-                {fiveLines[4]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={4}/>)}
+            {fiveLines[0]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={0} />)}
+            {fiveLines[1]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={1} />)}
+            {fiveLines[2]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={2} />)}
+            {fiveLines[3]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={3} />)}
+            {fiveLines[4]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={4} />)}
         </div>
     );
 }
