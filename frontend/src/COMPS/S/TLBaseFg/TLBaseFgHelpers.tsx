@@ -14,8 +14,10 @@ export const useTLBaseFgHelpers = () => {
         .filter(ev => {
             const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
             const Gh_timeEnd = cDateToGh(ev.timeEnd as cDate);
-            if (h$G_BgEnd > Gh_timeStart && Gh_timeStart > h$G_BgStart ||
-                h$G_BgEnd > Gh_timeEnd && Gh_timeEnd > h$G_BgStart) return true;
+            if (Gh_timeStart >= h$G_BgEnd || Gh_timeEnd <= h$G_BgStart) return false;
+            return true;
+            // if (h$G_BgEnd > Gh_timeStart && Gh_timeStart > h$G_BgStart ||
+            //     h$G_BgEnd > Gh_timeEnd && Gh_timeEnd > h$G_BgStart) return true;
         })
 
     // 2. group
