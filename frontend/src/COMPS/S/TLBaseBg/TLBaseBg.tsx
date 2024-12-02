@@ -50,7 +50,8 @@ export const TLBaseBg = () => {
                     id: uuidv4(),
                     date: addTime(timeConfig.period.date, 0, 0, 0, i, 0) as cDate
                 } as TI;
-                if (new Date(TI.date).getMonth() + 1 > m) break;
+                const { y: y2, m: m2, d: d2, h: h2, p: p2 } = parseCDate(TI.date);
+                if (y2 === y && m2 > m || y2 > y) break;
                 newTIList.push(TI);
             }
         }

@@ -38,16 +38,17 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
             {
                 <div id='columnContainer' style={{ width: '100%', height: '100%' }}>
                     {/* //! 1. content */}
-                    <div style={{ 
-                        height: 'calc(100% - 60px)',  // 60px is height of timeDiv
-                        borderLeft: (() => {
-                                const { y, m, d, h, p } = parseCDate(date);
-                                if ((lvList[level].levelName === '100years' && y % 100 === 0) ||
-                                    (lvList[level].levelName === 'year'     && d === 1)       ||
-                                    (lvList[level].levelName === 'month'    && h === 0 && index !== 0)) return '1px solid #00000050'
-                                return '1px solid #bfbfbf50'
-                            })()
-                         }}>
+                    <div id='contentDiv'
+                        style={{ 
+                            height: 'calc(100% - 60px)',  // 60px is height of timeDiv
+                            borderLeft: (() => {
+                                    const { y, m, d, h, p } = parseCDate(date);
+                                    if ((lvList[level].levelName === '100years' && y % 10 === 0)  ||
+                                        (lvList[level].levelName === 'year'     && d === 1)       ||
+                                        (lvList[level].levelName === 'month'    && h === 0 && index !== 0)) return '1px solid #00000050'
+                                    return '1px solid #bfbfbf50'
+                                })()
+                            }}>
                         <div id='content-relative' 
                             style={{ 
                                 height: '100%',  
@@ -58,7 +59,7 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                         style={{
                             borderLeft: (() => {
                                 const { y, m, d, h, p } = parseCDate(date);
-                                if ((lvList[level].levelName === '100years' && y % 100 === 0) ||
+                                if ((lvList[level].levelName === '100years' && y % 10 === 0)  ||
                                     (lvList[level].levelName === 'year' && d === 1)           ||
                                     (lvList[level].levelName === 'month' && h === 0 && index !== 0)) return '1px solid #00000050'
                                 return '1px solid transparent'
