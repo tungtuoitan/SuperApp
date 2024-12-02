@@ -7,11 +7,13 @@ import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import { EvGroup } from "./EvGroup";
 import TISample from "../TLTools/TISample";
 import { getEvs } from "../../../FetchAPIs/TLAPIs";
+import { useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 
 export const TLBaseFg = () => {
     const { setDateReal } = useTLBaseBgStore();
     const { setAllEvs, activeId } = useTLBaseFgStore();
     const { getAllEvGroups } = useTLBaseFgHelpers();
+    const { w$Bg } = useTLBaseBgHelpers();
     const { setNodeRef } = useDroppable({ id: 'droppablex' });
     const allEvGroups = getAllEvGroups();
 
@@ -46,7 +48,9 @@ export const TLBaseFg = () => {
         <div
             ref={setNodeRef}
             style={{
-                width: '100%',
+                width: w$Bg,
+                overflowX: 'hidden',
+                // width: '100%',
                 height: 373,
                 flexDirection: 'column',
                 gap: 1,

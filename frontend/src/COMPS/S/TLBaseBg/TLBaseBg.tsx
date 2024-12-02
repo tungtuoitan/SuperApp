@@ -44,6 +44,7 @@ export const TLBaseBg = () => {
             }
         }
         else if (lvList[timeConfig.level].levelName === 'month') {
+            const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
