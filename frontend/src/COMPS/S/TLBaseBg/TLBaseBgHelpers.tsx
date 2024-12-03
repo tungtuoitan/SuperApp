@@ -1,5 +1,5 @@
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { lvList, baseWofTI, miliperh, currentYearcDate } from "../TLHardcode";
+import { lvList, baseWofTI, miliperh, currentYearcDate } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
@@ -9,27 +9,36 @@ export const useTLBaseBgHelpers = () => {
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
+    // A. relate to TI
     const hourPerTI = lvList[timeConfig.level].hPerUnit;
     const pxPerTI = baseWofTI * zoomLv;
+
+    // B. Convert
     const RhPerPx = hourPerTI / pxPerTI;
-
-    const w$Bg = baseWofTI * zoomLv * TIList.length
-    const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
-    const w$BgStart_spot = () => w$Bg * spotRatio.current; //! những value thế này, nếu viết theo kiểu hàm, thì đôi lúc nó sẽ không reset value
-
-    const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
-    const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
-    const h$G_red = cDateToGh(dateToCDate(dateReal));
-
-    const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
-
-    const realCDate = dateToCDate(dateReal);
-    const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
-
     const RhToPx = (h: number) => h / RhPerPx
     const RpxToRh = (px: number) => px * RhPerPx
 
+
+    // C. TLBaseFrame
+    const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
+
+    // D. TLBaseBg
+    const w$Bg = baseWofTI * zoomLv * TIList.length
+    const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
+    const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
+    const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
+    
+    // E. spot
+    const w$BgStart_spot = () => w$Bg * spotRatio.current; //! những value thế này, nếu viết theo kiểu hàm, thì đôi lúc nó sẽ không reset value
+   
+    // F. Red line
+    const realCDate = dateToCDate(dateReal);
+    const h$G_red = cDateToGh(dateToCDate(dateReal));
+    const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
+
+
     return {
+        hourPerTI,
         h$G_BgStart,
         w$BgStart_red,
         RhPerPx,
@@ -168,8 +177,6 @@ export const getPeriodListUnit1m = () => {
     return periodList;
 }
 
-
-
 export const addTime = (date: cDate, years: number, month: number, day: number, hour: number, min: number): cDate => {
     const date0 = new Date(date);
     const newDate = new Date(date);
@@ -185,8 +192,6 @@ export const addTime = (date: cDate, years: number, month: number, day: number, 
 
     return dateToCDate(newDate5);
 };
-
-
 
 export const toLocalISOString = (date: Date): string => {
     const pad = (num: number): string => num.toString().padStart(2, '0');

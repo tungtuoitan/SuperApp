@@ -2,6 +2,7 @@ import { cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
+import { evCssBy, lvList } from "../TLConstants";
 
 type EvProps = {
     ev: Ev;
@@ -12,11 +13,9 @@ export const Evc = (props: EvProps) => {
     const { ev, lineOrder } = props;
     const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
     const { grabEdge } = useTLBaseFgStore();
-    // const { transform } = useDraggable({ id: ev.id });
     const paddingTop = 20;
     const left = RhToPx(cDateToGh(ev.timeStart as cDate) - h$G_BgStart)
     const top = paddingTop + (20 + 2) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
-    const height = 20;
     const width = RhToPx(
         cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
     )
@@ -24,17 +23,20 @@ export const Evc = (props: EvProps) => {
     return <>
         <div
             style={{
-                height: height,
+                height: evCssBy['month'][ev.level].height,
                 width: width,
-                background: grabEdge.id === ev.id && grabEdge.mousedownAtGE ? 'red' : 'black',
+                background: grabEdge.id === ev.id && grabEdge.mousedownAtGE 
+                    ? evCssBy['month'][ev.level].backgroundDrag 
+                    : evCssBy['month'][ev.level].background,
+                display: evCssBy['month'][ev.level].display,
                 transform: `translateX(${left}px)`,
+                fontSize: evCssBy['month'][ev.level].fontSize,
                 // transform: `translateX(${left + (transform?.x ?? 0)}px)`,
                 top: top,
                 position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
                 textAlign: 'left',
                 padding: '5px',
                 color: 'white',
-                display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: '50px 50px',

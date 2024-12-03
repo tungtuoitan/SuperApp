@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { TIc } from "./TIc";
-import { lvList } from "../TLHardcode";
+import { lvList } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { addTime, parseCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';

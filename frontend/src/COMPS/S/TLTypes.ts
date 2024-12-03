@@ -7,7 +7,7 @@ export type Ev = {
   timeEnd: cDate,
 
   type: string,
-  level: number,
+  level: EvLv,
   content?: string,
 
   lineOrder?: number,
@@ -39,6 +39,7 @@ export type Lv = {
     unitName: string,
     status: 'on' | 'off',
     hPerUnit: number,
+    evLv: EvLv,
 }
 
-
+export type EvLv = 'someHours' | 'someDays' | 'someWeeks' | 'someMonths' | 'someYears' | 'some10Years'

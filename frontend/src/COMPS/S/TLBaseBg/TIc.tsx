@@ -1,4 +1,4 @@
-import { lvList, baseWofTI } from "../TLHardcode";
+import { lvList, baseWofTI } from "../TLConstants";
 import { styled } from "@mui/styles";
 import { parseCDate, numbToCDate, getMonthShortName } from "./TLBaseBgHelpers";
 import { cDate } from "../TLTypes";

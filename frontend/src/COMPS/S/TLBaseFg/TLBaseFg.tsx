@@ -4,18 +4,20 @@ import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
-import { EvGroup } from "./EvGroup";
+import { ParentEv } from "./ParentEv";
 import TISample from "../TLTools/TISample";
 import { getEvs } from "../../../FetchAPIs/TLAPIs";
-import { useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { cDateToGh, GhToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { uncleEvConstant } from "../TLConstants";
 
 export const TLBaseFg = () => {
-    const { setDateReal } = useTLBaseBgStore();
+    const { setDateReal, TIList } = useTLBaseBgStore();
+    const {hourPerTI} = useTLBaseBgHelpers();
     const { setAllEvs, activeId } = useTLBaseFgStore();
-    const { getAllEvGroups } = useTLBaseFgHelpers();
+    const { getEvsByLevel, filterEvs } = useTLBaseFgHelpers();
     const { w$Bg } = useTLBaseBgHelpers();
     const { setNodeRef } = useDroppable({ id: 'droppablex' });
-    const allEvGroups = getAllEvGroups();
+    const { someWeeksEvs } = getEvsByLevel();
 
     useEffect(() => {
         // const evsInit: Ev[] = [
@@ -31,7 +33,7 @@ export const TLBaseFg = () => {
         getEvs()
             .then((data: Ev[]) => {
                 setAllEvs(data);
-                console.log("data:", data);
+                // console.log("data:", data);
             })
 
     }, []);
@@ -41,9 +43,17 @@ export const TLBaseFg = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const uncleEv = TIList.length > 0 
+    ? {
+        ...uncleEvConstant,
+        timeStart: TIList[0].date,
+        timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
+    } as Ev : {} as Ev;
 
-    // component flow: TLContainer --> TLBaseContainer --> TLBaseBg --> EvGroup --> Evc
-    // data flow: allEvs --> filterEvs --> allEvGroups --> EvGroup --> fiveLines --> Ev
+
+
+    // component flow: TLContainer --> TLBaseContainer --> TLBaseBg --> ParentEv --> Evc
+    // data flow: allEvs --> filterEvs --> ParentEv --> fiveLines --> Ev
     return (
         <div
             ref={setNodeRef}
@@ -60,9 +70,13 @@ export const TLBaseFg = () => {
                 left: 0,
                 zIndex: 100,
             }}>
-            {Object.keys(allEvGroups)
-                .sort((a, b) => (a === "none" ? 1 : b === "none" ? -1 : 0)) // sort để noneParent nằm dưới cùng
-                .map((groupKey) => <EvGroup key={groupKey} groupId={groupKey} groupEvs={allEvGroups[groupKey]} />)}
+            {[...someWeeksEvs, uncleEv]
+                .map((parentEv, index) => {
+                    const evs = parentEv.id === uncleEv.id 
+                        ? filterEvs.filter(ev => ['someHours','someDays'].includes(ev.level) && !ev.parentId)
+                        : filterEvs.filter(ev => ev.parentId === parentEv.id)
+                   return <ParentEv key={parentEv.id} parentId={parentEv.id} parentEv={parentEv} evs={evs} lineOrder={index} isUncle={parentEv.id === uncleEv.id} />
+                })}
             <DragOverlay>
                 {activeId ? (
                     <TISample id={activeId} />

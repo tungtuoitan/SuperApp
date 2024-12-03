@@ -21,22 +21,22 @@ export const useTLBaseFgHelpers = () => {
         })
 
     // 2. group
-    const getAllEvGroups = () => {
-        const parentIds = Array.from(new Set(filterEvs
-            .map(ev => ev.parentId)
-            .filter(parentId => typeof parentId === 'number' || parentId == null)
-        ));
-
-        const allGroups: {[key:string]: Ev[]} = {};
-        parentIds.forEach(parentId => {
-            if(parentId === null) {
-                allGroups['null'] = filterEvs.filter(ev => ev.parentId === null);
-            }
-            else {
-                allGroups[parentId] = filterEvs.filter(ev => ev.parentId === parentId);
-            }
-        })
-        return allGroups;
+    const getEvsByLevel = () => {
+        const someHoursEvs   = filterEvs.filter(ev => ev.level === 'someHours')
+        const someDaysEvs    = filterEvs.filter(ev => ev.level === 'someDays')
+        const someWeeksEvs   = filterEvs.filter(ev => ev.level === 'someWeeks')
+        const someMonthsEvs  = filterEvs.filter(ev => ev.level === 'someMonths')
+        const someYearsEvs   = filterEvs.filter(ev => ev.level === 'someYears')
+        const someDecadesEvs = filterEvs.filter(ev => ev.level === 'some10Years')
+        
+        return {
+            someHoursEvs,
+            someDaysEvs,
+            someWeeksEvs,
+            someMonthsEvs,
+            someYearsEvs,
+            someDecadesEvs,
+        }
     }
 
     // 2.1
@@ -86,7 +86,7 @@ export const useTLBaseFgHelpers = () => {
 
     return {
         filterEvs,
-        getAllEvGroups,
+        getEvsByLevel,
         getFiveLines,
         debounce$UpdateEv
     }
