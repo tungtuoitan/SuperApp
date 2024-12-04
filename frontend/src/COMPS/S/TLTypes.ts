@@ -32,14 +32,14 @@ export type curLv = {
     id: number,
     zoomLv: 1|2|3|4|5|6|7|8|9|10,
 }
-export type levelName = 'month' | 'year' | '100years'
+export type level = 'month' | 'year' | '100years'
 export type Lv = {
     id: number,
-    levelName: levelName,
-    unitName: string,
+    level: level,
+    TILevel: string,
     status: 'on' | 'off',
-    hPerUnit: number,
-    evLv: EvLv,
+    // hPerUnit: number,
+    evLevel: EvLv,
 }
 
 export type EvLv = 'someHours' | 'someDays' | 'someWeeks' | 'someMonths' | 'someYears' | 'some10Years'

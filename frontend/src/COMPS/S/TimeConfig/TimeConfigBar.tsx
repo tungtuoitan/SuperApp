@@ -1,5 +1,5 @@
 import { Autocomplete, Button, FormControl, FormGroup, FormLabel, InputLabel, MenuItem, Select, TextField } from "@mui/material"
-import { lvList } from "../TLConstants";
+import { clvs } from "../TLConstants";
 import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m } from "../TLBaseBg/TLBaseBgHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
@@ -72,9 +72,9 @@ export const TimeConfigBar = () => {
 
                     }}
                 >
-                    {lvList.map((option) => {
+                    {clvs.map((option) => {
                         return (
-                            <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.levelName}</MenuItem>
+                            <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.level}</MenuItem>
                         )
                     })}
                 </Select>

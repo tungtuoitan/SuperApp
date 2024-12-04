@@ -164,13 +164,13 @@ export const TLBaseContainer = () => {
                             if (zoomLv >= 6) {
                                 // console.log('uplevel')
                                 // uplevel nếu có thể
-                                // for(let i= newTimeConfig.level+1; i<lvList.length; i++) {
-                                //     if(lvList[i].status === 'on') {
+                                // for(let i= newTimeConfig.level+1; i<clvs.length; i++) {
+                                //     if(clvs[i].status === 'on') {
                                 //         newTimeConfig.level = i;
                                 //         break;
                                 //     }
                                 // }
-                                // if(lvList[newTimeConfig.level].levelName === 'year' && timeConfig.period) {
+                                // if(clvs[newTimeConfig.level].level === 'year' && timeConfig.period) {
                                 //     const newInYearsList = getInYearsList(timeConfig.period.date);
                                 //     newTimeConfig.inYearsVal = newInYearsList[0];
                                 // }
@@ -191,7 +191,7 @@ export const TLBaseContainer = () => {
 
                                 // downlevel nếu có thể
                                 // for(let i= timeConfig.level-1; i >= 0; i--) {
-                                //     if(lvList[i].status === 'on') {
+                                //     if(clvs[i].status === 'on') {
                                 //         newTimeConfig.level = i;
                                 //         break;
                                 //     }

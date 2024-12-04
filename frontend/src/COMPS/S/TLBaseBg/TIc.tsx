@@ -1,4 +1,4 @@
-import { lvList, baseWofTI } from "../TLConstants";
+import { clvs, baseWofTI } from "../TLConstants";
 import { styled } from "@mui/styles";
 import { parseCDate, numbToCDate, getMonthShortName } from "./TLBaseBgHelpers";
 import { cDate } from "../TLTypes";
@@ -43,9 +43,9 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             height: 'calc(100% - 60px)',  // 60px is height of timeDiv
                             borderLeft: (() => {
                                     const { y, m, d, h, p } = parseCDate(date);
-                                    if ((lvList[level].levelName === '100years' && y % 10 === 0)  ||
-                                        (lvList[level].levelName === 'year'     && d === 1)       ||
-                                        (lvList[level].levelName === 'month'    && h === 0 && index !== 0)) return '1px solid #00000050'
+                                    if ((clvs[level].level === '100years' && y % 10 === 0)  ||
+                                        (clvs[level].level === 'year'     && d === 1)       ||
+                                        (clvs[level].level === 'month'    && h === 0 && index !== 0)) return '1px solid #00000050'
                                     return '1px solid #bfbfbf50'
                                 })()
                             }}>
@@ -59,9 +59,9 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                         style={{
                             borderLeft: (() => {
                                 const { y, m, d, h, p } = parseCDate(date);
-                                if ((lvList[level].levelName === '100years' && y % 10 === 0)  ||
-                                    (lvList[level].levelName === 'year' && d === 1)           ||
-                                    (lvList[level].levelName === 'month' && h === 0 && index !== 0)) return '1px solid #00000050'
+                                if ((clvs[level].level === '100years' && y % 10 === 0)  ||
+                                    (clvs[level].level === 'year' && d === 1)           ||
+                                    (clvs[level].level === 'month' && h === 0 && index !== 0)) return '1px solid #00000050'
                                 return '1px solid transparent'
                             })()
                         }}
@@ -78,7 +78,7 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             }}>
                             {(() => {
                                 const { y, m, d, h, p } = parseCDate(date);
-                                switch (lvList[level].unitName) {
+                                switch (clvs[level].TILevel) {
                                     case 'year': return y
                                     case 'month': return getMonthShortName(m);
                                     case 'day': return d;
@@ -104,12 +104,12 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                                 (() => {
                                     const { y, m, d, h } = parseCDate(date);
                                     let text = ''
-                                    if (lvList[level].levelName === '100years' && y % 10 === 0) text = y.toString()
-                                    if (lvList[level].levelName === 'year') {
+                                    if (clvs[level].level === '100years' && y % 10 === 0) text = y.toString()
+                                    if (clvs[level].level === 'year') {
                                         if (d === 1 && m === 1) text = y.toString() + ' ' + getMonthShortName(m)
                                         if (d === 1 && m !== 1) text = getMonthShortName(m)
                                     }
-                                    if (lvList[level].levelName === 'month') {
+                                    if (clvs[level].level === 'month') {
                                         if (d === 1 && h === 0) text = getMonthShortName(m) + ' ' + d.toString()
                                         if (d !== 1 && h === 0) text = d.toString()
                                     }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { TIc } from "./TIc";
-import { lvList } from "../TLConstants";
+import { clvs } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { addTime, parseCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
@@ -23,7 +23,7 @@ export const TLBaseBg = () => {
         if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
 
-        if (lvList[timeConfig.level].levelName === '100years') {
+        if (clvs[timeConfig.level].level === '100years') {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -33,7 +33,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (lvList[timeConfig.level].levelName === 'year') {
+        else if (clvs[timeConfig.level].level === 'year') {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -43,7 +43,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (lvList[timeConfig.level].levelName === 'month') {
+        else if (clvs[timeConfig.level].level === 'month') {
             const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {

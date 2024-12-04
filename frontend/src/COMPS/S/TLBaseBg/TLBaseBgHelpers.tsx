@@ -1,5 +1,5 @@
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { lvList, baseWofTI, miliperh, currentYearcDate } from "../TLConstants";
+import { clvs, baseWofTI, miliperh, currentYearcDate, hper } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
@@ -10,7 +10,8 @@ export const useTLBaseBgHelpers = () => {
     const { dateReal } = useTLBaseBgStore();
 
     // A. relate to TI
-    const hourPerTI = lvList[timeConfig.level].hPerUnit;
+    const hourPerTI = hper[clvs[timeConfig.level].TILevel as keyof typeof hper];
+    // const hourPerTI = clvs[timeConfig.level].hPerUnit; 
     const pxPerTI = baseWofTI * zoomLv;
 
     // B. Convert
@@ -27,10 +28,10 @@ export const useTLBaseBgHelpers = () => {
     const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
     const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
     const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
-    
+
     // E. spot
     const w$BgStart_spot = () => w$Bg * spotRatio.current; //! những value thế này, nếu viết theo kiểu hàm, thì đôi lúc nó sẽ không reset value
-   
+
     // F. Red line
     const realCDate = dateToCDate(dateReal);
     const h$G_red = cDateToGh(dateToCDate(dateReal));

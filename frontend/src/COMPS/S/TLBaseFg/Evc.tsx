@@ -2,7 +2,7 @@ import { cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
-import { evCssBy, lvList } from "../TLConstants";
+import { evCssBy, clvs } from "../TLConstants";
 
 type EvProps = {
     ev: Ev;

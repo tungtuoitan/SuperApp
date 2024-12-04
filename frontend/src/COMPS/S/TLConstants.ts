@@ -1,11 +1,13 @@
 import { EvLv, Lv } from "./TLTypes"
 
 export const hper = {
-    h: 1,
-    d: 24,
-    m: 30*24,
-    y: 12*30*24,
-    c: 100*12*30*24,
+    'hour': 1,
+    'day': 24,
+    'week': 7*24,
+    'month': 30*24, // tạm thời làm tròn 1 tháng = 30 ngày
+    'year': 360*24,
+    '10years': 3600*24,
+    '100years': 36000*24,
 }
 export const miliperh = 1000*60*60
 export const baseWofTI = 30
@@ -13,10 +15,10 @@ export const baseWofTI = 30
 export const currentYearcDate = '2024-01-01T00:00:00.000+07:00'
 
 
-export const lvList: Lv[] = [ // đây là array chứa các timelineLevel
-    { id: 0, levelName: '100years',      unitName: 'year',  status:  'on', hPerUnit: hper.y, evLv: 'some10Years' }, 
-    { id: 1, levelName: 'year',          unitName: 'day',   status:  'on', hPerUnit: hper.d, evLv: 'someMonths' },
-    { id: 2, levelName: 'month',         unitName: 'hour',  status:  'on', hPerUnit: hper.h, evLv: 'someDays' },
+export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
+    { id: 0, level: '100years', TILevel: 'year', evLevel: 'some10Years', status: 'on' }, 
+    { id: 1, level: 'year',     TILevel: 'day',  evLevel: 'someMonths',  status: 'on' },
+    { id: 2, level: 'month',    TILevel: 'hour', evLevel: 'someDays',    status: 'on' },
 ]
 
 
