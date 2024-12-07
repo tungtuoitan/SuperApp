@@ -3,10 +3,11 @@ import { useTLBaseFgStore } from "./TLBaseFgStore";
 type GrabEdgeProps = {
     id: number,
     position: 'left' | 'right'
+    type?: 'parent' | 'child'
 }
 
 export default function GrabEdge (props: GrabEdgeProps) {
-    const {position, id} = props;
+    const {position, id, type = 'child'} = props;
     const { grabEdge, setGrabEdge } = useTLBaseFgStore();
     return (
         <div 
@@ -30,12 +31,22 @@ export default function GrabEdge (props: GrabEdgeProps) {
         // onMouseUp // k dùng mouseUp ở đây khi dragging, vì mouse dễ đi ra khỏi GrabEdge
      
         style={{
-            left:  position === 'left' ? -10 : 'auto',
-            right: position === 'right' ? -10 : 'auto',
+            ...(type === 'parent' ? 
+                {
+                left: position === 'left' ? -50 : 'auto',
+                right: position === 'right' ? -50 : 'auto',
+                top: -25,
+                width: 80,
+                height: 50,
+                // background: 'red',
+            } : {
+                
+                left: position === 'left' ? -10 : 'auto',
+                right: position === 'right' ? -10 : 'auto',
+                width: 40,
+                height: 30,
+            }),
             borderRadius: 500,
-            width: 40,
-            height: 30,
-            // background: 'red',
             position: 'absolute',
             cursor: grabEdge.mousedownAtGE ? 'grabbing' : 'grab',
             display: 'flex',
@@ -46,8 +57,8 @@ export default function GrabEdge (props: GrabEdgeProps) {
                 <span style={{
                     background: 'red',
                     fontWeight: 'bold',
-                    width: 4,
-                    height: 4,
+                    width: type === 'parent' ? 8 : 4,
+                    height: type === 'parent' ? 8 : 4,
                 }}/>
             }
         </div>

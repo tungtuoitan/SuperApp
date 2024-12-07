@@ -1,22 +1,22 @@
 import { cDate, Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { useDroppable } from "@dnd-kit/core";
-import { Evc } from "./Evc";
+import { ChildEv } from "./ChildEv";
 import { cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import GrabEdge from "./GrabEdge";
 
 type ParentEvProps = {
-    parentId: number; // tức id TI, mỗi evs tương ứng với 1 TI lớn
-    evs: Ev[];
+    childEvs: Ev[];
     parentEv: Ev;
     lineOrder: number;
     isUncle?: boolean;
 }
 export const ParentEv = (props: ParentEvProps) => {
-    const { parentId, evs, parentEv, lineOrder, isUncle = false } = props;
+    const { childEvs, parentEv, lineOrder, isUncle = false } = props;
     const { getFiveLines } = useTLBaseFgHelpers();
-    const { setNodeRef } = useDroppable({ id: parentId });
+    const { setNodeRef } = useDroppable({ id: parentEv.id });
 
-    const fiveLines = getFiveLines(evs);
+    const fiveLines = getFiveLines(childEvs);
 
     const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
     const paddingTop = 20;
@@ -25,12 +25,11 @@ export const ParentEv = (props: ParentEvProps) => {
     const width = RhToPx(
         cDateToGh(parentEv.timeEnd as cDate) - cDateToGh(parentEv.timeStart as cDate)
     )
-   
-    // ParentEv --> MainEv --> ChildEv
-    // data flow: allEvs --> filterEvs --> allGroups --> fiveLines --> renderEv --> Evc
+
     return (
         <div
-            id={'ParentEv-' + parentId}
+            id={'ParentEv-' + parentEv.name}
+            data-name={parentEv.name}
             ref={setNodeRef}
             style={{
                 width: width,
@@ -43,13 +42,18 @@ export const ParentEv = (props: ParentEvProps) => {
                 zIndex: 100,
                 position: 'absolute',
                 marginBottom: 10,
-                borderRadius: isUncle ? 0 : 100,
+                borderRadius: isUncle ? 0 : 10,
+                borderLeft: '10px solid transparent', // for beauty when child in parentEv
+                borderRight: '10px solid transparent',
             }}>
-            {fiveLines[0]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={0} />)}
-            {fiveLines[1]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={1} />)}
-            {fiveLines[2]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={2} />)}
-            {fiveLines[3]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={3} />)}
-            {fiveLines[4]?.map((ev: Ev, i) => <Evc key={ev.id} ev={ev} lineOrder={4} />)}
+            <span style={{ position: 'absolute', left: 4, top: -20, color: 'gray' }}>{parentEv.name}</span>
+            {fiveLines[0]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={0} />)}
+            {fiveLines[1]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={1} />)}
+            {fiveLines[2]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={2} />)}
+            {fiveLines[3]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={3} />)}
+            {fiveLines[4]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={4} />)}
+            <GrabEdge position='left' id={parentEv.id} type ='parent' />
+            <GrabEdge position='right' id={parentEv.id} type="parent" />
         </div>
     );
 }

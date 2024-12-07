@@ -2,35 +2,40 @@ import { cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
-import { evCssBy, clvs } from "../TLConstants";
+import { clvs, getCSS$ChildEv } from "../TLConstants";
+import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 
 type EvProps = {
     ev: Ev;
+    parentEv: Ev;
     lineOrder: number;
 }
 
-export const Evc = (props: EvProps) => {
-    const { ev, lineOrder } = props;
+export const ChildEv = (props: EvProps) => {
+    const { ev, parentEv, lineOrder } = props;
     const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
+    const { timeConfig } = useTimeConfigStore();
     const { grabEdge } = useTLBaseFgStore();
     const paddingTop = 20;
-    const left = RhToPx(cDateToGh(ev.timeStart as cDate) - h$G_BgStart)
+    const left = RhToPx(cDateToGh(ev.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = paddingTop + (20 + 2) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
     const width = RhToPx(
         cDateToGh(ev.timeEnd as cDate) - cDateToGh(ev.timeStart as cDate)
     )
+    const css = getCSS$ChildEv(clvs[timeConfig.level].Clevel, ev.level)
 
     return <>
         <div
+            data-name={ev.name}
             style={{
-                height: evCssBy['month'][ev.level].height,
+                height: css.height,
                 width: width,
-                background: grabEdge.id === ev.id && grabEdge.mousedownAtGE 
-                    ? evCssBy['month'][ev.level].backgroundDrag 
-                    : evCssBy['month'][ev.level].background,
-                display: evCssBy['month'][ev.level].display,
+                background: grabEdge.id === ev.id && grabEdge.mousedownAtGE
+                    ? css.backgroundDrag
+                    : css.background,
+                display: css.display,
                 transform: `translateX(${left}px)`,
-                fontSize: evCssBy['month'][ev.level].fontSize,
+                fontSize: css.fontSize,
                 // transform: `translateX(${left + (transform?.x ?? 0)}px)`,
                 top: top,
                 position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
@@ -42,7 +47,7 @@ export const Evc = (props: EvProps) => {
                 borderRadius: '50px 50px',
 
             }}>
-            <GrabEdge position='left' id={ev.id} />
+            <GrabEdge position='left' id={ev.id}  />
             <GrabEdge position='right' id={ev.id} />
             {ev.name}
         </div>

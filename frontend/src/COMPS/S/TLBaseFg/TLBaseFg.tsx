@@ -4,37 +4,51 @@ import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
-import { ParentEv } from "./ParentEv";
 import TISample from "../TLTools/TISample";
-import { getEvs } from "../../../FetchAPIs/TLAPIs";
-import { cDateToGh, GhToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { cDateToGh, GhToCDate, numbToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { uncleEvConstant } from "../TLConstants";
+import { ParentEv } from "./ParentEv";
 
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
-    const {hourPerTI} = useTLBaseBgHelpers();
+    const { hourPerTI } = useTLBaseBgHelpers();
     const { setAllEvs, activeId } = useTLBaseFgStore();
-    const { getEvsByLevel, filterEvs } = useTLBaseFgHelpers();
-    const { w$Bg } = useTLBaseBgHelpers();
+    const { filterEvs, getFiveLines } = useTLBaseFgHelpers();
+    const { w$Bg, getLevelByTimeConfig } = useTLBaseBgHelpers();
     const { setNodeRef } = useDroppable({ id: 'droppablex' });
-    const { someWeeksEvs } = getEvsByLevel();
+
+    const allParentEvs = filterEvs.filter(ev => ev.level === getLevelByTimeConfig('parentEv'));
 
     useEffect(() => {
-        // const evsInit: Ev[] = [
-        //     { id: 1, name: '1', type: 'war', parentId: null, level: 1, timeStart: numbToCDate(2024, 12, 1, 3, 0), timeEnd: numbToCDate(2024, 12, 1, 7, 0) },
-        //     { id: 2, name: '2', type: 'war', parentId: null, level: 1, timeStart: numbToCDate(2024, 12, 1, 3, 0), timeEnd: numbToCDate(2024, 12, 1, 5, 0) },
-        //     { id: 6, name: '6', type: 'war', parentId: null,     level: 1, timeStart: numbToCDate(2024, 12, 1, 6, 0), timeEnd: numbToCDate(2024, 12, 1, 9, 0) },
-        //     { id: 3, name: '3', type: 'war', parentId: null, level: 1, timeStart: numbToCDate(2024, 12, 1, 7, 0), timeEnd: numbToCDate(2024, 12, 1, 9, 0) },
-        //     { id: 4, name: '4', type: 'war', parentId: null, level: 1, timeStart: numbToCDate(2024, 12, 1, 6, 0), timeEnd: numbToCDate(2024, 12, 1, 10, 0) },
-        //     { id: 5, name: '5', type: 'war', parentId: null, level: 1, timeStart: numbToCDate(2024, 12, 1, 2, 0), timeEnd: numbToCDate(2024, 12, 1, 3, 0) },
-        // ];
-        // setAllEvs(evsInit);
+        const evsInit: Ev[] = [
+            { id: 12, name: 'cen2', type: 'war', parentId: null, level: 'century', timeStart: numbToCDate(2024, 1, 1, 0, 0), timeEnd: numbToCDate(1099, 1, 1, 0, 0) },
+            { id: 13, name: 'de20', type: 'war', parentId: null, level: 'decade', timeStart: numbToCDate(2024, 1, 1, 0, 0), timeEnd: numbToCDate(2030, 1, 1, 0, 0) },
+            { id: 14, name: 'de', type: 'war', parentId: null, level: 'decade', timeStart: numbToCDate(2030, 1, 1, 0, 0), timeEnd: numbToCDate(2036, 1, 1, 0, 0) },
+          
+            { id: 1, name: 'm1', type: 'war', parentId: null, level: 'month', timeStart: numbToCDate(2024, 12, 1, 0, 0), timeEnd: numbToCDate(2025, 2, 1, 0, 0) },
 
-        getEvs()
-            .then((data: Ev[]) => {
-                setAllEvs(data);
-                // console.log("data:", data);
-            })
+            { id: 2, name: 'm1-w1', type: 'war', parentId: 1, level: 'week', timeStart: numbToCDate(2024, 12, 2, 0, 0), timeEnd: numbToCDate(2024, 12, 15, 0, 0) },
+            { id: 3, name: 'm1-w2', type: 'war', parentId: 1, level: 'week', timeStart: numbToCDate(2024, 12, 12, 0, 0), timeEnd: numbToCDate(2024, 12, 30, 0, 0) },
+            { id: 12, name: 'm1-w3', type: 'war', parentId: 1, level: 'week', timeStart: numbToCDate(2024, 12, 17, 0, 0), timeEnd: numbToCDate(2024, 12, 28, 0, 0) },
+
+            { id: 4, name: 'm1-w1-d1', type: 'war', parentId: 2, level: 'day', timeStart: numbToCDate(2024, 12, 2, 0, 0), timeEnd: numbToCDate(2024, 12, 3, 0, 0) },
+            { id: 5, name: 'm1-w1-d2', type: 'war', parentId: 2, level: 'day', timeStart: numbToCDate(2024, 12, 3, 0, 0), timeEnd: numbToCDate(2024, 12, 6, 0, 0) },
+            { id: 6, name: 'm1-w2-d1', type: 'war', parentId: 3, level: 'day', timeStart: numbToCDate(2024, 12, 13, 0, 0), timeEnd: numbToCDate(2024, 12, 20, 0, 0) },
+            { id: 7, name: 'm1-w2-d2', type: 'war', parentId: 12, level: 'day', timeStart: numbToCDate(2024, 12, 17, 0, 0), timeEnd: numbToCDate(2024, 12, 24, 0, 0) },
+
+            { id: 8, name: 'm1-w1-d1-h1', type: 'war', parentId: 4, level: 'day', timeStart: numbToCDate(2024, 12, 1, 0, 0), timeEnd: numbToCDate(2024, 12, 22, 2, 0) },
+            { id: 9, name: 'm1-w1-d1-h2', type: 'war', parentId: 4, level: 'day', timeStart: numbToCDate(2024, 12, 2, 0, 0), timeEnd: numbToCDate(2024, 12, 22, 18, 0) },
+            { id: 10, name: 'm1-w1-d2-h1', type: 'war', parentId: 5, level: 'day', timeStart: numbToCDate(2024, 12, 3, 4, 0), timeEnd: numbToCDate(2024, 12, 3, 10, 0) },
+            { id: 11, name: 'm1-w1-d2-h2', type: 'war', parentId: 5, level: 'day', timeStart: numbToCDate(2024, 12, 3, 12, 0), timeEnd: numbToCDate(2024, 12, 3, 20, 0) },
+       
+        ];
+        setAllEvs(evsInit);
+
+        // getEvs()
+        //     .then((data: Ev[]) => {
+        //         setAllEvs(data);
+        //         // console.log("data:", data);
+        //     })
 
     }, []);
     // mỗi 1 phút cập nhật lại thời gian thực
@@ -43,40 +57,47 @@ export const TLBaseFg = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const uncleEv = TIList.length > 0 
-    ? {
-        ...uncleEvConstant,
-        timeStart: TIList[0].date,
-        timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
-    } as Ev : {} as Ev;
+    const uncleEv = TIList.length > 0
+        ? {
+            ...uncleEvConstant,
+            timeStart: TIList[0].date,
+            timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
+        } as Ev : {} as Ev;
 
+    const fiveLines = getFiveLines(allParentEvs);
 
-
-    // component flow: TLContainer --> TLBaseContainer --> TLBaseBg --> ParentEv --> Evc
-    // data flow: allEvs --> filterEvs --> ParentEv --> fiveLines --> Ev
     return (
         <div
             ref={setNodeRef}
+            id='TLBaseFg'
             style={{
                 width: w$Bg,
                 overflowX: 'hidden',
+                overflowY: 'hidden',
                 // width: '100%',
                 height: 373,
                 flexDirection: 'column',
                 gap: 1,
                 position: 'absolute',
-                overflowY: 'hidden',
                 top: 0,
                 left: 0,
                 zIndex: 100,
             }}>
-            {[...someWeeksEvs, uncleEv]
-                .map((parentEv, index) => {
-                    const evs = parentEv.id === uncleEv.id 
-                        ? filterEvs.filter(ev => ['someHours','someDays'].includes(ev.level) && !ev.parentId)
-                        : filterEvs.filter(ev => ev.parentId === parentEv.id)
-                   return <ParentEv key={parentEv.id} parentId={parentEv.id} parentEv={parentEv} evs={evs} lineOrder={index} isUncle={parentEv.id === uncleEv.id} />
-                })}
+            {[...fiveLines].map((line: Ev[], i) => {
+                // {[...fiveLines, [uncleEv]].map((line: Ev[], i) => {
+                return line.map(parontEv => {
+                    return <ParentEv
+                        key={parontEv.id}
+                        parentEv={parontEv}
+                        childEvs={parontEv.id === uncleEv.id
+                            ? filterEvs.filter(ev => ev.level === getLevelByTimeConfig('childEv'))
+                            : filterEvs.filter(ev => ev.parentId === parontEv.id)}
+                        lineOrder={i}
+                        isUncle={parontEv.id === uncleEv.id}
+                    />
+                })
+            })
+            }
             <DragOverlay>
                 {activeId ? (
                     <TISample id={activeId} />

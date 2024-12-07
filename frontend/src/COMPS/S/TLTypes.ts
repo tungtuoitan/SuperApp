@@ -7,7 +7,7 @@ export type Ev = {
   timeEnd: cDate,
 
   type: string,
-  level: EvLv,
+  level: TimeLevel,
   content?: string,
 
   lineOrder?: number,
@@ -32,14 +32,10 @@ export type curLv = {
     id: number,
     zoomLv: 1|2|3|4|5|6|7|8|9|10,
 }
-export type level = 'month' | 'year' | '100years'
 export type Lv = {
     id: number,
-    level: level,
-    TILevel: string,
+    Clevel: TimeLevel,
     status: 'on' | 'off',
-    // hPerUnit: number,
-    evLevel: EvLv,
 }
 
-export type EvLv = 'someHours' | 'someDays' | 'someWeeks' | 'someMonths' | 'someYears' | 'some10Years'
+export type TimeLevel = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'

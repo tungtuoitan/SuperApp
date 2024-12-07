@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { TIc } from "./TIc";
 import { clvs } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { addTime, parseCDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { addTime, cDateToGh, dateToCDate, getDate$NextMonday, getDAYOfWeek, parseCDate, parseDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
@@ -14,7 +14,7 @@ export const TLBaseBg = () => {
     const { zoomLv, TLBaseBgRef, TIList, setTIList, dateReal } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
-    const { h$G_BgStart, h$G_BgEnd, h$G_red } = useTLBaseBgHelpers();
+    const { h$G_BgStart, h$G_BgEnd, h$G_red, getLevelByTimeConfig, w$BaseTI } = useTLBaseBgHelpers();
 
     useEffect(() => {
         const newTIList = [] as TI[];
@@ -22,8 +22,7 @@ export const TLBaseBg = () => {
         const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
         if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
-
-        if (clvs[timeConfig.level].level === '100years') {
+        if (clvs[timeConfig.level].Clevel === 'century') {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -33,7 +32,17 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].level === 'year') {
+        else if (clvs[timeConfig.level].Clevel === 'decade') {
+            for (let i = 0; i <= 1000; i++) {
+                const TI = {
+                    id: uuidv4(),
+                    date: addTime(timeConfig.period.date, 0, i, 0, 0, 0) as cDate // edge case: use TILevel = month in week (instead of week)
+                } as TI;
+                if (new Date(TI.date).getFullYear() >= y + 10) break;
+                newTIList.push(TI);
+            }
+        }
+        else if (clvs[timeConfig.level].Clevel === 'year') {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -43,19 +52,31 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].level === 'month') {
+        else if (clvs[timeConfig.level].Clevel === 'month') {
             const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: addTime(timeConfig.period.date, 0, 0, 0, i, 0) as cDate
+                    date: addTime(timeConfig.period.date, 0, 0, i, 0, 0) as cDate
                 } as TI;
                 const { y: y2, m: m2, d: d2, h: h2, p: p2 } = parseCDate(TI.date);
                 if (y2 === y && m2 > m || y2 > y) break;
                 newTIList.push(TI);
             }
         }
-
+        else if (clvs[timeConfig.level].Clevel === 'week') {
+            const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
+            for (let i = 0; i < 1000; i++) {
+                const TI = {
+                    id: uuidv4(),
+                    date: addTime(timeConfig.period.date, 0, 0, 0, i, 0) as cDate
+                } as TI;
+                const h$Gh_nextMonday = cDateToGh(dateToCDate(getDate$NextMonday(new Date(timeConfig.period.date))))
+                const h$Gh_curTI = cDateToGh(TI.date);
+                if(h$Gh_curTI >= h$Gh_nextMonday) break;
+                newTIList.push(TI);
+            }
+        }
         setTIList(newTIList);
         if (isFirstTime) setIsFirstTime(false);
     }, [timeConfig]);
@@ -74,8 +95,8 @@ export const TLBaseBg = () => {
                     <TIc
                         key={TI.id}
                         date={TI.date}
-                        level={timeConfig.level}
-                        zoomLv={zoomLv}
+                        TILevel={getLevelByTimeConfig('TI')}
+                        width={w$BaseTI * zoomLv}
                         index={index}
                     />
                 )

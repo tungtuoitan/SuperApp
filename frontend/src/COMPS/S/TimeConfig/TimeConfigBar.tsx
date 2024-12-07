@@ -1,6 +1,6 @@
-import { Autocomplete, Button, FormControl, FormGroup, FormLabel, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import { Autocomplete, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { clvs } from "../TLConstants";
-import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m } from "../TLBaseBg/TLBaseBgHelpers";
+import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDate$MondayOfCurrentWeek, useTLBaseBgHelpers, getDate$FirstDayOfCurrentMonth, getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury } from "../TLBaseBg/TLBaseBgHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
 import { cDateOption } from "../TLTypes";
@@ -13,13 +13,26 @@ export const TimeConfigBar = () => {
         setTimeConfig2,
 
         allPeriods,
-        setAllPeriods,
+        setAllPeriods, 
     } = useTimeConfigStore();
+    const { dateToCDate } = useTLBaseBgHelpers();
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
-        const list = getPeriodListUnit1m()
-        const timeConfigInit = { level: 2, period: list[0] } as timeConfig
+        const initClevel = 1; //! điều chỉnh CLevel ban đầu tại đây
+        const period = clvs[initClevel].Clevel === 'century'
+            ? {id: 0, label: 'century now', date: dateToCDate(getDate$FirstDayOfCurrentCentury())}
+            : clvs[initClevel].Clevel === 'decade'
+            ? {id: 0, label: 'decade now', date: dateToCDate(getDate$FirstDayOfCurrentDecade())}
+            : clvs[initClevel].Clevel === 'year'
+            ? {id: 0, label: 'year now', date: dateToCDate(getDate$FirstDayOfCurrentYear())}
+            : clvs[initClevel].Clevel === 'month'
+            ? {id: 0, label: 'month now', date: dateToCDate(getDate$FirstDayOfCurrentMonth())}
+            : clvs[initClevel].Clevel === 'week'
+            ? {id: 0, label: 'week now', date: dateToCDate(getDate$MondayOfCurrentWeek())}
+            : null;
+
+        const timeConfigInit = { level: initClevel, period } as timeConfig
 
         if (timeConfigInit.level === 1) setAllPeriods(getPeriodListUnit1y());
         if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1m());
@@ -69,12 +82,11 @@ export const TimeConfigBar = () => {
                                 setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
                             }
                         }
-
                     }}
                 >
                     {clvs.map((option) => {
                         return (
-                            <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.level}</MenuItem>
+                            <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.Clevel}</MenuItem>
                         )
                     })}
                 </Select>

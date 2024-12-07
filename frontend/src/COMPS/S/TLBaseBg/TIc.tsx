@@ -1,7 +1,6 @@
-import { clvs, baseWofTI } from "../TLConstants";
 import { styled } from "@mui/styles";
-import { parseCDate, numbToCDate, getMonthShortName } from "./TLBaseBgHelpers";
-import { cDate } from "../TLTypes";
+import { parseCDate, getMonthShortName, getDAYOfWeek } from "./TLBaseBgHelpers";
+import { cDate, TimeLevel } from "../TLTypes";
 
 const ContainerTI = styled('div')({
     height: '100%',
@@ -18,50 +17,60 @@ const ContainerTI = styled('div')({
 
 type TIcProps = {
     date: cDate;
-    level: number;
-    zoomLv: number;
+    TILevel: TimeLevel;
+    width: number;
     index: number;
 }
 // TIc: TI component
 export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhiều, sau 
-    const { date, level, zoomLv, index } = props;
+    const { date, width, index, TILevel } = props;
 
     return (
         <ContainerTI
             className="TIc"
             style={{
                 display: 'flex',
-                width: baseWofTI * zoomLv,
+                width: width,
                 color: '#202020 !important',
                 // border: '1px solid red',
+                overflow: 'visible',
             }}>
             {
                 <div id='columnContainer' style={{ width: '100%', height: '100%' }}>
                     {/* //! 1. content */}
                     <div id='contentDiv'
-                        style={{ 
+                        style={{
                             height: 'calc(100% - 60px)',  // 60px is height of timeDiv
                             borderLeft: (() => {
-                                    const { y, m, d, h, p } = parseCDate(date);
-                                    if ((clvs[level].level === '100years' && y % 10 === 0)  ||
-                                        (clvs[level].level === 'year'     && d === 1)       ||
-                                        (clvs[level].level === 'month'    && h === 0 && index !== 0)) return '1px solid #00000050'
-                                    return '1px solid #bfbfbf50'
-                                })()
-                            }}>
-                        <div id='content-relative' 
-                            style={{ 
-                                height: '100%',  
-                                position: 'relative' }}/>
+                                if(index === 0) return ''
+                                const { y, m, d, h, p } = parseCDate(date);
+                                if (TILevel === 'year'  && y % 10 === 0 ||
+                                    TILevel === 'month' && m === 1 ||
+                                    TILevel === 'week'  && d === 1 || 
+                                    TILevel === 'day'   && d === 1 || 
+                                    TILevel === 'day'   && new Date(date).getDay() === 1 ||  // ~ Monday
+                                    TILevel === 'hour'  && h === 0 ) return '1px solid #00000050'
+                                return '1px solid #bfbfbf50'
+                            })()
+                        }}>
+                        <div id='content-relative'
+                            style={{
+                                height: '100%',
+                                position: 'relative'
+                            }} />
                     </div>
                     {/* //* 2. time */}
                     <div id='timeDiv'
                         style={{
                             borderLeft: (() => {
+                                if(index === 0) return ''
                                 const { y, m, d, h, p } = parseCDate(date);
-                                if ((clvs[level].level === '100years' && y % 10 === 0)  ||
-                                    (clvs[level].level === 'year' && d === 1)           ||
-                                    (clvs[level].level === 'month' && h === 0 && index !== 0)) return '1px solid #00000050'
+                                if (TILevel === 'year'  && y % 10 === 0 ||
+                                    TILevel === 'month' && m === 1 ||
+                                    TILevel === 'week'  && d === 1 || 
+                                    TILevel === 'day'   && d === 1 || 
+                                    TILevel === 'day'   && new Date(date).getDay() === 1 ||  // ~ Monday
+                                    TILevel === 'hour'  && h === 0 ) return '1px solid #00000050'
                                 return '1px solid transparent'
                             })()
                         }}
@@ -72,19 +81,23 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                                 borderTop: '1px solid #bfbfbf',
                                 width: '100%',
                                 textAlign: 'left',
-                                padding: '5px',
+                                paddingLeft: '5px',
                                 height: 30,
                                 color: '#202020',
                             }}>
                             {(() => {
+                                if (width < 18) return ''
                                 const { y, m, d, h, p } = parseCDate(date);
-                                switch (clvs[level].TILevel) {
+                                switch (TILevel) {
                                     case 'year': return y
-                                    case 'month': return getMonthShortName(m);
-                                    case 'day': return d;
-                                    case 'hour': return h > 11
-                                        ? <span>{h - 12}"</span>
-                                        : <span>{h}"</span>
+                                    case 'month': return getMonthShortName(m)
+                                    case 'week': 
+                                    case 'day':
+                                        return d;
+                                    case 'hour':
+                                        return h > 11
+                                            ? <span>{h - 12}"</span>
+                                            : <span>{h}"</span>
                                     default: return '';
                                 }
                             })()}
@@ -94,32 +107,33 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             style={{
                                 width: '100%',
                                 textAlign: 'left',
-                                padding: '5px',
+                                paddingLeft: '3px',
                                 height: 30,
                                 fontSize: '16px',
                                 color: '#202020',
+                                position: 'relative',
                             }}
                         >
                             {
                                 (() => {
                                     const { y, m, d, h } = parseCDate(date);
                                     let text = ''
-                                    if (clvs[level].level === '100years' && y % 10 === 0) text = y.toString()
-                                    if (clvs[level].level === 'year') {
-                                        if (d === 1 && m === 1) text = y.toString() + ' ' + getMonthShortName(m)
-                                        if (d === 1 && m !== 1) text = getMonthShortName(m)
+                                    if (TILevel === 'year') {
+                                        if (y % 10 === 0) text = y.toString()
                                     }
-                                    if (clvs[level].level === 'month') {
-                                        if (d === 1 && h === 0) text = getMonthShortName(m) + ' ' + d.toString()
-                                        if (d !== 1 && h === 0) text = d.toString()
+                                    if (TILevel === 'month') {
+                                        if (m === 1) text = y.toString()
+                                    }
+                                    else if (TILevel === 'week' || TILevel ==='day') {
+                                        if (d === 1) text = getMonthShortName(m)
+                                        if (new Date(date).getDay() === 1 && width > 18) text = 'M'
+                                        
+                                    }
+                                    else if (TILevel === 'hour') {
+                                        if (h === 0) text = d + '.' + getDAYOfWeek(new Date(y, m - 1, d, h, 0, 0))
                                     }
 
-                                    // if (text.length < 7) {
-                                    //     return <span>{text}</span>
-                                    // } else {
-                                    return <span style={{ fontSize: 11 }}>{text}</span>
-                                    // }
-
+                                    return <span style={{ fontSize: 11, position: 'absolute', zIndex: 10 }}>{text}</span>
                                 })()
                             }
                         </div>

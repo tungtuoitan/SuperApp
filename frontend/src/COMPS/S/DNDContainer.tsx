@@ -3,7 +3,7 @@ import { addTime, useTLBaseBgHelpers } from './TLBaseBg/TLBaseBgHelpers';
 import { TLBaseContainer } from './TLBaseContainer'
 import { useTLBaseFgStore } from './TLBaseFg/TLBaseFgStore';
 import TLToolsPopup from './TLTools/TLToolsPopup'
-import { closestCorners, DndContext } from '@dnd-kit/core'
+import { DndContext } from '@dnd-kit/core'
 import {v4 as uuid} from 'uuid';
 
 export default function DNDContainer() {

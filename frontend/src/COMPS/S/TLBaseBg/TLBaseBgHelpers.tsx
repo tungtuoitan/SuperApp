@@ -1,18 +1,31 @@
 import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { clvs, baseWofTI, miliperh, currentYearcDate, hper } from "../TLConstants";
+import { clvs, miliperh, currentYearcDate, hper, tl } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
+import { cDate, cDateOption, d, h, m, p, TimeLevel, y } from "../TLTypes";
 
 export const useTLBaseBgHelpers = () => {
     const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
+    const getLevelByTimeConfig = (type: 'parentEv' | 'childEv' | 'TI'): keyof typeof hper => {
+        switch (type) {
+            case 'parentEv':
+                return clvs[timeConfig.level + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 1].Clevel
+            case 'childEv':
+                return clvs[timeConfig.level + 2 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].Clevel
+            case 'TI':
+                return clvs[timeConfig.level + 3 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].Clevel
+        }
+    }
+    // C. TLBaseFrame
+    const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
+    const w$BaseTI = w$TLBaseFrame / TIList.length;
+
     // A. relate to TI
-    const hourPerTI = hper[clvs[timeConfig.level].TILevel as keyof typeof hper];
-    // const hourPerTI = clvs[timeConfig.level].hPerUnit; 
-    const pxPerTI = baseWofTI * zoomLv;
+    const hourPerTI = hper[getLevelByTimeConfig('TI') === tl.week ? tl.day : getLevelByTimeConfig('TI')];
+    const pxPerTI = w$BaseTI * zoomLv;
 
     // B. Convert
     const RhPerPx = hourPerTI / pxPerTI;
@@ -20,11 +33,9 @@ export const useTLBaseBgHelpers = () => {
     const RpxToRh = (px: number) => px * RhPerPx
 
 
-    // C. TLBaseFrame
-    const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
 
     // D. TLBaseBg
-    const w$Bg = baseWofTI * zoomLv * TIList.length
+    const w$Bg = w$BaseTI * zoomLv * TIList.length
     const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
     const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
     const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
@@ -36,6 +47,9 @@ export const useTLBaseBgHelpers = () => {
     const realCDate = dateToCDate(dateReal);
     const h$G_red = cDateToGh(dateToCDate(dateReal));
     const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
+    // console.log("RhPerPx:", RhPerPx);
+
+
 
 
     return {
@@ -47,11 +61,14 @@ export const useTLBaseBgHelpers = () => {
         RpxToRh,
         maxScrollLeft,
         w$TLBaseFrame,
+        w$BaseTI,
+
         w$BgStart_spot,
         h$G_BgEnd,
         dateToCDate,
         w$Bg,
         h$G_red,
+        getLevelByTimeConfig,
     }
 }
 
@@ -267,4 +284,56 @@ export const getMonthFullName = (month: number) => {
         case 12: return 'December'
         default: return ''
     }
+}
+
+
+export function getDate$MondayOfCurrentWeek(date: Date = new Date()) {
+    const today = new Date(date); // Lấy ngày hiện tại
+    const dayOfWeek = today.getDay(); // Lấy chỉ số của ngày trong tuần (0: Chủ nhật, 1: Thứ Hai, ...)
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Tính khoảng cách đến Thứ Hai
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + diffToMonday); // Cập nhật ngày thành Thứ Hai
+    return new Date(monday.getFullYear(), monday.getMonth(), monday.getDate(), 0, 0, 0, 0);
+}
+export function getDate$NextMonday(date: Date = new Date()) {
+    const today = new Date(date); // Lấy ngày hiện tại
+    const currentDay = today.getDay(); // Lấy chỉ số ngày trong tuần (0: Chủ nhật, 1: Thứ Hai, ...)
+
+    // Tính số ngày cần thêm để đến thứ Hai tuần sau
+    const daysUntilNextMonday = (currentDay === 0 ? 1 : 8 - currentDay);
+
+    // Thêm số ngày đó vào ngày hiện tại
+    const nextMonday = new Date(today);
+    nextMonday.setDate(today.getDate() + daysUntilNextMonday);
+
+    return new Date(nextMonday.getFullYear(), nextMonday.getMonth(), nextMonday.getDate(), 0, 0, 0, 0);
+}
+export function getDate$FirstDayOfCurrentMonth() {
+    const today = new Date(); // Lấy ngày hiện tại
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1); // Ngày đầu tiên của tháng
+    return firstDay;
+}
+export function getDate$FirstDayOfCurrentYear() {
+    const today = new Date(); // Lấy ngày hiện tại
+    const firstDayOfYear = new Date(today.getFullYear(), 0, 1); // Ngày đầu tiên của năm
+    return firstDayOfYear;
+}
+export function getDate$FirstDayOfCurrentDecade() {
+    const today = new Date(); // Lấy ngày hiện tại
+    const currentYear = today.getFullYear(); // Lấy năm hiện tại
+    const startOfDecade = Math.floor(currentYear / 10) * 10; // Tính năm đầu tiên của thập kỷ
+    const firstDayOfDecade = new Date(startOfDecade, 0, 1); // Tạo ngày đầu tiên của thập kỷ
+    return firstDayOfDecade;
+}
+export function getDate$FirstDayOfCurrentCentury() {
+    const today = new Date(); // Lấy ngày hiện tại
+    const currentYear = today.getFullYear(); // Lấy năm hiện tại
+    const startOfCentury = Math.floor(currentYear / 100) * 100; // Tính năm đầu tiên của thế kỷ
+    const firstDayOfCentury = new Date(startOfCentury, 0, 1); // Ngày 1 tháng 1 của năm đầu tiên của thế kỷ
+    return firstDayOfCentury;
+}
+export function getDAYOfWeek(date: Date) {
+    const days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+    const dayIndex = new Date(date).getDay(); // Lấy chỉ số ngày trong tuần
+    return days[dayIndex]; // Trả về tên ngày
 }

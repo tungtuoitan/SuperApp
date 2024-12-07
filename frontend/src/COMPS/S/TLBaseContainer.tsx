@@ -85,9 +85,10 @@ export const TLBaseContainer = () => {
             style={{
                 border: '1px solid #bfbfbf',
                 width: '100%',
-                height: '450px', //^ modify height of content here,
+                height: '650px', //^ modify height of content here,
                 display: 'flex',
                 position: 'relative',
+                paddingBottom: zoomLv === 1 ? '15px' : '0', // giữ cho Frame khỏi rung vì display/hide scrollbar
             }}>
             <GroupColumn val={'zoomLv:' + zoomLv} width="100px" id="" />
             {/* { loadingTL ? <LoadingWrapper /> : <></>}  */}
@@ -99,7 +100,8 @@ export const TLBaseContainer = () => {
                         width: 'calc(100% - 100px)',
                         // width: 'calc(400px)',
                         // height: '200px', // TODO: make this dynamic,
-                        overflow: 'auto',
+                        overflowX: zoomLv === 1 ? 'hidden' : 'auto', // force hide scrollbar
+                        overflowY: 'hidden',
                         display: 'flex',
                     }}
                     onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { // event: mousedown luôn chạy 2 lần, có thể do touchStart 
