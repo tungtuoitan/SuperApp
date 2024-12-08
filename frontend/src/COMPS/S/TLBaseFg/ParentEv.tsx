@@ -9,10 +9,10 @@ type ParentEvProps = {
     childEvs: Ev[];
     parentEv: Ev;
     lineOrder: number;
-    isUncle?: boolean;
+    isBeggerGang?: boolean;
 }
 export const ParentEv = (props: ParentEvProps) => {
-    const { childEvs, parentEv, lineOrder, isUncle = false } = props;
+    const { childEvs, parentEv, lineOrder, isBeggerGang = false } = props;
     const { getFiveLines } = useTLBaseFgHelpers();
     const { setNodeRef } = useDroppable({ id: parentEv.id });
 
@@ -42,18 +42,18 @@ export const ParentEv = (props: ParentEvProps) => {
                 zIndex: 100,
                 position: 'absolute',
                 marginBottom: 10,
-                borderRadius: isUncle ? 0 : 10,
-                borderLeft: '10px solid transparent', // for beauty when child in parentEv
-                borderRight: '10px solid transparent',
+                borderRadius: isBeggerGang ? 0 : 20,
+                // borderLeft: '10px solid transparent', // for beauty when child in parentEv
+                // borderRight: '10px solid transparent',
             }}>
             <span style={{ position: 'absolute', left: 4, top: -20, color: 'gray' }}>{parentEv.name}</span>
-            {fiveLines[0]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={0} />)}
-            {fiveLines[1]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={1} />)}
-            {fiveLines[2]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={2} />)}
-            {fiveLines[3]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={3} />)}
-            {fiveLines[4]?.map((ev: Ev, i) => <ChildEv key={ev.id} parentEv={parentEv}  ev={ev} lineOrder={4} />)}
-            <GrabEdge position='left' id={parentEv.id} type ='parent' />
-            <GrabEdge position='right' id={parentEv.id} type="parent" />
+            {fiveLines[0]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={0} />)}
+            {fiveLines[1]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={1} />)}
+            {fiveLines[2]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={2} />)}
+            {fiveLines[3]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={3} />)}
+            {fiveLines[4]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={4} />)}
+            {!isBeggerGang && <GrabEdge position='left' id={parentEv.id} type='parent' />}
+            {!isBeggerGang && <GrabEdge position='right' id={parentEv.id} type='parent' />}
         </div>
     );
 }

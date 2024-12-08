@@ -9,7 +9,7 @@ export const useTLBaseBgHelpers = () => {
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
-    const getLevelByTimeConfig = (type: 'parentEv' | 'childEv' | 'TI'): keyof typeof hper => {
+    const getLevelByType = (type: 'parentEv' | 'childEv' | 'TI'): keyof typeof hper => {
         switch (type) {
             case 'parentEv':
                 return clvs[timeConfig.level + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 1].Clevel
@@ -21,10 +21,10 @@ export const useTLBaseBgHelpers = () => {
     }
     // C. TLBaseFrame
     const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
-    const w$BaseTI = w$TLBaseFrame / TIList.length;
+    const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
 
     // A. relate to TI
-    const hourPerTI = hper[getLevelByTimeConfig('TI') === tl.week ? tl.day : getLevelByTimeConfig('TI')];
+    const hourPerTI = hper[getLevelByType('TI') === tl.week ? tl.day : getLevelByType('TI')];
     const pxPerTI = w$BaseTI * zoomLv;
 
     // B. Convert
@@ -68,7 +68,7 @@ export const useTLBaseBgHelpers = () => {
         dateToCDate,
         w$Bg,
         h$G_red,
-        getLevelByTimeConfig,
+        getLevelByType,
     }
 }
 
@@ -108,7 +108,7 @@ export const parseDate = (date: Date) => {
 };
 
 // B3. to h
-export const cDateToGh = (date: cDate) => new Date(date).getTime() / miliperh
+export const cDateToGh = (date: cDate) => date ? new Date(date).getTime() / miliperh : 0;
 export const pxToRh = (px: number, hPerPx: number) => px * hPerPx;
 
 

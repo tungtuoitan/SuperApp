@@ -14,7 +14,7 @@ export const TLBaseBg = () => {
     const { zoomLv, TLBaseBgRef, TIList, setTIList, dateReal } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
-    const { h$G_BgStart, h$G_BgEnd, h$G_red, getLevelByTimeConfig, w$BaseTI } = useTLBaseBgHelpers();
+    const { h$G_BgStart, h$G_BgEnd, h$G_red, getLevelByType, w$BaseTI } = useTLBaseBgHelpers();
 
     useEffect(() => {
         const newTIList = [] as TI[];
@@ -95,7 +95,7 @@ export const TLBaseBg = () => {
                     <TIc
                         key={TI.id}
                         date={TI.date}
-                        TILevel={getLevelByTimeConfig('TI')}
+                        TILevel={getLevelByType('TI')}
                         width={w$BaseTI * zoomLv}
                         index={index}
                     />

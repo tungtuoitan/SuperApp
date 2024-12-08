@@ -65,7 +65,8 @@ export const constants = {
 
   // 4. API Endpoints
   apiEndpoints: {
-    getEvents: 'X/getEvents',
+    getEvents: 'Ev/GetEvs',
+    iuEv: 'Ev/IuEv',
   },
 
 

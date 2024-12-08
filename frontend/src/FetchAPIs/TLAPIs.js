@@ -22,3 +22,34 @@ export const getEvs = async (token, skip) => {
       return Promise.reject(res);
   }
 }
+
+export const iuEv = async (token, params, skip) => {
+    const headers = new Headers({
+        // Authorization: `Bearer ${token}`,
+        'Accept-Language': getLocaleLanguage(),
+    });
+  
+    const formData = new FormData();
+
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+            formData.append(key, value);
+        }
+    });
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: formData,
+    };
+  
+    // URL = Domain + APIEnpoint + Params
+    const res = await window.fetch(`${constants.domain.getTLDomain()}${constants.apiEndpoints.iuEv}`, options);
+    if (res.ok) {
+        const ret = await res.json();
+        return ret;
+    } else {
+        return Promise.reject(res);
+    }
+  }
+  

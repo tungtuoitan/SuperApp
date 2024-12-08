@@ -1,5 +1,5 @@
 import { Autocomplete, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, TextField } from "@mui/material"
-import { clvs } from "../TLConstants";
+import { clvs, tl } from "../TLConstants";
 import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDate$MondayOfCurrentWeek, useTLBaseBgHelpers, getDate$FirstDayOfCurrentMonth, getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury } from "../TLBaseBg/TLBaseBgHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
@@ -19,16 +19,16 @@ export const TimeConfigBar = () => {
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
-        const initClevel = 1; //! điều chỉnh CLevel ban đầu tại đây
-        const period = clvs[initClevel].Clevel === 'century'
+        const initClevel = 4; //! điều chỉnh CLevel ban đầu tại đây
+        const period = clvs[initClevel].Clevel === tl.century
             ? {id: 0, label: 'century now', date: dateToCDate(getDate$FirstDayOfCurrentCentury())}
-            : clvs[initClevel].Clevel === 'decade'
+            : clvs[initClevel].Clevel === tl.decade
             ? {id: 0, label: 'decade now', date: dateToCDate(getDate$FirstDayOfCurrentDecade())}
-            : clvs[initClevel].Clevel === 'year'
+            : clvs[initClevel].Clevel === tl.year
             ? {id: 0, label: 'year now', date: dateToCDate(getDate$FirstDayOfCurrentYear())}
-            : clvs[initClevel].Clevel === 'month'
+            : clvs[initClevel].Clevel === tl.month
             ? {id: 0, label: 'month now', date: dateToCDate(getDate$FirstDayOfCurrentMonth())}
-            : clvs[initClevel].Clevel === 'week'
+            : clvs[initClevel].Clevel === tl.week
             ? {id: 0, label: 'week now', date: dateToCDate(getDate$MondayOfCurrentWeek())}
             : null;
 

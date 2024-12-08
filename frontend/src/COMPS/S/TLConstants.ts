@@ -13,7 +13,7 @@ export const hper = {
     "hour": 1,
     "day": 24,
     "week": 7*24,
-    "month": 365.25/12*24, // trung bình
+    "month": 365.25/12*24, // trung bình // TODO: [FIX BUG: lệch time ở level Decade] TIlevel = month nên bị lệch 1 tí, vì kích thước của month là không bằng nhau
     "year": 365.25*24, // trung bình
     "decade": 365.25*10*24,
     "century": 365.25*100*24,
@@ -34,258 +34,32 @@ export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
 ]
 
 export const childEvCSS = {
-    week: {
-        hour: {
-            height: 6,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '10px',
-        },
-        day: {
-            height: 20,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        week: {
-            height: 40,
-            background: '#00000010',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        month: {
-            height: 80,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        year: {
-            height: 160,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        decade: {
-            height: 320,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        century: {
-            height: 640,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        }
-    },
-    month: {
-        hour: {
-            height: 6,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '10px',
-        },
-        day: {
-            height: 20,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        week: {
-            height: 40,
-            background: '#00000010',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-    },
-    year: {
-        hour: {
-            height: 6,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '10px',
-        },
-        day: {
-            height: 20,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        week: {
-            height: 40,
-            background: '#00000010',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        month: {
-            height: 80,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        year: {
-            height: 160,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        decade: {
-            height: 320,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        century: {
-            height: 640,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        }
-    },
-    decade: {
-        hour: {
-            height: 6,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '10px',
-        },
-        day: {
-            height: 20,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        week: {
-            height: 40,
-            background: '#00000010',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        month: {
-            height: 80,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        year: {
-            height: 160,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        decade: {
-            height: 320,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        century: {
-            height: 640,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        }
-    },
-    century: {
-        hour: {
-            height: 6,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '10px',
-        },
-        day: {
-            height: 20,
-            background: 'black',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        week: {
-            height: 40,
-            background: '#00000010',
-            backgroundDrag: 'red',
-            display: 'flex',
-            fontSize: '16px',
-        },
-        month: {
-            height: 80,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        year: {
-            height: 160,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        decade: {
-            height: 320,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        },
-        century: {
-            height: 640,
-            background: '#00000050',
-            backgroundDrag: 'red',
-            display: 'none',
-            fontSize: '16px',
-        }
-    },
+    height: 16,
+    background: '#00000070',
+    backgroundDrag: 'red',
+    display: 'flex',
+    fontSize: '12px',
 }
 
-export const getCSS$ChildEv = (CLevel: TimeLevel, type: TimeLevel) => {
-    switch (CLevel) {
-        case 'week': 
-            return childEvCSS.week[type as keyof typeof childEvCSS.week]
-        case 'month': 
-            return childEvCSS.month[type as keyof typeof childEvCSS.month]
-        case 'year':
-            return childEvCSS.year[type as keyof typeof childEvCSS.year]
-        case 'decade':
-            return childEvCSS.decade[type as keyof typeof childEvCSS.decade]
-        case 'century':
-            return childEvCSS.century[type as keyof typeof childEvCSS.century]
-        default:
-            return childEvCSS.week[type as keyof typeof childEvCSS.week]
-    }
-}
+// export const getCSS$ChildEv = (CLevel: TimeLevel, evLevel: TimeLevel) => {
+//     switch (CLevel) {
+//         case 'week': 
+//             return childEvCSS.week[evLevel as keyof typeof childEvCSS.week]
+//         case 'month': 
+//             return childEvCSS.month[evLevel as keyof typeof childEvCSS.month]
+//         case 'year':
+//             return childEvCSS.year[evLevel as keyof typeof childEvCSS.year]
+//         case 'decade':
+//             return childEvCSS.decade[evLevel as keyof typeof childEvCSS.decade]
+//         case 'century':
+//             return childEvCSS.century[evLevel as keyof typeof childEvCSS.century]
+//         default:
+//             return childEvCSS.week[evLevel as keyof typeof childEvCSS.week]
+//     }
+// }
 
 
 
-export const uncleEvConstant = {
-    id: 999,
-    name: 'Uncle',
-    type: 'uncle',
-    parentId: 0,
-    level: 'week',
+export const beggerEv = {
+    
 }
