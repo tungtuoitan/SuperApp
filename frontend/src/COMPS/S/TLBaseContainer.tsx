@@ -1,12 +1,14 @@
 import { useTLBaseBgStore } from "./TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./TimeConfig/TimeConfigStore";
-import { hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
+import { addTime, cDateToUTCDate, hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
 import { useEffect, useLayoutEffect } from "react";
 import { useTLBaseFgStore } from "./TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./TLBaseBg/TLBaseBg";
 import { TLBaseFg } from "./TLBaseFg/TLBaseFg";
 import { useTLBaseFgHelpers } from "./TLBaseFg/TLBaseFgHelpers";
+import { iuEv } from "../../FetchAPIs/TLAPIs";
+import { useSnackbar } from "notistack";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -50,8 +52,9 @@ export const TLBaseContainer = () => {
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
     const { w$BgStart_red, w$TLBaseFrame, w$BgStart_spot, w$Bg, RpxToRh } = useTLBaseBgHelpers();
-    const { debounce$UpdateEv } = useTLBaseFgHelpers();
-    const { grabEdge, setGrabEdge } = useTLBaseFgStore();
+    const { debounce$UpdateEv  } = useTLBaseFgHelpers();
+    const { grabEdge, setGrabEdge, allEvs, setAllEvs } = useTLBaseFgStore();
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (TLBaseFrameRef.current) {
@@ -118,7 +121,24 @@ export const TLBaseContainer = () => {
                         }
                     }}
                     onMouseUp={() => {
-                        setGrabEdge({ ...grabEdge, id: null, mousedownAtGE: false }); // phải set mousedownAtGE = false tại đây, vì  khi dragging, mouse có thể k nằm trong GE nữa
+                        if(grabEdge.mousedownAtGE) {
+                            const { id, position } = grabEdge;
+                            const { roundedH, roundedM } = hToRoundedHM(RpxToRh(w$BgStart_spot()), true)
+                            const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM)
+                            const newEv = allEvs.filter(ev => ev.id === id)[0];
+                            iuEv({...newEv, 
+                                timeStart: cDateToUTCDate(position === 'left' ? newTime : newEv.timeStart), 
+                                timeEnd: cDateToUTCDate(position === 'right' ? newTime : newEv.timeEnd)}
+                            ).then((data: any) => {
+                                if(data.status === 'success') {
+                                    enqueueSnackbar(data.message, { variant: "success", autoHideDuration: 3000 });
+                                } else {
+                                    enqueueSnackbar(data.message, { variant: "error", autoHideDuration: 3000 });
+                                }
+                            })
+
+                            setGrabEdge({ ...grabEdge, id: null, mousedownAtGE: false }); // phải set mousedownAtGE = false tại đây, vì  khi dragging, mouse có thể k nằm trong GE nữa
+                        }
                         if (mouseDown) {
                             setMouseDown(false);
                         }
