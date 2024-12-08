@@ -211,8 +211,8 @@ export const TLBaseContainer = () => {
                     <div id='FgBgContainer' style={{
                         position: 'relative'
                     }}>
-                        <TLBaseBg />
                         <TLBaseFg />
+                        <TLBaseBg />
                     </div>
                 </div>
             }

@@ -35,7 +35,7 @@ export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
 
 export const childEvCSS = {
     height: 16,
-    background: '#00000070',
+    background: '#828282',
     backgroundDrag: 'red',
     display: 'flex',
     fontSize: '12px',

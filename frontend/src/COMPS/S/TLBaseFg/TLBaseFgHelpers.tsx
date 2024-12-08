@@ -1,5 +1,5 @@
 import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
-import { cDate, Ev } from "../TLTypes";
+import { cDate, Ev, FilterType } from "../TLTypes";
 import { addTime, cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { debounce } from "lodash";
@@ -7,18 +7,43 @@ import { debounce } from "lodash";
 export const useTLBaseFgHelpers = () => {
     const { TIList } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { h$G_BgStart, h$G_BgEnd } = useTLBaseBgHelpers();
+    const { h$G_BgStart, h$G_BgEnd, getLevelByType } = useTLBaseBgHelpers();
 
     // 1. filter
-    const filterEvs = allEvs // loại bỏ Event nằm ngoài timeline
-        .filter(ev => {
-            const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
-            const Gh_timeEnd = cDateToGh(ev.timeEnd as cDate);
-            if (Gh_timeStart >= h$G_BgEnd || Gh_timeEnd <= h$G_BgStart) return false;
-            return true;
-            // if (h$G_BgEnd > Gh_timeStart && Gh_timeStart > h$G_BgStart ||
-            //     h$G_BgEnd > Gh_timeEnd && Gh_timeEnd > h$G_BgStart) return true;
-        })
+    const filterEvs = (filterTypes: FilterType[] ):Ev[] =>  {
+        let newEvs = [...allEvs];
+
+        // 1.1
+        if(filterTypes.includes('inside-TL')) {
+            newEvs = newEvs.filter(ev => {
+                const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
+                const Gh_timeEnd = cDateToGh(ev.timeEnd as cDate);
+                if (Gh_timeStart >= h$G_BgEnd || Gh_timeEnd <= h$G_BgStart) return false;
+                return true;
+            })
+        }
+        if(filterTypes.includes('active')) {
+            newEvs = newEvs.filter(ev => ev.status !== 0)
+        }
+
+        // 1.2
+        if(filterTypes.includes('parentEv')) {
+            newEvs = newEvs.filter(ev => ev.level === getLevelByType('parentEv'))
+        }
+        if(filterTypes.includes('childEv')) {
+            newEvs = newEvs.filter(ev => ev.level === getLevelByType('childEv'))
+        }
+
+        // 1.3
+        if(filterTypes.includes('hasParent')) {
+            newEvs = newEvs.filter(ev => ev.parentId !== null)
+        }
+        if(filterTypes.includes('nonParent')) {
+            newEvs = newEvs.filter(ev => ev.parentId === null)
+        }
+
+        return newEvs;
+    }
 
     // 2. group
 

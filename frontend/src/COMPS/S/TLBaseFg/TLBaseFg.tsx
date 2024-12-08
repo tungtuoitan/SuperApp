@@ -5,7 +5,7 @@ import { Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import TISample from "../TLTools/TISample";
-import { cDateToGh, GhToCDate, numbToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { cDateToGh, GhToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { ParentEv } from "./ParentEv";
 import { getEvs } from "../../../FetchAPIs/TLAPIs";
 
@@ -17,19 +17,12 @@ export const TLBaseFg = () => {
     const { w$Bg, getLevelByType } = useTLBaseBgHelpers();
     const { setNodeRef } = useDroppable({ id: 'droppablex' });
 
-    const allParentEvs = filterEvs.filter(ev => ev.level === getLevelByType('parentEv'));
+    const allParentEvs = filterEvs(['inside-TL', 'parentEv', 'active']);
 
     useEffect(() => {
-        // const evsInit: Ev[] = [
-        //     { id: 12, name: 'Happy', type: 'war', parentId: null, level: 'century', timeStart: numbToCDate(2024, 1, 1, 0, 0), timeEnd: numbToCDate(1099, 1, 1, 0, 0) },
-       
-        // ];
-        // setAllEvs(evsInit);
-
         getEvs()
             .then((data: Ev[]) => {
                 setAllEvs(data);
-                // console.log("data:", data);
             })
 
     }, []);
@@ -58,7 +51,6 @@ export const TLBaseFg = () => {
                 width: w$Bg,
                 overflowX: 'hidden',
                 overflowY: 'hidden',
-                // width: '100%',
                 height: 573,
                 flexDirection: 'column',
                 gap: 1,
@@ -73,8 +65,8 @@ export const TLBaseFg = () => {
                         key={parontEv.id}
                         parentEv={parontEv}
                         childEvs={parontEv.id === beggerEv.id
-                            ? filterEvs.filter(ev => ev.level === getLevelByType('childEv') && ev.parentId === null)
-                            : filterEvs.filter(ev => ev.parentId === parontEv.id)}
+                            ? filterEvs(['inside-TL', 'active', 'childEv', 'nonParent'])
+                            : filterEvs(['inside-TL', 'active']).filter(ev => ev.parentId === parontEv.id)}
                         lineOrder={i}
                         isBeggerGang={parontEv.id === beggerEv.id}
                     />
