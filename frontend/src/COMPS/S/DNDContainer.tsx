@@ -1,4 +1,5 @@
 
+import { useSnackbar } from 'notistack';
 import { iuEv } from '../../FetchAPIs/TLAPIs';
 import { addTime, useTLBaseBgHelpers } from './TLBaseBg/TLBaseBgHelpers';
 import { TLBaseContainer } from './TLBaseContainer'
@@ -11,6 +12,7 @@ export default function DNDContainer() {
 
     const { allEvs, setAllEvs, activeId, setActiveId, setNewEvId } = useTLBaseFgStore();
     const { dateToCDate, getLevelByType, hourPerTI } = useTLBaseBgHelpers();
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id);
@@ -27,8 +29,12 @@ export default function DNDContainer() {
             iuEv(null, newEv)
                 .then((data: any) => {
                     setAllEvs(allEvs.map(ev => ev.id === 0 ? { ...ev, id: data.reference } : ev)) // update id
+                    enqueueSnackbar(data.message, { variant: "success", autoHideDuration: 3000 });
                 })
-                .catch((err: any) => console.log(err))
+                .catch((err: any) => {
+                    console.log(err);
+                    enqueueSnackbar(err.message, { variant: "error", autoHideDuration: 3000 });
+                })
         }
 
         setActiveId(null);

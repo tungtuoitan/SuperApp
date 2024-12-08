@@ -6,6 +6,8 @@ import { Route, Routes } from 'react-router-dom'
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
 import TLContainer from "../S/TLContainer";
+import { SnackbarKey, SnackbarProvider } from "notistack";
+import { CloseNotiBtn } from "../Helper/CloseNotiBtn";
 
 export const SideNavRoot = styled('div')({
   flexGrow: 1,
@@ -98,11 +100,13 @@ const SideNavAndBody: React.FC<React.PropsWithChildren<React.PropsWithChildren<u
             width: expanded ? 'calc(100% - 200px)' : 'calc(100% - 48px)',
             // border: '4px solid red',
           }}>
-          <Routes>
-              <Route path="/login" Component={LoginContainer} />
-              <Route path="/signup" Component={LoginContainer} />
-              <Route path="/schedule" Component={TLContainer} />
-          </Routes>
+            <SnackbarProvider action={(id: SnackbarKey) => <CloseNotiBtn id={id} />} autoHideDuration={3000}>
+                <Routes>
+                    <Route path="/login" Component={LoginContainer} />
+                    <Route path="/signup" Component={LoginContainer} />
+                    <Route path="/schedule" Component={TLContainer} />
+                </Routes>
+            </SnackbarProvider>
         </BodyWrapper>
       </SideNavRoot>
     </>

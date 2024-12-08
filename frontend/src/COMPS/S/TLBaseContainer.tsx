@@ -1,8 +1,7 @@
-import { TLColumn, GroupColumn } from "./TLBaseBg/TIColumn";
 import { useTLBaseBgStore } from "./TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./TimeConfig/TimeConfigStore";
-import { addTime, cDateToGh, hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
+import { hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
 import { useEffect, useLayoutEffect } from "react";
 import { useTLBaseFgStore } from "./TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./TLBaseBg/TLBaseBg";
@@ -90,14 +89,14 @@ export const TLBaseContainer = () => {
                 position: 'relative',
                 paddingBottom: zoomLv === 1 ? '15px' : '0', // giữ cho Frame khỏi rung vì display/hide scrollbar
             }}>
-            <GroupColumn val={'zoomLv:' + zoomLv} width="100px" id="" />
+            {/* <GroupColumn val={'zoomLv:' + zoomLv} width="100px" id="" /> */}
             {/* { loadingTL ? <LoadingWrapper /> : <></>}  */}
             {
                 <div
                     id="TLBaseFrame"
                     ref={TLBaseFrameRef}
                     style={{
-                        width: 'calc(100% - 100px)',
+                        width: 'calc(100%)',
                         // width: 'calc(400px)',
                         // height: '200px', // TODO: make this dynamic,
                         overflowX: zoomLv === 1 ? 'hidden' : 'auto', // force hide scrollbar

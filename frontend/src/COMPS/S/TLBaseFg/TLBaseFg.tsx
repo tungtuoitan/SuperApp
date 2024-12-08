@@ -22,26 +22,6 @@ export const TLBaseFg = () => {
     useEffect(() => {
         // const evsInit: Ev[] = [
         //     { id: 12, name: 'Happy', type: 'war', parentId: null, level: 'century', timeStart: numbToCDate(2024, 1, 1, 0, 0), timeEnd: numbToCDate(1099, 1, 1, 0, 0) },
-          
-        //     { id: 13, name: 'Health', type: 'war', parentId: 12, level: 'decade', timeStart: numbToCDate(2024, 1, 1, 0, 0), timeEnd: numbToCDate(2042, 1, 1, 0, 0) },
-        //     { id: 20, name: 'Family', type: 'war', parentId: 12, level: 'decade', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 14, name: 'Career', type: 'war', parentId: 12, level: 'decade', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 21, name: '...', type: 'war', parentId: null, level: 'decade', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 22, name: '...', type: 'war', parentId: null, level: 'year', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 23, name: '...', type: 'war', parentId: null, level: 'month', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 24, name: '...', type: 'war', parentId: null, level: 'week', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 25, name: '...', type: 'war', parentId: null, level: 'day', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-        //     { id: 26, name: '...', type: 'war', parentId: null, level: 'hour', timeStart: numbToCDate(2040, 1, 1, 0, 0), timeEnd: numbToCDate(2062, 1, 1, 0, 0) },
-            
-        //     { id: 15, name: 'archive Middle lv', type: 'war', parentId: 14, level: 'year', timeStart: numbToCDate(2024, 8, 1, 0, 0), timeEnd: numbToCDate(2026, 8, 1, 0, 0) },
-          
-        //     { id: 16, name: 'Xchedule Project', type: 'war', parentId: 15, level: 'month', timeStart: numbToCDate(2024, 12, 1, 0, 0), timeEnd: numbToCDate(2025, 4, 1, 0, 0) },
-        //     { id: 17, name: 'Next Project', type: 'war', parentId: 15, level: 'month', timeStart: numbToCDate(2025, 4, 1, 0, 0), timeEnd: numbToCDate(2025, 8, 1, 0, 0) },
-
-        //     { id: 2, name: 'basic UI', type: 'war', parentId: 16, level: 'week', timeStart: numbToCDate(2024, 12, 2, 0, 0), timeEnd: numbToCDate(2024, 12, 15, 0, 0) },
-        //     { id: 27, name: 'add Begging Gang', type: 'war', parentId: 16, level: 'hour', timeStart: numbToCDate(2024, 12, 2, 0, 0), timeEnd: numbToCDate(2024, 12, 15, 0, 0) },
-         
-        //     { id: 19, name: 'mua Hạt Dưa đãi mấy ac  ', type: '', parentId: null, level: 'hour', timeStart: numbToCDate(2024, 12, 3, 12, 0), timeEnd: numbToCDate(2024, 12, 3, 20, 0) },
        
         // ];
         // setAllEvs(evsInit);
