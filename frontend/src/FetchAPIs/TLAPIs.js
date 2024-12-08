@@ -1,4 +1,4 @@
-import { constants } from "../Config/Constants.js";
+import { constants } from "../Config/constants.js";
 import { getLocaleLanguage } from "../Utilities.js";
 
 

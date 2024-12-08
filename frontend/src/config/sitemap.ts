@@ -1,4 +1,4 @@
-import { constants } from "./Constants";
+import { constants } from "./constants";
 
 export type SAModule = {
     id: string;
