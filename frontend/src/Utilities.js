@@ -1,4 +1,4 @@
-import { constants } from "./Config/Constants.js";
+import { constants } from "./Config/constants.js";
 
 
 export const getLocaleLanguage = () => {
