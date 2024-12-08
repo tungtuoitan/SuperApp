@@ -14,7 +14,7 @@ export type Ev = {
 }
 
 export type cDateOption = {id: string, label: string, date: cDate};
-export type cDate = `${y}-${m}-${d}T${h}:${p}:00.000+07:00`;
+export type cDate = `${y}-${m}-${d}T${h}:${p}:00.000`; // we dont need to specify the timezone, bcz when push cDate to new Date(), it will automatically convert to local timezone WITHOUT CHANGING ANY VALUE
 export type y = number
 export type m = number
 export type d = number
