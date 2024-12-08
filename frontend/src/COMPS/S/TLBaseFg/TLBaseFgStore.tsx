@@ -27,6 +27,9 @@ export interface TLBaseFgContextData {
     setGrabbing: Dispatch<SetStateAction<boolean>>;
     grabEdge: GragEdge;
     setGrabEdge: Dispatch<SetStateAction<GragEdge>>;
+
+    fevId: number | null;
+    setFevId: Dispatch<SetStateAction<number | null>>;
 };
 
 export const TLBaseFgContextDefaultValue: TLBaseFgContextData = {
@@ -45,6 +48,8 @@ export const TLBaseFgContextDefaultValue: TLBaseFgContextData = {
     setGrabbing: () => {},
     grabEdge: defaultGrabEdge,
     setGrabEdge: () => {},
+    fevId: null,
+    setFevId: () => {},
 };
 
 const TLBaseFgStore = createContext<TLBaseFgContextData>(TLBaseFgContextDefaultValue);
@@ -59,6 +64,9 @@ export const TLBaseFgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [mouseenter, setEnterGrabEdge] = useState<boolean>(false);
     const [mousedownAtGE, setGrabbing] = useState<boolean>(false);
     const [grabEdge, setGrabEdge] = useState<GragEdge>(defaultGrabEdge);
+
+    const [fevId, setFevId] = useState<number | null>(null);
+
 
     return (
         <TLBaseFgStore.Provider
@@ -78,6 +86,9 @@ export const TLBaseFgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 setGrabbing,
                 grabEdge,
                 setGrabEdge,
+
+                fevId,
+                setFevId,
             }}>
             {children}
         </TLBaseFgStore.Provider>

@@ -10,7 +10,7 @@ import { v4 as uuid } from 'uuid';
 
 export default function DNDContainer() {
 
-    const { allEvs, setAllEvs, activeId, setActiveId, setNewEvId } = useTLBaseFgStore();
+    const { allEvs, setAllEvs, setActiveId, setNewEvId } = useTLBaseFgStore();
     const { dateToCDate, getLevelByType, hourPerTI } = useTLBaseBgHelpers();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -24,11 +24,12 @@ export default function DNDContainer() {
         const timeStart = dateToCDate(new Date());
 
         if (over) {
-            const newEv = {id: 0, name: 'New Event', type: '', parentId: null, level: getLevelByType('childEv'), timeStart, timeEnd: addTime(timeStart, 0, 0, 0, hourPerTI * 20, 0) }
-            setAllEvs([...allEvs, newEv]); // update state, to make the interactive smoother
-            iuEv(null, newEv)
+            const newEv = { id: 0, name: 'New Event', type: '', parentId: null, level: getLevelByType('childEv'), timeStart, timeEnd: addTime(timeStart, 0, 0, 0, hourPerTI * 20, 0), status: 1 };
+            const newEvs = [...allEvs, newEv];
+            setAllEvs(newEvs); // update state, to make the interactive smoother
+            iuEv(newEv)
                 .then((data: any) => {
-                    setAllEvs(allEvs.map(ev => ev.id === 0 ? { ...ev, id: data.reference } : ev)) // update id
+                    setAllEvs(newEvs.map(ev => ev.id === 0 ? {...ev, id: data.reference} : ev)) // update id
                     enqueueSnackbar(data.message, { variant: "success", autoHideDuration: 3000 });
                 })
                 .catch((err: any) => {

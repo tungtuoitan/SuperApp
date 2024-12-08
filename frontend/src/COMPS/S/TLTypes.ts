@@ -6,9 +6,9 @@ export type Ev = {
   timeStart: cDate,
   timeEnd: cDate,
 
-  type: string,
+  status: 0 | 1
+  type?: string,
   level: TimeLevel,
-  content?: string,
 
   lineOrder?: number,
 }
@@ -39,3 +39,4 @@ export type Lv = {
 }
 
 export type TimeLevel = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'
+export type FilterType = 'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent'
