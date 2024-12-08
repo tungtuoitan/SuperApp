@@ -50,6 +50,7 @@ export default function TLContainer() {
                 padding: '10px',
                 paddingTop: '50px',
                 position: 'relative',
+                outline: 'none',
         }}>
             <TimeConfigBar/>
             <DNDContainer/>

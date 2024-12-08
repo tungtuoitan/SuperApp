@@ -2,7 +2,7 @@ import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { clvs, miliperh, currentYearcDate, hper, tl } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { cDate, cDateOption, d, h, m, p, TimeLevel, y } from "../TLTypes";
+import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
 
 export const useTLBaseBgHelpers = () => {
     const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
@@ -54,20 +54,23 @@ export const useTLBaseBgHelpers = () => {
 
     return {
         hourPerTI,
+
         h$G_BgStart,
+        h$G_BgEnd,
+        h$G_red,
+
         w$BgStart_red,
+        w$Bg,
+        w$TLBaseFrame,
+        w$BaseTI,
+        w$BgStart_spot,
+        maxScrollLeft,
+
         RhPerPx,
         RhToPx,
         RpxToRh,
-        maxScrollLeft,
-        w$TLBaseFrame,
-        w$BaseTI,
 
-        w$BgStart_spot,
-        h$G_BgEnd,
         dateToCDate,
-        w$Bg,
-        h$G_red,
         getLevelByType,
     }
 }
@@ -92,6 +95,7 @@ export const dateToCDate = (date: Date) => {
     return numbToCDate(y, m, d, h, p);
 }
 export const GhToCDate = (h: number) => dateToCDate(new Date(h * miliperh));
+export const cDateToUTCDate = (date: cDate) => new Date(date).toISOString();
 
 
 

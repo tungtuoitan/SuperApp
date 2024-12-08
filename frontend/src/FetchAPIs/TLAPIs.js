@@ -6,6 +6,7 @@ export const getEvs = async (token, skip) => {
   const headers = new Headers({
       // Authorization: `Bearer ${token}`,
       'Accept-Language': getLocaleLanguage(),
+      'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
   });
 
   const options = {
@@ -27,6 +28,7 @@ export const iuEv = async (params, token, skip) => {
     const headers = new Headers({
         // Authorization: `Bearer ${token}`,
         'Accept-Language': getLocaleLanguage(),
+        'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone 
     });
   
     const formData = new FormData();
