@@ -40,3 +40,20 @@ export type Lv = {
 
 export type TimeLevel = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'
 export type FilterType = 'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent'
+
+export type ResultOptions = {
+        success: boolean;
+        message?: string;
+        reference?: string;
+        reference2?: string;
+        reference3?: string;
+        reference4?: string;
+        reference5?: string;
+        object?: any;
+        status?: number;
+}
+
+export type EvsResult = {
+    evs: Ev[];
+    options: ResultOptions;
+}

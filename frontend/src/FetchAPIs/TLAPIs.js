@@ -53,5 +53,5 @@ export const iuEv = async (params, token, skip) => {
     } else {
         return Promise.reject(res);
     }
-  }
+}
   

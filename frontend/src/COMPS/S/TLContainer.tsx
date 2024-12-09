@@ -5,6 +5,7 @@ import DNDContainer from './DNDContainer'
 import { KeyboardEvent } from 'react';
 import { iuEv } from '../../FetchAPIs/TLAPIs';
 import { useSnackbar } from 'notistack';
+import { EvsResult } from './TLTypes';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs, fevId, setFevId } = useTLBaseFgStore();
@@ -32,11 +33,11 @@ export default function TLContainer() {
                                fEv.status = 0;
                                setAllEvs(newAllEvs);
                                iuEv(fEv)
-                               .then((data: any) => {
-                                   if(data.success) {
-                                       enqueueSnackbar(data.message, { variant: "success", autoHideDuration: 3000 });
+                               .then((data: EvsResult) => {
+                                   if(data.options.success) {
+                                       enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
                                    } else {
-                                       enqueueSnackbar(data.message, { variant: "error", autoHideDuration: 3000 });
+                                       enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
                                    }
                                })
                            }

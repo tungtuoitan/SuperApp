@@ -1,8 +1,10 @@
 import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
-import { cDate, Ev, FilterType } from "../TLTypes";
-import { addTime, cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { cDate, Ev, EvsResult, FilterType } from "../TLTypes";
+import { addTime, cDateToGh, cDateToUTCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { debounce } from "lodash";
+import { useCallback } from "react";
+import { iuEv } from "../../../FetchAPIs/TLAPIs";
 
 export const useTLBaseFgHelpers = () => {
     const { TIList } = useTLBaseBgStore();
@@ -91,11 +93,24 @@ export const useTLBaseFgHelpers = () => {
         })
         setAllEvs([...newAllEvs]);
     }, 6);
+    const debounceUpdateEvName = useCallback(debounce((curEv:Ev, value: string) => {
+        iuEv({...curEv, name: value, timeStart: cDateToUTCDate(curEv.timeStart), timeEnd: cDateToUTCDate(curEv.timeEnd)})
+            .then((data: EvsResult) => {
+                if(data.options.success) {
+                    setAllEvs(allEvs.map(ev => ev.id === ev.id ? data.evs[0] : ev));
+                }
+            })
+            .catch((err: any) => {
+                console.log(err);
+            })
+       
+    }, 1000),[])
 
     return {
         filterEvs,
         getFiveLines,
-        debounce$UpdateEv
+        debounce$UpdateEv,
+        debounceUpdateEvName
     }
 }
 
