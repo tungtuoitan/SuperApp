@@ -9,6 +9,7 @@ import { TLBaseFg } from "./TLBaseFg/TLBaseFg";
 import { useTLBaseFgHelpers } from "./TLBaseFg/TLBaseFgHelpers";
 import { iuEv } from "../../FetchAPIs/TLAPIs";
 import { useSnackbar } from "notistack";
+import { EvsResult } from "./TLTypes";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -129,11 +130,11 @@ export const TLBaseContainer = () => {
                             iuEv({...newEv, 
                                 timeStart: cDateToUTCDate(position === 'left' ? newTime : newEv.timeStart), 
                                 timeEnd: cDateToUTCDate(position === 'right' ? newTime : newEv.timeEnd)}
-                            ).then((data: any) => {
-                                if(data.status === 'success') {
-                                    enqueueSnackbar(data.message, { variant: "success", autoHideDuration: 3000 });
+                            ).then((data: EvsResult) => {
+                                if(data.options.success) {
+                                    enqueueSnackbar(data.options.message ?? '', { variant: "success", autoHideDuration: 3000 });
                                 } else {
-                                    enqueueSnackbar(data.message, { variant: "error", autoHideDuration: 3000 });
+                                    enqueueSnackbar(data.options.message ?? '', { variant: "error", autoHideDuration: 3000 });
                                 }
                             })
 
