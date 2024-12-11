@@ -2,18 +2,19 @@ import { styled } from "@mui/styles";
 import { parseCDate, getMonthShortName, getDAYOfWeek } from "../3_TimeConfig/TimeHelpers";
 import { cDate, TimeLevel } from "../TLTypes";
 import { tl } from "../TLConstants";
+import { _1css } from "./1css";
 
 const ContainerTI = styled('div')({
-    height: '100%',
     display: 'flex',
+    color: _1css.TI.co,
+    overflow: 'visible',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     boxSizing: 'border-box',
-    fontSize: '12px',
-    color: '#bfbfbf',
+    fontSize: _1css.TI.fs,
     textAlign: 'center',
     position: 'relative',
-    overflow: 'hidden',
 })
 
 type TIcProps = {
@@ -31,11 +32,7 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
         <ContainerTI
             className="TIc"
             style={{
-                display: 'flex',
                 width: width,
-                color: '#202020 !important',
-                // border: '1px solid red',
-                overflow: 'visible',
                 background: TILevel === tl.hour && (h > 22 || h < 5) 
                     ? '#00000010' 
                     : TILevel === tl.day && (h > 22 || h < 5)

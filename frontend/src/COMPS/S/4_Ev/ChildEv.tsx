@@ -1,8 +1,6 @@
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
-import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
-import { childEvCSS } from "../TLConstants";
 import MiniPopup from "./MiniPopup";
 import { TextField } from "@mui/material";
 import { useState } from "react";
@@ -10,6 +8,7 @@ import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 import { useTLBaseEvStore } from "./TLBaseEvStore";
 import { useTLBaseEvHelpers } from "./TLBaseEvHelpers";
 import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
+import { childEvCSS } from "./4css";
 
 type EvProps = {
     childEv: Ev;

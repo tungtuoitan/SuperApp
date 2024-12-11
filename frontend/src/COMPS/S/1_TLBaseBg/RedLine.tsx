@@ -1,3 +1,4 @@
+import { _1css } from "./1css";
 import { useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 
 export const RedLine = () => {
@@ -7,8 +8,8 @@ export const RedLine = () => {
         <div
             style={{
                 height: '100%',
-                width: 1,
-                background: 'red',
+                width: _1css.redline.w,
+                background: _1css.redline.bg,
                 position: 'absolute',
                 // top: 0,
                 left: w$BgStart_red,
