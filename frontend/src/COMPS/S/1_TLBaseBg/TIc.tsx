@@ -1,5 +1,5 @@
 import { styled } from "@mui/styles";
-import { parseCDate, getMonthShortName, getDAYOfWeek } from "./TLBaseBgHelpers";
+import { parseCDate, getMonthShortName, getDAYOfWeek } from "../3_TimeConfig/TimeHelpers";
 import { cDate, TimeLevel } from "../TLTypes";
 import { tl } from "../TLConstants";
 

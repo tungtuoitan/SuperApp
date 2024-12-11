@@ -1,5 +1,5 @@
 import TISample from './TISample';
-import { useTLBaseFgStore } from '../TLBaseFg/TLBaseFgStore';
+import { useTLBaseFgStore } from '../2_TLBaseFg/TLBaseFgStore';
 
 export default function TLFloatTools () {
     const {newEvId, activeId} = useTLBaseFgStore();

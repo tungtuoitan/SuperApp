@@ -1,13 +1,14 @@
 import { useEffect } from "react";
-import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
+import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import TISample from "../TLTools/TISample";
-import { cDateToGh, GhToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
-import { ParentEv } from "./ParentEv";
+import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
+import { ParentEv } from "../4_Ev/ParentEv";
 import { getEvs } from "../../../FetchAPIs/TLAPIs";
+import { cDateToGh, GhToCDate } from "../3_TimeConfig/TimeHelpers";
 
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();

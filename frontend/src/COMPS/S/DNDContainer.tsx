@@ -1,14 +1,15 @@
 
 import { useSnackbar } from 'notistack';
 import { iuEv } from '../../FetchAPIs/TLAPIs';
-import { addTime, cDateToUTCDate, dateToCDate, useTLBaseBgHelpers } from './TLBaseBg/TLBaseBgHelpers';
+import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
+import { addTime, cDateToUTCDate, dateToCDate } from './3_TimeConfig/TimeHelpers';
 import { TLBaseContainer } from './TLBaseContainer'
-import { useTLBaseFgStore } from './TLBaseFg/TLBaseFgStore';
+import { useTLBaseFgStore } from './2_TLBaseFg/TLBaseFgStore';
 import TLToolsPopup from './TLTools/TLFloatTools'
 import { DndContext } from '@dnd-kit/core'
 import { v4 as uuid } from 'uuid';
-import { useTLBaseBgStore } from './TLBaseBg/TLBaseBgStore';
-import { useTLBaseFgHelpers } from './TLBaseFg/TLBaseFgHelpers';
+import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
+import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import { EvsResult } from './TLTypes';
 
 export default function DNDContainer() {

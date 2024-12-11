@@ -1,10 +1,8 @@
-import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
+import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { cDate, Ev, EvsResult, FilterType } from "../TLTypes";
-import { addTime, cDateToGh, cDateToUTCDate, dateToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
-import { debounce } from "lodash";
-import { useCallback } from "react";
-import { iuEv } from "../../../FetchAPIs/TLAPIs";
+import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
 
 export const useTLBaseFgHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
@@ -78,42 +76,10 @@ export const useTLBaseFgHelpers = () => {
         return allLines;
     }
 
-    // 3. update Ev (khi Grab)
-    const debounce$UpdateEv = debounce((id, position, roundedH, roundedM) => {
-        const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM)
-        const newAllEvs = allEvs.map(ev => {
-            if (ev.id === id) {
-                return {
-                    ...ev,
-                    timeStart: position === 'left' ? newTime : ev.timeStart,
-                    timeEnd: position === 'right' ? newTime : ev.timeEnd
-                }
-            }
-            return ev;
-        })
-        setAllEvs([...newAllEvs]);
-    }, 6);
-    const debounceUpdateEvName = useCallback(debounce((curEv:Ev, value: string) => {
-        iuEv({...curEv, name: value, timeStart: cDateToUTCDate(curEv.timeStart), timeEnd: cDateToUTCDate(curEv.timeEnd)})
-            .then((data: EvsResult) => {
-                if(data.options.success) {
-                    setAllEvs(allEvs.map(ev => ev.id === ev.id ? data.evs[0] : ev));
-                }
-            })
-            .catch((err: any) => {
-                console.log(err);
-            })
-       
-    }, 1000),[])
-
-    const isPast = (timeEnd: cDate) => cDateToGh(timeEnd) < cDateToGh(dateToCDate(dateReal));
 
     return {
         filterEvs,
         getFiveLines,
-        debounce$UpdateEv,
-        debounceUpdateEvName,
-        isPast
     }
 }
 

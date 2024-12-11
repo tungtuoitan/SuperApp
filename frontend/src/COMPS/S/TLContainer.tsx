@@ -1,12 +1,12 @@
 
-import { useTLBaseFgStore } from './TLBaseFg/TLBaseFgStore'
-import { TimeConfigBar } from './TimeConfig/TimeConfigBar'
+import { useTLBaseFgStore } from './2_TLBaseFg/TLBaseFgStore'
+import { TimeConfigBar } from './3_TimeConfig/TimeConfigBar'
 import DNDContainer from './DNDContainer'
 import { KeyboardEvent } from 'react';
 import { iuEv } from '../../FetchAPIs/TLAPIs';
 import { useSnackbar } from 'notistack';
 import { EvsResult } from './TLTypes';
-import { useTLBaseEvStore } from './Ev/TLBaseEvStore';
+import { useTLBaseEvStore } from './4_Ev/TLBaseEvStore';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs, } = useTLBaseFgStore();

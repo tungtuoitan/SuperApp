@@ -1,9 +1,9 @@
 
-import { TLBaseFgProvider } from './TLBaseFg/TLBaseFgStore'
-import { TLBaseBgProvider } from './TLBaseBg/TLBaseBgStore'
-import { TimeConfigProvider } from './TimeConfig/TimeConfigStore'
+import { TLBaseFgProvider } from './2_TLBaseFg/TLBaseFgStore'
+import { TLBaseBgProvider } from './1_TLBaseBg/TLBaseBgStore'
+import { TimeConfigProvider } from './3_TimeConfig/TimeConfigStore'
 import TLContainer from './TLContainer'
-import { TLBaseEvProvider } from './Ev/TLBaseEvStore'
+import { TLBaseEvProvider } from './4_Ev/TLBaseEvStore'
 
 export default function TLProvider() {
 

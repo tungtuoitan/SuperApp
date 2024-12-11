@@ -22,9 +22,6 @@ export interface TLBaseBgContextData {
     mouseDown: boolean;
     setMouseDown: Dispatch<SetStateAction<boolean>>;
     
-    mousePosition: { x: number, y: number };
-    setMousePosition: Dispatch<SetStateAction<{ x: number; y: number; }>>
-
     loadingTL: boolean;
     setLoadingTL: Dispatch<SetStateAction<boolean>>;
     
@@ -50,9 +47,6 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
     mouseDown: false,
     setMouseDown: () => {},
 
-    mousePosition: { x: 0, y: 0 },
-    setMousePosition: () => {},
-
     loadingTL: false,
     setLoadingTL: () => {},
 
@@ -75,11 +69,7 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const scrollByHand = useRef<boolean>(true);
     const [mouseDown, setMouseDown] = useState<boolean>(false);
 
-
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [loadingTL, setLoadingTL] = useState<boolean>(true);
-
-
 
     return (
         <TLBaseBgStore.Provider
@@ -102,9 +92,6 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 startScrollX,
                 mouseDown,
                 setMouseDown,
-
-                mousePosition,
-                setMousePosition,
 
                 loadingTL,
                 setLoadingTL,

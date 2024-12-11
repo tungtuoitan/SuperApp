@@ -1,16 +1,17 @@
-import { useTLBaseBgStore } from "./TLBaseBg/TLBaseBgStore";
+import { useTLBaseBgStore } from "./1_TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
-import { useTimeConfigStore } from "./TimeConfig/TimeConfigStore";
-import { addTime, cDateToUTCDate, hToRoundedHM, parseCDate, useTLBaseBgHelpers } from "./TLBaseBg/TLBaseBgHelpers";
+import { useTimeConfigStore } from "./3_TimeConfig/TimeConfigStore";
+import { useTLBaseBgHelpers } from "./1_TLBaseBg/TLBaseBgHelpers";
+import { addTime, cDateToUTCDate, hToRoundedHM, parseCDate } from "./3_TimeConfig/TimeHelpers";
 import { useEffect, useLayoutEffect } from "react";
-import { useTLBaseFgStore } from "./TLBaseFg/TLBaseFgStore";
-import { TLBaseBg } from "./TLBaseBg/TLBaseBg";
-import { TLBaseFg } from "./TLBaseFg/TLBaseFg";
-import { useTLBaseFgHelpers } from "./TLBaseFg/TLBaseFgHelpers";
+import { useTLBaseFgStore } from "./2_TLBaseFg/TLBaseFgStore";
+import { TLBaseBg } from "./1_TLBaseBg/TLBaseBg";
+import { TLBaseFg } from "./2_TLBaseFg/TLBaseFg";
 import { iuEv } from "../../FetchAPIs/TLAPIs";
 import { useSnackbar } from "notistack";
 import { EvsResult } from "./TLTypes";
-import { useTLBaseEvStore } from "./Ev/TLBaseEvStore";
+import { useTLBaseEvStore } from "./4_Ev/TLBaseEvStore";
+import { useTLBaseEvHelpers } from "./4_Ev/TLBaseEvHelpers";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -49,12 +50,12 @@ export const TLLoading = () => {
     );
 }
 export const TLBaseContainer = () => {
-    const { TLBaseFrameRef, mouseDown, setMouseDown, setMousePosition,
+    const { TLBaseFrameRef, mouseDown, setMouseDown,
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, spotRatio, w$FrameLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
     const { w$BgStart_red, w$TLBaseFrame, w$BgStart_spot, w$Bg, RpxToRh } = useTLBaseBgHelpers();
-    const { debounce$UpdateEv  } = useTLBaseFgHelpers();
+    const { debounce$UpdateEv  } = useTLBaseEvHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { grabEdge, setGrabEdge } = useTLBaseEvStore();
     const { enqueueSnackbar } = useSnackbar();
@@ -148,7 +149,6 @@ export const TLBaseContainer = () => {
                     }}
                     onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                         if (!TLBaseFrameRef.current) return;
-                        // setMousePosition({ x: e.clientX ?? 0, y: e.clientY ?? 0 }); (dùng cho MouseTooltip)
 
                         // 1. tính spotRatio
                         const w$Bg_spot = e.clientX - (TLBaseBgRef.current?.getBoundingClientRect()?.left ?? 0);

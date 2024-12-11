@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { TIc } from "./TIc";
 import { clvs, tl } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
-import { addTime, cDateToGh, dateToCDate, getDate$NextMonday, getDAYOfWeek, parseCDate, parseDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import {useTLBaseBgHelpers } from "./TLBaseBgHelpers";
+import { addTime, cDateToGh, dateToCDate, getDate$NextMonday, getDAYOfWeek, parseCDate, parseDate } from "../3_TimeConfig/TimeHelpers";
 import { v4 as uuidv4 } from 'uuid';
-import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
-import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
+import { useTimeConfigStore } from "../3_TimeConfig/TimeConfigStore";
+import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { RedLine } from "./RedLine";
 import { cDate, TI } from "../TLTypes";
 

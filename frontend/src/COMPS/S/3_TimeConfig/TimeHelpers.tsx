@@ -1,79 +1,6 @@
-import { useTimeConfigStore } from "../TimeConfig/TimeConfigStore";
 import { clvs, miliperh, currentYearcDate, hper, tl } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
-import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
-
-export const useTLBaseBgHelpers = () => {
-    const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
-    const { timeConfig } = useTimeConfigStore();
-    const { dateReal } = useTLBaseBgStore();
-
-    const getLevelByType = (type: 'parentEv' | 'childEv' | 'TI'): keyof typeof hper => {
-        switch (type) {
-            case 'parentEv':
-                return clvs[timeConfig.level + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 1].Clevel
-            case 'childEv':
-                return clvs[timeConfig.level + 2 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].Clevel
-            case 'TI':
-                return clvs[timeConfig.level + 3 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].Clevel
-        }
-    }
-    // C. TLBaseFrame
-    const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
-    const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
-
-    // A. relate to TI
-    const hourPerTI = hper[(getLevelByType('TI') === tl.week ? tl.day : getLevelByType('TI')) as keyof typeof hper];
-    const pxPerTI = w$BaseTI * zoomLv;
-
-    // B. Convert
-    const RhPerPx = hourPerTI / pxPerTI;
-    const RhToPx = (h: number) => h / RhPerPx
-    const RpxToRh = (px: number) => px * RhPerPx
-
-
-
-    // D. TLBaseBg
-    const w$Bg = w$BaseTI * zoomLv * TIList.length
-    const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
-    const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
-    const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
-
-    // E. spot
-    const w$BgStart_spot = () => w$Bg * spotRatio.current; //! những value thế này, nếu viết theo kiểu hàm, thì đôi lúc nó sẽ không reset value
-
-    // F. Red line
-    const realCDate = dateToCDate(dateReal);
-    const h$G_red = cDateToGh(dateToCDate(dateReal));
-    const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
-    // console.log("RhPerPx:", RhPerPx);
-
-
-
-
-    return {
-        hourPerTI,
-
-        h$G_BgStart,
-        h$G_BgEnd,
-        h$G_red,
-
-        w$BgStart_red,
-        w$Bg,
-        w$TLBaseFrame,
-        w$BaseTI,
-        w$BgStart_spot,
-        maxScrollLeft,
-
-        RhPerPx,
-        RhToPx,
-        RpxToRh,
-
-        dateToCDate,
-        getLevelByType,
-    }
-}
 
 // B1. to CDate
 export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
@@ -116,15 +43,26 @@ export const cDateToGh = (date: cDate) => date ? new Date(date).getTime() / mili
 export const pxToRh = (px: number, hPerPx: number) => px * hPerPx;
 
 
+// B4. add time
+export const addTime = (date: cDate, years: number, month: number, day: number, hour: number, min: number): cDate => {
+    const date0 = new Date(date);
+    const newDate = new Date(date);
+    newDate.setFullYear(date0.getFullYear() + years);
+    const newDate2 = new Date(new Date(newDate))
+    newDate2.setMonth(date0.getMonth() + month);
+    const newDate3 = new Date(new Date(newDate2))
+    newDate3.setDate(date0.getDate() + day);
+    const newDate4 = new Date(new Date(newDate3))
+    newDate4.setHours(date0.getHours() + hour);
+    const newDate5 = new Date(new Date(newDate4))
+    newDate5.setMinutes(date0.getMinutes() + min);
+
+    return dateToCDate(newDate5);
+};
 
 
 
-
-
-
-
-
-// 4. lấy yearList
+// B5. Get Period List
 export const getInYearsList = (date: cDate) => {
     const { y, m, d, h } = parseCDate(date);
     const newInYearsList = [] as cDateOption[];
@@ -138,8 +76,6 @@ export const getInYearsList = (date: cDate) => {
     }
     return newInYearsList;
 }
-
-
 export const getPeriodListUnit1000y = () => {
     const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
     const new100yList = [] as cDateOption[];
@@ -155,11 +91,9 @@ export const getPeriodListUnit1000y = () => {
     }
     return new100yList;
 }
-
 export const getPeriodListUnit100y = () => {
     return [{ id: `0`, label: `${2024} -> 2100`, date: numbToCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
 }
-
 export const getPeriodListUnit1y = () => {
     const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
     let periodList = [] as cDateOption[];
@@ -177,8 +111,6 @@ export const getPeriodListUnit1y = () => {
     periodList = [curYearItem, ...periodList];
     return periodList;
 }
-
-
 export const getPeriodListUnit1m = () => {
     const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
     let periodList = [] as cDateOption[];
@@ -199,40 +131,26 @@ export const getPeriodListUnit1m = () => {
     return periodList;
 }
 
-export const addTime = (date: cDate, years: number, month: number, day: number, hour: number, min: number): cDate => {
-    const date0 = new Date(date);
-    const newDate = new Date(date);
-    newDate.setFullYear(date0.getFullYear() + years);
-    const newDate2 = new Date(new Date(newDate))
-    newDate2.setMonth(date0.getMonth() + month);
-    const newDate3 = new Date(new Date(newDate2))
-    newDate3.setDate(date0.getDate() + day);
-    const newDate4 = new Date(new Date(newDate3))
-    newDate4.setHours(date0.getHours() + hour);
-    const newDate5 = new Date(new Date(newDate4))
-    newDate5.setMinutes(date0.getMinutes() + min);
 
-    return dateToCDate(newDate5);
-};
 
-export const toLocalISOString = (date: Date): string => {
-    const pad = (num: number): string => num.toString().padStart(2, '0');
+// export const toLocalISOString = (date: Date): string => {
+//     const pad = (num: number): string => num.toString().padStart(2, '0');
 
-    const year = date.getFullYear();
-    const month = pad(date.getMonth() + 1); // Tháng bắt đầu từ 0
-    const day = pad(date.getDate());
-    const hour = pad(date.getHours());
-    const minute = pad(date.getMinutes());
-    const second = pad(date.getSeconds());
-    const millisecond = date.getMilliseconds().toString().padStart(3, '0');
+//     const year = date.getFullYear();
+//     const month = pad(date.getMonth() + 1); // Tháng bắt đầu từ 0
+//     const day = pad(date.getDate());
+//     const hour = pad(date.getHours());
+//     const minute = pad(date.getMinutes());
+//     const second = pad(date.getSeconds());
+//     const millisecond = date.getMilliseconds().toString().padStart(3, '0');
 
-    const timezoneOffset = -date.getTimezoneOffset();
-    const sign = timezoneOffset >= 0 ? '+' : '-';
-    const offsetHour = pad(Math.floor(Math.abs(timezoneOffset) / 60));
-    const offsetMinute = pad(Math.abs(timezoneOffset) % 60);
+//     const timezoneOffset = -date.getTimezoneOffset();
+//     const sign = timezoneOffset >= 0 ? '+' : '-';
+//     const offsetHour = pad(Math.floor(Math.abs(timezoneOffset) / 60));
+//     const offsetMinute = pad(Math.abs(timezoneOffset) % 60);
 
-    return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}${sign}${offsetHour}:${offsetMinute}`;
-};
+//     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}${sign}${offsetHour}:${offsetMinute}`;
+// };
 
 export const hToRoundedHM = (h: number, isRoundM?: boolean): { roundedH: number, roundedM: number } => {
     let roundedH = Math.floor(h);
@@ -253,7 +171,7 @@ export const hToRoundedHM = (h: number, isRoundM?: boolean): { roundedH: number,
 };
 
 
-// B4. get Month's name
+// B6. get Month's name
 export const getMonthShortName = (month: number) => {
     switch (month) {
         case 1: return 'Jan'
@@ -290,7 +208,7 @@ export const getMonthFullName = (month: number) => {
     }
 }
 
-
+// B.7 get Day's name
 export function getDate$MondayOfCurrentWeek(date: Date = new Date()) {
     const today = new Date(date); // Lấy ngày hiện tại
     const dayOfWeek = today.getDay(); // Lấy chỉ số của ngày trong tuần (0: Chủ nhật, 1: Thứ Hai, ...)

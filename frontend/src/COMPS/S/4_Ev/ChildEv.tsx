@@ -1,13 +1,15 @@
-import { cDateToGh, dateToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
-import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
+import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
 import { childEvCSS } from "../TLConstants";
 import MiniPopup from "./MiniPopup";
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import { useTLBaseFgHelpers } from "../TLBaseFg/TLBaseFgHelpers";
+import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 import { useTLBaseEvStore } from "./TLBaseEvStore";
+import { useTLBaseEvHelpers } from "./TLBaseEvHelpers";
+import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
 
 type EvProps = {
     childEv: Ev;
@@ -32,7 +34,7 @@ export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
     const { RhToPx } = useTLBaseBgHelpers();
     const { grabEdge, fevId, setFevId } = useTLBaseEvStore();
-    const { debounceUpdateEvName, isPast } = useTLBaseFgHelpers();
+    const { debounceUpdateEvName, isPast } = useTLBaseEvHelpers();
     const paddingTop = 20;
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = paddingTop + (20 + 2) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
