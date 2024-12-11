@@ -1,6 +1,5 @@
 
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import { v4 as uuid } from 'uuid';
 
 export type GragEdge = {
     id: number | null;
@@ -20,9 +19,12 @@ export interface TLBaseEvContextData {
 
     fevId: number | null;
     setFevId: Dispatch<SetStateAction<number | null>>;
+
+    cutEvId: number | null;
+    setCutEvId: Dispatch<SetStateAction<number | null>>;
 };
 
-export const TLBaseEvContextDefaultValue: TLBaseEvContextData = {
+export const EvContextDefaultValue: TLBaseEvContextData = {
     mouseenter: false,
     setEnterGrabEdge: () => {},
     mousedownAtGE: false,
@@ -31,10 +33,12 @@ export const TLBaseEvContextDefaultValue: TLBaseEvContextData = {
     setGrabEdge: () => {},
     fevId: null,
     setFevId: () => {},
+    cutEvId: null,
+    setCutEvId: () => {},
 };
 
-const TLBaseEvStore = createContext<TLBaseEvContextData>(TLBaseEvContextDefaultValue);
-export const useTLBaseEvStore = () => useContext(TLBaseEvStore);
+const EvContext = createContext<TLBaseEvContextData>(EvContextDefaultValue);
+export const EvStore = () => useContext(EvContext);
 
 export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [mouseenter, setEnterGrabEdge] = useState<boolean>(false);
@@ -42,9 +46,11 @@ export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [grabEdge, setGrabEdge] = useState<GragEdge>(defaultGrabEdge);
 
     const [fevId, setFevId] = useState<number | null>(null);
+    const [cutEvId, setCutEvId] = useState<number | null>(null);
+
 
     return (
-        <TLBaseEvStore.Provider
+        <EvContext.Provider
             value={{
                 mouseenter,
                 setEnterGrabEdge,
@@ -55,8 +61,10 @@ export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
                 fevId,
                 setFevId,
+                cutEvId,
+                setCutEvId,
             }}>
             {children}
-        </TLBaseEvStore.Provider>
+        </EvContext.Provider>
     )
 }

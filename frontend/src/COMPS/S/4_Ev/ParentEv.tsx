@@ -5,6 +5,8 @@ import { ChildEv } from "./ChildEv";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import GrabEdge from "./GrabEdge";
 import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
+import { EvStore } from "./EvStore";
+import { _4css } from "./4css";
 
 type ParentEvProps = {
     childEvs: Ev[];
@@ -17,6 +19,7 @@ export const ParentEv = (props: ParentEvProps) => {
     const { getFiveLines } = useTLBaseFgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: parentEv.id });
     const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
+    const { setFevId, fevId } = EvStore();
 
     const fiveLines = getFiveLines(childEvs);
 
@@ -32,6 +35,9 @@ export const ParentEv = (props: ParentEvProps) => {
             id={'ParentEv-' + parentEv.name}
             data-name={parentEv.name}
             ref={setNodeRef}
+            onClick={() => {
+                setFevId(parentEv.id)
+            }}
             style={{
                 width: width,
                 // transform: `translateX(${left}px)`, // this is better for performance, but it has problem while dropping
@@ -46,6 +52,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 position: 'absolute',
                 marginBottom: 10,
                 borderRadius: isBeggerGang ? 0 : 20,
+                border: fevId && fevId === parentEv.id ? '2px solid '+ _4css.focusBco : '2px solid transparent',
                 // borderLeft: '10px solid transparent', // for beauty when child in parentEv
                 // borderRight: '10px solid transparent',
             }}>

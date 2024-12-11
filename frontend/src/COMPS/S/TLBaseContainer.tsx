@@ -10,8 +10,8 @@ import { TLBaseFg } from "./2_TLBaseFg/TLBaseFg";
 import { iuEv } from "../../FetchAPIs/TLAPIs";
 import { useSnackbar } from "notistack";
 import { EvsResult } from "./TLTypes";
-import { useTLBaseEvStore } from "./4_Ev/TLBaseEvStore";
-import { useTLBaseEvHelpers } from "./4_Ev/TLBaseEvHelpers";
+import { EvStore } from "./4_Ev/EvStore";
+import { useEvHelpers } from "./4_Ev/EvHelpers";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -55,9 +55,9 @@ export const TLBaseContainer = () => {
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
     const { w$BgStart_red, w$TLBaseFrame, w$BgStart_spot, w$Bg, RpxToRh } = useTLBaseBgHelpers();
-    const { debounce$UpdateEv  } = useTLBaseEvHelpers();
+    const { debounce$UpdateEv } = useEvHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { grabEdge, setGrabEdge } = useTLBaseEvStore();
+    const { grabEdge, setGrabEdge } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {

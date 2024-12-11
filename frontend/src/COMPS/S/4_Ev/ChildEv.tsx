@@ -1,14 +1,13 @@
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
 import GrabEdge from "./GrabEdge";
-import MiniPopup from "./MiniPopup";
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
-import { useTLBaseEvStore } from "./TLBaseEvStore";
-import { useTLBaseEvHelpers } from "./TLBaseEvHelpers";
+import { EvStore } from "./EvStore";
+import { useEvHelpers } from "./EvHelpers";
 import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
-import { childEvCSS } from "./4css";
+import { _4css } from "./4css";
+import MiniPopup from "./MiniPopup";
 
 type EvProps = {
     childEv: Ev;
@@ -32,15 +31,15 @@ const getTextFieldCSSSelector = (name: string, id: number | string) => {
 export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
     const { RhToPx } = useTLBaseBgHelpers();
-    const { grabEdge, fevId, setFevId } = useTLBaseEvStore();
-    const { debounceUpdateEvName, isPast } = useTLBaseEvHelpers();
+    const { grabEdge, fevId, setFevId, cutEvId } = EvStore();
+    const { debounceUpdateEvName, isPast } = useEvHelpers();
     const paddingTop = 20;
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = paddingTop + (20 + 2) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
     const width = RhToPx(
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
-    const css = childEvCSS
+    const css = _4css
     const tfSelector = getTextFieldCSSSelector('childEvName', childEv.id);
     const [tfValue, setTfValue] = useState(childEv.name);
 
@@ -59,6 +58,7 @@ export const ChildEv = (props: EvProps) => {
                         : css.background,
                 display: css.display,
                 transform: `translateX(${left}px)`,
+                opacity: childEv.id === cutEvId ? '0.5' : '1',
                 // transform: `translateY(${top}px)`,
                 fontSize: css.fontSize,
                 top: top,
@@ -68,11 +68,12 @@ export const ChildEv = (props: EvProps) => {
                 color: 'white',
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: childEv.type === 'jobtask' ? '1px 1px' : '50px 50px',
+                borderRadius: '50px 50px',
+                // borderRadius: childEv.type === 'jobtask' ? '1px 1px' : '50px 50px',
 
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
-                border: fevId && fevId === childEv.id ? '2px solid #0D99FF' : 'none',
+                border: fevId && fevId === childEv.id ? '2px solid '+ _4css.focusBco : 'none',
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
 
             }}

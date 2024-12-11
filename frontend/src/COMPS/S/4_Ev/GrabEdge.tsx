@@ -1,4 +1,4 @@
-import { useTLBaseEvStore } from "./TLBaseEvStore";
+import { EvStore } from "./EvStore";
 
 type GrabEdgeProps = {
     id: number,
@@ -8,7 +8,7 @@ type GrabEdgeProps = {
 
 export default function GrabEdge (props: GrabEdgeProps) {
     const {position, id, type = 'child'} = props;
-    const { grabEdge, setGrabEdge } = useTLBaseEvStore();
+    const { grabEdge, setGrabEdge } = EvStore();
     return (
         <div 
         onMouseEnter={() => {

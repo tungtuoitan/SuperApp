@@ -6,7 +6,7 @@ import { debounce } from "lodash";
 import { useCallback } from "react";
 import { iuEv } from "../../../FetchAPIs/TLAPIs";
 
-export const useTLBaseEvHelpers = () => {
+export const useEvHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
 

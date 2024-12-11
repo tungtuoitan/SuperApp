@@ -1,5 +1,5 @@
 
-export const childEvCSS = {
+export const _4css = {
     height: 16,
     background: '#828282',
     pastBackground: '#82828220',
@@ -7,4 +7,5 @@ export const childEvCSS = {
     backgroundJobTask: '#000000',
     display: 'flex',
     fontSize: '12px',
+    focusBco: '#0D99FF',
 }
