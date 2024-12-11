@@ -12,10 +12,10 @@ import { getEvs } from "../../../FetchAPIs/TLAPIs";
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
     const { hourPerTI } = useTLBaseBgHelpers();
-    const { setAllEvs, activeId } = useTLBaseFgStore();
+    const { setAllEvs, activeId, newEvId } = useTLBaseFgStore();
     const { filterEvs, getFiveLines } = useTLBaseFgHelpers();
     const { w$Bg, getLevelByType } = useTLBaseBgHelpers();
-    const { setNodeRef } = useDroppable({ id: 'droppablex' });
+    const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
 
     const allParentEvs = filterEvs(['inside-TL', 'parentEv', 'active']);
 
@@ -34,7 +34,7 @@ export const TLBaseFg = () => {
 
     const beggerEv = TIList.length > 0
         ? {
-            id: 999,
+            id: 999999999,
             name: 'Begger Gang',
             parentId: null,
             level: getLevelByType('parentEv'),
@@ -45,10 +45,11 @@ export const TLBaseFg = () => {
     const fiveLines = getFiveLines(allParentEvs);
     return (
         <div
-            ref={setNodeRef}
             id='TLBaseFg'
+            ref={setNodeRef}
             style={{
                 width: w$Bg,
+                border: isOver ? '4px solid lightblue' : '4px solid transparent',
                 overflowX: 'hidden',
                 overflowY: 'hidden',
                 height: 573,
@@ -74,9 +75,9 @@ export const TLBaseFg = () => {
             })
             }
             <DragOverlay>
-                {activeId ? (
-                    <TISample id={activeId} />
-                ) : null}
+                {activeId === newEvId 
+                ? <TISample id={activeId} type={isOver ? 'parentEv' : 'childEv'} />
+                : null}
             </DragOverlay>
         </div>
     );

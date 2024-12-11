@@ -16,10 +16,10 @@ export interface TLBaseFgContextData {
     setAllEvs: Dispatch<SetStateAction<any[]>>;
     isFirstTime: boolean;
     setIsFirstTime: Dispatch<SetStateAction<boolean>>;
-    activeId: string | null;
-    setActiveId: Dispatch<SetStateAction<string | null>>;
-    newEvId: string;
-    setNewEvId: Dispatch<SetStateAction<string>>;
+    activeId: string|number|null;
+    setActiveId: Dispatch<SetStateAction<string|number|null>>;
+    newEvId: string|number;
+    setNewEvId: Dispatch<SetStateAction<string|number>>;
 
     mouseenter: boolean;
     setEnterGrabEdge: Dispatch<SetStateAction<boolean>>;
@@ -30,6 +30,9 @@ export interface TLBaseFgContextData {
 
     fevId: number | null;
     setFevId: Dispatch<SetStateAction<number | null>>;
+
+    activeDroppableId: string | null;
+    setActiveDroppableId: Dispatch<SetStateAction<string | null>>;
 };
 
 export const TLBaseFgContextDefaultValue: TLBaseFgContextData = {
@@ -50,6 +53,8 @@ export const TLBaseFgContextDefaultValue: TLBaseFgContextData = {
     setGrabEdge: () => {},
     fevId: null,
     setFevId: () => {},
+    activeDroppableId: null,
+    setActiveDroppableId: () => {},
 };
 
 const TLBaseFgStore = createContext<TLBaseFgContextData>(TLBaseFgContextDefaultValue);
@@ -58,14 +63,15 @@ export const useTLBaseFgStore = () => useContext(TLBaseFgStore);
 export const TLBaseFgProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [allEvs, setAllEvs] = useState<any[]>([]);
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
-    const [activeId, setActiveId] = useState<string|null>(null); 
-    const [newEvId, setNewEvId] = useState<string>(uuid());
+    const [activeId, setActiveId] = useState<string|number|null>(null); 
+    const [newEvId, setNewEvId] = useState<string|number>(uuid());
 
     const [mouseenter, setEnterGrabEdge] = useState<boolean>(false);
     const [mousedownAtGE, setGrabbing] = useState<boolean>(false);
     const [grabEdge, setGrabEdge] = useState<GragEdge>(defaultGrabEdge);
 
     const [fevId, setFevId] = useState<number | null>(null);
+    const [activeDroppableId, setActiveDroppableId] = useState<string | null>(null);
 
 
     return (
@@ -89,6 +95,8 @@ export const TLBaseFgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
                 fevId,
                 setFevId,
+                activeDroppableId,
+                setActiveDroppableId,
             }}>
             {children}
         </TLBaseFgStore.Provider>

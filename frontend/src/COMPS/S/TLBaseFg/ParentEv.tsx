@@ -14,11 +14,11 @@ type ParentEvProps = {
 export const ParentEv = (props: ParentEvProps) => {
     const { childEvs, parentEv, lineOrder, isBeggerGang = false } = props;
     const { getFiveLines } = useTLBaseFgHelpers();
-    const { setNodeRef } = useDroppable({ id: parentEv.id });
+    const { setNodeRef, isOver } = useDroppable({ id: parentEv.id });
+    const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
 
     const fiveLines = getFiveLines(childEvs);
 
-    const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
     const paddingTop = 20;
     const left = RhToPx(cDateToGh(parentEv.timeStart as cDate) - h$G_BgStart)
     const top = paddingTop + (100 + 10) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
@@ -33,11 +33,13 @@ export const ParentEv = (props: ParentEvProps) => {
             ref={setNodeRef}
             style={{
                 width: width,
-                transform: `translateX(${left}px)`,
+                // transform: `translateX(${left}px)`, // this is better for performance, but it has problem while dropping
+                left: left,
+                
                 height: 100,
                 top: top,
                 flexDirection: 'column',
-                background: '#00000010',
+                background: isOver ? 'lightblue' : '#00000010',
                 gap: 1,
                 zIndex: 100,
                 position: 'absolute',
