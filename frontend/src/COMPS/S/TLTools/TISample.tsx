@@ -1,5 +1,5 @@
 import { useDraggable } from "@dnd-kit/core";
-import { childEvCSS } from "../4_Ev/4css";
+import { _4css } from "../4_Ev/4css";
 
 type DraggableProps = {
     children?: React.ReactNode;
@@ -22,7 +22,7 @@ export default function TISample(props: DraggableProps) {
                 ...sx,
                 width: 100,
                 height: 30,
-                backgroundColor: childEvCSS.background,
+                backgroundColor: _4css.background,
                 borderRadius: 50,
                 color: 'white',
                 display: 'flex',
