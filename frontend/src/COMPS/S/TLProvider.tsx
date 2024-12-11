@@ -3,6 +3,7 @@ import { TLBaseFgProvider } from './TLBaseFg/TLBaseFgStore'
 import { TLBaseBgProvider } from './TLBaseBg/TLBaseBgStore'
 import { TimeConfigProvider } from './TimeConfig/TimeConfigStore'
 import TLContainer from './TLContainer'
+import { TLBaseEvProvider } from './Ev/TLBaseEvStore'
 
 export default function TLProvider() {
 
@@ -11,7 +12,9 @@ export default function TLProvider() {
         <TLBaseFgProvider>
             <TLBaseBgProvider>
                 <TimeConfigProvider>
-                    <TLContainer/>
+                    <TLBaseEvProvider>
+                        <TLContainer/>
+                    </TLBaseEvProvider>
                 </TimeConfigProvider>
             </TLBaseBgProvider>
         </TLBaseFgProvider>

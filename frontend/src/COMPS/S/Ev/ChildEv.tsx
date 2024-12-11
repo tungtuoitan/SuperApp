@@ -1,12 +1,13 @@
 import { cDateToGh, dateToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
-import { useTLBaseFgStore } from "./TLBaseFgStore";
+import { useTLBaseFgStore } from "../TLBaseFg/TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
 import { childEvCSS } from "../TLConstants";
 import MiniPopup from "./MiniPopup";
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
+import { useTLBaseFgHelpers } from "../TLBaseFg/TLBaseFgHelpers";
+import { useTLBaseEvStore } from "./TLBaseEvStore";
 
 type EvProps = {
     childEv: Ev;
@@ -30,7 +31,7 @@ const getTextFieldCSSSelector = (name: string, id: number | string) => {
 export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
     const { RhToPx } = useTLBaseBgHelpers();
-    const { grabEdge, fevId, setFevId, allEvs, setAllEvs } = useTLBaseFgStore();
+    const { grabEdge, fevId, setFevId } = useTLBaseEvStore();
     const { debounceUpdateEvName, isPast } = useTLBaseFgHelpers();
     const paddingTop = 20;
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv

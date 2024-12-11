@@ -1,9 +1,9 @@
 import { cDate, Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { useDroppable } from "@dnd-kit/core";
-import { ChildEv } from "./ChildEv";
+import { ChildEv } from "../Ev/ChildEv";
 import { cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
-import GrabEdge from "./GrabEdge";
+import GrabEdge from "../Ev/GrabEdge";
 
 type ParentEvProps = {
     childEvs: Ev[];

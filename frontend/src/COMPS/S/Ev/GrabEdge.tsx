@@ -1,4 +1,4 @@
-import { useTLBaseFgStore } from "./TLBaseFgStore";
+import { useTLBaseEvStore } from "./TLBaseEvStore";
 
 type GrabEdgeProps = {
     id: number,
@@ -8,7 +8,7 @@ type GrabEdgeProps = {
 
 export default function GrabEdge (props: GrabEdgeProps) {
     const {position, id, type = 'child'} = props;
-    const { grabEdge, setGrabEdge } = useTLBaseFgStore();
+    const { grabEdge, setGrabEdge } = useTLBaseEvStore();
     return (
         <div 
         onMouseEnter={() => {

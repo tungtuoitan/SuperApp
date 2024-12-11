@@ -6,9 +6,11 @@ import { KeyboardEvent } from 'react';
 import { iuEv } from '../../FetchAPIs/TLAPIs';
 import { useSnackbar } from 'notistack';
 import { EvsResult } from './TLTypes';
+import { useTLBaseEvStore } from './Ev/TLBaseEvStore';
 
 export default function TLContainer() {
-    const { allEvs, setAllEvs, fevId, setFevId } = useTLBaseFgStore();
+    const { allEvs, setAllEvs, } = useTLBaseFgStore();
+    const { fevId, setFevId } = useTLBaseEvStore();
     const { enqueueSnackbar } = useSnackbar();
 
   return (
@@ -19,7 +21,7 @@ export default function TLContainer() {
                 }
             }}
             tabIndex={0} // to enable onKeyDown
-            onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
+            onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => { 
                 if (fevId) {
                     switch (e.key) {
                        case 'Escape':
