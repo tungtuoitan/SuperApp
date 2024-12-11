@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { TIc } from "./TIc";
-import { clvs } from "../TLConstants";
+import { clvs, tl } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { addTime, cDateToGh, dateToCDate, getDate$NextMonday, getDAYOfWeek, parseCDate, parseDate, useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { v4 as uuidv4 } from 'uuid';
@@ -22,7 +22,7 @@ export const TLBaseBg = () => {
         const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
         if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
-        if (clvs[timeConfig.level].Clevel === 'century') {
+        if (clvs[timeConfig.level].Clevel === tl.century) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -32,7 +32,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === 'decade') {
+        else if (clvs[timeConfig.level].Clevel === tl.decade) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -42,7 +42,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === 'year') {
+        else if (clvs[timeConfig.level].Clevel === tl.year) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -52,7 +52,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === 'month') {
+        else if (clvs[timeConfig.level].Clevel === tl.month) {
             const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
@@ -64,7 +64,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === 'week') {
+        else if (clvs[timeConfig.level].Clevel === tl.week) {
             const { y, m, d, h, p } = parseCDate(timeConfig.period.date);
             for (let i = 0; i < 1000; i++) {
                 const TI = {

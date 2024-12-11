@@ -192,7 +192,7 @@ export const TLBaseContainer = () => {
                                 //         break;
                                 //     }
                                 // }
-                                // if(clvs[newTimeConfig.level].level === 'year' && timeConfig.period) {
+                                // if(clvs[newTimeConfig.level].level === tl.year && timeConfig.period) {
                                 //     const newInYearsList = getInYearsList(timeConfig.period.date);
                                 //     newTimeConfig.inYearsVal = newInYearsList[0];
                                 // }

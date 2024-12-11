@@ -24,13 +24,13 @@ export const currentYearcDate = '2024-01-01T00:00:00.000+07:00'
 
 
 export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
-    { id: 0, Clevel: 'century', status: 'on' }, 
-    { id: 1, Clevel: 'decade',  status: 'on' }, 
-    { id: 2, Clevel: 'year',    status: 'on' },
-    { id: 3, Clevel: 'month',   status: 'on' },
-    { id: 4, Clevel: 'week',    status: 'on' },
-    { id: 5, Clevel: 'day',     status: 'off' },
-    { id: 6, Clevel: 'hour',    status: 'off' },
+    { id: 0, Clevel: tl.century, status: 'on' }, 
+    { id: 1, Clevel: tl.decade,  status: 'on' }, 
+    { id: 2, Clevel: tl.year,    status: 'on' },
+    { id: 3, Clevel: tl.month,   status: 'on' },
+    { id: 4, Clevel: tl.week,    status: 'on' },
+    { id: 5, Clevel: tl.day,     status: 'off' },
+    { id: 6, Clevel: tl.hour,    status: 'off' },
 ]
 
 export const childEvCSS = {
@@ -45,15 +45,15 @@ export const childEvCSS = {
 
 // export const getCSS$ChildEv = (CLevel: TimeLevel, evLevel: TimeLevel) => {
 //     switch (CLevel) {
-//         case 'week': 
+//         case tl.week: 
 //             return childEvCSS.week[evLevel as keyof typeof childEvCSS.week]
-//         case 'month': 
+//         case tl.month: 
 //             return childEvCSS.month[evLevel as keyof typeof childEvCSS.month]
-//         case 'year':
+//         case tl.year:
 //             return childEvCSS.year[evLevel as keyof typeof childEvCSS.year]
-//         case 'decade':
+//         case tl.decade:
 //             return childEvCSS.decade[evLevel as keyof typeof childEvCSS.decade]
-//         case 'century':
+//         case tl.century:
 //             return childEvCSS.century[evLevel as keyof typeof childEvCSS.century]
 //         default:
 //             return childEvCSS.week[evLevel as keyof typeof childEvCSS.week]

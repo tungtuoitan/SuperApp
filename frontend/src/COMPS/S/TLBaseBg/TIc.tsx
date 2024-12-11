@@ -1,6 +1,7 @@
 import { styled } from "@mui/styles";
 import { parseCDate, getMonthShortName, getDAYOfWeek } from "./TLBaseBgHelpers";
 import { cDate, TimeLevel } from "../TLTypes";
+import { tl } from "../TLConstants";
 
 const ContainerTI = styled('div')({
     height: '100%',
@@ -35,9 +36,9 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                 color: '#202020 !important',
                 // border: '1px solid red',
                 overflow: 'visible',
-                background: TILevel === 'hour' && (h > 22 || h < 5) 
+                background: TILevel === tl.hour && (h > 22 || h < 5) 
                     ? '#00000010' 
-                    : TILevel === 'day' && (h > 22 || h < 5)
+                    : TILevel === tl.day && (h > 22 || h < 5)
                     ? 'linear-gradient(to right, #00000005 0%, #00000005 20.83%, transparent 20.83%, transparent 95.83%, #00000005 95.83%)'
                     : 'transparent',
             }}>
@@ -49,12 +50,12 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             height: 'calc(100% - 60px)',  // 60px is height of timeDiv
                             borderLeft: (() => {
                                 if (index === 0) return ''
-                                if (TILevel === 'year' && y % 10 === 0 ||
-                                    TILevel === 'month' && m === 1 ||
-                                    TILevel === 'week' && d === 1 ||
-                                    TILevel === 'day' && d === 1 ||
-                                    TILevel === 'day' && new Date(date).getDay() === 1 ||  // ~ Monday
-                                    TILevel === 'hour' && h === 0) return '1px solid #00000050'
+                                if (TILevel === tl.year && y % 10 === 0 ||
+                                    TILevel === tl.month && m === 1 ||
+                                    TILevel === tl.week && d === 1 ||
+                                    TILevel === tl.day && d === 1 ||
+                                    TILevel === tl.day && new Date(date).getDay() === 1 ||  // ~ Monday
+                                    TILevel === tl.hour && h === 0) return '1px solid #00000050'
                                 return '1px solid #bfbfbf50'
                             })()
                         }}>
@@ -69,12 +70,12 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                         style={{
                             borderLeft: (() => {
                                 if (index === 0) return ''
-                                if (TILevel === 'year' && y % 10 === 0 ||
-                                    TILevel === 'month' && m === 1 ||
-                                    TILevel === 'week' && d === 1 ||
-                                    TILevel === 'day' && d === 1 ||
-                                    TILevel === 'day' && new Date(date).getDay() === 1 ||  // ~ Monday
-                                    TILevel === 'hour' && h === 0) return '1px solid #00000050'
+                                if (TILevel === tl.year && y % 10 === 0 ||
+                                    TILevel === tl.month && m === 1 ||
+                                    TILevel === tl.week && d === 1 ||
+                                    TILevel === tl.day && d === 1 ||
+                                    TILevel === tl.day && new Date(date).getDay() === 1 ||  // ~ Monday
+                                    TILevel === tl.hour && h === 0) return '1px solid #00000050'
                                 return '1px solid transparent'
                             })()
                         }}
@@ -92,12 +93,12 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             {(() => {
                                 if (width < 18) return ''
                                 switch (TILevel) {
-                                    case 'year': return y
-                                    case 'month': return getMonthShortName(m)
-                                    case 'week':
-                                    case 'day':
+                                    case tl.year: return y
+                                    case tl.month: return getMonthShortName(m)
+                                    case tl.week:
+                                    case tl.day:
                                         return d;
-                                    case 'hour':
+                                    case tl.hour:
                                         return h > 11
                                             ? <span>{h - 12}"</span>
                                             : <span>{h}"</span>
@@ -120,18 +121,18 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             {
                                 (() => {
                                     let text = ''
-                                    if (TILevel === 'year') {
+                                    if (TILevel === tl.year) {
                                         if (y % 10 === 0) text = y.toString()
                                     }
-                                    if (TILevel === 'month') {
+                                    if (TILevel === tl.month) {
                                         if (m === 1) text = y.toString()
                                     }
-                                    else if (TILevel === 'week' || TILevel === 'day') {
+                                    else if (TILevel === tl.week || TILevel === tl.day) {
                                         if (d === 1) text = getMonthShortName(m)
                                         if (new Date(date).getDay() === 1 && width > 18) text = 'M'
                                         
                                     }
-                                    else if (TILevel === 'hour') {
+                                    else if (TILevel === tl.hour) {
                                         if (h === 0) text = d + '.' + getDAYOfWeek(new Date(y, m - 1, d, h, 0, 0))
                                     }
 

@@ -24,7 +24,7 @@ export const useTLBaseBgHelpers = () => {
     const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
 
     // A. relate to TI
-    const hourPerTI = hper[getLevelByType('TI') === tl.week ? tl.day : getLevelByType('TI')];
+    const hourPerTI = hper[(getLevelByType('TI') === tl.week ? tl.day : getLevelByType('TI')) as keyof typeof hper];
     const pxPerTI = w$BaseTI * zoomLv;
 
     // B. Convert
