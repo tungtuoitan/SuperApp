@@ -32,36 +32,3 @@ export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
     { id: 5, Clevel: tl.day,     status: 'off' },
     { id: 6, Clevel: tl.hour,    status: 'off' },
 ]
-
-export const childEvCSS = {
-    height: 16,
-    background: '#828282',
-    pastBackground: '#82828220',
-    backgroundDrag: 'red',
-    backgroundJobTask: '#000000',
-    display: 'flex',
-    fontSize: '12px',
-}
-
-// export const getCSS$ChildEv = (CLevel: TimeLevel, evLevel: TimeLevel) => {
-//     switch (CLevel) {
-//         case tl.week: 
-//             return childEvCSS.week[evLevel as keyof typeof childEvCSS.week]
-//         case tl.month: 
-//             return childEvCSS.month[evLevel as keyof typeof childEvCSS.month]
-//         case tl.year:
-//             return childEvCSS.year[evLevel as keyof typeof childEvCSS.year]
-//         case tl.decade:
-//             return childEvCSS.decade[evLevel as keyof typeof childEvCSS.decade]
-//         case tl.century:
-//             return childEvCSS.century[evLevel as keyof typeof childEvCSS.century]
-//         default:
-//             return childEvCSS.week[evLevel as keyof typeof childEvCSS.week]
-//     }
-// }
-
-
-
-export const beggerEv = {
-    
-}
