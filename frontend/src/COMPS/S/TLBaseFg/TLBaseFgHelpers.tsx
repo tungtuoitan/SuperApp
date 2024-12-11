@@ -1,13 +1,13 @@
 import { useTLBaseBgStore } from "../TLBaseBg/TLBaseBgStore";
 import { cDate, Ev, EvsResult, FilterType } from "../TLTypes";
-import { addTime, cDateToGh, cDateToUTCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { addTime, cDateToGh, cDateToUTCDate, dateToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { debounce } from "lodash";
 import { useCallback } from "react";
 import { iuEv } from "../../../FetchAPIs/TLAPIs";
 
 export const useTLBaseFgHelpers = () => {
-    const { TIList } = useTLBaseBgStore();
+    const { TIList, dateReal } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { h$G_BgStart, h$G_BgEnd, getLevelByType } = useTLBaseBgHelpers();
 
@@ -106,11 +106,14 @@ export const useTLBaseFgHelpers = () => {
        
     }, 1000),[])
 
+    const isPast = (timeEnd: cDate) => cDateToGh(timeEnd) < cDateToGh(dateToCDate(dateReal));
+
     return {
         filterEvs,
         getFiveLines,
         debounce$UpdateEv,
-        debounceUpdateEvName
+        debounceUpdateEvName,
+        isPast
     }
 }
 

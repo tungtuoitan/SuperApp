@@ -1,4 +1,4 @@
-import { cDateToGh, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
+import { cDateToGh, dateToCDate, useTLBaseBgHelpers } from "../TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev } from "../TLTypes";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import GrabEdge from "./GrabEdge";
@@ -13,7 +13,7 @@ type EvProps = {
     parentEv: Ev;
     lineOrder: number;
 }
-const getTextFieldCSSSelector = (name: string, id: number|string) => {
+const getTextFieldCSSSelector = (name: string, id: number | string) => {
     return {
         inputId: `TFInput-${name}-${id}`,
         div1Class: `TFContainer-${name}-${id}`,
@@ -31,7 +31,7 @@ export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
     const { RhToPx } = useTLBaseBgHelpers();
     const { grabEdge, fevId, setFevId, allEvs, setAllEvs } = useTLBaseFgStore();
-    const { debounceUpdateEvName } = useTLBaseFgHelpers();
+    const { debounceUpdateEvName, isPast } = useTLBaseFgHelpers();
     const paddingTop = 20;
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = paddingTop + (20 + 2) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
@@ -39,10 +39,9 @@ export const ChildEv = (props: EvProps) => {
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
     const css = childEvCSS
-
     const tfSelector = getTextFieldCSSSelector('childEvName', childEv.id);
     const [tfValue, setTfValue] = useState(childEv.name);
-    
+
     return <>
         <div
             data-name={childEv.name}
@@ -51,9 +50,12 @@ export const ChildEv = (props: EvProps) => {
                 width: width,
                 background: grabEdge.id === childEv.id && grabEdge.mousedownAtGE
                     ? css.backgroundDrag
-                    : css.background,
+                    : childEv.type === 'jobtask'
+                        ? css.backgroundJobTask
+                        : isPast(childEv.timeEnd as cDate)
+                        ? css.pastBackground
+                        : css.background,
                 display: css.display,
-                
                 transform: `translateX(${left}px)`,
                 // transform: `translateY(${top}px)`,
                 fontSize: css.fontSize,
@@ -64,9 +66,9 @@ export const ChildEv = (props: EvProps) => {
                 color: 'white',
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: '50px 50px',
+                borderRadius: childEv.type === 'jobtask' ? '1px 1px' : '50px 50px',
 
-                whiteSpace: 'nowrap',        
+                whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
                 border: fevId && fevId === childEv.id ? '2px solid #0D99FF' : 'none',
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
@@ -74,30 +76,32 @@ export const ChildEv = (props: EvProps) => {
             }}
             onClick={(e) => {
                 e.stopPropagation();
-                if(!grabEdge.mouseenter) {
+                if(isPast(childEv.timeEnd)) return;
+                if (!grabEdge.mouseenter) {
                     setFevId(childEv.id);
                 }
 
             }}
-            >
-            {fevId && fevId === childEv.id && <MiniPopup childId={childEv.id}/>}
-            <GrabEdge position='left' id={childEv.id} />
-            <GrabEdge position='right' id={childEv.id} />
+        >
+            {fevId && fevId === childEv.id && <MiniPopup childId={childEv.id} />}
+            {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
+            {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
             <TextField
-                id= {tfSelector.inputId}
+                id={tfSelector.inputId}
                 value={tfValue}
                 onChange={(e) => {
                     setTfValue(e.target.value);
-                    debounceUpdateEvName({...childEv}, e.target.value);
+                    debounceUpdateEvName({ ...childEv }, e.target.value);
                 }}
                 autoComplete='off'
+                disabled={isPast(childEv.timeEnd)}
                 className={tfSelector.div1Class}
                 variant="outlined"
                 sx={{
-                    width: '100%',
+                    width: 'calc(100% - 50px)', // 50(width of 2 GrabEdges)
                     textAlign: 'center',
                     outline: 'none',
-                    
+
                     [`& ${tfSelector.div2}`]: {
                     },
                     [`& ${tfSelector.input}`]: {
@@ -109,7 +113,6 @@ export const ChildEv = (props: EvProps) => {
                     [`& ${tfSelector.fieldset}`]: {
                         display: 'none',
                     },
-                   
                 }}
             />
         </div>

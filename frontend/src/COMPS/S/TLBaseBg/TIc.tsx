@@ -24,6 +24,7 @@ type TIcProps = {
 // TIc: TI component
 export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhiều, sau 
     const { date, width, index, TILevel } = props;
+    const { y, m, d, h, p } = parseCDate(date);
 
     return (
         <ContainerTI
@@ -34,6 +35,11 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                 color: '#202020 !important',
                 // border: '1px solid red',
                 overflow: 'visible',
+                background: TILevel === 'hour' && (h > 22 || h < 5) 
+                    ? '#00000010' 
+                    : TILevel === 'day' && (h > 22 || h < 5)
+                    ? 'linear-gradient(to right, #00000005 0%, #00000005 20.83%, transparent 20.83%, transparent 95.83%, #00000005 95.83%)'
+                    : 'transparent',
             }}>
             {
                 <div id='columnContainer' style={{ width: '100%', height: '100%' }}>
@@ -42,14 +48,13 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                         style={{
                             height: 'calc(100% - 60px)',  // 60px is height of timeDiv
                             borderLeft: (() => {
-                                if(index === 0) return ''
-                                const { y, m, d, h, p } = parseCDate(date);
-                                if (TILevel === 'year'  && y % 10 === 0 ||
+                                if (index === 0) return ''
+                                if (TILevel === 'year' && y % 10 === 0 ||
                                     TILevel === 'month' && m === 1 ||
-                                    TILevel === 'week'  && d === 1 || 
-                                    TILevel === 'day'   && d === 1 || 
-                                    TILevel === 'day'   && new Date(date).getDay() === 1 ||  // ~ Monday
-                                    TILevel === 'hour'  && h === 0 ) return '1px solid #00000050'
+                                    TILevel === 'week' && d === 1 ||
+                                    TILevel === 'day' && d === 1 ||
+                                    TILevel === 'day' && new Date(date).getDay() === 1 ||  // ~ Monday
+                                    TILevel === 'hour' && h === 0) return '1px solid #00000050'
                                 return '1px solid #bfbfbf50'
                             })()
                         }}>
@@ -63,14 +68,13 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                     <div id='timeDiv'
                         style={{
                             borderLeft: (() => {
-                                if(index === 0) return ''
-                                const { y, m, d, h, p } = parseCDate(date);
-                                if (TILevel === 'year'  && y % 10 === 0 ||
+                                if (index === 0) return ''
+                                if (TILevel === 'year' && y % 10 === 0 ||
                                     TILevel === 'month' && m === 1 ||
-                                    TILevel === 'week'  && d === 1 || 
-                                    TILevel === 'day'   && d === 1 || 
-                                    TILevel === 'day'   && new Date(date).getDay() === 1 ||  // ~ Monday
-                                    TILevel === 'hour'  && h === 0 ) return '1px solid #00000050'
+                                    TILevel === 'week' && d === 1 ||
+                                    TILevel === 'day' && d === 1 ||
+                                    TILevel === 'day' && new Date(date).getDay() === 1 ||  // ~ Monday
+                                    TILevel === 'hour' && h === 0) return '1px solid #00000050'
                                 return '1px solid transparent'
                             })()
                         }}
@@ -87,11 +91,10 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             }}>
                             {(() => {
                                 if (width < 18) return ''
-                                const { y, m, d, h, p } = parseCDate(date);
                                 switch (TILevel) {
                                     case 'year': return y
                                     case 'month': return getMonthShortName(m)
-                                    case 'week': 
+                                    case 'week':
                                     case 'day':
                                         return d;
                                     case 'hour':
@@ -116,7 +119,6 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                         >
                             {
                                 (() => {
-                                    const { y, m, d, h } = parseCDate(date);
                                     let text = ''
                                     if (TILevel === 'year') {
                                         if (y % 10 === 0) text = y.toString()
@@ -124,7 +126,7 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                                     if (TILevel === 'month') {
                                         if (m === 1) text = y.toString()
                                     }
-                                    else if (TILevel === 'week' || TILevel ==='day') {
+                                    else if (TILevel === 'week' || TILevel === 'day') {
                                         if (d === 1) text = getMonthShortName(m)
                                         if (new Date(date).getDay() === 1 && width > 18) text = 'M'
                                         
