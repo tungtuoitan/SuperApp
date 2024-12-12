@@ -208,7 +208,7 @@ export const getMonthFullName = (month: number) => {
     }
 }
 
-// B.7 get Day's name
+// B.7 get day of Monday
 export function getDate$MondayOfCurrentWeek(date: Date = new Date()) {
     const today = new Date(date); // Lấy ngày hiện tại
     const dayOfWeek = today.getDay(); // Lấy chỉ số của ngày trong tuần (0: Chủ nhật, 1: Thứ Hai, ...)
@@ -230,6 +230,21 @@ export function getDate$NextMonday(date: Date = new Date()) {
 
     return new Date(nextMonday.getFullYear(), nextMonday.getMonth(), nextMonday.getDate(), 0, 0, 0, 0);
 }
+export function getDate$LastMonday(date: Date = new Date()): Date {
+    const today = new Date(date); // Lấy ngày hiện tại
+    const currentDay = today.getDay(); // Lấy chỉ số ngày trong tuần (0: Chủ nhật, 1: Thứ Hai, ...)
+
+    // Tính số ngày cần trừ để đến thứ Hai tuần trước
+    const daysSinceLastMonday = currentDay === 0 ? 6 : currentDay - 1 + 7;
+
+    // Trừ số ngày đó từ ngày hiện tại
+    const lastMonday = new Date(today);
+    lastMonday.setDate(today.getDate() - daysSinceLastMonday);
+
+    return new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate(), 0, 0, 0, 0);
+}
+
+// B.8 get Year's name
 export function getDate$FirstDayOfCurrentMonth() {
     const today = new Date(); // Lấy ngày hiện tại
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1); // Ngày đầu tiên của tháng

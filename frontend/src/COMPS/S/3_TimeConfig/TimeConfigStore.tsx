@@ -10,6 +10,8 @@ export interface TimeConfigContextData {
     setTimeConfig: Dispatch<SetStateAction<timeConfig>>;
     timeConfig2: timeConfig;
     setTimeConfig2: Dispatch<SetStateAction<timeConfig>>;
+    timeFrom: cDate|null;
+    setTimeFrom: Dispatch<SetStateAction<cDate|null>>;
 };
 
 export const timeConfigInit = {
@@ -25,6 +27,8 @@ export const TimeConfigContextDefaultValue: TimeConfigContextData = {
     setTimeConfig: () => {},
     timeConfig2: timeConfigInit,
     setTimeConfig2: () => {},
+    timeFrom: null,
+    setTimeFrom: () => {},
 };
 const TimeConfigStore = createContext<TimeConfigContextData>(TimeConfigContextDefaultValue);
 
@@ -40,6 +44,8 @@ export const TimeConfigProvider: React.FC<React.PropsWithChildren<React.PropsWit
     const [timeConfig, setTimeConfig] = useState<timeConfig>(timeConfigInit);
     const [timeConfig2, setTimeConfig2] = useState<timeConfig>(timeConfigInit);
 
+    const [timeFrom, setTimeFrom] = useState<cDate|null>(null);
+
     return (
         <TimeConfigStore.Provider
             value={{
@@ -50,6 +56,8 @@ export const TimeConfigProvider: React.FC<React.PropsWithChildren<React.PropsWit
                 setTimeConfig,
                 timeConfig2,
                 setTimeConfig2,
+                timeFrom,
+                setTimeFrom,
             }}>
             {children}
         </TimeConfigStore.Provider>
