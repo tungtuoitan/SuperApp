@@ -14,19 +14,7 @@ type EvProps = {
     parentEv: Ev;
     lineOrder: number;
 }
-const getTextFieldCSSSelector = (name: string, id: number | string) => {
-    return {
-        inputId: `TFInput-${name}-${id}`,
-        div1Class: `TFContainer-${name}-${id}`,
 
-        div1: `TFContainer-${name}-${id}`, // relative ContainerDiv, and no need to use this, write directly in sx instead
-        div2: `TFContainer-${name}-${id} div`,
-        input: `#TFInput-${name}-${id}`,
-        fieldset: `div fieldset`,
-        legend: `div fieldset legend`,
-        span: `div fieldset legend span`,
-    }
-}
 
 export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
@@ -39,28 +27,27 @@ export const ChildEv = (props: EvProps) => {
     const width = RhToPx(
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
-    const css = _4css
-    const tfSelector = getTextFieldCSSSelector('childEvName', childEv.id);
+    const tfSelector = _4css.getTextFieldCSSSelector('childEvName', childEv.id);
     const [tfValue, setTfValue] = useState(childEv.name);
 
     return <>
         <div
             data-name={childEv.name}
             style={{
-                height: css.height,
+                height: _4css.height,
                 width: width,
                 background: grabEdge.id === childEv.id && grabEdge.mousedownAtGE
-                    ? css.backgroundDrag
+                    ? _4css.backgroundDrag
                     : childEv.type === 'jobtask'
-                        ? css.backgroundJobTask
+                        ? _4css.backgroundJobTask
                         : isPast(childEv.timeEnd as cDate)
-                        ? css.pastBackground
-                        : css.background,
-                display: css.display,
+                        ? _4css.pastBackground
+                        : _4css.background,
+                display: _4css.display,
                 transform: `translateX(${left}px)`,
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
                 // transform: `translateY(${top}px)`,
-                fontSize: css.fontSize,
+                fontSize: _4css.fontSize,
                 top: top,
                 position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
                 textAlign: 'left',

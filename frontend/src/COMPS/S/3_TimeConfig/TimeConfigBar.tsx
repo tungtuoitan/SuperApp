@@ -1,22 +1,29 @@
-import { Autocomplete, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import { Autocomplete, Button, FormControl, FormGroup, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { clvs, tl } from "../TLConstants";
 import {useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
-import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury } from "./TimeHelpers";
+import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
+    getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury, 
+    GhToCDate,
+    getDate$NextMonday,
+    getDate$LastMonday} from "./TimeHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
 import { cDateOption } from "../TLTypes";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from "@mui/x-date-pickers";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { _3css } from "./3css";
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 
 export const TimeConfigBar = () => {
-    const {
-        timeConfig,
-        setTimeConfig,
-        timeConfig2,
-        setTimeConfig2,
-
-        allPeriods,
-        setAllPeriods, 
-    } = useTimeConfigStore();
-    const { dateToCDate } = useTLBaseBgHelpers();
+    const {timeConfig, setTimeConfig, timeConfig2, setTimeConfig2,allPeriods,setAllPeriods, timeFrom, setTimeFrom } = useTimeConfigStore();
+    const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
+    const { TIList } = useTLBaseBgStore();
+    const dpSelector = _3css.getDatePickerCSSSelector();
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
@@ -39,6 +46,7 @@ export const TimeConfigBar = () => {
         if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1m());
 
         setTimeConfig(timeConfigInit);
+        setTimeFrom(timeConfigInit.period?.date ?? null);
         setTimeConfig2(timeConfigInit);
     }, []);
 
@@ -47,54 +55,57 @@ export const TimeConfigBar = () => {
             style={{
                 display: 'flex',
                 flexDirection: 'row',
+                justifyContent: 'space-between',
                 gap: 10,
             }}>
-            <FormControl
-                style={{
-                    width: 200,
-                    marginBottom: 10,
-                    textAlign: 'left',
-                }}
-            >
-                {/* //! Level */}
-                <InputLabel id="demo-simple-select-label">Current Level</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={timeConfig2.level}
-                    label="Current Level"
-                    size='small'
-                    onChange={(e) => {
-                        if (e.target.value !== timeConfig2.level) {
-                            const newLv = e.target.value as number;
-                            if (newLv === 0) {
-                                const periodList = getPeriodListUnit100y();
-                                setAllPeriods(periodList);
-                                setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
-                            }
-                            if (newLv === 1) {
-                                const periodList = getPeriodListUnit1y();
-                                setAllPeriods(periodList);
-                                setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
-                            }
-                            if (newLv === 2) {
-                                const periodList = getPeriodListUnit1m();
-                                setAllPeriods(periodList);
-                                setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
-                            }
-                        }
+            <div>
+                <FormControl
+                    style={{
+                        width: 200,
+                        marginBottom: 10,
+                        textAlign: 'left',
                     }}
                 >
-                    {clvs.map((option) => {
-                        return (
-                            <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.Clevel}</MenuItem>
-                        )
-                    })}
-                </Select>
-            </FormControl>
+                    {/* //! Level */}
+                    <InputLabel id="demo-simple-select-label">Current Level</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={timeConfig2.level}
+                        label="Current Level"
+                        size='small'
+                        onChange={(e) => {
+                            if (e.target.value !== timeConfig2.level) {
+                                const newLv = e.target.value as number;
+                                if (newLv === 0) {
+                                    const periodList = getPeriodListUnit100y();
+                                    setAllPeriods(periodList);
+                                    setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
+                                }
+                                if (newLv === 1) {
+                                    const periodList = getPeriodListUnit1y();
+                                    setAllPeriods(periodList);
+                                    setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
+                                }
+                                if (newLv === 2) {
+                                    const periodList = getPeriodListUnit1m();
+                                    setAllPeriods(periodList);
+                                    setTimeConfig2({ ...timeConfig2, level: newLv, period: periodList[0] });
+                                }
+                            }
+                        }}
+                    >
+                        {clvs.map((option) => {
+                            return (
+                                <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.Clevel}</MenuItem>
+                            )
+                        })}
+                    </Select>
+                </FormControl>
+            </div>
 
             {/* //! 1000year */}
-            <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: '4px' }} >
+            {/* <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: '4px' }} >
                 <Autocomplete
                     disablePortal
                     size='small'
@@ -129,7 +140,117 @@ export const TimeConfigBar = () => {
                 >
                     Reset
                 </Button>
-            </FormGroup>
+            </FormGroup> */}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',  
+                gap: 10,
+                paddingBottom: 10,
+            }}>
+                <IconButton aria-label="delete" 
+                    title={`Back ${clvs[timeConfig2.level].Clevel}`}
+                    onClick={() => {
+                        switch (clvs[timeConfig2.level].Clevel) {
+                            case tl.decade:
+                                break;
+                            case tl.year:
+                                break;
+                            case tl.month:
+                                break;
+                            case tl.week:
+                                setTimeFrom(dateToCDate(getDate$LastMonday(new Date(TIList[0].date))));
+                                break;
+                            default:
+                                break;
+                        }
+                        
+                    }}
+                    sx={{
+                        width: 40,
+                    }}
+                >
+                    <NavigateBeforeIcon />
+                </IconButton>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            className="fromDatePicker"
+                            sx={{ 
+                                height: 40, 
+                                width: 180,
+                                [`& ${dpSelector.div1}`]: {
+                                    height: 40,
+                                },
+                                [`& ${dpSelector.labelNoShrink}`]: {
+                                    top: -8,
+                                },
+                                [`& ${dpSelector.input}`]: {
+                                    height: 40,
+                                    padding: '0px 10px 0 10px',
+                                },
+                             }}
+                            label="From"
+                            // format="DD/MM/YYYY"
+                            value={new Date(TIList[0]?.date)}
+                            onChange={(newValue) => {
+                                // setTimeConfig2({ ...timeConfig2, period: { id: 0, label: 'custom', date: newValue } });
+                            }}
+                            // renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                        {/* {console.log(new Date(TIList[0]?.date))} */}
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            className="toDatePicker"
+                            sx={{ 
+                                height: 40, 
+                                width: 180,
+                                [`& ${dpSelector.div1}`]: {
+                                    height: 40,
+                                },
+                                [`& ${dpSelector.labelNoShrink}`]: {
+                                    top: -8,
+                                },
+                                [`& ${dpSelector.input}`]: {
+                                    height: 40,
+                                    padding: '0px 10px 0 10px',
+                                },
+                             }}
+                            label="To"
+                            // format="DD/MM/YYYY"
+                            value={new Date(GhToCDate(h$G_BgEnd))}
+                            onChange={(newValue) => {
+                                // update timeFrom here ....
+                    
+                            }}
+                            // renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                <IconButton 
+                    aria-label="delete"
+                    title={`Next ${clvs[timeConfig2.level].Clevel}`}
+                    onClick={() => {
+                        switch (clvs[timeConfig2.level].Clevel) {
+                            case tl.decade:
+                                break;
+                            case tl.year:
+                                break;
+                            case tl.month:
+                                break;
+                            case tl.week:
+                                setTimeFrom(dateToCDate(getDate$NextMonday(new Date(TIList[0].date))));
+                                break;
+                            default:
+                                break;
+                        }
+                    }}
+                    sx={{
+                        width: 40,
+                    }}
+                >
+                    <NavigateNextIcon />
+                </IconButton>
+            </div>
+            <div style={{width: 200}}></div>
         </div>
     )
 }
