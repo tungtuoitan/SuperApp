@@ -7,7 +7,7 @@ export const _3css = {
     // backgroundJobTask: '#000000',
     // display: 'flex',
     // fontSize: '12px',
-    // focusBco: '#0D99FF',
+    // focusBorderColor: '#0D99FF',
 
     getDatePickerCSSSelector : () => {
         const div1 = `div.MuiInputBase-root`;
