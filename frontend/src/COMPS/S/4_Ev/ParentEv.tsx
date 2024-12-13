@@ -44,7 +44,8 @@ export const ParentEv = (props: ParentEvProps) => {
                 left: left,
                 
                 height: 100,
-                top: top,
+                top: isBeggerGang ? undefined : top,
+                bottom: isBeggerGang ? 0 : undefined,
                 flexDirection: 'column',
                 background: isOver ? 'lightblue' : '#00000010',
                 gap: 1,
@@ -52,7 +53,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 position: 'absolute',
                 marginBottom: 10,
                 borderRadius: isBeggerGang ? 0 : 20,
-                border: fevId && fevId === parentEv.id ? '2px solid '+ _4css.focusBco : '2px solid transparent',
+                border: fevId && fevId === parentEv.id ? '2px solid ' + _4css.focusBco : '2px solid transparent',
                 // borderLeft: '10px solid transparent', // for beauty when child in parentEv
                 // borderRight: '10px solid transparent',
             }}>

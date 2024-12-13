@@ -17,6 +17,7 @@ export const _4css = {
             div1: `TFContainer-${name}-${id}`, // relative ContainerDiv, and no need to use this, write directly in sx instead
             div2: `TFContainer-${name}-${id} div`,
             input: `#TFInput-${name}-${id}`,
+            inputDisable: `#TFInput-${name}-${id}.Mui-disabled`,
             fieldset: `div fieldset`,
             legend: `div fieldset legend`,
             span: `div fieldset legend span`,

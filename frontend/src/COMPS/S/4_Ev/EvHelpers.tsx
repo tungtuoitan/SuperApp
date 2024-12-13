@@ -25,24 +25,11 @@ export const useEvHelpers = () => {
         })
         setAllEvs([...newAllEvs]);
     }, 6);
-    const debounceUpdateEvName = useCallback(debounce((curEv:Ev, value: string) => {
-        iuEv({...curEv, name: value, timeStart: cDateToUTCDate(curEv.timeStart), timeEnd: cDateToUTCDate(curEv.timeEnd)})
-            .then((data: EvsResult) => {
-                if(data.options.success) {
-                    setAllEvs(allEvs.map(ev => ev.id === ev.id ? data.evs[0] : ev));
-                }
-            })
-            .catch((err: any) => {
-                console.log(err);
-            })
-       
-    }, 1000),[])
 
     const isPast = (timeEnd: cDate) => cDateToGh(timeEnd) < cDateToGh(dateToCDate(dateReal));
 
     return {
         debounce$UpdateEv,
-        debounceUpdateEvName,
         isPast
     }
 }

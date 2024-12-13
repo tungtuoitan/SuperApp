@@ -13,7 +13,7 @@ import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs, } = useTLBaseFgStore();
-    const { fevId, setFevId, cutEvId, setCutEvId } = EvStore();
+    const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs } = useTLBaseFgHelpers();
     const { RpxToRh } = useTLBaseBgHelpers();
@@ -23,10 +23,12 @@ export default function TLContainer() {
             onClick={() => {
                 if (fevId) {
                     setFevId(null);
+                    setFocusTFId(null)
                 }
             }}
             tabIndex={0} // to enable onKeyDown
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => { 
+                if(focusTFId) return;
                 if (fevId) {
                     switch (e.key) {
                        case 'Escape':
@@ -72,7 +74,6 @@ export default function TLContainer() {
                                         cutEv.timeStart = fEv.timeStart;
                                         cutEv.timeEnd = fEv.timeEnd; addTime(fEv.timeStart, 0, 0, 0, RpxToRh(250), 0)
                                         setAllEvs(newAllEvs);
-                                        
                                         iuEv({ ...cutEv, timeStart: cDateToUTCDate(cutEv.timeStart), timeEnd: cDateToUTCDate(cutEv.timeEnd) })
                                         .then((data: EvsResult) => {
                                             if(data.options.success) {
