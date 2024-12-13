@@ -7,7 +7,7 @@ export const _4css = {
     backgroundJobTask: '#000000',
     display: 'flex',
     fontSize: '12px',
-    focusBco: '#0D99FF',
+    focusBorderColor: '#0D99FF',
 
     getTextFieldCSSSelector: (name: string, id: number | string) => {
         return {

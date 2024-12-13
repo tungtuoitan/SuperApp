@@ -65,7 +65,7 @@ export const ChildEv = (props: EvProps) => {
                 borderRadius: '50px 50px',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
-                border: fevId && fevId === childEv.id ? '2px solid ' + _4css.focusBco : 'none',
+                border: fevId && fevId === childEv.id ? '2px solid ' + _4css.focusBorderColor : '2px solid transparent',
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
             }}
             onClick={(e) => {
@@ -97,6 +97,7 @@ export const ChildEv = (props: EvProps) => {
                             if (data.options.success) {
                                 enqueueSnackbar(data.options.message, { variant: "success" });
                                 setAllEvs((prev: Ev[]) => prev.map(ev => ev.id === data.evs[0].id ? data.evs[0] : ev))
+                                setFevId(data.evs[0].id)
                             }
                         })
                         .catch((err: any) => {
