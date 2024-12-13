@@ -1,5 +1,5 @@
 
-import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
 export type GragEdge = {
     id: number | null;
@@ -22,6 +22,9 @@ export interface TLBaseEvContextData {
 
     cutEvId: number | null;
     setCutEvId: Dispatch<SetStateAction<number | null>>;
+
+    focusTFId: number | null;
+    setFocusTFId: Dispatch<SetStateAction<number | null>>;
 };
 
 export const EvContextDefaultValue: TLBaseEvContextData = {
@@ -35,6 +38,9 @@ export const EvContextDefaultValue: TLBaseEvContextData = {
     setFevId: () => {},
     cutEvId: null,
     setCutEvId: () => {},
+
+    focusTFId: null,
+    setFocusTFId: () => {},
 };
 
 const EvContext = createContext<TLBaseEvContextData>(EvContextDefaultValue);
@@ -47,6 +53,7 @@ export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
     const [fevId, setFevId] = useState<number | null>(null);
     const [cutEvId, setCutEvId] = useState<number | null>(null);
+    const [focusTFId, setFocusTFId] = useState<number | null>(null);
 
 
     return (
@@ -63,6 +70,8 @@ export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 setFevId,
                 cutEvId,
                 setCutEvId,
+                focusTFId,
+                setFocusTFId,
             }}>
             {children}
         </EvContext.Provider>

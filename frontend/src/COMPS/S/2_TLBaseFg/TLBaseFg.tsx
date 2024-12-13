@@ -13,12 +13,10 @@ import { cDateToGh, GhToCDate } from "../3_TimeConfig/TimeHelpers";
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
     const { hourPerTI } = useTLBaseBgHelpers();
-    const { setAllEvs, activeId, newEvId } = useTLBaseFgStore();
+    const { setAllEvs, activeId, newEvId, allEvs } = useTLBaseFgStore();
     const { filterEvs, getFiveLines } = useTLBaseFgHelpers();
     const { w$Bg, getLevelByType } = useTLBaseBgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
-
-    const allParentEvs = filterEvs(['inside-TL', 'parentEv', 'active']);
 
     useEffect(() => {
         getEvs()
@@ -43,7 +41,7 @@ export const TLBaseFg = () => {
             timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
         } as Ev : {} as Ev;
 
-    const fiveLines = getFiveLines(allParentEvs);
+    const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
     return (
         <div
             id='TLBaseFg'
@@ -61,7 +59,7 @@ export const TLBaseFg = () => {
                 left: 0,
                 zIndex: 100,
             }}>
-                {[...fiveLines, [beggerEv]].map((line: Ev[], i) => {
+            {[...fiveLines, [beggerEv]].map((line: Ev[], i) => {
                 return line.map(parontEv => {
                     return <ParentEv
                         key={parontEv.id}
@@ -76,9 +74,9 @@ export const TLBaseFg = () => {
             })
             }
             <DragOverlay>
-                {activeId === newEvId 
-                ? <TISample id={activeId} type={isOver ? 'parentEv' : 'childEv'} />
-                : null}
+                {activeId === newEvId
+                    ? <TISample id={activeId} type={isOver ? 'parentEv' : 'childEv'} />
+                    : null}
             </DragOverlay>
         </div>
     );

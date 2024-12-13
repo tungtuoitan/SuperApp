@@ -39,7 +39,7 @@ export const useTLBaseFgHelpers = () => {
             newEvs = newEvs.filter(ev => ev.parentId !== null)
         }
         if(filterTypes.includes('nonParent')) {
-            newEvs = newEvs.filter(ev => ev.parentId === null)
+            newEvs = newEvs.filter(ev => ev.parentId === null || ev.parentId === 999999999)
         }
 
         return newEvs;
