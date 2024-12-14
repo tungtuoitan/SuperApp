@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import { EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
-import { addTime, cDateToUTCDate, dateToCDate } from './3_TimeConfig/TimeHelpers';
+import { addTime, cDateToUTCDate } from './3_TimeConfig/TimeHelpers';
 import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 
 export default function TLContainer() {
@@ -99,8 +99,8 @@ export default function TLContainer() {
             }}
             style={{ 
                 width: '100%',
-                padding: '10px',
-                paddingTop: '50px',
+                height: '100%',
+                padding: '0 10px 10px 10px',
                 position: 'relative',
                 outline: 'none',
         }}>

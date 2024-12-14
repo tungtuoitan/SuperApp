@@ -1,24 +1,22 @@
+import { TLBaseEvProvider } from "./4_Ev/EvStore"
+import { TimeConfigProvider } from "./3_TimeConfig/TimeConfigStore"
+import { TLBaseBgProvider } from "./1_TLBaseBg/TLBaseBgStore"
+import { TLBaseFgProvider } from "./2_TLBaseFg/TLBaseFgStore"
+import { TabItem, TLTabsContainer } from "./TLTabsContainer"
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import TLContainer from "./TLContainer"
 
-import { TLBaseFgProvider } from './2_TLBaseFg/TLBaseFgStore'
-import { TLBaseBgProvider } from './1_TLBaseBg/TLBaseBgStore'
-import { TimeConfigProvider } from './3_TimeConfig/TimeConfigStore'
-import TLContainer from './TLContainer'
-import { TLBaseEvProvider } from './4_Ev/EvStore'
+export const TLProvider = () => {
 
-export default function TLProvider() {
-
-  return (
-    <>
-        <TLBaseFgProvider>
-            <TLBaseBgProvider>
-                <TimeConfigProvider>
-                    <TLBaseEvProvider>
-                        <TLContainer/>
-                    </TLBaseEvProvider>
-                </TimeConfigProvider>
-            </TLBaseBgProvider>
-        </TLBaseFgProvider>
-    </>
-  )
+    return (
+            <TLBaseFgProvider>
+                <TLBaseBgProvider>
+                    <TimeConfigProvider>
+                        <TLBaseEvProvider>
+                            <TLTabsContainer tabs={[{ label: 'TL', tabComponent: <TLContainer/>, icon: <CalendarTodayIcon/> } as TabItem] }/>
+                        </TLBaseEvProvider>
+                    </TimeConfigProvider>
+                </TLBaseBgProvider>
+            </TLBaseFgProvider>
+    )
 }
-

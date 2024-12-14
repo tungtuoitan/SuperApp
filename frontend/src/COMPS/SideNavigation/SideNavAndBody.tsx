@@ -7,7 +7,7 @@ import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import { CloseNotiBtn } from "../Helper/CloseNotiBtn";
-import TLProvider from "../S/TLProvider";
+import { TLProvider } from "../S/TLProvider";
 
 export const SideNavRoot = styled('div')({
   flexGrow: 1,

@@ -1,4 +1,4 @@
-import { Autocomplete, Button, FormControl, FormGroup, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import { Autocomplete, Box, Button, FormControl, FormGroup, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { clvs, tl } from "../TLConstants";
 import {useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
@@ -8,22 +8,41 @@ import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDat
     getDate$LastMonday} from "./TimeHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
-import { cDateOption } from "../TLTypes";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from "@mui/x-date-pickers";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { _3css } from "./3css";
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import { styled } from "@mui/system";
+
+const WLeft = styled(Box)({
+    
+})
+const WMid = styled(Box)({
+    display: 'flex',
+    flexDirection: 'row',  
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    height: '100%',
+})
+const WBar = styled(Box)({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
+    height: 50
+})
 
 export const TimeConfigBar = () => {
     const {timeConfig, setTimeConfig, timeConfig2, setTimeConfig2,allPeriods,setAllPeriods, timeFrom, setTimeFrom } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
     const { TIList } = useTLBaseBgStore();
     const dpSelector = _3css.getDatePickerCSSSelector();
+    const sSelector = _3css.getSelectCSSSelector('timeLevelSelect');
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
@@ -51,26 +70,32 @@ export const TimeConfigBar = () => {
     }, []);
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                gap: 10,
-            }}>
-            <div>
+        <WBar>
+            <WLeft>
                 <FormControl
-                    style={{
-                        width: 200,
-                        marginBottom: 10,
+                 
+                    sx={{ 
                         textAlign: 'left',
+                        height: 30, 
+                        width: 120,
+                        margin: 0,
+                        [`& ${dpSelector.div1}`]: {
+                            height: 30,
+                        },
+                        [`& ${dpSelector.input}`]: {
+                            height: 30,
+                            padding: '0px 0px 0 10px',
+                        },
+                         [`& ${dpSelector.legend}`]: {
+                            width: '0 !important',
+                        },
                     }}
                 >
                     {/* //! Level */}
-                    <InputLabel id="demo-simple-select-label">Current Level</InputLabel>
+                    <InputLabel id="timeLevelLabel"></InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        labelId="timeLevelLabel"
+                        id="timeLevelSelect"
                         value={timeConfig2.level}
                         label="Current Level"
                         size='small'
@@ -94,6 +119,7 @@ export const TimeConfigBar = () => {
                                 }
                             }
                         }}
+                      
                     >
                         {clvs.map((option) => {
                             return (
@@ -102,51 +128,45 @@ export const TimeConfigBar = () => {
                         })}
                     </Select>
                 </FormControl>
-            </div>
-
-            {/* //! 1000year */}
-            {/* <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: '4px' }} >
-                <Autocomplete
-                    disablePortal
-                    size='small'
-                    options={allPeriods}
-                    sx={{ width: 200 }}
-                    value={timeConfig2.period}
-                    disabled={timeConfig2.level === 0}
-                    onChange={(e, value) => {
-                        if (value && value?.date !== timeConfig2.period?.date) {
-                            setTimeConfig2({ ...timeConfig2, period: value as cDateOption });
-                        }
-                    }}
-                    renderInput={(params) => <TextField {...params} error={timeConfig2.period === null} label="Period" />}
-                />
-                <Button
-                    variant="contained"
-                    size="small"
-                    sx={{ height: 40 }}
-                    onClick={() => {
-                        setTimeConfig(timeConfig2);
-                    }}
-                >
-                    OK
-                </Button>
-                <Button
-                    variant="contained"
-                    size="small"
-                    sx={{ height: 40 }}
-                    onClick={() => {
-                        setTimeConfig2(timeConfig);
-                    }}
-                >
-                    Reset
-                </Button>
-            </FormGroup> */}
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',  
-                gap: 10,
-                paddingBottom: 10,
-            }}>
+                {/* //! 1000year */}
+                {/* <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: '4px' }} >
+                    <Autocomplete
+                        disablePortal
+                        size='small'
+                        options={allPeriods}
+                        sx={{ width: 200 }}
+                        value={timeConfig2.period}
+                        disabled={timeConfig2.level === 0}
+                        onChange={(e, value) => {
+                            if (value && value?.date !== timeConfig2.period?.date) {
+                                setTimeConfig2({ ...timeConfig2, period: value as cDateOption });
+                            }
+                        }}
+                        renderInput={(params) => <TextField {...params} error={timeConfig2.period === null} label="Period" />}
+                    />
+                    <Button
+                        variant="contained"
+                        size="small"
+                        sx={{ height: 40 }}
+                        onClick={() => {
+                            setTimeConfig(timeConfig2);
+                        }}
+                    >
+                        OK
+                    </Button>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        sx={{ height: 40 }}
+                        onClick={() => {
+                            setTimeConfig2(timeConfig);
+                        }}
+                    >
+                        Reset
+                    </Button>
+                </FormGroup> */}
+            </WLeft>
+            <WMid>
                 <IconButton aria-label="delete" 
                     title={`Back ${clvs[timeConfig2.level].Clevel}`}
                     onClick={() => {
@@ -167,28 +187,30 @@ export const TimeConfigBar = () => {
                     }}
                     sx={{
                         width: 40,
+                        height: 40,
                     }}
                 >
                     <NavigateBeforeIcon />
                 </IconButton>
+                <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             className="fromDatePicker"
                             sx={{ 
-                                height: 40, 
-                                width: 180,
+                                height: 30, 
+                                width: 150,
                                 [`& ${dpSelector.div1}`]: {
-                                    height: 40,
+                                    height: 30,
                                 },
                                 [`& ${dpSelector.labelNoShrink}`]: {
                                     top: -8,
                                 },
                                 [`& ${dpSelector.input}`]: {
-                                    height: 40,
-                                    padding: '0px 10px 0 10px',
+                                    height: 30,
+                                    padding: '0px 0px 0 10px',
                                 },
                              }}
-                            label="From"
+                            // label="From"
                             // format="DD/MM/YYYY"
                             value={new Date(TIList[0]?.date)}
                             onChange={(newValue) => {
@@ -197,25 +219,30 @@ export const TimeConfigBar = () => {
                             // renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
-                        {/* {console.log(new Date(TIList[0]?.date))} */}
+                </Box>
+                <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             className="toDatePicker"
                             sx={{ 
-                                height: 40, 
-                                width: 180,
+                                height: 30, 
+                                width: 150,
                                 [`& ${dpSelector.div1}`]: {
-                                    height: 40,
+                                    height: 30,
                                 },
                                 [`& ${dpSelector.labelNoShrink}`]: {
                                     top: -8,
                                 },
                                 [`& ${dpSelector.input}`]: {
-                                    height: 40,
-                                    padding: '0px 10px 0 10px',
+                                    height: 30,
+                                    padding: '0px 0px 0 10px',
                                 },
-                             }}
-                            label="To"
+                                [`& ${dpSelector.button}`]: {
+                                    // height: 30,
+                                    padding: '0 !important',
+                                },
+                            }}
+                            // label="To"
                             // format="DD/MM/YYYY"
                             value={new Date(GhToCDate(h$G_BgEnd))}
                             onChange={(newValue) => {
@@ -225,6 +252,7 @@ export const TimeConfigBar = () => {
                             // renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
+                </Box>
                 <IconButton 
                     aria-label="delete"
                     title={`Next ${clvs[timeConfig2.level].Clevel}`}
@@ -245,12 +273,14 @@ export const TimeConfigBar = () => {
                     }}
                     sx={{
                         width: 40,
+                        height: 40,
                     }}
                 >
                     <NavigateNextIcon />
                 </IconButton>
-            </div>
+            </WMid>
             <div style={{width: 200}}></div>
-        </div>
+        </WBar>
     )
 }
+
