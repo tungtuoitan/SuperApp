@@ -38,7 +38,7 @@ export default function DNDContainer() {
             if(over.id === 'TLBaseFg-droppable') {
                 newEv = {
                     id: 0,
-                    name: 'New Event',
+                    name: '',
                     type: '',
                     parentId: null,
                     level: getLevelByType('parentEv'),
@@ -54,7 +54,7 @@ export default function DNDContainer() {
                 if(parentEv) {
                     newEv = {
                         id: 0,
-                        name: 'New Event',
+                        name: '',
                         type: '',
                         parentId: parentEv.id,
                         level: getLevelByType('childEv'),
@@ -67,7 +67,7 @@ export default function DNDContainer() {
                 else{
                     newEv = {
                         id: 0,
-                        name: 'New Event',
+                        name: '',
                         type: '',
                         parentId: null,
                         level: getLevelByType('childEv'),

@@ -28,9 +28,17 @@ export const useEvHelpers = () => {
 
     const isPast = (timeEnd: cDate) => cDateToGh(timeEnd) < cDateToGh(dateToCDate(dateReal));
 
+    const isPresent = (timeStart: cDate, timeEnd: cDate) => {
+        const Gh_timeStart = cDateToGh(timeStart);
+        const Gh_timeEnd = cDateToGh(timeEnd);
+        const Gh_dateReal = cDateToGh(dateToCDate(dateReal));
+        return Gh_timeStart <= Gh_dateReal && Gh_dateReal <= Gh_timeEnd;
+    }
+
     return {
         debounce$UpdateEv,
-        isPast
+        isPast,
+        isPresent,
     }
 }
 

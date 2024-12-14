@@ -72,23 +72,23 @@ export default function Etail(props: EtailProps) {
     const saveEtail = (e: any) => {
         const ev = allEvs.find(ev => ev.id === props.id);
         if (ev) {
-            iuEv({  
-                    ...ev,
-                    id: ev.id,
-                    name: etailForm.name,
-                    parentId: etailForm.parentId ?? null,
-                    level: levelOptions.find(option => option.label === etailForm.level)?.label ?? tl.hour,
-                    timeStart: cDateToUTCDate(etailForm.timeStart),
-                    timeEnd: cDateToUTCDate(etailForm.timeEnd),
-                })
-            .then((data: any) => {
-                if(data.options.success) {
-                    enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
-                } else {
-                    enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
-                }
-
+            iuEv({
+                ...ev,
+                id: ev.id,
+                name: etailForm.name,
+                parentId: etailForm.parentId ?? null,
+                level: levelOptions.find(option => option.label === etailForm.level)?.label ?? tl.hour,
+                timeStart: cDateToUTCDate(etailForm.timeStart),
+                timeEnd: cDateToUTCDate(etailForm.timeEnd),
             })
+                .then((data: any) => {
+                    if (data.options.success) {
+                        enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
+                    } else {
+                        enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
+                    }
+
+                })
 
         }
     }
@@ -107,22 +107,22 @@ export default function Etail(props: EtailProps) {
 
         }}>
             <WBar>
-            <Tooltip title="Save">
-                <span>
-                    <IconButton
-                        onClick={(e) => saveEtail(e)}>
-                        <CheckOutlinedIcon />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title="Cancel">
-                <span>
-                    <IconButton
-                        onClick={(e) => cancelEtail(e)}>
-                        <CloseOutlinedIcon />
-                    </IconButton>
-                </span>
-            </Tooltip>
+                <Tooltip title="Save">
+                    <span>
+                        <IconButton
+                            onClick={(e) => saveEtail(e)}>
+                            <CheckOutlinedIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
+                <Tooltip title="Cancel">
+                    <span>
+                        <IconButton
+                            onClick={(e) => cancelEtail(e)}>
+                            <CloseOutlinedIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
 
             </WBar>
             <WBody>
@@ -140,7 +140,7 @@ export default function Etail(props: EtailProps) {
                                 [`& ${evNameSelector.label1Shrink}`]: {
                                     fontSize: '12px',
                                     top: 3,
-                                }, 
+                                },
                                 [`& ${evIdSelector.input2}`]: {
                                     fontSize: '12px',
                                     height: 30,
@@ -188,7 +188,7 @@ export default function Etail(props: EtailProps) {
                             value={etailForm.name}
                             onChange={(e) => {
                                 // setEtailForm({ name: e.target.value });
-                                if(e.target && e.target.value && e.target.name) {
+                                if (e.target && e.target.value && e.target.name) {
                                     handleChange(e.target.name, e.target.value);
                                 }
                             }}
@@ -242,14 +242,9 @@ export default function Etail(props: EtailProps) {
                                 labelId="timeLevelLabel"
                                 name="level"
                                 id="levelSelect"
-                                value={(()=>{
-                                    const x = levelOptions.find(option => option.label === etailForm.level)?.id ?? 6
-                                    console.log(x, etailForm);
-                                    return x
-                                })()}
+                                value={levelOptions.find(option => option.label === etailForm.level)?.id ?? 6}
                                 label="Current Cevel"
                                 onChange={(e) => {
-                                    console.log(e.target.value);
                                     if (e.target && e.target.value && typeof e.target.value === 'number' && e.target.name) {
                                         handleChange(e.target.name, e.target.value);
                                     }
@@ -271,7 +266,7 @@ export default function Etail(props: EtailProps) {
                                 className="dateStartPicker"
                                 value={new Date(etailForm.timeStart)}
                                 onChange={(newValue) => {
-                                    if(newValue) {
+                                    if (newValue) {
                                         handleChange('dateStart', newValue);
                                     }
                                 }}
@@ -310,7 +305,7 @@ export default function Etail(props: EtailProps) {
                                 label="Time Start"
                                 value={new Date(etailForm.timeStart)}
                                 onChange={(newValue) => {
-                                    if(newValue) {
+                                    if (newValue) {
                                         handleChange('timeStart', newValue);
                                     }
                                 }}
@@ -351,7 +346,7 @@ export default function Etail(props: EtailProps) {
                                 className="DateEndPicker"
                                 value={new Date(etailForm.timeEnd)}
                                 onChange={(newValue) => {
-                                    if(newValue) {
+                                    if (newValue) {
                                         handleChange('dateEnd', newValue);
                                     }
                                 }}
@@ -390,7 +385,7 @@ export default function Etail(props: EtailProps) {
                                 label="Time End"
                                 value={new Date(etailForm.timeEnd)}
                                 onChange={(newValue) => {
-                                    if(newValue) {
+                                    if (newValue) {
                                         handleChange('timeEnd', newValue);
                                     }
                                 }}

@@ -274,3 +274,12 @@ export function getDAYOfWeek(date: Date) {
     const dayIndex = new Date(date).getDay(); // Lấy chỉ số ngày trong tuần
     return days[dayIndex]; // Trả về tên ngày
 }
+
+
+// B.9 check Sat/Sun
+export function isWeekend(date: cDate) {
+    // Lấy ngày trong tuần (0 = Chủ Nhật, 6 = Thứ Bảy)
+    const day = new Date(date).getDay();
+    // Kiểm tra nếu là Thứ Bảy (6) hoặc Chủ Nhật (0)
+    return day === 0 || day === 6;
+  }

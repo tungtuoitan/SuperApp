@@ -34,7 +34,7 @@ export const iuEv = async (params, token, skip) => {
     const formData = new FormData();
 
     Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
+        if (value !== undefined && value !== null && value !== "") {
             formData.append(key, value);
         }
     });

@@ -10,13 +10,15 @@ import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import { addTime, cDateToUTCDate } from './3_TimeConfig/TimeHelpers';
 import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
+import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 
 export default function TLContainer() {
-    const { allEvs, setAllEvs, } = useTLBaseFgStore();
+    const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs } = useTLBaseFgHelpers();
     const { RpxToRh } = useTLBaseBgHelpers();
+    const { TIList } = useTLBaseBgStore();
 
   return (
         <div id ='TLContainer' // this is the biggest container if TL
@@ -64,28 +66,35 @@ export default function TLContainer() {
                         case 'v':
                         case 'V':
                             if(e.ctrlKey) {
+                                const newAllEvs = [...allEvs]
+                                const cutEv = newAllEvs.filter(ev => ev.id === cutEvId)[0];
+                                // if fevId is parentEv, go on
                                 if(fevId && filterEvs(['parentEv']).filter(ev => ev.id === fevId).length > 0) {
                                     // paste
                                     if(cutEvId) {
-                                        const newAllEvs = [...allEvs]
-                                        const cutEv = newAllEvs.filter(ev => ev.id === cutEvId)[0];
                                         const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
                                         cutEv.parentId = fevId;
                                         cutEv.timeStart = fEv.timeStart;
-                                        cutEv.timeEnd = fEv.timeEnd; addTime(fEv.timeStart, 0, 0, 0, RpxToRh(250), 0)
-                                        setAllEvs(newAllEvs);
-                                        iuEv({ ...cutEv, timeStart: cDateToUTCDate(cutEv.timeStart), timeEnd: cDateToUTCDate(cutEv.timeEnd) })
-                                        .then((data: EvsResult) => {
-                                            if(data.options.success) {
-                                                enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
-                                                setCutEvId(null);
-                                            } else {
-                                                enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
-                                            }
-                                        })
+                                        cutEv.timeEnd = addTime(fEv.timeStart, 0, 0, 0, RpxToRh(250), 0)
                                     }
-
                                 }
+                                // if fevId is BeggerGang
+                                else if (fevId === null || fevId === 999999999){
+                                    cutEv.parentId = null;
+                                    cutEv.timeStart = TIList[0].date;
+                                    cutEv.timeEnd = addTime(TIList[0].date, 0, 0, 0, RpxToRh(250), 0)
+                                }
+                                
+                                setAllEvs(newAllEvs);
+                                iuEv({ ...cutEv, timeStart: cDateToUTCDate(cutEv.timeStart), timeEnd: cDateToUTCDate(cutEv.timeEnd) })
+                                .then((data: EvsResult) => {
+                                    if(data.options.success) {
+                                        enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
+                                        setCutEvId(null);
+                                    } else {
+                                        enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
+                                    }
+                                })
                             }
                             break;
 
