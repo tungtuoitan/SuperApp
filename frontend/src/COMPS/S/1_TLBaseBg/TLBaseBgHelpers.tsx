@@ -11,11 +11,11 @@ export const useTLBaseBgHelpers = () => {
     const getLevelByType = (type: 'parentEv' | 'childEv' | 'TI'): keyof typeof hper => { // means get level(hour/day/...) of childEv/ parentEv/ TI
         switch (type) {
             case 'parentEv':
-                return clvs[timeConfig.level + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 1].Clevel
+                return clvs[timeConfig.level + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 1].cevel
             case 'childEv':
-                return clvs[timeConfig.level + 2 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].Clevel
+                return clvs[timeConfig.level + 2 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].cevel
             case 'TI':
-                return clvs[timeConfig.level + 3 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].Clevel
+                return clvs[timeConfig.level + 3 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].cevel
         }
     }
 

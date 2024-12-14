@@ -10,7 +10,8 @@ import { _4css } from "./4css";
 import { iuEv } from "../../../FetchAPIs/TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useSnackbar } from "notistack";
-import PowerUp from "./PowerUp";
+import { helperMUIcss } from "../../Helpers/HelperMUIcss";
+import BlackMini from "./BlackMini";
 
 type EvProps = {
     childEv: Ev;
@@ -34,7 +35,7 @@ export const ChildEv = (props: EvProps) => {
     const width = RhToPx(
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
-    const tfSelector = _4css.getTextFieldCSSSelector('childEvName', childEv.id);
+    const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
     const enabled = !isPast(childEv.timeEnd) && fevId === childEv.id && fevId !== null
 
     return <>
@@ -81,11 +82,12 @@ export const ChildEv = (props: EvProps) => {
                 }
             }}
         >
-            {fevId && fevId === childEv.id && <PowerUp childId={childEv.id} />}
+            {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} />}
             {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
             {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
             <TextField
-                id={tfSelector.inputId}
+                id={'childEvName' + childEv.id}
+                className={tfSelector.div0Class}
                 value={tfValue}
                 onFocus={() => {
                     setFocusTFId(childEv.id);
@@ -110,13 +112,12 @@ export const ChildEv = (props: EvProps) => {
                 }}
                 autoComplete='off'
                 disabled={!enabled}
-                className={tfSelector.div1Class}
                 variant="outlined"
                 sx={{
                     width: 'calc(100% - 50px)', // 50(width of 2 GrabEdges)
                     textAlign: 'center',
                     outline: 'none',
-                    [`& ${tfSelector.input}`]: {
+                    [`& ${tfSelector.input2}`]: {
                         fontSize: '12px',
                         textAlign: 'center',
                         color: 'white',
@@ -124,10 +125,10 @@ export const ChildEv = (props: EvProps) => {
                         caretColor: enabled ? 'auto' : 'transparent',
                         pointerEvents: enabled ? 'auto' : 'none', // keep this, if drop this, the TextField will not be able to focus
                     },
-                    [`& ${tfSelector.inputDisable}`]: {
+                    [`& ${tfSelector.input2Disable}`]: {
                         '-webkit-text-fill-color': 'white !important',
                     },
-                    [`& ${tfSelector.fieldset}`]: {
+                    [`& ${tfSelector.fieldset2}`]: {
                         display: 'none',
                     },
                 }}
