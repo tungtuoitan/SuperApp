@@ -7,10 +7,10 @@ import { EvStore } from "./EvStore";
 import { useEvHelpers } from "./EvHelpers";
 import { cDateToGh, cDateToUTCDate } from "../3_TimeConfig/TimeHelpers";
 import { _4css } from "./4css";
-import MiniPopup from "./MiniPopup";
 import { iuEv } from "../../../FetchAPIs/TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useSnackbar } from "notistack";
+import PowerUp from "./PowerUp";
 
 type EvProps = {
     childEv: Ev;
@@ -81,7 +81,7 @@ export const ChildEv = (props: EvProps) => {
                 }
             }}
         >
-            {fevId && fevId === childEv.id && <MiniPopup childId={childEv.id} />}
+            {fevId && fevId === childEv.id && <PowerUp childId={childEv.id} />}
             {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
             {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
             <TextField

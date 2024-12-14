@@ -79,7 +79,7 @@ export const NavigationProvider: React.FC<React.PropsWithChildren<React.PropsWit
     const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb>({} as Breadcrumb);
     const [version, setVersion] = useState('');
     const [moduleName, setModuleName] = useState('');
-    const [expanded, setExpanded] = useState<boolean | null | undefined>(true);
+    const [expanded, setExpanded] = useState<boolean | null | undefined>(false);
     const [sideMenuOpen, setSideMenuOpen] = useState<boolean | null | undefined>(false);
     const [sideMenuOpen2, setSideMenuOpen2] = useState<boolean | null | undefined>(false);
     const [popoverPosition, setPopoverPosition] = useState<PopoverPosition | null>(null);

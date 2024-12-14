@@ -1,10 +1,14 @@
+import { IconButton } from "@mui/material";
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import { EtailStore } from "../5_Etail/EtailStore";
 
 type MiniPopupProps = {
     childId: number,
 }
 
-export default function MiniPopup (props: MiniPopupProps) {
+export default function PowerUp (props: MiniPopupProps) {
     const {childId} = props;
+    const {activeEtailIds, setActiveEtailIds} = EtailStore();
 
     return (
         <div 
@@ -26,7 +30,13 @@ export default function MiniPopup (props: MiniPopupProps) {
             display: 'flex',
             top: 20,
         }}>
-           
+            <IconButton onClick={()=>{
+                setActiveEtailIds([...activeEtailIds, childId])
+                
+                
+            }}>
+                <DoubleArrowIcon style={{color: 'white'}}/>
+            </IconButton>
         </div>
     )
 }

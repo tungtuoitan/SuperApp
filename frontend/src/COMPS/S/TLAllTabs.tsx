@@ -1,0 +1,125 @@
+import { Box, Grow, IconButton, Tab, Tabs, styled } from "@mui/material";
+import { SetStateAction, useState, MouseEvent } from "react";
+import Badge, { BadgeProps } from '@mui/material/Badge';
+import TLContainer from "./TLContainer";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import Etail from "./5_Etail/Etail";
+import { EtailStore } from "./5_Etail/EtailStore";
+import { useTLBaseFgStore } from "./2_TLBaseFg/TLBaseFgStore";
+
+const WBadge = styled(Badge)<BadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+        right: -5,
+        top: 0,
+        padding: '0 2px',
+        height: '16px',
+        minWidth: '16px',
+    },
+}));
+
+export const WTabsContainer = styled(Box)({
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgb(246, 246, 246)',
+})
+
+export const WTabBar = styled(Tabs)({
+    backgroundColor: '#fff',
+    marginRight: '30px',
+    width: '100%',
+    height: '50px',
+    [`& .MuiTabs-scroller`]: {
+        borderRightWidth: '0',
+    },
+})
+
+export interface ITabsContainer {
+    tabs: TabItem[]
+}
+
+export interface TabItem {
+    label: string
+    tabComponent: React.ReactNode
+    disabled?: boolean
+    badge?: number
+    icon?: React.ReactNode
+}
+
+const a11yProps = (index: number) => {
+    return {
+        id: `x-tab-${index}`,
+        'aria-controls': `tabs-tabpanel-${index}`,
+    };
+}
+
+export const TLAllTabs = () => {
+    const [curTabIndex, setCurTabIndex] = useState(0);
+    const { activeEtailIds, setActiveEtailIds } = EtailStore();
+    const { allEvs, setAllEvs } = useTLBaseFgStore();
+
+    const handleChange = (event: any, newValue: SetStateAction<number>) => {
+        setCurTabIndex(newValue);
+    };
+
+const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, pdata: any) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+}
+
+const allTabIDs = ['ScheduleID', ...activeEtailIds];
+return (
+    <WTabsContainer id='TLAllTabs'>
+        <WTabBar
+            id='tabBar'
+            value={curTabIndex}
+            onChange={handleChange}
+            aria-label="tabs">
+            {allTabIDs.map((id, index) => {
+                if(id === 'ScheduleID') return <Tab key={index} icon={<CalendarTodayIcon />} {...a11yProps(index)}    sx={{ 
+                        height: '48px',
+                        minHeight: '48px',
+
+                     }} />
+
+                const ev = allEvs.filter(ev => ev.id === id)[0];
+                return (
+                    <Tab
+                    key={index}
+                    // disabled={ev.disabled ?? false}
+                    label={
+                        <WBadge 
+                        // badgeContent={ev.badge}
+                         color="primary" max={99}>
+                            {ev.name}
+                        </WBadge>}
+                    icon={index > 0 ?
+                        <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{
+                            margin: '0 !important',
+                        }}>
+                            <HighlightOffOutlinedIcon />
+                        </IconButton> : <></>}
+                    {...a11yProps(index)} 
+                    style={{ 
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        gap: 10,
+                        padding: '0 0 0 16px',
+                        height: '48px',
+                        minHeight: '48px',
+                     }}
+                    />
+                )
+            })}
+            {/* <Grow><div/></Grow> */}
+            {/* RIGHT THINGS HERE */}
+        </WTabBar>
+
+        <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)' }}>
+            {(allTabIDs.filter((id, index) => index === curTabIndex)[0]) === 'ScheduleID' 
+            ? <TLContainer /> 
+            : <Etail id={allTabIDs[curTabIndex] as number} />}
+        </div>
+    </WTabsContainer>
+)
+}
