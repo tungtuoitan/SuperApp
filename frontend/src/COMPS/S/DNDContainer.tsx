@@ -34,6 +34,7 @@ export default function DNDContainer() {
             const px$Draggable_drop = draggableRect.current.translated.left - droppableRect.left;
 
             let newEv;
+            // drop on TLBaseFg --> create parentEv
             if(over.id === 'TLBaseFg-droppable') {
                 newEv = {
                     id: 0,
@@ -45,18 +46,37 @@ export default function DNDContainer() {
                     timeEnd: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop + 100), 0), // 100 is width of TISample
                     status: 1
                 };
-            } else {
+            } 
+            // drop on ParentEv --> create childEv
+            else {
                 const parentEv = allEvs.filter(ev => ev.id === over.id)[0];
-                newEv = {
-                    id: 0,
-                    name: 'New Event',
-                    type: '',
-                    parentId: parentEv.id,
-                    level: getLevelByType('childEv'),
-                    timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
-                    timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
-                    status: 1
-                };
+                // if drop on ParentEv
+                if(parentEv) {
+                    newEv = {
+                        id: 0,
+                        name: 'New Event',
+                        type: '',
+                        parentId: parentEv.id,
+                        level: getLevelByType('childEv'),
+                        timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
+                        timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
+                        status: 1
+                    };
+                }
+                // if drop on BeggerEv
+                else{
+                    newEv = {
+                        id: 0,
+                        name: 'New Event',
+                        type: '',
+                        parentId: null,
+                        level: getLevelByType('childEv'),
+                        timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
+                        timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
+                        status: 1
+                    };
+
+                }
             }
 
             const newEvs = [...allEvs, newEv];

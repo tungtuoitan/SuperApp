@@ -16,6 +16,7 @@ import { _3css } from "./3css";
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import { styled } from "@mui/system";
+import { helperMUIcss } from "../../Helpers/HelperMUIcss";
 
 const WLeft = styled(Box)({
     
@@ -41,25 +42,25 @@ export const TimeConfigBar = () => {
     const {timeConfig, setTimeConfig, timeConfig2, setTimeConfig2,allPeriods,setAllPeriods, timeFrom, setTimeFrom } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
     const { TIList } = useTLBaseBgStore();
-    const dpSelector = _3css.getDatePickerCSSSelector();
-    const sSelector = _3css.getSelectCSSSelector('timeLevelSelect');
+    const dpSelector = helperMUIcss.getDatePickerCSSSelector();
+    const sSelector = helperMUIcss.getSelectCSSSelector();
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
-        const initClevel = 4; //! điều chỉnh CLevel ban đầu tại đây
-        const period = clvs[initClevel].Clevel === tl.century
+        const initCevel = 4; //! điều chỉnh CLevel ban đầu tại đây
+        const period = clvs[initCevel].cevel === tl.century
             ? {id: 0, label: 'century now', date: dateToCDate(getDate$FirstDayOfCurrentCentury())}
-            : clvs[initClevel].Clevel === tl.decade
+            : clvs[initCevel].cevel === tl.decade
             ? {id: 0, label: 'decade now', date: dateToCDate(getDate$FirstDayOfCurrentDecade())}
-            : clvs[initClevel].Clevel === tl.year
+            : clvs[initCevel].cevel === tl.year
             ? {id: 0, label: 'year now', date: dateToCDate(getDate$FirstDayOfCurrentYear())}
-            : clvs[initClevel].Clevel === tl.month
+            : clvs[initCevel].cevel === tl.month
             ? {id: 0, label: 'month now', date: dateToCDate(getDate$FirstDayOfCurrentMonth())}
-            : clvs[initClevel].Clevel === tl.week
+            : clvs[initCevel].cevel === tl.week
             ? {id: 0, label: 'week now', date: dateToCDate(getDate$MondayOfCurrentWeek())}
             : null;
 
-        const timeConfigInit = { level: initClevel, period } as timeConfig
+        const timeConfigInit = { level: initCevel, period } as timeConfig
 
         if (timeConfigInit.level === 1) setAllPeriods(getPeriodListUnit1y());
         if (timeConfigInit.level === 2) setAllPeriods(getPeriodListUnit1m());
@@ -79,14 +80,14 @@ export const TimeConfigBar = () => {
                         height: 30, 
                         width: 120,
                         margin: 0,
-                        [`& ${dpSelector.div1}`]: {
+                        [`& ${sSelector.div1}`]: {
                             height: 30,
                         },
-                        [`& ${dpSelector.input}`]: {
+                        [`& ${sSelector.input2}`]: {
                             height: 30,
                             padding: '0px 0px 0 10px',
                         },
-                         [`& ${dpSelector.legend}`]: {
+                         [`& ${sSelector.legend2}`]: {
                             width: '0 !important',
                         },
                     }}
@@ -123,7 +124,7 @@ export const TimeConfigBar = () => {
                     >
                         {clvs.map((option) => {
                             return (
-                                <MenuItem key={option.id} value={option.id} disabled={option.status === 'off'}>{option.Clevel}</MenuItem>
+                                <MenuItem key={option.id} value={option.id} disabled={!option.isActive}>{option.cevel}</MenuItem>
                             )
                         })}
                     </Select>
@@ -168,9 +169,9 @@ export const TimeConfigBar = () => {
             </WLeft>
             <WMid>
                 <IconButton aria-label="delete" 
-                    title={`Back ${clvs[timeConfig2.level].Clevel}`}
+                    title={`Back ${clvs[timeConfig2.level].cevel}`}
                     onClick={() => {
-                        switch (clvs[timeConfig2.level].Clevel) {
+                        switch (clvs[timeConfig2.level].cevel) {
                             case tl.decade:
                                 break;
                             case tl.year:
@@ -202,10 +203,10 @@ export const TimeConfigBar = () => {
                                 [`& ${dpSelector.div1}`]: {
                                     height: 30,
                                 },
-                                [`& ${dpSelector.labelNoShrink}`]: {
+                                [`& ${dpSelector.label1NoShrink}`]: {
                                     top: -8,
                                 },
-                                [`& ${dpSelector.input}`]: {
+                                [`& ${dpSelector.input2}`]: {
                                     height: 30,
                                     padding: '0px 0px 0 10px',
                                 },
@@ -230,14 +231,14 @@ export const TimeConfigBar = () => {
                                 [`& ${dpSelector.div1}`]: {
                                     height: 30,
                                 },
-                                [`& ${dpSelector.labelNoShrink}`]: {
+                                [`& ${dpSelector.label1NoShrink}`]: {
                                     top: -8,
                                 },
-                                [`& ${dpSelector.input}`]: {
+                                [`& ${dpSelector.input2}`]: {
                                     height: 30,
                                     padding: '0px 0px 0 10px',
                                 },
-                                [`& ${dpSelector.button}`]: {
+                                [`& ${dpSelector.button3}`]: {
                                     // height: 30,
                                     padding: '0 !important',
                                 },
@@ -255,9 +256,9 @@ export const TimeConfigBar = () => {
                 </Box>
                 <IconButton 
                     aria-label="delete"
-                    title={`Next ${clvs[timeConfig2.level].Clevel}`}
+                    title={`Next ${clvs[timeConfig2.level].cevel}`}
                     onClick={() => {
-                        switch (clvs[timeConfig2.level].Clevel) {
+                        switch (clvs[timeConfig2.level].cevel) {
                             case tl.decade:
                                 break;
                             case tl.year:

@@ -34,9 +34,11 @@ export type curLv = {
 }
 export type Lv = {
     id: number,
-    Clevel: TimeLevel,
-    status: 'on' | 'off',
+    cevel: TimeLevel,
+    isActive: boolean,
 }
+
+export type SelectField = 'level' | 'parentId'
 
 export type TimeLevel = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'
 export type FilterType = 'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent'

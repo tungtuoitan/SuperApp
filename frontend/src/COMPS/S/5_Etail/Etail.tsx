@@ -1,5 +1,19 @@
-import { Paper, styled } from "@mui/material"
-import { GenericAutoComplete, IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete"
+import { FormControl, IconButton, InputLabel, MenuItem, Paper, Select, styled, TextField, Tooltip } from "@mui/material"
+import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3"
+import { _3css } from "../3_TimeConfig/3css"
+import { helperMUIcss } from "../../Helpers/HelperMUIcss"
+import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers"
+import { useEtailHelpers } from "./EtailHelper"
+import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore"
+import { clvs, levelOptions, tl } from "../TLConstants"
+import { useEtailFormStore } from "./EtailFormStore"
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { iuEv } from "../../../FetchAPIs/TLAPIs"
+import { cDateToUTCDate, dateToCDate } from "../3_TimeConfig/TimeHelpers"
+import { useSnackbar } from "notistack"
+import { set } from "lodash"
 
 const EtailPaper = styled(Paper)({
     display: 'flex',
@@ -30,62 +44,393 @@ const WBody = styled('div')({
     height: 'calc(100% - 50px)',
     padding: '0 10px 10px 10px'
 })
-    const getSelectedOption = (option: string, id: number | string): IAutoCompleteOptions | null => {
-        let result: IAutoCompleteOptions | null = null;
-        switch (option) {
-        //  
-          default:
-            result = { id: 0, label: '' } as IAutoCompleteOptions;
-            break;
-        }
-        return result;
-      };
+
+const WRow = styled('div')({
+    display: 'flex',
+    gap: 10,
+
+    width: '100%',
+    margin: '0 0 16px 0',
+})
+
 
 type EtailProps = {
     id: number
 }
-export default function Etail (props: EtailProps) {
+export default function Etail(props: EtailProps) {
+    const { allEvs, setAllEvs } = useTLBaseFgStore();
+    const [etailForm, setEtailForm] = useEtailFormStore();
+    const { enqueueSnackbar } = useSnackbar();
+    const { handleChange } = useEtailHelpers();
+
+    const dpSelector = helperMUIcss.getDatePickerCSSSelector();
+    const evNameSelector = helperMUIcss.getTextFieldCSSSelector('evName');
+    const parentIdSelector = helperMUIcss.getTextFieldCSSSelector('parentId');
+    const evIdSelector = helperMUIcss.getTextFieldCSSSelector('evID');
+    const levelSelector = helperMUIcss.getSelectCSSSelector();
+
+    const saveEtail = (e: any) => {
+        const ev = allEvs.find(ev => ev.id === props.id);
+        if (ev) {
+            iuEv({  
+                    ...ev,
+                    id: ev.id,
+                    name: etailForm.name,
+                    parentId: etailForm.parentId ?? null,
+                    level: levelOptions.find(option => option.label === etailForm.level)?.label ?? tl.hour,
+                    timeStart: cDateToUTCDate(etailForm.timeStart),
+                    timeEnd: cDateToUTCDate(etailForm.timeEnd),
+                })
+            .then((data: any) => {
+                if(data.options.success) {
+                    enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
+                } else {
+                    enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
+                }
+
+            })
+
+        }
+    }
+    const cancelEtail = (e: any) => {
+        // cancel etail here ....
+    }
 
     return <>
-    <div style={{
-        margin: 0,
-        padding: '20px 0 0 0',
-        gap: 10,
-        width: '100%',
-        height: '100%',
-        flex: 1,
+        <div style={{
+            margin: 0,
+            padding: '20px 0 0 0',
+            gap: 10,
+            width: '100%',
+            height: '100%',
+            flex: 1,
 
-    }}>
-        <WBar>
+        }}>
+            <WBar>
+            <Tooltip title="Save">
+                <span>
+                    <IconButton
+                        onClick={(e) => saveEtail(e)}>
+                        <CheckOutlinedIcon />
+                    </IconButton>
+                </span>
+            </Tooltip>
+            <Tooltip title="Cancel">
+                <span>
+                    <IconButton
+                        onClick={(e) => cancelEtail(e)}>
+                        <CloseOutlinedIcon />
+                    </IconButton>
+                </span>
+            </Tooltip>
 
-        </WBar>
-        <WBody>
-            <EtailPaper>
-                 <GenericAutoComplete
-                    id="requestDetailStatus"
-                    inputProps={{ name: "RFD Status", label: "RFD Status" }}
-                    disableClearable={true}
-                    size='small'
-                    style={{ marginBottom: '16px' }}
-                    renderOptionProps={{ sx: { fontSize: '12px' } }}
-                    //
-                    allOptions={[]
-                        // rfdDialogFormInput.cadDrawingStatusCode !== plm.cadDrawingStatusCode.Approved
-                        // ? allStatus
-                        // : allStatus.map(item => {
-                        //     if (item.label === "Pending") return { ...item, isActive: false };
-                        //     return item;
-                        // })
-                    }
-                    value={getSelectedOption('', 'P')}
-                />
-            </EtailPaper>
-            <EtailPaper >
-            </EtailPaper>
-            <EtailPaper>
-            </EtailPaper>
-        </WBody>
-    </div>
+            </WBar>
+            <WBody>
+                <EtailPaper>
+                    <WRow>
+                        <TextField
+                            id="evId"
+                            name="id"
+                            label="ID"
+                            value={etailForm.id}
+                            disabled
+                            sx={{
+                                width: '100%', // 50(width of 2 GrabEdges)
+                                height: 30,
+                                [`& ${evNameSelector.label1Shrink}`]: {
+                                    fontSize: '12px',
+                                    top: 3,
+                                }, 
+                                [`& ${evIdSelector.input2}`]: {
+                                    fontSize: '12px',
+                                    height: 30,
+                                    padding: '0 0 0 10px',
+                                },
+                            }}
+                        />
+                        <TextField
+                            id="parentId"
+                            name="parentId"
+                            label="Parent ID"
+                            disabled
+                            value={etailForm.parentId}
+                            onChange={(e) => {
+                                // update name here ....
+                            }}
+                            sx={{
+                                width: '100%', // 50(width of 2 GrabEdges)
+                                height: 30,
+                                [`& ${parentIdSelector.label1Shrink}`]: {
+                                    fontSize: '12px',
+                                    top: 3,
+                                },
+                                [`& ${parentIdSelector.label1NoShrink}`]: {
+                                    fontSize: '12px',
+                                    top: -9,
+                                },
+                                [`& ${parentIdSelector.input2}`]: {
+                                    fontSize: '12px',
+                                    height: 30,
+                                    padding: '0 0 0 10px',
+                                },
+                                [`& ${parentIdSelector.legend3}`]: {
+                                    width: '48px',
+                                },
+
+                            }}
+                        />
+                    </WRow>
+                    <WRow>
+                        <TextField
+                            id={'evName' + etailForm.id}
+                            name="name"
+                            label="Event Name"
+                            value={etailForm.name}
+                            onChange={(e) => {
+                                // setEtailForm({ name: e.target.value });
+                                if(e.target && e.target.value && e.target.name) {
+                                    handleChange(e.target.name, e.target.value);
+                                }
+                            }}
+                            sx={{
+                                width: '100%',
+                                height: 30,
+                                textAlign: 'center',
+                                [`& ${evNameSelector.label1Shrink}`]: {
+                                    fontSize: '12px',
+                                    top: 3,
+                                },
+                                [`& ${evNameSelector.input2}`]: {
+                                    fontSize: '12px',
+                                    height: 30,
+                                    padding: '0px 0px 0 10px',
+                                },
+                                [`& ${evNameSelector.legend3}`]: {
+                                    width: '60px',
+                                },
+
+                            }}
+                        />
+                    </WRow>
+                    <WRow>
+                        <FormControl
+                            sx={{
+                                textAlign: 'left',
+                                height: 30,
+                                width: '100%',
+                                margin: 0,
+                                [`& ${levelSelector.label1Shrink}`]: {
+                                    fontSize: '12px',
+                                    top: 3,
+                                },
+                                [`& ${levelSelector.div1}`]: {
+                                    height: 30,
+                                },
+                                [`& ${levelSelector.div2}`]: {
+                                    padding: '0px 0px 0 10px',
+                                    fontSize: '12px',
+                                    height: 30,
+                                    lineHeight: '30px',
+                                },
+                                [`& ${levelSelector.legend2}`]: {
+                                    width: 32,
+                                },
+                            }}
+                        >
+                            <InputLabel id="timeLevelLabel">Level</InputLabel>
+                            <Select
+                                labelId="timeLevelLabel"
+                                name="level"
+                                id="levelSelect"
+                                value={(()=>{
+                                    const x = levelOptions.find(option => option.label === etailForm.level)?.id ?? 6
+                                    console.log(x, etailForm);
+                                    return x
+                                })()}
+                                label="Current Cevel"
+                                onChange={(e) => {
+                                    console.log(e.target.value);
+                                    if (e.target && e.target.value && typeof e.target.value === 'number' && e.target.name) {
+                                        handleChange(e.target.name, e.target.value);
+                                    }
+                                }}
+                            >
+                                {levelOptions.map((option) => {
+                                    return (
+                                        <MenuItem key={option.id} value={option.id} >{option.label}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                    </WRow>
+                    <WRow>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Date Start"
+                                name="dateStart"
+                                className="dateStartPicker"
+                                value={new Date(etailForm.timeStart)}
+                                onChange={(newValue) => {
+                                    if(newValue) {
+                                        handleChange('dateStart', newValue);
+                                    }
+                                }}
+                                sx={{
+                                    height: 30,
+                                    width: 'calc((100% - 10px)/2)', // 10px is gap
+                                    [`& ${dpSelector.div1}`]: {
+                                        height: 30,
+                                    },
+                                    [`& ${dpSelector.label1Shrink}`]: {
+                                        fontSize: '12px',
+                                        top: 3,
+                                    },
+                                    [`& ${dpSelector.label1NoShrink}`]: {
+                                        top: -8,
+                                    },
+                                    [`& ${dpSelector.input2}`]: {
+                                        height: 30,
+                                        padding: '0px 0px 0 10px',
+                                        fontSize: '12px',
+                                    },
+                                    [`& ${dpSelector.button3}`]: {
+                                        // height: 30,
+                                        padding: '0 !important',
+                                    },
+                                    [`& ${dpSelector.legend3}`]: {
+                                        width: '53px',
+                                    },
+                                }}
+                            />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <TimePicker
+                                className="timeStartPicker"
+                                name="timeStart"
+                                label="Time Start"
+                                value={new Date(etailForm.timeStart)}
+                                onChange={(newValue) => {
+                                    if(newValue) {
+                                        handleChange('timeStart', newValue);
+                                    }
+                                }}
+                                sx={{
+                                    height: 30,
+                                    width: 'calc((100% - 10px)/2)', // 10px is gap
+                                    [`& ${dpSelector.div1}`]: {
+                                        height: 30,
+                                    },
+                                    [`& ${dpSelector.label1NoShrink}`]: {
+                                        top: -8,
+                                    },
+                                    [`& ${dpSelector.label1Shrink}`]: {
+                                        fontSize: '12px',
+                                        top: 3,
+                                    },
+                                    [`& ${dpSelector.input2}`]: {
+                                        height: 30,
+                                        padding: '0px 0px 0 10px',
+                                        fontSize: '12px',
+                                    },
+                                    [`& ${dpSelector.button3}`]: {
+                                        // height: 30,
+                                        padding: '0 !important',
+                                    },
+                                    [`& ${dpSelector.legend3}`]: {
+                                        width: '53px',
+                                    },
+                                }}
+                            />
+                        </LocalizationProvider>
+                    </WRow>
+                    <WRow>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Date End"
+                                name="dateEnd"
+                                className="DateEndPicker"
+                                value={new Date(etailForm.timeEnd)}
+                                onChange={(newValue) => {
+                                    if(newValue) {
+                                        handleChange('dateEnd', newValue);
+                                    }
+                                }}
+                                sx={{
+                                    height: 30,
+                                    width: 'calc((100% - 10px)/2)', // 10px is gap
+                                    [`& ${dpSelector.div1}`]: {
+                                        height: 30,
+                                    },
+                                    [`& ${dpSelector.label1Shrink}`]: {
+                                        fontSize: '12px',
+                                        top: 3,
+                                    },
+                                    [`& ${dpSelector.label1NoShrink}`]: {
+                                        top: -8,
+                                    },
+                                    [`& ${dpSelector.input2}`]: {
+                                        height: 30,
+                                        padding: '0px 0px 0 10px',
+                                        fontSize: '12px',
+                                    },
+                                    [`& ${dpSelector.button3}`]: {
+                                        // height: 30,
+                                        padding: '0 !important',
+                                    },
+                                    [`& ${dpSelector.legend3}`]: {
+                                        width: '53px',
+                                    },
+                                }}
+                            />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <TimePicker
+                                className="timeEndPicker"
+                                name="timeEnd"
+                                label="Time End"
+                                value={new Date(etailForm.timeEnd)}
+                                onChange={(newValue) => {
+                                    if(newValue) {
+                                        handleChange('timeEnd', newValue);
+                                    }
+                                }}
+                                sx={{
+                                    height: 30,
+                                    width: 'calc((100% - 10px)/2)', // 10px is gap
+                                    [`& ${dpSelector.div1}`]: {
+                                        height: 30,
+                                    },
+                                    [`& ${dpSelector.label1NoShrink}`]: {
+                                        top: -8,
+                                    },
+                                    [`& ${dpSelector.label1Shrink}`]: {
+                                        fontSize: '12px',
+                                        top: 3,
+                                    },
+                                    [`& ${dpSelector.input2}`]: {
+                                        height: 30,
+                                        padding: '0px 0px 0 10px',
+                                        fontSize: '12px',
+                                    },
+                                    [`& ${dpSelector.button3}`]: {
+                                        // height: 30,
+                                        padding: '0 !important',
+                                    },
+                                    [`& ${dpSelector.legend3}`]: {
+                                        width: '53px',
+                                    },
+                                }}
+                            />
+                        </LocalizationProvider>
+                    </WRow>
+
+                </EtailPaper>
+                <EtailPaper >
+                </EtailPaper>
+                <EtailPaper>
+                </EtailPaper>
+            </WBody>
+        </div>
 
     </>
 

@@ -1,3 +1,4 @@
+import { IAutoCompleteOptions } from "../Helpers/GenericAutoComplete"
 import { TimeLevel, Lv } from "./TLTypes"
 
 export const tl: {[key: string]: TimeLevel} = {
@@ -24,11 +25,21 @@ export const currentYearcDate = '2024-01-01T00:00:00.000+07:00'
 
 
 export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
-    { id: 0, Clevel: tl.century, status: 'on' }, 
-    { id: 1, Clevel: tl.decade,  status: 'on' }, 
-    { id: 2, Clevel: tl.year,    status: 'on' },
-    { id: 3, Clevel: tl.month,   status: 'on' },
-    { id: 4, Clevel: tl.week,    status: 'on' },
-    { id: 5, Clevel: tl.day,     status: 'off' },
-    { id: 6, Clevel: tl.hour,    status: 'off' },
+    { id: 0, cevel: tl.century, isActive: true }, 
+    { id: 1, cevel: tl.decade,  isActive: true }, 
+    { id: 2, cevel: tl.year,    isActive: true },
+    { id: 3, cevel: tl.month,   isActive: true },
+    { id: 4, cevel: tl.week,    isActive: true },
+    { id: 5, cevel: tl.day,     isActive: false },
+    { id: 6, cevel: tl.hour,    isActive: false },
+]
+
+export const levelOptions: IAutoCompleteOptions[] = [ 
+    { id: 0, label: tl.century, isActive: true }, 
+    { id: 1, label: tl.decade,  isActive: true }, 
+    { id: 2, label: tl.year,    isActive: true },
+    { id: 3, label: tl.month,   isActive: true },
+    { id: 4, label: tl.week,    isActive: true },
+    { id: 5, label: tl.day,     isActive: true },
+    { id: 6, label: tl.hour,    isActive: true },
 ]

@@ -1,8 +1,12 @@
+import { cDate } from "../TLTypes";
 
 
-export type Etail = {
+export type EtailForm = {
     id: number;
+    parentId: number|null;
     name: string;
-    timeStart: string;
-    timeEnd: string;
+    level: string;
+    timeStart: cDate;
+    timeEnd: cDate;
+    type: string|null;
 }

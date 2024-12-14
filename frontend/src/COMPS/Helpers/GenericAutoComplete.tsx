@@ -19,7 +19,7 @@ export const isEmpty = (value: any) => {
 
 export interface IAutoCompleteOptions {
     label: string;
-    id: number | string;
+    id: number;
     isActive?: boolean;
     type?: string;
     description?: string;

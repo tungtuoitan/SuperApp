@@ -23,7 +23,7 @@ export const TLBaseBg = () => {
         const { y, m, d, h, p } = parseCDate(timeFrom);
         if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
-        if (clvs[timeConfig.level].Clevel === tl.century) {
+        if (clvs[timeConfig.level].cevel === tl.century) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -33,7 +33,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === tl.decade) {
+        else if (clvs[timeConfig.level].cevel === tl.decade) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -43,7 +43,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === tl.year) {
+        else if (clvs[timeConfig.level].cevel === tl.year) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -53,7 +53,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === tl.month) {
+        else if (clvs[timeConfig.level].cevel === tl.month) {
             const { y, m, d, h, p } = parseCDate(timeFrom);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
@@ -65,7 +65,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].Clevel === tl.week) {
+        else if (clvs[timeConfig.level].cevel === tl.week) {
             for (let i = 0; i < 1000; i++) {
                 const TI = {
                     id: uuidv4(),
