@@ -6,10 +6,11 @@ import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 
 type MiniPopupProps = {
     childId: number,
+    parentWidth?: number,
 }
 
 export default function BlackMini (props: MiniPopupProps) {
-    const {childId} = props;
+    const {childId, parentWidth} = props;
     const {allTabIds, setAllTabIds, setCurTabIndex} = useAllTabsStore();
     const [etailForm, setEtailForm] = useEtailFormStore();
     const {allEvs, setAllEvs} = useTLBaseFgStore();
@@ -33,7 +34,8 @@ export default function BlackMini (props: MiniPopupProps) {
             zIndex: 100,
             alignItems: 'center',
             display: 'flex',
-            top: 20,
+            bottom: -50,
+            left: parentWidth ? parentWidth / 2 - 100 : 0, // in parent, we have to center it ourselves
         }}>
             <IconButton onClick={()=>{
                 if(allTabIds.includes(childId)) {

@@ -48,7 +48,8 @@ export const TLBaseFg = () => {
             ref={setNodeRef}
             style={{
                 width: w$Bg,
-                border: isOver ? '4px solid lightblue' : '4px solid transparent',
+                // border: isOver ? '4px solid lightblue' : '4px solid transparent',
+                background: isOver ? '#add8e698' : 'transparent',
                 overflowX: 'hidden',
                 overflowY: 'hidden',
                 height: 573,
