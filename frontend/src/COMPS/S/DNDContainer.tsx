@@ -8,7 +8,6 @@ import TLToolsPopup from './TLTools/TLFloatTools'
 import { DndContext } from '@dnd-kit/core'
 import { v4 as uuid } from 'uuid';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
-import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import { iuEv } from '../../FetchAPIs/TLAPIs';
 import { EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
@@ -16,9 +15,7 @@ import { EvStore } from './4_Ev/EvStore';
 export default function DNDContainer() {
 
     const { allEvs, setAllEvs, activeId, setActiveId, setNewEvId } = useTLBaseFgStore();
-    const { dateReal } = useTLBaseBgStore();
     const { getLevelByType, h$G_BgStart, RpxToRh } = useTLBaseBgHelpers();
-    const { filterEvs } = useTLBaseFgHelpers();
     const { TIList } = useTLBaseBgStore();
     const { enqueueSnackbar } = useSnackbar();
     const { setFevId } = EvStore();
