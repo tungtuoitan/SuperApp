@@ -33,17 +33,17 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
             className="TIc"
             style={{
                 width: width,
-                background: TILevel === tl.hour && (h > 22 || h < 5) 
-                    ? '#00000010' 
-                    : TILevel === tl.day && (h > 22 || h < 5)
-                    ? 'linear-gradient(to right, #00000005 0%, #00000005 20.83%, transparent 20.83%, transparent 95.83%, #00000005 95.83%)'
-                    : 'transparent',
             }}>
             {
                 <div id='columnContainer' style={{ width: '100%', height: '100%' }}>
                     {/* //! 1. content */}
                     <div id='contentDiv'
                         style={{
+                            background: TILevel === tl.hour && (h > 22 || h < 5) 
+                                ? '#00000010' 
+                                : TILevel === tl.day && (h > 22 || h < 5)
+                                ? 'linear-gradient(to right, #00000005 0%, #00000005 20.83%, transparent 20.83%, transparent 95.83%, #00000005 95.83%)'
+                                : 'transparent',
                             height: 'calc(100% - 60px)',  // 60px is height of timeDiv
                             borderLeft: (() => {
                                 if (index === 0) return ''
