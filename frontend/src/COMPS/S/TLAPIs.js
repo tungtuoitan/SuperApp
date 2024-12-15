@@ -1,5 +1,5 @@
-import { constants } from "../Config/constants.js";
-import { getLocaleLanguage } from "../Utilities.js";
+import { constants } from "../../Config/constants.js";
+import { getLocaleLanguage } from "../../Utilities.js";
 
 
 export const getEvs = async (token, skip) => {
@@ -54,4 +54,25 @@ export const iuEv = async (params, token, skip) => {
         return Promise.reject(res);
     }
 }
+
+export const getSRs = async (token, skip) => {
+    const headers = new Headers({
+        // Authorization: `Bearer ${token}`,
+        'Accept-Language': getLocaleLanguage(),
+        'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+    });
   
+    const options = {
+        method: "GET",
+        headers: headers,
+    };
+  
+    // URL = Domain + APIEnpoint + Params
+    const res = await window.fetch(`${constants.domain.getTLDomain()}${constants.apiEndpoints.getSRs}`, options);
+    if (res.ok) {
+        const ret = await res.json();
+        return ret;
+    } else {
+        return Promise.reject(res);
+    }
+  }

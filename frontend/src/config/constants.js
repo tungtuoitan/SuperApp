@@ -1,3 +1,4 @@
+
 export const constants = {
   // 1. Setting
   setting: {
@@ -67,6 +68,7 @@ export const constants = {
   apiEndpoints: {
     getEvents: 'Ev/GetEvs',
     iuEv: 'Ev/IuEv',
+    getSRs: 'SRs/GetSRs',
   },
 
 

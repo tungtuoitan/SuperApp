@@ -4,10 +4,10 @@ import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
-import TISample from "../TLTools/TISample";
+import TISample from "../7_TLTools/TISample";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { ParentEv } from "../4_Ev/ParentEv";
-import { getEvs } from "../../../FetchAPIs/TLAPIs";
+import { getEvs } from "../TLAPIs";
 import { cDateToGh, GhToCDate } from "../3_TimeConfig/TimeHelpers";
 
 export const TLBaseFg = () => {

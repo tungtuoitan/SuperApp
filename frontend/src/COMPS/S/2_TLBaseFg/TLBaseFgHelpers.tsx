@@ -3,6 +3,7 @@ import { cDate, Ev, EvsResult, FilterType } from "../TLTypes";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
+import { sR } from "../TLConstants";
 
 export const useTLBaseFgHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
@@ -23,7 +24,7 @@ export const useTLBaseFgHelpers = () => {
             })
         }
         if(filterTypes.includes('active')) {
-            newEvs = newEvs.filter(ev => ev.status !== 0)
+            newEvs = newEvs.filter(ev => ev.activeC !== sR.active.activeC)
         }
 
         // 1.2

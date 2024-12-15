@@ -7,7 +7,7 @@ import { EvStore, GragEdge } from "./EvStore";
 import { useEvHelpers } from "./EvHelpers";
 import { cDateToGh, cDateToUTCDate } from "../3_TimeConfig/TimeHelpers";
 import { _4css } from "./4css";
-import { iuEv } from "../../../FetchAPIs/TLAPIs";
+import { iuEv } from "../TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useSnackbar } from "notistack";
 import { helperMUIcss } from "../../Helpers/HelperMUIcss";

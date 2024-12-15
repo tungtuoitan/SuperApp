@@ -1,5 +1,5 @@
 import { Box, Grow, IconButton, Tab, Tabs, styled } from "@mui/material";
-import { SetStateAction, useState, MouseEvent } from "react";
+import { SetStateAction, useState, MouseEvent, useEffect } from "react";
 import Badge, { BadgeProps } from '@mui/material/Badge';
 import TLContainer from "../TLContainer";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -8,6 +8,8 @@ import Etail from "../5_Etail/Etail";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useAllTabsStore } from "./AllTabsStore";
 import { useEtailFormStore } from "../5_Etail/EtailFormStore";
+import { getSRs } from "../TLAPIs";
+import { SR, useSRsStore } from "../8_SRs/SRsStore";
 
 const WBadge = styled(Badge)<BadgeProps>(() => ({
     '& .MuiBadge-badge': {
@@ -58,6 +60,7 @@ export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const {allTabIds, setAllTabIds, curTabIndex, setCurTabIndex} = useAllTabsStore();
     const [etailForm, setEtailForm] = useEtailFormStore();
+    const {sRs, setSRs} = useSRsStore();
 
     const handleChange = (event: any, newTabIndex: SetStateAction<number>) => {
         setCurTabIndex(newTabIndex);
@@ -71,9 +74,14 @@ const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => 
     if(curTabIndex === allTabIds.indexOf(id)) {
         setCurTabIndex(0);
     }
-
-
 }
+
+useEffect(() => {
+    getSRs()
+    .then((data: SR[]) => {
+        setSRs(data);
+    })
+}, [])
 
 return (
     <WTabsContainer id='TLAllTabs'>
