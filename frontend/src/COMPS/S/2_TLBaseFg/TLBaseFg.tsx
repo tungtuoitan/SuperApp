@@ -36,12 +36,13 @@ export const TLBaseFg = () => {
             id: 999999999,
             name: 'Begger Gang',
             parentId: null,
-            level: getLevelByType('parentEv'),
+            levelC: getLevelByType('parentEv'),
             timeStart: TIList[0].date,
             timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
         } as Ev : {} as Ev;
 
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
+    console.log("fiveLines:", fiveLines);
     return (
         <div
             id='TLBaseFg'

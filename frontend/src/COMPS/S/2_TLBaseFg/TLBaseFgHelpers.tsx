@@ -3,7 +3,7 @@ import { cDate, Ev, EvsResult, FilterType } from "../TLTypes";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
-import { sR } from "../TLConstants";
+import { sr } from "../TLConstants";
 
 export const useTLBaseFgHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
@@ -24,15 +24,15 @@ export const useTLBaseFgHelpers = () => {
             })
         }
         if(filterTypes.includes('active')) {
-            newEvs = newEvs.filter(ev => ev.activeC !== sR.active.activeC)
+            newEvs = newEvs.filter(ev => ev.activeC !== sr.active.c)
         }
 
         // 1.2
         if(filterTypes.includes('parentEv')) {
-            newEvs = newEvs.filter(ev => ev.level === getLevelByType('parentEv'))
+            newEvs = newEvs.filter(ev => ev.levelC === getLevelByType('parentEv'))
         }
         if(filterTypes.includes('childEv')) {
-            newEvs = newEvs.filter(ev => ev.level === getLevelByType('childEv'))
+            newEvs = newEvs.filter(ev => ev.levelC === getLevelByType('childEv'))
         }
 
         // 1.3

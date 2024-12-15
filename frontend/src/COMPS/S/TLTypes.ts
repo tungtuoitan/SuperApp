@@ -10,7 +10,7 @@ export type Ev = {
   mainC: string,
 
   type?: string,
-  level: TimeLevel,
+  levelC: CevelC,
 
   lineOrder?: number,
 }
@@ -36,13 +36,15 @@ export type curLv = {
 }
 export type Lv = {
     id: number,
-    cevel: TimeLevel,
-    isActive: boolean,
+    cevelC: CevelC,
+    cevelD: CevelD,
+    active: boolean,
 }
 
 export type SelectField = 'level' | 'parentId'
 
-export type TimeLevel = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'
+export type CevelD = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'
+export type CevelC = 'hou' | 'day' | 'wee' | 'mon' | 'yea' | 'dec' | 'cen'
 export type FilterType = 'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent'
 
 export type ResultOptions = {

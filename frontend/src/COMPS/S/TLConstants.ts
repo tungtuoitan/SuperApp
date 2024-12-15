@@ -1,7 +1,16 @@
 import { IAutoCompleteOptions } from "../Helpers/GenericAutoComplete"
-import { TimeLevel, Lv } from "./TLTypes"
+import { CevelC, CevelD, Lv } from "./TLTypes"
 
-export const tl: {[key: string]: TimeLevel} = {
+// export const tl: {[key: string]: CevelD} = {
+//     hour: "hour",
+//     day: "day",
+//     week: "week",
+//     month: "month",
+//     year: "year",
+//     decade: "decade",
+//     century: "century",
+// }
+export const cevel = {
     hour: "hour",
     day: "day",
     week: "week",
@@ -10,50 +19,81 @@ export const tl: {[key: string]: TimeLevel} = {
     decade: "decade",
     century: "century",
 }
-export const hper = {
-    "hour": 1,
+export const hper: Record<CevelC, number> = {
+    "hou": 1,
     "day": 24,
-    "week": 7*24,
-    "month": 365.25/12*24, // trung bình // TODO: [FIX BUG: lệch time ở level Decade] TIlevel = month nên bị lệch 1 tí, vì kích thước của month là không bằng nhau
-    "year": 365.25*24, // trung bình
-    "decade": 365.25*10*24,
-    "century": 365.25*100*24,
+    "wee": 7*24,
+    "mon": 365.25/12*24, // trung bình // TODO: [FIX BUG: lệch time ở level Decade] TIlevel = month nên bị lệch 1 tí, vì kích thước của month là không bằng nhau
+    "yea": 365.25*24, // trung bình
+    "dec": 365.25*10*24,
+    "cen": 365.25*100*24,
 }
 export const miliperh = 1000*60*60
 export const paddingTop$TLBaseFg = 20
 export const currentYearcDate = '2024-01-01T00:00:00.000+07:00'
 
 
-export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
-    { id: 0, cevel: tl.century, isActive: true }, 
-    { id: 1, cevel: tl.decade,  isActive: true }, 
-    { id: 2, cevel: tl.year,    isActive: true },
-    { id: 3, cevel: tl.month,   isActive: true },
-    { id: 4, cevel: tl.week,    isActive: true },
-    { id: 5, cevel: tl.day,     isActive: false },
-    { id: 6, cevel: tl.hour,    isActive: false },
-]
 
-export const levelOptions: IAutoCompleteOptions[] = [ 
-    { id: 0, label: tl.century, isActive: true }, 
-    { id: 1, label: tl.decade,  isActive: true }, 
-    { id: 2, label: tl.year,    isActive: true },
-    { id: 3, label: tl.month,   isActive: true },
-    { id: 4, label: tl.week,    isActive: true },
-    { id: 5, label: tl.day,     isActive: true },
-    { id: 6, label: tl.hour,    isActive: true },
-]
 
-export const sR = {
+export const sr = {
     // 1
     active: {
-        activeC: 'Act',
-        activeD: 'Active',
+        c: 'Act',
+        d: 'Active',
     },
     inActive: {
-        activeC: 'InAct',
-        activeD: 'Inactive',
+        c: 'InAct',
+        d: 'Inactive',
     },
 
     // 2
+    hour: {
+        c: 'hou' as CevelC,
+        d: 'hour' as CevelD,
+    },
+    day: {
+        c: 'day' as CevelC,
+        d: 'day' as CevelD,
+    },
+    week: {
+        c: 'wee' as CevelC,
+        d: 'week' as CevelD,
+    },
+    month: {
+        c: 'mon' as CevelC,
+        d: 'month' as CevelD,
+    },
+    year: {
+        c: 'yea' as CevelC,
+        d: 'year' as CevelD,
+    },
+    decade: {
+        c: 'dec' as CevelC,
+        d: 'decade' as CevelD,
+    },
+    century: {
+        c: 'cen' as CevelC,
+        d: 'century' as CevelD,
+    },
 }
+
+
+export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
+    { id: 0, cevelC: sr.century.c, cevelD: sr.century.d, active: true }, 
+    { id: 1, cevelC: sr.decade.c,  cevelD: sr.decade.d,  active: true }, 
+    { id: 2, cevelC: sr.year.c,    cevelD: sr.year.d,    active: true },
+    { id: 3, cevelC: sr.month.c,   cevelD: sr.month.d,   active: true },
+    { id: 4, cevelC: sr.week.c,    cevelD: sr.week.d,    active: true },
+    { id: 5, cevelC: sr.day.c,     cevelD: sr.day.d,     active: true },
+    { id: 6, cevelC: sr.hour.c,    cevelD: sr.hour.d,    active: true },
+]
+
+// export const levelOptions: IAutoCompleteOptions[] = [ 
+//     { id: 0, code: sr.century.c, desc: sr.century.d, active: true }, 
+//     { id: 1, code: sr.decade.c,  desc: sr.decade.d,  active: true }, 
+//     { id: 2, code: sr.year.c,    desc: sr.year.d,    active: true },
+//     { id: 3, code: sr.month.c,   desc: sr.month.d,   active: true },
+//     { id: 4, code: sr.week.c,    desc: sr.week.d,    active: true },
+//     { id: 5, code: sr.day.c,     desc: sr.day.d,     active: true },
+//     { id: 6, code: sr.hour.c,    desc: sr.hour.d,    active: true },
+// ]

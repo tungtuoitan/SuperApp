@@ -10,6 +10,7 @@ import { useAllTabsStore } from "./AllTabsStore";
 import { useEtailFormStore } from "../5_Etail/EtailFormStore";
 import { getSRs } from "../TLAPIs";
 import { SR, useSRsStore } from "../8_SRs/SRsStore";
+import { IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete";
 
 const WBadge = styled(Badge)<BadgeProps>(() => ({
     '& .MuiBadge-badge': {
@@ -58,96 +59,101 @@ const a11yProps = (index: number) => {
 
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const {allTabIds, setAllTabIds, curTabIndex, setCurTabIndex} = useAllTabsStore();
+    const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
     const [etailForm, setEtailForm] = useEtailFormStore();
-    const {sRs, setSRs} = useSRsStore();
+    const { sRs, setSRs, setLevelOptions } = useSRsStore();
 
     const handleChange = (event: any, newTabIndex: SetStateAction<number>) => {
         setCurTabIndex(newTabIndex);
     };
 
-const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
-    event?.preventDefault();
-    event?.stopPropagation();
-    console.log('closeTab', id);
-    setAllTabIds(allTabIds.filter(tabId => tabId !== id));
-    if(curTabIndex === allTabIds.indexOf(id)) {
-        setCurTabIndex(0);
+    const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
+        event?.preventDefault();
+        event?.stopPropagation();
+        setAllTabIds(allTabIds.filter(tabId => tabId !== id));
+        if (curTabIndex === allTabIds.indexOf(id)) {
+            setCurTabIndex(0);
+        }
     }
-}
 
-useEffect(() => {
-    getSRs()
-    .then((data: SR[]) => {
-        setSRs(data);
-    })
-}, [])
+    useEffect(() => {
+        getSRs()
+            .then((srs: SR[]) => {
+                setSRs(srs);
+                const levelOptions = srs.filter(sr => sr.type === 'Cevel');
+                console.log("levelOptions:", levelOptions);
+                setLevelOptions(levelOptions.map(sr => (
+                    { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
+                )));
 
-return (
-    <WTabsContainer id='TLAllTabs'>
-        <WTabBar
-            id='tabBar'
-            value={curTabIndex}
-            onChange={handleChange}
-            aria-label="tabs">
-            {allTabIds.map((id: number|string, index: number) => {
-                if(id === 'ScheduleID') return <Tab key={index} icon={<CalendarTodayIcon />} {...a11yProps(index)}    sx={{ 
+            })
+    }, [])
+
+    return (
+        <WTabsContainer id='TLAllTabs'>
+            <WTabBar
+                id='tabBar'
+                value={curTabIndex}
+                onChange={handleChange}
+                aria-label="tabs">
+                {allTabIds.map((id: number | string, index: number) => {
+                    if (id === 'ScheduleID') return <Tab key={index} icon={<CalendarTodayIcon />} {...a11yProps(index)} sx={{
                         height: '48px',
                         minHeight: '48px',
 
-                     }} />
+                    }} />
 
-                const ev = allEvs.filter(ev => ev.id === id)[0];
-                return (
-                    <Tab
-                        key={index}
-                        // disabled={ev.disabled ?? false}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setCurTabIndex(index);
-                            const newTabIds = allTabIds[index]
-                            const ev = allEvs.filter(ev => ev.id === newTabIds)[0];
-                            setEtailForm({ 
-                                id: ev.id,
-                                name: ev.name,
-                                parentId: ev.parentId ?? null,
-                                timeStart: ev.timeStart,
-                                timeEnd: ev.timeEnd,
-                                type: ev.type 
-                            })
-                        }}
-                        label={
-                            <WBadge 
-                            // badgeContent={ev.badge}
-                            color="primary" max={99}>
-                                {ev.name}
-                            </WBadge>}
-                        icon={index > 0 ?
-                            <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{margin: '0 !important'}}>
-                                <HighlightOffOutlinedIcon />
-                            </IconButton> : <></>}
-                        {...a11yProps(index)} 
-                        style={{ 
-                            display: 'flex',
-                            flexDirection: 'row-reverse',
-                            gap: 10,
-                            padding: '0 0 0 16px',
-                            height: '48px',
-                            minHeight: '48px',
-                        }}
-                    />
-                )
-            })}
-            {/* <Grow><div/></Grow> */}
-            {/* RIGHT THINGS HERE */}
-        </WTabBar>
+                    const ev = allEvs.filter(ev => ev.id === id)[0];
+                    return (
+                        <Tab
+                            key={index}
+                            // disabled={ev.disabled ?? false}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setCurTabIndex(index);
+                                const newTabIds = allTabIds[index]
+                                const ev = allEvs.filter(ev => ev.id === newTabIds)[0];
+                                setEtailForm({
+                                    id: ev.id,
+                                    name: ev.name,
+                                    parentId: ev.parentId ?? null,
+                                    timeStart: ev.timeStart,
+                                    timeEnd: ev.timeEnd,
+                                    type: ev.type
+                                })
+                            }}
+                            label={
+                                <WBadge
+                                    // badgeContent={ev.badge}
+                                    color="primary" max={99}>
+                                    {ev.name}
+                                </WBadge>}
+                            icon={index > 0 ?
+                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important' }}>
+                                    <HighlightOffOutlinedIcon />
+                                </IconButton> : <></>}
+                            {...a11yProps(index)}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row-reverse',
+                                gap: 10,
+                                padding: '0 0 0 16px',
+                                height: '48px',
+                                minHeight: '48px',
+                            }}
+                        />
+                    )
+                })}
+                {/* <Grow><div/></Grow> */}
+                {/* RIGHT THINGS HERE */}
+            </WTabBar>
 
-        <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)' }}>
-            {(allTabIds.filter((id, index) => index === curTabIndex)[0]) === 'ScheduleID' 
-            ? <TLContainer /> 
-            : <Etail id={allTabIds[curTabIndex] as number} />}
-        </div>
-    </WTabsContainer>
-)
+            <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)' }}>
+                {(allTabIds.filter((id, index) => index === curTabIndex)[0]) === 'ScheduleID'
+                    ? <TLContainer />
+                    : <Etail id={allTabIds[curTabIndex] as number} />}
+            </div>
+        </WTabsContainer>
+    )
 }

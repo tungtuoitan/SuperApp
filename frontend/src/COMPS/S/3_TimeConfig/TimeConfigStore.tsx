@@ -15,7 +15,7 @@ export interface TimeConfigContextData {
 };
 
 export const timeConfigInit = {
-    level: 0,
+    levelC: 0,
     period: {label: '-10000 -> -9000' ,id: 'period-0', date: '2024-01-01T00:00:00.000+07:00' as cDate},
 }
 
@@ -34,7 +34,7 @@ const TimeConfigStore = createContext<TimeConfigContextData>(TimeConfigContextDe
 
 
 export type timeConfig = {
-    level: number,
+    levelC: number,
     period: cDateOption|null,
 };
 export const useTimeConfigStore = () => useContext(TimeConfigStore);

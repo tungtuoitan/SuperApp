@@ -1,11 +1,11 @@
-import { cDate } from "../TLTypes";
+import { cDate, CevelC } from "../TLTypes";
 
 
 export type EtailForm = {
     id: number;
     parentId: number|null;
     name: string;
-    level: string;
+    levelC: CevelC;
     timeStart: cDate;
     timeEnd: cDate;
     type: string|null;
