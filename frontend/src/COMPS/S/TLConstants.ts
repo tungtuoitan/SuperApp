@@ -43,3 +43,17 @@ export const levelOptions: IAutoCompleteOptions[] = [
     { id: 5, label: tl.day,     isActive: true },
     { id: 6, label: tl.hour,    isActive: true },
 ]
+
+export const sR = {
+    // 1
+    active: {
+        activeC: 'Act',
+        activeD: 'Active',
+    },
+    inActive: {
+        activeC: 'InAct',
+        activeD: 'Inactive',
+    },
+
+    // 2
+}

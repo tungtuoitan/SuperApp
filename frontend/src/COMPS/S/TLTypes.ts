@@ -6,7 +6,9 @@ export type Ev = {
   timeStart: cDate,
   timeEnd: cDate,
 
-  status: 0 | 1
+  activeC: string,
+  mainC: string,
+
   type?: string,
   level: TimeLevel,
 
