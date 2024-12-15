@@ -11,7 +11,6 @@ import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { iuEv } from './TLAPIs';
 import { EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
-import { sR } from './TLConstants';
 
 export default function DNDContainer() {
 
@@ -42,10 +41,9 @@ export default function DNDContainer() {
                     name: '',
                     type: '',
                     parentId: null,
-                    level: getLevelByType('parentEv'),
+                    levelC: getLevelByType('parentEv'),
                     timeStart: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop), 0),
                     timeEnd: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop + 100), 0), // 100 is width of TISample
-                    activeC: sR.active.activeC
                 };
             } 
             // drop on ParentEv --> create childEv
@@ -58,10 +56,9 @@ export default function DNDContainer() {
                         name: '',
                         type: '',
                         parentId: parentEv.id,
-                        level: getLevelByType('childEv'),
+                        levelC: getLevelByType('childEv'),
                         timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
-                        activeC: sR.active.activeC
                     };
                 }
                 // if drop on BeggerEv
@@ -71,10 +68,9 @@ export default function DNDContainer() {
                         name: '',
                         type: '',
                         parentId: null,
-                        level: getLevelByType('childEv'),
+                        levelC: getLevelByType('childEv'),
                         timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
-                        activeC: sR.active.activeC
                     };
 
                 }

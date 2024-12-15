@@ -18,11 +18,13 @@ export const isEmpty = (value: any) => {
 
 
 export interface IAutoCompleteOptions {
-    label: string;
     id: number;
-    isActive?: boolean;
+    code: string;
+    desc: string;
+
+    active?: boolean;
     type?: string;
-    description?: string;
+    longDesc?: string;
     level?: number;
 }
 export interface GenericAutoCompleteProps {
@@ -95,8 +97,8 @@ export const GenericAutoComplete: FC<GenericAutoCompleteProps> = (props: Generic
                 },
             }}
             getOptionDisabled={getOptionDisabled}
-            getOptionLabel={(option) => option?.label ?? " "}
-            isOptionEqualToValue={(option, value) => option?.label === value?.label}
+            getOptionLabel={(option) => option?.desc ?? " "}
+            isOptionEqualToValue={(option, value) => option?.desc === value?.desc}
             onChange={(event: any, newValue: IAutoCompleteOptions | null) => {
                 if (onChange) {
                     if (newValue) {
@@ -106,11 +108,11 @@ export const GenericAutoComplete: FC<GenericAutoCompleteProps> = (props: Generic
                 }
             }}
             renderOption={(props, option) => {
-                if (typeof (option.isActive) !== undefined && option.isActive === false) {
+                if (typeof (option.active) !== undefined && option.active === false) {
                     props['aria-disabled'] = true;
                 }
                 return <Box component="li" {...props} {...renderOptionProps} >
-                    <span style={{ marginRight: '20px' }}>{option?.label}</span>{option.description}
+                    <span style={{ marginRight: '20px' }}>{option?.desc}</span>{option.longDesc}
                 </Box>
             }}
             renderInput={(params) => (

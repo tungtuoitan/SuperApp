@@ -65,8 +65,8 @@ export const TLBaseContainer = () => {
             if (timeConfig.period) {
                 const { y, m, d, h } = parseCDate(timeConfig.period.date);
                 // nếu đang có dateReal
-                if (timeConfig.level === 1 && y === dateReal.getFullYear() ||
-                    timeConfig.level === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
+                if (timeConfig.levelC === 1 && y === dateReal.getFullYear() ||
+                    timeConfig.levelC === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
                     TLBaseFrameRef.current.scrollLeft = w$BgStart_red - w$TLBaseFrame / 2;
                 }
                 // nếu k có dateReal 
@@ -188,13 +188,13 @@ export const TLBaseContainer = () => {
                             if (zoomLv >= 6) {
                                 // console.log('uplevel')
                                 // uplevel nếu có thể
-                                // for(let i= newTimeConfig.level+1; i<clvs.length; i++) {
+                                // for(let i= newTimeConfig.levelC+1; i<clvs.length; i++) {
                                 //     if(clvs[i].status === 'on') {
-                                //         newTimeConfig.level = i;
+                                //         newTimeConfig.levelC = i;
                                 //         break;
                                 //     }
                                 // }
-                                // if(clvs[newTimeConfig.level].level === tl.year && timeConfig.period) {
+                                // if(clvs[newTimeConfig.levelC].levelC === sr.year && timeConfig.period) {
                                 //     const newInYearsList = getInYearsList(timeConfig.period.date);
                                 //     newTimeConfig.inYearsVal = newInYearsList[0];
                                 // }
@@ -214,9 +214,9 @@ export const TLBaseContainer = () => {
                                 // newZoomLv = 6;
 
                                 // downlevel nếu có thể
-                                // for(let i= timeConfig.level-1; i >= 0; i--) {
+                                // for(let i= timeConfig.levelC-1; i >= 0; i--) {
                                 //     if(clvs[i].status === 'on') {
-                                //         newTimeConfig.level = i;
+                                //         newTimeConfig.levelC = i;
                                 //         break;
                                 //     }
                                 // }
@@ -227,7 +227,7 @@ export const TLBaseContainer = () => {
                         }
 
                         setZoomLv(newZoomLv);
-                        if (newTimeConfig.level !== timeConfig.level)
+                        if (newTimeConfig.levelC !== timeConfig.levelC)
                             setTimeConfig(newTimeConfig);
                     }}
                 >

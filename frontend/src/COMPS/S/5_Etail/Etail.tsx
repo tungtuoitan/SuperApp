@@ -5,13 +5,14 @@ import { _3css } from "../3_TimeConfig/3css"
 import { helperMUIcss } from "../../Helpers/HelperMUIcss"
 import { useEtailHelpers } from "./EtailHelper"
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore"
-import { clvs, levelOptions, tl } from "../TLConstants"
+import { clvs, sr } from "../TLConstants"
 import { useEtailFormStore } from "./EtailFormStore"
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { iuEv } from "../TLAPIs"
 import { cDateToUTCDate, dateToCDate } from "../3_TimeConfig/TimeHelpers"
 import { useSnackbar } from "notistack"
+import { useSRsStore } from "../8_SRs/SRsStore"
 
 const EtailPaper = styled(Paper)({
     display: 'flex',
@@ -66,6 +67,7 @@ export default function Etail(props: EtailProps) {
     const parentIdSelector = helperMUIcss.getTextFieldCSSSelector('parentId');
     const evIdSelector = helperMUIcss.getTextFieldCSSSelector('evID');
     const levelSelector = helperMUIcss.getSelectCSSSelector();
+    const { levelOptions } = useSRsStore();
 
     const saveEtail = (e: any) => {
         const ev = allEvs.find(ev => ev.id === props.id);
@@ -75,7 +77,7 @@ export default function Etail(props: EtailProps) {
                 id: ev.id,
                 name: etailForm.name,
                 parentId: etailForm.parentId ?? null,
-                level: levelOptions.find(option => option.label === etailForm.level)?.label ?? tl.hour,
+                level: levelOptions.find(option => option.desc === etailForm.levelC)?.code ?? sr.hour.c,
                 timeStart: cDateToUTCDate(etailForm.timeStart),
                 timeEnd: cDateToUTCDate(etailForm.timeEnd),
             })
@@ -198,6 +200,10 @@ export default function Etail(props: EtailProps) {
                                     fontSize: '12px',
                                     top: 3,
                                 },
+                                [`& ${evNameSelector.label1NoShrink}`]: {
+                                    fontSize: '12px',
+                                    top: -9,
+                                },
                                 [`& ${evNameSelector.input2}`]: {
                                     fontSize: '12px',
                                     height: 30,
@@ -240,7 +246,7 @@ export default function Etail(props: EtailProps) {
                                 labelId="timeLevelLabel"
                                 name="level"
                                 id="levelSelect"
-                                value={levelOptions.find(option => option.label === etailForm.level)?.id ?? 6}
+                                value={levelOptions.find(option => option.desc === etailForm.levelC) ?? sr.hour.c}
                                 label="Current Cevel"
                                 onChange={(e) => {
                                     if (e.target && e.target.value && typeof e.target.value === 'number' && e.target.name) {
@@ -249,8 +255,9 @@ export default function Etail(props: EtailProps) {
                                 }}
                             >
                                 {levelOptions.map((option) => {
+                                    console.log(option);
                                     return (
-                                        <MenuItem key={option.id} value={option.id} >{option.label}</MenuItem>
+                                        <MenuItem key={option.id} value={option.code.toLowerCase()} >{option.desc}</MenuItem>
                                     )
                                 })}
                             </Select>

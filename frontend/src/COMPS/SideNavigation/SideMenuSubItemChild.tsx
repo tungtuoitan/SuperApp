@@ -81,7 +81,7 @@ export const SideMenuSubItemChild = (props: ISideSubMenuProps) => {
     const {expanded} = useNavigationStore();
     const {menuItemIcon} = useSideMenuHelper();
     const {onClickHandlerSubItem,onMouseEnterHandlerSubItem} = useSideMenuSubItemEvents();
-    const [isActive,setIsActive] = useState(item.active);
+    const [active,setIsActive] = useState(item.active);
     useEffect(() => {
         setIsActive(item.active);
     },[item])

@@ -52,7 +52,7 @@ export default function BlackMini (props: MiniPopupProps) {
                     id: ev.id,
                     name: ev.name,
                     parentId: ev.parentId ?? null,
-                    level: ev.level,
+                    levelC: ev.levelC,
                     timeStart: ev.timeStart,
                     timeEnd: ev.timeEnd,
                     type: ev.type, 

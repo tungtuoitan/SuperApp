@@ -1,7 +1,7 @@
 import { styled } from "@mui/styles";
 import { parseCDate, getMonthShortName, getDAYOfWeek } from "../3_TimeConfig/TimeHelpers";
-import { cDate, TimeLevel } from "../TLTypes";
-import { tl } from "../TLConstants";
+import { cDate, CevelC, CevelD } from "../TLTypes";
+import { sr } from "../TLConstants";
 import { _1css } from "./1css";
 import { isWeekend } from "date-fns";
 
@@ -20,11 +20,11 @@ const WContainerTI = styled('div')({
 
 type TIcProps = {
     date: cDate;
-    TILevel: TimeLevel;
+    TILevel: CevelC;
     width: number;
     index: number;
 }
-const getTIBg = (TILevel: TimeLevel, date: cDate) => {
+const getTIBg = (TILevel: CevelC, date: cDate) => {
     const lightPink = 'rgb(231, 226, 224)'
     const mediumPink = 'rgb(230, 215, 212)'
     const lightGray = '#00000005'
@@ -34,13 +34,13 @@ const getTIBg = (TILevel: TimeLevel, date: cDate) => {
     const { y, m, d, h, p } = parseCDate(date);
     
     switch (TILevel) {
-        case tl.hour:
+        case sr.hour.c:
             if(h > 22 || h < 5) { // night
                 return isWeekend(date) ? mediumPink : mediumGray
             } else { // day
                 return isWeekend(date) ? lightPink : transparent
             }
-        case tl.day:
+        case sr.day.c:
                 return isWeekend(date) 
                 ? `linear-gradient(to right, ${mediumPink} 0%, ${mediumPink} 20.83%, rgb(231, 226, 224) 20.83%, rgb(231, 226, 224) 95.83%, ${mediumPink} 95.83%)`
                 : `linear-gradient(to right, ${lightGray} 0%, ${lightGray} 20.83%, ${transparent} 20.83%, ${transparent} 95.83%, ${lightGray} 95.83%)`
@@ -48,15 +48,15 @@ const getTIBg = (TILevel: TimeLevel, date: cDate) => {
             return transparent
     }
 }
-const getBorderLeft = (TILevel: TimeLevel, date: cDate, index: number, defaultBorderLeft: string = '1px solid #bfbfbf50') => {
+const getBorderLeft = (TILevel: CevelC, date: cDate, index: number, defaultBorderLeft: string = '1px solid #bfbfbf50') => {
     const { y, m, d, h, p } = parseCDate(date);
     if (index === 0) return ''
-    if (TILevel === tl.year && y % 10 === 0 ||
-        TILevel === tl.month && m === 1 ||
-        TILevel === tl.week && d === 1 ||
-        TILevel === tl.day && d === 1 ||
-        TILevel === tl.day && new Date(date).getDay() === 1 ||  // ~ Monday
-        TILevel === tl.hour && h === 0) return '1px solid #00000050'
+    if (TILevel === sr.year.c && y % 10 === 0 ||
+        TILevel === sr.month.c && m === 1 ||
+        TILevel === sr.week.c && d === 1 ||
+        TILevel === sr.day.c && d === 1 ||
+        TILevel === sr.day.c && new Date(date).getDay() === 1 ||  // ~ Monday
+        TILevel === sr.hour.c && h === 0) return '1px solid #00000050'
     return defaultBorderLeft
 }
 const WColumnContainer = styled('div')({
@@ -110,12 +110,12 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             {(() => {
                                 if (width < 18) return ''
                                 switch (TILevel) {
-                                    case tl.year: return y
-                                    case tl.month: return getMonthShortName(m)
-                                    case tl.week:
-                                    case tl.day:
+                                    case sr.year.c: return y
+                                    case sr.month.c: return getMonthShortName(m)
+                                    case sr.week.c:
+                                    case sr.day.c:
                                         return d;
-                                    case tl.hour:
+                                    case sr.hour.c:
                                         return h > 11
                                             ? <span>{h - 12}"</span>
                                             : <span>{h}"</span>
@@ -138,18 +138,18 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                             {
                                 (() => {
                                     let text = ''
-                                    if (TILevel === tl.year) {
+                                    if (TILevel === sr.year.c) {
                                         if (y % 10 === 0) text = y.toString()
                                     }
-                                    if (TILevel === tl.month) {
+                                    if (TILevel === sr.month.c) {
                                         if (m === 1) text = y.toString()
                                     }
-                                    else if (TILevel === tl.week || TILevel === tl.day) {
+                                    else if (TILevel === sr.week.c || TILevel === sr.day.c) {
                                         if (d === 1) text = getMonthShortName(m)
                                         if (new Date(date).getDay() === 1 && width > 18) text = 'M'
                                         
                                     }
-                                    else if (TILevel === tl.hour) {
+                                    else if (TILevel === sr.hour.c) {
                                         if (h === 0) text = d + '.' + getDAYOfWeek(new Date(y, m - 1, d, h, 0, 0))
                                     }
 

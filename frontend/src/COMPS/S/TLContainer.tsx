@@ -11,7 +11,7 @@ import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import { addTime, cDateToUTCDate } from './3_TimeConfig/TimeHelpers';
 import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
-import { sR } from './TLConstants';
+import { sr } from './TLConstants';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -42,7 +42,7 @@ export default function TLContainer() {
                                // delete
                                const newAllEvs = [...allEvs]
                                const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
-                               fEv.activeC = sR.active.activeC
+                               fEv.activeC = sr.active.c
                                setAllEvs(newAllEvs);
                                iuEv(fEv)
                                .then((data: EvsResult) => {

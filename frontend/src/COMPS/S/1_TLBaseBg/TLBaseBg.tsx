@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { TIc } from "./TIc";
-import { clvs, tl } from "../TLConstants";
+import { clvs, sr } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import {useTLBaseBgHelpers } from "./TLBaseBgHelpers";
 import { addTime, cDateToGh, dateToCDate, getDate$NextMonday, parseCDate } from "../3_TimeConfig/TimeHelpers";
@@ -23,7 +23,7 @@ export const TLBaseBg = () => {
         const { y, m, d, h, p } = parseCDate(timeFrom);
         if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
-        if (clvs[timeConfig.level].cevel === tl.century) {
+        if (clvs[timeConfig.levelC].cevelC === sr.century.c) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -33,7 +33,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].cevel === tl.decade) {
+        else if (clvs[timeConfig.levelC].cevelC === sr.decade.c) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -43,7 +43,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].cevel === tl.year) {
+        else if (clvs[timeConfig.levelC].cevelC === sr.year.c) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
@@ -53,7 +53,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].cevel === tl.month) {
+        else if (clvs[timeConfig.levelC].cevelC === sr.month.c) {
             const { y, m, d, h, p } = parseCDate(timeFrom);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
@@ -65,7 +65,7 @@ export const TLBaseBg = () => {
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.level].cevel === tl.week) {
+        else if (clvs[timeConfig.levelC].cevelC === sr.week.c) {
             for (let i = 0; i < 1000; i++) {
                 const TI = {
                     id: uuidv4(),

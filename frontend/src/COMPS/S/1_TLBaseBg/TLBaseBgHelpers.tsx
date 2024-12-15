@@ -1,5 +1,5 @@
 import { useTimeConfigStore } from "../3_TimeConfig/TimeConfigStore";
-import { clvs, hper, tl } from "../TLConstants";
+import { clvs, hper, sr } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { cDateToGh, dateToCDate } from "../3_TimeConfig/TimeHelpers";
 
@@ -8,14 +8,14 @@ export const useTLBaseBgHelpers = () => {
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
-    const getLevelByType = (type: 'parentEv' | 'childEv' | 'TI'): keyof typeof hper => { // means get level(hour/day/...) of childEv/ parentEv/ TI
+    const getLevelByType = (type: 'parentEv' | 'childEv' | 'TI') => { // means get level(hour/day/...) of childEv/ parentEv/ TI
         switch (type) {
             case 'parentEv':
-                return clvs[timeConfig.level + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 1].cevel
+                return clvs[timeConfig.levelC + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.levelC + 1].cevelC
             case 'childEv':
-                return clvs[timeConfig.level + 2 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].cevel
+                return clvs[timeConfig.levelC + 2 > clvs.length - 1 ? clvs.length - 1 : timeConfig.levelC + 2].cevelC
             case 'TI':
-                return clvs[timeConfig.level + 3 > clvs.length - 1 ? clvs.length - 1 : timeConfig.level + 2].cevel
+                return clvs[timeConfig.levelC + 3 > clvs.length - 1 ? clvs.length - 1 : timeConfig.levelC + 2].cevelC
         }
     }
 
@@ -24,7 +24,7 @@ export const useTLBaseBgHelpers = () => {
     const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
 
     // A. relate to TI
-    const hourPerTI = hper[(getLevelByType('TI') === tl.week ? tl.day : getLevelByType('TI')) as keyof typeof hper];
+    const hourPerTI = hper[(getLevelByType('TI') === sr.week.c ? sr.day.c : getLevelByType('TI')) as keyof typeof hper];
     const pxPerTI = w$BaseTI * zoomLv;
 
     // B. Convert

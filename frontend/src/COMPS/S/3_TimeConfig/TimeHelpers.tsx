@@ -1,4 +1,4 @@
-import { clvs, miliperh, currentYearcDate, hper, tl } from "../TLConstants";
+import { clvs, miliperh, currentYearcDate, hper } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
 import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
 

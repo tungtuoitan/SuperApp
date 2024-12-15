@@ -2,12 +2,13 @@
 import { createContext, Dispatch, SetStateAction, useContext, useReducer, useState } from "react";
 import { EtailForm } from "./EtailType";
 import { addTime, dateToCDate } from "../3_TimeConfig/TimeHelpers";
+import { sr } from "../TLConstants";
 
 export const initEtailForm: EtailForm = {
     id: 0,
     parentId: 0,
     name: '',
-    level: '',
+    levelC: sr.hour.c,
     timeStart: dateToCDate(new Date()),
     timeEnd: addTime(dateToCDate(new Date()), 0, 0, 0, 10, 0),
     type: null
