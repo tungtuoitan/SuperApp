@@ -55,6 +55,9 @@ export const ChildEv = (props: EvProps) => {
         else if (childEv.isOverlap) {
             return _4css.backgroundOverlap
         }
+        else if (childEv.isLateNight) {
+            return _4css.backgroundLateNight
+        }
         else if(isPresent(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4css.backgroundDrag
@@ -118,7 +121,7 @@ export const ChildEv = (props: EvProps) => {
             {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
             {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
             {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left' &&
-                <WTime sx={{left: 0}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
+                <WTime sx={{left: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
             <Cooltip title={childEv.name} placement='top' enterDelay={500} leaveDelay={200} >
                 <TextField
                     id={'childEvName' + childEv.id}
@@ -170,7 +173,7 @@ export const ChildEv = (props: EvProps) => {
                 />
             </Cooltip>
             {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right' &&
-                <WTime sx={{right: 0}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
+                <WTime sx={{right: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
         </div>
     </>
 }

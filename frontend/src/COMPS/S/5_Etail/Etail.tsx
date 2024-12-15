@@ -77,7 +77,7 @@ export default function Etail(props: EtailProps) {
                 id: ev.id,
                 name: etailForm.name,
                 parentId: etailForm.parentId ?? null,
-                level: levelOptions.find(option => option.desc === etailForm.levelC)?.code ?? sr.hour.c,
+                levelC: etailForm.levelC ?? sr.hour.c,
                 timeStart: cDateToUTCDate(etailForm.timeStart),
                 timeEnd: cDateToUTCDate(etailForm.timeEnd),
             })
@@ -246,16 +246,15 @@ export default function Etail(props: EtailProps) {
                                 labelId="timeLevelLabel"
                                 name="level"
                                 id="levelSelect"
-                                value={levelOptions.find(option => option.desc === etailForm.levelC) ?? sr.hour.c}
+                                value={etailForm.levelC ?? sr.hour.c}
                                 label="Current Cevel"
                                 onChange={(e) => {
-                                    if (e.target && e.target.value && typeof e.target.value === 'number' && e.target.name) {
+                                    if (e.target && e.target.name && e.target.value) {
                                         handleChange(e.target.name, e.target.value);
                                     }
                                 }}
                             >
                                 {levelOptions.map((option) => {
-                                    console.log(option);
                                     return (
                                         <MenuItem key={option.id} value={option.code.toLowerCase()} >{option.desc}</MenuItem>
                                     )

@@ -11,6 +11,7 @@ export const _4css = {
     backgroundDrag: 'black',
     backgroundJobTask: '#000000',
     backgroundOverlap: 'red',
+    backgroundLateNight: '#F24822',
     
     display: 'flex',
     fontSize: '12px',

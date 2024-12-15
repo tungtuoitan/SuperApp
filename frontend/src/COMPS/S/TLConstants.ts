@@ -1,15 +1,5 @@
-import { IAutoCompleteOptions } from "../Helpers/GenericAutoComplete"
 import { CevelC, CevelD, Lv } from "./TLTypes"
 
-// export const tl: {[key: string]: CevelD} = {
-//     hour: "hour",
-//     day: "day",
-//     week: "week",
-//     month: "month",
-//     year: "year",
-//     decade: "decade",
-//     century: "century",
-// }
 export const cevel = {
     hour: "hour",
     day: "day",
@@ -33,9 +23,9 @@ export const paddingTop$TLBaseFg = 20
 export const currentYearcDate = '2024-01-01T00:00:00.000+07:00'
 export const lateNight = {
     start: 23,
-    end: 5,
+    end: 6,
 }
-
+export const zoomLvMax = 10;
 
 
 
@@ -91,13 +81,3 @@ export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
     { id: 5, cevelC: sr.day.c,     cevelD: sr.day.d,     active: true },
     { id: 6, cevelC: sr.hour.c,    cevelD: sr.hour.d,    active: true },
 ]
-
-// export const levelOptions: IAutoCompleteOptions[] = [ 
-//     { id: 0, code: sr.century.c, desc: sr.century.d, active: true }, 
-//     { id: 1, code: sr.decade.c,  desc: sr.decade.d,  active: true }, 
-//     { id: 2, code: sr.year.c,    desc: sr.year.d,    active: true },
-//     { id: 3, code: sr.month.c,   desc: sr.month.d,   active: true },
-//     { id: 4, code: sr.week.c,    desc: sr.week.d,    active: true },
-//     { id: 5, code: sr.day.c,     desc: sr.day.d,     active: true },
-//     { id: 6, code: sr.hour.c,    desc: sr.hour.d,    active: true },
-// ]

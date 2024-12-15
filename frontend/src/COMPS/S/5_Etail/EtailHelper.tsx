@@ -6,8 +6,7 @@
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete";
-import { CevelC, SelectField } from "../TLTypes";
-import {  sr } from "../TLConstants";
+import { SelectField } from "../TLTypes";
 import { useEtailFormStore } from "./EtailFormStore";
 import { dateToCDate } from "../3_TimeConfig/TimeHelpers";
 import { useSRsStore } from "../8_SRs/SRsStore";
@@ -38,8 +37,7 @@ export const useEtailHelpers = () => {
                 setEtailForm({ name: value });
                 break;
             case 'level':
-                const newLevel = levelOptions.find(option => option.code === value)?.desc as CevelC ?? sr.hour.c;
-                setEtailForm({ levelC: newLevel });
+                setEtailForm({ levelC: value });
                 break;
             case 'dateStart':
             case 'timeStart':
