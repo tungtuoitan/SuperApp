@@ -1,6 +1,6 @@
-import { clvs, miliperh, currentYearcDate, hper } from "../TLConstants";
+import { clvs, miliperh, currentYearcDate, hper, sr } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
-import { cDate, cDateOption, d, h, m, p, y } from "../TLTypes";
+import { cDate, cDateOption, CevelC, d, h, m, p, y } from "../TLTypes";
 
 // B1. to CDate
 export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
@@ -282,4 +282,16 @@ export function isWeekend(date: cDate) {
     const day = new Date(date).getDay();
     // Kiểm tra nếu là Thứ Bảy (6) hoặc Chủ Nhật (0)
     return day === 0 || day === 6;
-  }
+}
+
+// B.10 format Date to display 
+export function formatTime(date: cDate, levelC: CevelC) {
+    switch (levelC) {
+        case sr.hour.c:
+            const hours = String(new Date(date).getHours()).padStart(2, '0'); // Lấy giờ và thêm 0 nếu cần
+            const minutes = String(new Date(date).getMinutes()).padStart(2, '0'); // Lấy phút và thêm 0 nếu cần
+            return `${hours}:${minutes}`;
+    }
+}
+
+

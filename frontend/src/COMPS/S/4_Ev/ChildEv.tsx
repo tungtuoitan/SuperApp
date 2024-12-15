@@ -1,11 +1,11 @@
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev, EvsResult } from "../TLTypes";
 import GrabEdge from "./GrabEdge";
-import { TextField } from "@mui/material";
+import { styled, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import { EvStore, GragEdge } from "./EvStore";
 import { useEvHelpers } from "./EvHelpers";
-import { cDateToGh, cDateToUTCDate } from "../3_TimeConfig/TimeHelpers";
+import { cDateToGh, cDateToUTCDate, formatTime } from "../3_TimeConfig/TimeHelpers";
 import { _4css } from "./4css";
 import { iuEv } from "../TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
@@ -13,6 +13,8 @@ import { useSnackbar } from "notistack";
 import { helperMUIcss } from "../../Helpers/HelperMUIcss";
 import BlackMini from "./BlackMini";
 import { Cooltip } from "../../Helpers/CoolTip";
+import { sr } from "../TLConstants";
+import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 
 type EvProps = {
     childEv: Ev;
@@ -20,12 +22,21 @@ type EvProps = {
     lineOrder: number;
 }
 
+const WTime = styled('p')({
+    position: 'absolute',
+    top: 0,
+    fontSize: '16px',
+    color: 'black',
+    fontWeight: 'bold',
+})
+
 export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
     const { RhToPx } = useTLBaseBgHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { grabEdge, fevId, setFevId, cutEvId, focusTFId, setFocusTFId } = EvStore();
     const { isPast, isPresent } = useEvHelpers();
+    const { markEvs } = useTLBaseFgHelpers();
     const [tfValue, setTfValue] = useState(childEv.name);
     const { enqueueSnackbar } = useSnackbar();
 
@@ -41,6 +52,9 @@ export const ChildEv = (props: EvProps) => {
         if (isPast(childEv.timeEnd)) {
             return _4css.pastBackground
         } 
+        else if (childEv.isOverlap) {
+            return _4css.backgroundOverlap
+        }
         else if(isPresent(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4css.backgroundDrag
@@ -60,7 +74,6 @@ export const ChildEv = (props: EvProps) => {
             }
         }
     }
-
 
     return <>
         <div
@@ -104,6 +117,8 @@ export const ChildEv = (props: EvProps) => {
             {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} />}
             {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
             {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
+            {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left' &&
+                <WTime sx={{left: 0}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
             <Cooltip title={childEv.name} placement='top' enterDelay={500} leaveDelay={200} >
                 <TextField
                     id={'childEvName' + childEv.id}
@@ -118,7 +133,7 @@ export const ChildEv = (props: EvProps) => {
                             .then((data: EvsResult) => {
                                 if (data.options.success) {
                                     enqueueSnackbar(data.options.message, { variant: "success" });
-                                    setAllEvs((prev: Ev[]) => prev.map(ev => ev.id === data.evs[0].id ? data.evs[0] : ev))
+                                    setAllEvs((prev: Ev[]) => markEvs(prev.map(ev => ev.id === data.evs[0].id ? data.evs[0] : ev)))
                                     setFevId(data.evs[0].id)
                                 }
                             })
@@ -154,6 +169,8 @@ export const ChildEv = (props: EvProps) => {
                     }}
                 />
             </Cooltip>
+            {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right' &&
+                <WTime sx={{right: 0}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
         </div>
     </>
 }

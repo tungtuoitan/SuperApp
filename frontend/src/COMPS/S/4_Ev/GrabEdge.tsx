@@ -9,6 +9,7 @@ type GrabEdgeProps = {
 export default function GrabEdge (props: GrabEdgeProps) {
     const {position, id, type = 'child'} = props;
     const { grabEdge, setGrabEdge } = EvStore();
+
     return (
         <div 
         onMouseEnter={() => {

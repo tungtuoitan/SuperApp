@@ -1,7 +1,7 @@
 import { styled } from "@mui/styles";
 import { parseCDate, getMonthShortName, getDAYOfWeek } from "../3_TimeConfig/TimeHelpers";
 import { cDate, CevelC, CevelD } from "../TLTypes";
-import { sr } from "../TLConstants";
+import { lateNight, sr } from "../TLConstants";
 import { _1css } from "./1css";
 import { isWeekend } from "date-fns";
 
@@ -35,7 +35,7 @@ const getTIBg = (TILevel: CevelC, date: cDate) => {
     
     switch (TILevel) {
         case sr.hour.c:
-            if(h > 22 || h < 5) { // night
+            if(h >= lateNight.start || h <= lateNight.end) { // night
                 return isWeekend(date) ? mediumPink : mediumGray
             } else { // day
                 return isWeekend(date) ? lightPink : transparent

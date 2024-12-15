@@ -1,21 +1,23 @@
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
-import { cDate, Ev, EvsResult, FilterType } from "../TLTypes";
+import { cDate, Ev, EvsResult, FilterType, Mark } from "../TLTypes";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
-import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
-import { sr } from "../TLConstants";
+import { cDateToGh, parseCDate } from "../3_TimeConfig/TimeHelpers";
+import { lateNight, sr } from "../TLConstants";
+import { parse } from "path";
+import { useEvHelpers } from "../4_Ev/EvHelpers";
 
 export const useTLBaseFgHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { h$G_BgStart, h$G_BgEnd, getLevelByType } = useTLBaseBgHelpers();
+    const { h$G_BgStart, h$G_BgEnd, getLevelCOf } = useTLBaseBgHelpers();
 
     // 1. filter
-    const filterEvs = (filterTypes: FilterType[] ):Ev[] =>  {
-        let newEvs = [...allEvs];
+    const filterEvs = (filterTypes: FilterType[], evs: Ev[] = allEvs, deepClone: boolean = true): Ev[] => {
+        let newEvs: Ev[] = deepClone ? structuredClone(evs) : evs
 
         // 1.1
-        if(filterTypes.includes('inside-TL')) {
+        if (filterTypes.includes('inside-TL')) {
             newEvs = newEvs.filter(ev => {
                 const Gh_timeStart = cDateToGh(ev.timeStart as cDate);
                 const Gh_timeEnd = cDateToGh(ev.timeEnd as cDate);
@@ -23,25 +25,55 @@ export const useTLBaseFgHelpers = () => {
                 return true;
             })
         }
-        if(filterTypes.includes('active')) {
-            newEvs = newEvs.filter(ev => ev.activeC !== sr.active.c)
+        if (filterTypes.includes('active')) {
+            newEvs = newEvs.filter(ev => ev.activeC === null || ev.activeC === sr.active.c)
         }
 
         // 1.2
-        if(filterTypes.includes('parentEv')) {
-            newEvs = newEvs.filter(ev => ev.levelC === getLevelByType('parentEv'))
+        if (filterTypes.includes('parentEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === getLevelCOf('parentEv'))
         }
-        if(filterTypes.includes('childEv')) {
-            newEvs = newEvs.filter(ev => ev.levelC === getLevelByType('childEv'))
+        if (filterTypes.includes('childEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === getLevelCOf('childEv'))
         }
 
         // 1.3
-        if(filterTypes.includes('hasParent')) {
+        if (filterTypes.includes('hasParent')) {
             newEvs = newEvs.filter(ev => ev.parentId !== null)
         }
-        if(filterTypes.includes('nonParent')) {
+        if (filterTypes.includes('nonParent')) {
             newEvs = newEvs.filter(ev => ev.parentId === null || ev.parentId === 999999999)
         }
+
+        // 1.4
+        if (filterTypes.includes('centuryEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.century.c)
+        }
+        if (filterTypes.includes('decadeEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.decade.c)
+        }
+        if (filterTypes.includes('yearEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.year.c)
+        }
+        if (filterTypes.includes('monthEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.month.c)
+        }
+        if (filterTypes.includes('weekEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.week.c)
+        }
+        if (filterTypes.includes('dayEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.day.c)
+        }
+        if (filterTypes.includes('hourEv')) {
+            newEvs = newEvs.filter(ev => ev.levelC === sr.hour.c)
+            if (filterTypes.includes('isOverlap')) {
+                newEvs = newEvs.filter(ev => ev.isOverlap)
+            }
+            if (filterTypes.includes('isLateNight')) {
+                newEvs = newEvs.filter(ev => ev.isLateNight)
+            }
+        }
+
 
         return newEvs;
     }
@@ -77,14 +109,55 @@ export const useTLBaseFgHelpers = () => {
         return allLines;
     }
 
+    const markEvs = (evs: Ev[], marks: Mark[] = ['isLateNight', 'isOverlap']): Ev[] => {
+        const newEvs = structuredClone(evs);
+
+        const hourEvs = filterEvs(['inside-TL', 'active', 'hourEv'], newEvs, false);
+        if (marks.includes('isOverlap')) {
+            hourEvs.forEach(ev => ev.isOverlap = false);
+            for (let i=0; i<hourEvs.length; i++) {
+            for (let j=0; j<hourEvs.length; j++) {
+                const ev1=hourEvs[i]; const ev2=hourEvs[j];
+                if (i!==j && isOverlap(ev1, ev2, true)) ev1.isOverlap = true;
+            }
+            }
+        }
+
+        if (marks.includes('isLateNight')) {
+            for (let i = 0; i < hourEvs.length; i++) {
+                if (isLateNight(hourEvs[i]))
+                    hourEvs[i].isLateNight = true;
+            }
+        }
+
+        return newEvs;
+    }
+
+
 
     return {
         filterEvs,
         getFiveLines,
+        markEvs,
     }
 }
 
+export const isBetween = (x: cDate, timeStart: cDate, timeEnd: cDate) => {
+    const Gh_x = cDateToGh(x);
+    const Gh_timeStart = cDateToGh(timeStart);
+    const Gh_timeEnd = cDateToGh(timeEnd);
+    return Gh_timeStart < Gh_x && Gh_x < Gh_timeEnd;
+}
+
 // B1. check overlap
-export const isOverlap = (ev1: Ev, ev2: Ev): boolean => {
+export const isOverlap = (ev1: Ev, ev2: Ev, checkBothSide: boolean = false): boolean => {
+    // console.log(isBetween(ev1.timeStart, ev2.timeStart, ev2.timeEnd) || isBetween(ev1.timeEnd, ev2.timeStart, ev2.timeEnd), ev1.name, ev2.name, )
+    if (checkBothSide) return isBetween(ev1.timeStart, ev2.timeStart, ev2.timeEnd) || isBetween(ev1.timeEnd, ev2.timeStart, ev2.timeEnd)
     return (cDateToGh(ev1.timeEnd) > cDateToGh(ev2.timeStart))
+}
+
+export const isLateNight = (ev: Ev): boolean => {
+    const { h } = parseCDate(ev.timeStart);
+    const { h: h2 } = parseCDate(ev.timeEnd);
+    return h < lateNight.end || h2 > lateNight.start
 }

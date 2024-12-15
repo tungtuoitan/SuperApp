@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
-import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
+import { isOverlap, useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import TISample from "../7_TLTools/TISample";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
@@ -14,14 +14,14 @@ export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
     const { hourPerTI } = useTLBaseBgHelpers();
     const { setAllEvs, activeId, newEvId, allEvs } = useTLBaseFgStore();
-    const { filterEvs, getFiveLines } = useTLBaseFgHelpers();
-    const { w$Bg, getLevelByType } = useTLBaseBgHelpers();
+    const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
+    const { w$Bg, getLevelCOf } = useTLBaseBgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
 
     useEffect(() => {
         getEvs()
             .then((data: Ev[]) => {
-                setAllEvs(data);
+                setAllEvs(markEvs(data));
             })
 
     }, []);
@@ -31,18 +31,21 @@ export const TLBaseFg = () => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        // console.log('allEvs', allEvs);
+    }, [allEvs, TIList]);
+
     const beggerEv = TIList.length > 0
         ? {
             id: 999999999,
             name: 'Begger Gang',
             parentId: null,
-            levelC: getLevelByType('parentEv'),
+            levelC: getLevelCOf('parentEv'),
             timeStart: TIList[0].date,
             timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
         } as Ev : {} as Ev;
 
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
-    console.log("fiveLines:", fiveLines);
     return (
         <div
             id='TLBaseFg'

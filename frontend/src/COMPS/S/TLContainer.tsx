@@ -17,7 +17,7 @@ export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
-    const { filterEvs } = useTLBaseFgHelpers();
+    const { filterEvs, markEvs } = useTLBaseFgHelpers();
     const { RpxToRh } = useTLBaseBgHelpers();
     const { TIList } = useTLBaseBgStore();
 
@@ -42,8 +42,8 @@ export default function TLContainer() {
                                // delete
                                const newAllEvs = [...allEvs]
                                const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
-                               fEv.activeC = sr.active.c
-                               setAllEvs(newAllEvs);
+                               fEv.activeC = sr.inActive.c;
+                               setAllEvs(markEvs(newAllEvs))
                                iuEv(fEv)
                                .then((data: EvsResult) => {
                                    if(data.options.success) {
@@ -86,7 +86,7 @@ export default function TLContainer() {
                                     cutEv.timeEnd = addTime(TIList[0].date, 0, 0, 0, RpxToRh(250), 0)
                                 }
                                 
-                                setAllEvs(newAllEvs);
+                                setAllEvs(markEvs(newAllEvs))
                                 iuEv({ ...cutEv, timeStart: cDateToUTCDate(cutEv.timeStart), timeEnd: cDateToUTCDate(cutEv.timeEnd) })
                                 .then((data: EvsResult) => {
                                     if(data.options.success) {

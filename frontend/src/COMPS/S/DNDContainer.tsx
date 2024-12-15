@@ -9,13 +9,15 @@ import { DndContext } from '@dnd-kit/core'
 import { v4 as uuid } from 'uuid';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { iuEv } from './TLAPIs';
-import { EvsResult } from './TLTypes';
+import { Ev, EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
+import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 
 export default function DNDContainer() {
 
     const { allEvs, setAllEvs, activeId, setActiveId, setNewEvId } = useTLBaseFgStore();
-    const { getLevelByType, h$G_BgStart, RpxToRh } = useTLBaseBgHelpers();
+    const { getLevelCOf, h$G_BgStart, RpxToRh } = useTLBaseBgHelpers();
+    const { markEvs } = useTLBaseFgHelpers();
     const { TIList } = useTLBaseBgStore();
     const { enqueueSnackbar } = useSnackbar();
     const { setFevId } = EvStore();
@@ -41,7 +43,7 @@ export default function DNDContainer() {
                     name: '',
                     type: '',
                     parentId: null,
-                    levelC: getLevelByType('parentEv'),
+                    levelC: getLevelCOf('parentEv'),
                     timeStart: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop), 0),
                     timeEnd: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop + 100), 0), // 100 is width of TISample
                 };
@@ -56,7 +58,7 @@ export default function DNDContainer() {
                         name: '',
                         type: '',
                         parentId: parentEv.id,
-                        levelC: getLevelByType('childEv'),
+                        levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
                     };
@@ -68,7 +70,7 @@ export default function DNDContainer() {
                         name: '',
                         type: '',
                         parentId: null,
-                        levelC: getLevelByType('childEv'),
+                        levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
                     };
@@ -76,11 +78,11 @@ export default function DNDContainer() {
                 }
             }
 
-            const newEvs = [...allEvs, newEv];
-            setAllEvs(newEvs); // update state, to make the interactive smoother
+            const newEvs = structuredClone([...allEvs, newEv] as Ev[]);
+            setAllEvs(markEvs(newEvs)) // update state, to make the interactive smoother
             iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
                 .then((data: EvsResult) => {
-                    setAllEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev)) // update id
+                    setAllEvs(markEvs(newEvs.map((ev:Ev) => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))) // update id
                     enqueueSnackbar(data.options.message ?? '', { variant: "success", autoHideDuration: 3000 });
                     setFevId(data.evs[0].id);
                 })
