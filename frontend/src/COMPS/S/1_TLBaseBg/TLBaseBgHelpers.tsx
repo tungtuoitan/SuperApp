@@ -8,7 +8,7 @@ export const useTLBaseBgHelpers = () => {
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
-    const getLevelByType = (type: 'parentEv' | 'childEv' | 'TI') => { // means get level(hour/day/...) of childEv/ parentEv/ TI
+    const getLevelCOf = (type: 'parentEv' | 'childEv' | 'TI') => { // means get level(hour/day/...) of childEv/ parentEv/ TI
         switch (type) {
             case 'parentEv':
                 return clvs[timeConfig.levelC + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.levelC + 1].cevelC
@@ -24,7 +24,7 @@ export const useTLBaseBgHelpers = () => {
     const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
 
     // A. relate to TI
-    const hourPerTI = hper[(getLevelByType('TI') === sr.week.c ? sr.day.c : getLevelByType('TI')) as keyof typeof hper];
+    const hourPerTI = hper[(getLevelCOf('TI') === sr.week.c ? sr.day.c : getLevelCOf('TI')) as keyof typeof hper];
     const pxPerTI = w$BaseTI * zoomLv;
 
     // B. Convert
@@ -68,7 +68,7 @@ export const useTLBaseBgHelpers = () => {
         RpxToRh,
 
         dateToCDate,
-        getLevelByType,
+        getLevelCOf,
     }
 }
 

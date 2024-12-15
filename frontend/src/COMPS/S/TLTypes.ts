@@ -1,4 +1,5 @@
 
+
 export type Ev = {
   id: number,
   name: string,
@@ -13,6 +14,11 @@ export type Ev = {
   levelC: CevelC,
 
   lineOrder?: number,
+
+  // these twos are just used for hourEv
+  isOverlap: boolean, 
+  isLateNight: boolean,
+  
 }
 
 export type cDateOption = {id: string, label: string, date: cDate};
@@ -42,10 +48,14 @@ export type Lv = {
 }
 
 export type SelectField = 'level' | 'parentId'
+export type Mark = 'isOverlap' | 'isLateNight'
 
 export type CevelD = 'hour' | 'day' | 'week' | 'month' | 'year' | 'decade' | 'century'
 export type CevelC = 'hou' | 'day' | 'wee' | 'mon' | 'yea' | 'dec' | 'cen'
-export type FilterType = 'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent'
+export type FilterType = 
+    'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent' | 
+    'hourEv' | 'dayEv' | 'weekEv' | 'monthEv' | 'yearEv' | 'decadeEv' | 'centuryEv' |
+    'isOverlap' | 'isLateNight' 
 
 export type ResultOptions = {
         success: boolean;

@@ -81,7 +81,6 @@ export const TLAllTabs = () => {
             .then((srs: SR[]) => {
                 setSRs(srs);
                 const levelOptions = srs.filter(sr => sr.type === 'Cevel');
-                console.log("levelOptions:", levelOptions);
                 setLevelOptions(levelOptions.map(sr => (
                     { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
                 )));

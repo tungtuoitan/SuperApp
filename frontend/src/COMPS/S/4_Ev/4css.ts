@@ -8,8 +8,9 @@ export const _4css = {
     background: '#828282',
     pastBackground: '#82828220',
     presentBackground: '#FFCD29',
-    backgroundDrag: 'red',
+    backgroundDrag: 'black',
     backgroundJobTask: '#000000',
+    backgroundOverlap: 'red',
     
     display: 'flex',
     fontSize: '12px',

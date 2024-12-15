@@ -3,15 +3,17 @@ import { cDate, Ev, EvsResult } from "../TLTypes";
 import { addTime, cDateToGh, cDateToUTCDate, dateToCDate } from "../3_TimeConfig/TimeHelpers";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { debounce } from "lodash";
+import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 
 export const useEvHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
+    const { markEvs } = useTLBaseFgHelpers();
 
     // 3. update Ev (khi Grab)
     const debounce$UpdateEv = debounce((id, position, roundedH, roundedM) => {
         const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM)
-        const newAllEvs = allEvs.map(ev => {
+        const newAllEvs = structuredClone(allEvs).map((ev :Ev) => {
             if (ev.id === id) {
                 return {
                     ...ev,
@@ -21,7 +23,7 @@ export const useEvHelpers = () => {
             }
             return ev;
         })
-        setAllEvs([...newAllEvs]);
+        setAllEvs(markEvs(newAllEvs))
     }, 6);
 
     const isPast = (timeEnd: cDate) => cDateToGh(timeEnd) < cDateToGh(dateToCDate(dateReal));
@@ -33,6 +35,7 @@ export const useEvHelpers = () => {
         return Gh_timeStart <= Gh_dateReal && Gh_dateReal <= Gh_timeEnd;
     }
 
+    
     return {
         debounce$UpdateEv,
         isPast,
@@ -40,7 +43,3 @@ export const useEvHelpers = () => {
     }
 }
 
-// B1. check overlap
-export const isOverlap = (ev1: Ev, ev2: Ev): boolean => {
-    return (cDateToGh(ev1.timeEnd) > cDateToGh(ev2.timeStart))
-}
