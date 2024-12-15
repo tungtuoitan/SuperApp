@@ -197,6 +197,7 @@ export const TimeConfigBar = () => {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             className="fromDatePicker"
+                            disabled
                             sx={{ 
                                 height: 30, 
                                 width: 150,
@@ -225,6 +226,7 @@ export const TimeConfigBar = () => {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             className="toDatePicker"
+                            disabled
                             sx={{ 
                                 height: 30, 
                                 width: 150,

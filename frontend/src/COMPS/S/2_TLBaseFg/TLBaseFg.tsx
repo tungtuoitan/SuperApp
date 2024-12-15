@@ -31,10 +31,6 @@ export const TLBaseFg = () => {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        // console.log('allEvs', allEvs);
-    }, [allEvs, TIList]);
-
     const beggerEv = TIList.length > 0
         ? {
             id: 999999999,
@@ -69,7 +65,7 @@ export const TLBaseFg = () => {
                     return <ParentEv
                         key={parontEv.id}
                         parentEv={parontEv}
-                        childEvs={parontEv.id === beggerEv.id
+                        childEvs={parontEv.id === beggerEv.id || parontEv.id === null
                             ? filterEvs(['inside-TL', 'active', 'childEv', 'nonParent'])
                             : filterEvs(['inside-TL', 'active']).filter(ev => ev.parentId === parontEv.id)}
                         lineOrder={i}

@@ -37,12 +37,13 @@ export default function DNDContainer() {
 
             let newEv;
             // drop on TLBaseFg --> create parentEv
-            if(over.id === 'TLBaseFg-droppable') {
+            if (over.id === 'TLBaseFg-droppable') {
                 newEv = {
                     id: 0,
                     name: '',
-                    type: '',
+                    type: null,
                     parentId: null,
+                    activeC: null,
                     levelC: getLevelCOf('parentEv'),
                     timeStart: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop), 0),
                     timeEnd: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop + 100), 0), // 100 is width of TISample
@@ -56,8 +57,9 @@ export default function DNDContainer() {
                     newEv = {
                         id: 0,
                         name: '',
-                        type: '',
+                        type: null,
                         parentId: parentEv.id,
+                        activeC: null,
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
@@ -68,8 +70,9 @@ export default function DNDContainer() {
                     newEv = {
                         id: 0,
                         name: '',
-                        type: '',
+                        type: null,
                         parentId: null,
+                        activeC: null,
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
@@ -78,11 +81,12 @@ export default function DNDContainer() {
                 }
             }
 
-            const newEvs = structuredClone([...allEvs, newEv] as Ev[]);
-            setAllEvs(markEvs(newEvs)) // update state, to make the interactive smoother
+            const newEvs = structuredClone([...allEvs, newEv] as Ev[])
+            setAllEvs(newEvs) // update state, to make the interactive smoother
             iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
                 .then((data: EvsResult) => {
-                    setAllEvs(markEvs(newEvs.map((ev:Ev) => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))) // update id
+                    const newE = markEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))
+                    setAllEvs(newE) // update id
                     enqueueSnackbar(data.options.message ?? '', { variant: "success", autoHideDuration: 3000 });
                     setFevId(data.evs[0].id);
                 })

@@ -12,6 +12,7 @@ import { useSnackbar } from "notistack";
 import { EvsResult } from "./TLTypes";
 import { EvStore } from "./4_Ev/EvStore";
 import { useEvHelpers } from "./4_Ev/EvHelpers";
+import { zoomLvMax } from "./TLConstants";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -185,7 +186,7 @@ export const TLBaseContainer = () => {
                         // 1.calc newL
                         // ~zoom in
                         if (e.deltaY < 0) {
-                            if (zoomLv >= 6) {
+                            if (zoomLv >= zoomLvMax) {
                                 // console.log('uplevel')
                                 // uplevel nếu có thể
                                 // for(let i= newTimeConfig.levelC+1; i<clvs.length; i++) {
