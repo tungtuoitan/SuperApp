@@ -15,6 +15,7 @@ import { sr } from './TLConstants';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
+    const { keyboardState, setKeyboardState } = useTLBaseBgStore();
     const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
@@ -31,26 +32,33 @@ export default function TLContainer() {
             }}
             tabIndex={0} // to enable onKeyDown
             onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => { 
+                if(e.ctrlKey)
+                    setKeyboardState({...keyboardState, ctrl: true})
+                if(e.shiftKey)
+                    setKeyboardState({...keyboardState, shift: true})
+                if(e.altKey)
+                    setKeyboardState({...keyboardState, alt: true})
+
                 if(focusTFId) return;
                 if (fevId) {
-                    switch (e.key) {
-                       case 'Escape':
-                           setFevId(null);
-                           break;
-                       case 'Delete':
-                           if (fevId) {
+                    switch (e.key) {          
+                        case 'Escape':
+                            setFevId(null);
+                            break;
+                        case 'Delete':
+                            if (fevId) {
                                // delete
-                               const newAllEvs = [...allEvs]
-                               const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
-                               fEv.activeC = sr.inActive.c;
-                               setAllEvs(markEvs(newAllEvs))
-                               iuEv(fEv)
-                               .then((data: EvsResult) => {
-                                   if(data.options.success) {
-                                       enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
-                                   } else {
-                                       enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
-                                   }
+                                const newAllEvs = [...allEvs]
+                                const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
+                                fEv.activeC = sr.inActive.c;
+                                setAllEvs(markEvs(newAllEvs))
+                                iuEv(fEv)
+                                .then((data: EvsResult) => {
+                                    if(data.options.success) {
+                                        enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
+                                    } else {
+                                        enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
+                                    }
                                })
                            }
                            break;
@@ -103,9 +111,18 @@ export default function TLContainer() {
 
 
 
-                       default:
-                   }
-                }
+                            default:
+                            }
+                        } else {
+                        }
+                    }}
+            onKeyUp={(e: KeyboardEvent<HTMLDivElement>) => {
+                if(e.ctrlKey)
+                    setKeyboardState({...keyboardState, ctrl: false})
+                if(e.shiftKey)
+                    setKeyboardState({...keyboardState, shift: false})
+                if(e.altKey)
+                    setKeyboardState({...keyboardState, alt: false})
             }}
             style={{ 
                 width: '100%',

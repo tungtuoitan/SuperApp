@@ -1,8 +1,7 @@
-import { clvs, miliperh, currentYearcDate, hper, sr, tt } from "../TLConstants";
-import { v4 as uuidv4 } from 'uuid';
+import { clvs, miliperh, sr, tt } from "../TLConstants";
 import { cDate, cDateOption, CevelC, d, h, m, p, TimeTitle, y } from "../TLTypes";
 import {timeConfig} from "./TimeConfigStore";
-
+import {getWeek} from "date-fns";
 // B1. to CDate
 export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
     const pad = (num: number): string => num.toString().padStart(2, '0');
@@ -60,98 +59,6 @@ export const addTime = (date: cDate, years: number, month: number, day: number, 
 
     return dateToCDate(newDate5);
 };
-
-
-
-// // B5. Get Period List
-// export const getInYearsList = (date: cDate) => {
-//     const { y, m, d, h } = parseCDate(date);
-//     const newInYearsList = [] as cDateOption[];
-//     for (let i = 0; i < 100; i++) {
-//         const year = {
-//             id: `inYearsVal-${i}`,
-//             label: `${y + i}`,
-//             date: `${y + i}/1/1/1` as cDate,
-//         } as cDateOption;
-//         newInYearsList.push(year);
-//     }
-//     return newInYearsList;
-// }
-// export const getPeriodListUnit1000y = () => {
-//     const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
-//     const new100yList = [] as cDateOption[];
-//     for (let i = 0; i < 15; i++) {
-//         const year = y + i * 1000;
-//         if (year >= 3000) break;
-//         const period = {
-//             id: `${uuidv4()}-${i}`,
-//             label: `${year} -> ${y + (i + 1) * 1000}`,
-//             date: `${year}/1/1/1` as cDate,
-//         } as cDateOption;
-//         new100yList.push(period);
-//     }
-//     return new100yList;
-// }
-// export const getPeriodListUnit100y = () => {
-//     return [{ id: `0`, label: `${2024} -> 2100`, date: numbToCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
-// }
-// export const getPeriodListUnit1y = () => {
-//     const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
-//     let periodList = [] as cDateOption[];
-//     for (let i = 0; i < 1000; i++) {
-//         const year = y + i;
-//         if (year >= 2100) break;
-//         const period = {
-//             id: `${uuidv4()}`,
-//             label: `${year}`,
-//             date: addTime(currentYearcDate as cDate, i, 0, 0, 0, 0) as cDate,
-//         } as cDateOption;
-//         periodList.push(period);
-//     }
-//     const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date: numbToCDate(y, 1, 1, 0, 0) as cDate }
-//     periodList = [curYearItem, ...periodList];
-//     return periodList;
-// }
-// export const getPeriodListUnit1m = () => {
-//     const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
-//     let periodList = [] as cDateOption[];
-//     for (let i = 0; i < 100; i++) {
-//         const year = y + i;
-//         if (year >= 2100) break;
-//         for (let _m = 0; _m < 12; _m++) {
-//             const period = {
-//                 id: `${uuidv4()}-${i}`,
-//                 label: `${year}-${_m + 1}`,
-//                 date: numbToCDate(year, m + _m, 1, 0, 0) as cDate,
-//             } as cDateOption;
-//             periodList.push(period);
-//         }
-//     }
-//     const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: numbToCDate(new Date().getFullYear(), new Date().getMonth() + 1, 1, 0, 0) as cDate }
-//     periodList = [curMonth, ...periodList];
-//     return periodList;
-// }
-
-
-
-// export const toLocalISOString = (date: Date): string => {
-//     const pad = (num: number): string => num.toString().padStart(2, '0');
-
-//     const year = date.getFullYear();
-//     const month = pad(date.getMonth() + 1); // Tháng bắt đầu từ 0
-//     const day = pad(date.getDate());
-//     const hour = pad(date.getHours());
-//     const minute = pad(date.getMinutes());
-//     const second = pad(date.getSeconds());
-//     const millisecond = date.getMilliseconds().toString().padStart(3, '0');
-
-//     const timezoneOffset = -date.getTimezoneOffset();
-//     const sign = timezoneOffset >= 0 ? '+' : '-';
-//     const offsetHour = pad(Math.floor(Math.abs(timezoneOffset) / 60));
-//     const offsetMinute = pad(Math.abs(timezoneOffset) % 60);
-
-//     return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}${sign}${offsetHour}:${offsetMinute}`;
-// };
 
 export const hToRoundedHM = (h: number, isRoundM?: boolean): { roundedH: number, roundedM: number } => {
     let roundedH = Math.floor(h);
@@ -296,58 +203,75 @@ function isEqualDate(date1: cDate, date2: cDate) {
 
     return year1 === year2 && month1 === month2 && day1 === day2
 }
-export function getTimeTitle (timeConfig: timeConfig): TimeTitle {
+export function getTimeTitle (timeConfig: timeConfig): TimeTitle|string {
     const cevelC = clvs[timeConfig.cevelId].cevelC;
     const timeStart = timeConfig.timeStart;
+
+    const {y, m, d, h, p} = parseCDate(timeStart);
+    const paddedD = d.toString().padStart(2, '0');
+    const paddedM = m.toString().padStart(2, '0');
+    const dayStr =  `${paddedD}.${paddedM}`;
 
     switch(cevelC) {
         case sr.hour.c:
         case sr.day.c:
             if(isEqualDate(timeStart, getDateOf(tt.today as TimeTitle))) 
                 return tt.today as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.tomorrow as TimeTitle))) 
+            else if(isEqualDate(timeStart, getDateOf(tt.tomorrow as TimeTitle))) 
                 return tt.tomorrow as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.yesterday as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.yesterday as TimeTitle)))
                 return tt.yesterday as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.afterTomorrow as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.afterTomorrow as TimeTitle)))
                 return tt.afterTomorrow as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.beforeYesterday as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.beforeYesterday as TimeTitle)))
                 return tt.beforeYesterday as TimeTitle;
-            break;
+            else
+                return dayStr;
+
         case sr.week.c:
             if(isEqualDate(timeStart, getDateOf(tt.thisWeek as TimeTitle)))
                 return tt.thisWeek as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.lastWeek as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.lastWeek as TimeTitle)))
                 return tt.lastWeek as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.nextWeek as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.nextWeek as TimeTitle)))
                 return tt.nextWeek as TimeTitle;
-            break;
+            else
+                return 'Week: '+getWeek(new Date(timeStart))
         case sr.month.c:
             if(isEqualDate(timeStart, getDateOf(tt.thisMonth as TimeTitle)))
                 return tt.thisMonth as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.lastMonth as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.lastMonth as TimeTitle)))
                 return tt.lastMonth as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.nextMonth as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.nextMonth as TimeTitle)))
                 return tt.nextMonth as TimeTitle;
-            break;
+            else
+                return `${getMonthFullName(m)} ${y}`;
         case sr.year.c:
             if(isEqualDate(timeStart, getDateOf(tt.thisYear as TimeTitle)))
                 return tt.thisYear as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.lastYear as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.lastYear as TimeTitle)))
                 return tt.lastYear as TimeTitle;
-            if(isEqualDate(timeStart, getDateOf(tt.nextYear as TimeTitle)))
+            else if(isEqualDate(timeStart, getDateOf(tt.nextYear as TimeTitle)))
                 return tt.nextYear as TimeTitle;
-            break;
+            else
+                return `${y}`;
         case sr.decade.c:
             if(isEqualDate(timeStart, getDateOf(tt.thisDecade as TimeTitle)))
                 return tt.thisDecade as TimeTitle;
-            break;
+            else
+                return `${Math.floor(y/10)}0s`;
+        case sr.century.c:
+            if(isEqualDate(timeStart, getDateOf(tt.thisCentury as TimeTitle)))
+                return tt.thisCentury as TimeTitle;
+            else 
+                return 'CAN NOT GET CENTURY'
     }
-    return tt.today as TimeTitle; // Ensure a return statement at the end
+    return dayStr;
+    
 }
 
 export function getDateOf(timeTitle: TimeTitle): cDate {
-    const date = dateToCDate(new Date());
+    const date = dateToCDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0, 0))
     
     switch(timeTitle) {
         case tt.today: 
@@ -380,7 +304,8 @@ export function getDateOf(timeTitle: TimeTitle): cDate {
             return dateToCDate(getDate$FirstDayOfNextYear(new Date(date)))
         case tt.thisDecade:
             return dateToCDate(getDate$FirstDayOfCurrentDecade(new Date(date)))
-
+        case tt.thisCentury:
+            return dateToCDate(getDate$FirstDayOfCurrentCentury(new Date(date)))
         default: 
             return dateToCDate(new Date(new Date().setHours(0, 0, 0, 0)))
     }
