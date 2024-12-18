@@ -81,7 +81,7 @@ export default function DNDContainer() {
                 }
             }
 
-            const newEvs = structuredClone([...allEvs, newEv] as Ev[])
+            const newEvs: Ev[] = structuredClone([...allEvs, newEv] as Ev[])
             setAllEvs(newEvs) // update state, to make the interactive smoother
             iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
                 .then((data: EvsResult) => {

@@ -13,73 +13,85 @@ import { cDate, TI } from "../TLTypes";
 export const TLBaseBg = () => {
 
     const { zoomLv, TLBaseBgRef, TIList, setTIList, dateReal } = useTLBaseBgStore();
-    const { timeConfig, timeFrom } = useTimeConfigStore();
+    const { timeConfig } = useTimeConfigStore();
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
     const { h$G_BgStart, h$G_BgEnd, h$G_red, getLevelCOf, w$BaseTI } = useTLBaseBgHelpers();
 
     useEffect(() => {
         const newTIList = [] as TI[];
-        if (!timeConfig.period || !timeFrom) return;
-        const { y, m, d, h, p } = parseCDate(timeFrom);
+        if (!timeConfig.timeStart) return;
+        const { y, m, d, h, p } = parseCDate(timeConfig.timeStart);
         if (isNaN(y) || isNaN(m) || isNaN(d) || isNaN(h) || isNaN(p)) return;
 
-        if (clvs[timeConfig.levelC].cevelC === sr.century.c) {
+        if (clvs[timeConfig.cevelId].cevelC === sr.century.c) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: addTime(timeFrom, i, 0, 0, 0, 0) as cDate
+                    date: addTime(timeConfig.timeStart, i, 0, 0, 0, 0) as cDate
                 } as TI;
                 if (new Date(TI.date).getFullYear() >= 2100) break;
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.levelC].cevelC === sr.decade.c) {
+        else if (clvs[timeConfig.cevelId].cevelC === sr.decade.c) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: addTime(timeFrom, 0, i, 0, 0, 0) as cDate // edge case: use TILevel = month in week (instead of week)
+                    date: addTime(timeConfig.timeStart, 0, i, 0, 0, 0) as cDate // edge case: use TILevel = month in week (instead of week)
                 } as TI;
                 if (new Date(TI.date).getFullYear() >= y + 10) break;
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.levelC].cevelC === sr.year.c) {
+        else if (clvs[timeConfig.cevelId].cevelC === sr.year.c) {
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: addTime(timeFrom, 0, 0, i, 0, 0) as cDate
+                    date: addTime(timeConfig.timeStart, 0, 0, i, 0, 0) as cDate
                 } as TI;
                 if (new Date(TI.date).getFullYear() > y) break;
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.levelC].cevelC === sr.month.c) {
-            const { y, m, d, h, p } = parseCDate(timeFrom);
+        else if (clvs[timeConfig.cevelId].cevelC === sr.month.c) {
+            const { y, m, d, h, p } = parseCDate(timeConfig.timeStart);
             for (let i = 0; i <= 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: addTime(timeFrom, 0, 0, i, 0, 0) as cDate
+                    date: addTime(timeConfig.timeStart, 0, 0, i, 0, 0) as cDate
                 } as TI;
                 const { y: y2, m: m2, d: d2, h: h2, p: p2 } = parseCDate(TI.date);
                 if (y2 === y && m2 > m || y2 > y) break;
                 newTIList.push(TI);
             }
         }
-        else if (clvs[timeConfig.levelC].cevelC === sr.week.c) {
+        else if (clvs[timeConfig.cevelId].cevelC === sr.week.c) {
             for (let i = 0; i < 1000; i++) {
                 const TI = {
                     id: uuidv4(),
-                    date: addTime(timeFrom, 0, 0, 0, i, 0) as cDate
+                    date: addTime(timeConfig.timeStart, 0, 0, 0, i, 0) as cDate
                 } as TI;
-                const h$Gh_nextMonday = cDateToGh(dateToCDate(getDate$NextMonday(new Date(timeFrom))))
+                const h$Gh_nextMonday = cDateToGh(dateToCDate(getDate$NextMonday(new Date(timeConfig.timeStart))))
                 const h$Gh_curTI = cDateToGh(TI.date);
                 if(h$Gh_curTI >= h$Gh_nextMonday) break;
                 newTIList.push(TI);
             }
         }
+        else if (clvs[timeConfig.cevelId].cevelC === sr.day.c) {
+            for (let i = 0; i < 1000; i++) {
+                const TI = {
+                    id: uuidv4(),
+                    date: addTime(timeConfig.timeStart, 0, 0, 0, i, 0) as cDate
+                } as TI;
+                const h$Gh_start = cDateToGh(timeConfig.timeStart)
+                const h$Gh_curTI = cDateToGh(TI.date);
+                if((h$Gh_curTI - h$Gh_start) > 24) break;
+                newTIList.push(TI);
+            }
+        }
         setTIList(newTIList);
         if (isFirstTime) setIsFirstTime(false);
-    }, [timeConfig, timeFrom]);
+    }, [timeConfig, timeConfig.timeStart]);
 
     return (
         <div

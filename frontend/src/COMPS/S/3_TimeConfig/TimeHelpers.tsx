@@ -1,6 +1,7 @@
-import { clvs, miliperh, currentYearcDate, hper, sr } from "../TLConstants";
+import { clvs, miliperh, currentYearcDate, hper, sr, tt } from "../TLConstants";
 import { v4 as uuidv4 } from 'uuid';
-import { cDate, cDateOption, CevelC, d, h, m, p, y } from "../TLTypes";
+import { cDate, cDateOption, CevelC, d, h, m, p, TimeTitle, y } from "../TLTypes";
+import {timeConfig} from "./TimeConfigStore";
 
 // B1. to CDate
 export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
@@ -62,74 +63,74 @@ export const addTime = (date: cDate, years: number, month: number, day: number, 
 
 
 
-// B5. Get Period List
-export const getInYearsList = (date: cDate) => {
-    const { y, m, d, h } = parseCDate(date);
-    const newInYearsList = [] as cDateOption[];
-    for (let i = 0; i < 100; i++) {
-        const year = {
-            id: `inYearsVal-${i}`,
-            label: `${y + i}`,
-            date: `${y + i}/1/1/1` as cDate,
-        } as cDateOption;
-        newInYearsList.push(year);
-    }
-    return newInYearsList;
-}
-export const getPeriodListUnit1000y = () => {
-    const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
-    const new100yList = [] as cDateOption[];
-    for (let i = 0; i < 15; i++) {
-        const year = y + i * 1000;
-        if (year >= 3000) break;
-        const period = {
-            id: `${uuidv4()}-${i}`,
-            label: `${year} -> ${y + (i + 1) * 1000}`,
-            date: `${year}/1/1/1` as cDate,
-        } as cDateOption;
-        new100yList.push(period);
-    }
-    return new100yList;
-}
-export const getPeriodListUnit100y = () => {
-    return [{ id: `0`, label: `${2024} -> 2100`, date: numbToCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
-}
-export const getPeriodListUnit1y = () => {
-    const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
-    let periodList = [] as cDateOption[];
-    for (let i = 0; i < 1000; i++) {
-        const year = y + i;
-        if (year >= 2100) break;
-        const period = {
-            id: `${uuidv4()}`,
-            label: `${year}`,
-            date: addTime(currentYearcDate as cDate, i, 0, 0, 0, 0) as cDate,
-        } as cDateOption;
-        periodList.push(period);
-    }
-    const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date: numbToCDate(y, 1, 1, 0, 0) as cDate }
-    periodList = [curYearItem, ...periodList];
-    return periodList;
-}
-export const getPeriodListUnit1m = () => {
-    const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
-    let periodList = [] as cDateOption[];
-    for (let i = 0; i < 100; i++) {
-        const year = y + i;
-        if (year >= 2100) break;
-        for (let _m = 0; _m < 12; _m++) {
-            const period = {
-                id: `${uuidv4()}-${i}`,
-                label: `${year}-${_m + 1}`,
-                date: numbToCDate(year, m + _m, 1, 0, 0) as cDate,
-            } as cDateOption;
-            periodList.push(period);
-        }
-    }
-    const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: numbToCDate(new Date().getFullYear(), new Date().getMonth() + 1, 1, 0, 0) as cDate }
-    periodList = [curMonth, ...periodList];
-    return periodList;
-}
+// // B5. Get Period List
+// export const getInYearsList = (date: cDate) => {
+//     const { y, m, d, h } = parseCDate(date);
+//     const newInYearsList = [] as cDateOption[];
+//     for (let i = 0; i < 100; i++) {
+//         const year = {
+//             id: `inYearsVal-${i}`,
+//             label: `${y + i}`,
+//             date: `${y + i}/1/1/1` as cDate,
+//         } as cDateOption;
+//         newInYearsList.push(year);
+//     }
+//     return newInYearsList;
+// }
+// export const getPeriodListUnit1000y = () => {
+//     const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
+//     const new100yList = [] as cDateOption[];
+//     for (let i = 0; i < 15; i++) {
+//         const year = y + i * 1000;
+//         if (year >= 3000) break;
+//         const period = {
+//             id: `${uuidv4()}-${i}`,
+//             label: `${year} -> ${y + (i + 1) * 1000}`,
+//             date: `${year}/1/1/1` as cDate,
+//         } as cDateOption;
+//         new100yList.push(period);
+//     }
+//     return new100yList;
+// }
+// export const getPeriodListUnit100y = () => {
+//     return [{ id: `0`, label: `${2024} -> 2100`, date: numbToCDate(2024, 1, 1, 0, 0) }] as cDateOption[];
+// }
+// export const getPeriodListUnit1y = () => {
+//     const { y, m, d, h } = parseCDate(currentYearcDate as cDate);
+//     let periodList = [] as cDateOption[];
+//     for (let i = 0; i < 1000; i++) {
+//         const year = y + i;
+//         if (year >= 2100) break;
+//         const period = {
+//             id: `${uuidv4()}`,
+//             label: `${year}`,
+//             date: addTime(currentYearcDate as cDate, i, 0, 0, 0, 0) as cDate,
+//         } as cDateOption;
+//         periodList.push(period);
+//     }
+//     const curYearItem = { id: `${uuidv4()}`, label: `Current Year`, date: numbToCDate(y, 1, 1, 0, 0) as cDate }
+//     periodList = [curYearItem, ...periodList];
+//     return periodList;
+// }
+// export const getPeriodListUnit1m = () => {
+//     const { y, m, d, h, p } = parseCDate(currentYearcDate as cDate);
+//     let periodList = [] as cDateOption[];
+//     for (let i = 0; i < 100; i++) {
+//         const year = y + i;
+//         if (year >= 2100) break;
+//         for (let _m = 0; _m < 12; _m++) {
+//             const period = {
+//                 id: `${uuidv4()}-${i}`,
+//                 label: `${year}-${_m + 1}`,
+//                 date: numbToCDate(year, m + _m, 1, 0, 0) as cDate,
+//             } as cDateOption;
+//             periodList.push(period);
+//         }
+//     }
+//     const curMonth = { id: `${uuidv4()}`, label: `Current Month`, date: numbToCDate(new Date().getFullYear(), new Date().getMonth() + 1, 1, 0, 0) as cDate }
+//     periodList = [curMonth, ...periodList];
+//     return periodList;
+// }
 
 
 
@@ -234,10 +235,8 @@ export function getDate$LastMonday(date: Date = new Date()): Date {
     const today = new Date(date); // Lấy ngày hiện tại
     const currentDay = today.getDay(); // Lấy chỉ số ngày trong tuần (0: Chủ nhật, 1: Thứ Hai, ...)
 
-    // Tính số ngày cần trừ để đến thứ Hai tuần trước
     const daysSinceLastMonday = currentDay === 0 ? 6 : currentDay - 1 + 7;
 
-    // Trừ số ngày đó từ ngày hiện tại
     const lastMonday = new Date(today);
     lastMonday.setDate(today.getDate() - daysSinceLastMonday);
 
@@ -245,26 +244,41 @@ export function getDate$LastMonday(date: Date = new Date()): Date {
 }
 
 // B.8 get Year's name
-export function getDate$FirstDayOfCurrentMonth() {
-    const today = new Date(); // Lấy ngày hiện tại
-    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1); // Ngày đầu tiên của tháng
+export function getDate$FirstDayOfLastMonth(date: Date = new Date()) {
+    const firstDayOfPreviousMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1); // Ngày đầu tiên của tháng trước
+    return firstDayOfPreviousMonth;
+}
+
+export function getDate$FirstDayOfCurrentMonth(date: Date = new Date()) {
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1); // Ngày đầu tiên của tháng
     return firstDay;
 }
-export function getDate$FirstDayOfCurrentYear() {
-    const today = new Date(); // Lấy ngày hiện tại
-    const firstDayOfYear = new Date(today.getFullYear(), 0, 1); // Ngày đầu tiên của năm
+export function getDate$FirstDayOfNextMonth(date: Date = new Date()) {
+    const firstDayOfNextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1); // Ngày đầu tiên của tháng tiếp theo
+    return firstDayOfNextMonth;
+}
+
+export function getDate$FirstDayOfLastYear(date: Date = new Date()) {
+    const firstDayOfLastYear = new Date(date.getFullYear() - 1, 0, 1); // Ngày đầu tiên của năm ngoái
+    return firstDayOfLastYear;
+}
+export function getDate$FirstDayOfCurrentYear(date: Date = new Date()) {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1); // Ngày đầu tiên của năm
     return firstDayOfYear;
 }
-export function getDate$FirstDayOfCurrentDecade() {
-    const today = new Date(); // Lấy ngày hiện tại
-    const currentYear = today.getFullYear(); // Lấy năm hiện tại
+export function getDate$FirstDayOfNextYear(date: Date = new Date()) {
+    const nextYear = date.getFullYear() + 1; // Năm tiếp theo
+    const firstDayOfNextYear = new Date(nextYear, 0, 1); // Ngày đầu tiên của năm tới
+    return firstDayOfNextYear;
+}
+export function getDate$FirstDayOfCurrentDecade(date: Date = new Date()) {
+    const currentYear = date.getFullYear(); // Lấy năm hiện tại
     const startOfDecade = Math.floor(currentYear / 10) * 10; // Tính năm đầu tiên của thập kỷ
     const firstDayOfDecade = new Date(startOfDecade, 0, 1); // Tạo ngày đầu tiên của thập kỷ
     return firstDayOfDecade;
 }
-export function getDate$FirstDayOfCurrentCentury() {
-    const today = new Date(); // Lấy ngày hiện tại
-    const currentYear = today.getFullYear(); // Lấy năm hiện tại
+export function getDate$FirstDayOfCurrentCentury(date: Date = new Date()) {
+    const currentYear = date.getFullYear(); // Lấy năm hiện tại
     const startOfCentury = Math.floor(currentYear / 100) * 100; // Tính năm đầu tiên của thế kỷ
     const firstDayOfCentury = new Date(startOfCentury, 0, 1); // Ngày 1 tháng 1 của năm đầu tiên của thế kỷ
     return firstDayOfCentury;
@@ -273,6 +287,103 @@ export function getDAYOfWeek(date: Date) {
     const days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
     const dayIndex = new Date(date).getDay(); // Lấy chỉ số ngày trong tuần
     return days[dayIndex]; // Trả về tên ngày
+}
+
+
+function isEqualDate(date1: cDate, date2: cDate) {
+    const {y: year1, m: month1, d: day1} = parseCDate(date1);
+    const {y: year2, m: month2, d: day2} = parseCDate(date2);
+
+    return year1 === year2 && month1 === month2 && day1 === day2
+}
+export function getTimeTitle (timeConfig: timeConfig): TimeTitle {
+    const cevelC = clvs[timeConfig.cevelId].cevelC;
+    const timeStart = timeConfig.timeStart;
+
+    switch(cevelC) {
+        case sr.hour.c:
+        case sr.day.c:
+            if(isEqualDate(timeStart, getDateOf(tt.today as TimeTitle))) 
+                return tt.today as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.tomorrow as TimeTitle))) 
+                return tt.tomorrow as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.yesterday as TimeTitle)))
+                return tt.yesterday as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.afterTomorrow as TimeTitle)))
+                return tt.afterTomorrow as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.beforeYesterday as TimeTitle)))
+                return tt.beforeYesterday as TimeTitle;
+            break;
+        case sr.week.c:
+            if(isEqualDate(timeStart, getDateOf(tt.thisWeek as TimeTitle)))
+                return tt.thisWeek as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.lastWeek as TimeTitle)))
+                return tt.lastWeek as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.nextWeek as TimeTitle)))
+                return tt.nextWeek as TimeTitle;
+            break;
+        case sr.month.c:
+            if(isEqualDate(timeStart, getDateOf(tt.thisMonth as TimeTitle)))
+                return tt.thisMonth as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.lastMonth as TimeTitle)))
+                return tt.lastMonth as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.nextMonth as TimeTitle)))
+                return tt.nextMonth as TimeTitle;
+            break;
+        case sr.year.c:
+            if(isEqualDate(timeStart, getDateOf(tt.thisYear as TimeTitle)))
+                return tt.thisYear as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.lastYear as TimeTitle)))
+                return tt.lastYear as TimeTitle;
+            if(isEqualDate(timeStart, getDateOf(tt.nextYear as TimeTitle)))
+                return tt.nextYear as TimeTitle;
+            break;
+        case sr.decade.c:
+            if(isEqualDate(timeStart, getDateOf(tt.thisDecade as TimeTitle)))
+                return tt.thisDecade as TimeTitle;
+            break;
+    }
+    return tt.today as TimeTitle; // Ensure a return statement at the end
+}
+
+export function getDateOf(timeTitle: TimeTitle): cDate {
+    const date = dateToCDate(new Date());
+    
+    switch(timeTitle) {
+        case tt.today: 
+            return date
+        case tt.tomorrow:
+            return addTime(date, 0, 0, 1, 0, 0);
+        case tt.yesterday:
+            return addTime(date, 0, 0, -1, 0, 0);
+        case tt.afterTomorrow:
+            return addTime(date, 0, 0, 2, 0, 0);
+        case tt.beforeYesterday:
+            return addTime(date, 0, 0, -2, 0, 0);
+        case tt.lastWeek:
+            return dateToCDate(getDate$LastMonday(new Date(date)))
+        case tt.thisWeek:
+            return dateToCDate(getDate$MondayOfCurrentWeek(new Date(date)))
+        case tt.nextWeek:
+            return dateToCDate(getDate$NextMonday(new Date(date)))
+        case tt.lastMonth:
+            return dateToCDate(getDate$FirstDayOfLastMonth(new Date(date)))
+        case tt.thisMonth:
+            return dateToCDate(getDate$FirstDayOfCurrentMonth(new Date(date)))
+        case tt.nextMonth:
+            return dateToCDate(getDate$FirstDayOfNextMonth(new Date(date)))
+        case tt.lastYear:
+            return dateToCDate(getDate$FirstDayOfLastYear(new Date(date)))
+        case tt.thisYear:
+            return dateToCDate(getDate$FirstDayOfCurrentYear(new Date(date)))
+        case tt.nextYear:
+            return dateToCDate(getDate$FirstDayOfNextYear(new Date(date)))
+        case tt.thisDecade:
+            return dateToCDate(getDate$FirstDayOfCurrentDecade(new Date(date)))
+
+        default: 
+            return dateToCDate(new Date(new Date().setHours(0, 0, 0, 0)))
+    }
 }
 
 

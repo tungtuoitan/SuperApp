@@ -1,4 +1,4 @@
-import { CevelC, CevelD, Lv } from "./TLTypes"
+import { CevelC, CevelD, Lv, TimeTitle } from "./TLTypes"
 
 export const cevel = {
     hour: "hour",
@@ -69,6 +69,29 @@ export const sr = {
         c: 'cen' as CevelC,
         d: 'century' as CevelD,
     },
+}
+
+
+export const tt = {
+    beforeYesterday: 'Before YesterDay',
+    yesterday: 'Yesterday',
+    today: 'Today',
+    tomorrow: 'Tomorrow',
+    afterTomorrow: 'After Tomorrow',
+
+    lastWeek: 'Last Week',
+    thisWeek: 'This Week',
+    nextWeek: 'Next Week',
+
+    lastMonth: 'Last Month',
+    thisMonth: 'This Month',
+    nextMonth: 'Next Month',
+
+    lastYear: 'Last Year',
+    thisYear: 'This Year',
+    nextYear: 'Next Year',
+
+    thisDecade: 'This Decade',
 }
 
 
