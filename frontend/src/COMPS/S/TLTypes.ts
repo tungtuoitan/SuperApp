@@ -57,6 +57,15 @@ export type FilterType =
     'hourEv' | 'dayEv' | 'weekEv' | 'monthEv' | 'yearEv' | 'decadeEv' | 'centuryEv' |
     'isOverlap' | 'isLateNight' 
 
+export type TimeTitle =  'Before YesterDay' | 'Yesterday' | 'Today' | 'Tomorrow' | 'After Tomorrow' |
+    'Last Week' | 'This Week' | 'Next Week' | 
+    'Last Month' | 'This Month' | 'Next Month' |
+     'Last Year' | 'This Year' | 'Next Year' | 
+     'Last Decade' | 'This Decade' | 'Next Decade' 
+
+
+
+
 export type ResultOptions = {
         success: boolean;
         message?: string;

@@ -1,11 +1,14 @@
-import { Autocomplete, Box, Button, FormControl, FormGroup, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import { Autocomplete, Box, Button, FormControl, FormGroup, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import { clvs, sr } from "../TLConstants";
 import {useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
-import { getPeriodListUnit100y, getPeriodListUnit1y, getPeriodListUnit1m, getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
+import { getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
     getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury, 
     GhToCDate,
     getDate$NextMonday,
-    getDate$LastMonday} from "./TimeHelpers";
+    getDate$LastMonday,
+    addTime,
+    getDateOf,
+    getTimeTitle} from "./TimeHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -17,8 +20,17 @@ import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import { styled } from "@mui/system";
 import { helperMUIcss } from "../../Helpers/HelperMUIcss";
+import {cDate} from "../TLTypes";
 
 const WLeft = styled(Box)({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'left',
+    paddingLeft: 10,
+    alignItems: 'center',
+    gap: 10,
+    height: '100%',
+    width: "33.3%",
     
 })
 const WMid = styled(Box)({
@@ -28,52 +40,51 @@ const WMid = styled(Box)({
     alignItems: 'center',
     gap: 10,
     height: '100%',
+    width: "33.3%"
 })
 const WBar = styled(Box)({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 10,
     height: 50
 })
 
 export const TimeConfigBar = () => {
-    const {timeConfig, setTimeConfig, timeConfig2, setTimeConfig2,allPeriods,setAllPeriods, timeFrom, setTimeFrom } = useTimeConfigStore();
+    const {timeConfig, setTimeConfig } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
-    const { TIList } = useTLBaseBgStore();
+    const { TIList, setZoomLv } = useTLBaseBgStore();
     const dpSelector = helperMUIcss.getDatePickerCSSSelector();
     const sSelector = helperMUIcss.getSelectCSSSelector();
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
-        const initCevel = 4; //! điều chỉnh CLevel ban đầu tại đây
-        const period = clvs[initCevel].cevelC === sr.century.c
-            ? {id: 0, label: 'century now', date: dateToCDate(getDate$FirstDayOfCurrentCentury())}
-            : clvs[initCevel].cevelC === sr.decade.c
-            ? {id: 0, label: 'decade now', date: dateToCDate(getDate$FirstDayOfCurrentDecade())}
-            : clvs[initCevel].cevelC === sr.year.c
-            ? {id: 0, label: 'year now', date: dateToCDate(getDate$FirstDayOfCurrentYear())}
-            : clvs[initCevel].cevelC === sr.month.c
-            ? {id: 0, label: 'month now', date: dateToCDate(getDate$FirstDayOfCurrentMonth())}
-            : clvs[initCevel].cevelC === sr.week.c
-            ? {id: 0, label: 'week now', date: dateToCDate(getDate$MondayOfCurrentWeek())}
+        const initCevelId = 5; //! điều chỉnh CLevel ban đầu tại đây
+        const initTimeStart = clvs[initCevelId].cevelC === sr.century.c
+            ? dateToCDate(getDate$FirstDayOfCurrentCentury())
+            : clvs[initCevelId].cevelC === sr.decade.c
+            ? dateToCDate(getDate$FirstDayOfCurrentDecade())
+            : clvs[initCevelId].cevelC === sr.year.c
+            ? dateToCDate(getDate$FirstDayOfCurrentYear())
+            : clvs[initCevelId].cevelC === sr.month.c
+            ? dateToCDate(getDate$FirstDayOfCurrentMonth())
+            : clvs[initCevelId].cevelC === sr.week.c
+            ? dateToCDate(getDate$MondayOfCurrentWeek())
+            : clvs[initCevelId].cevelC === sr.day.c
+            
+            ? getDateOf('Today')
             : null;
 
-        const timeConfigInit = { levelC: initCevel, period } as timeConfig
 
-        if (timeConfigInit.levelC === 1) setAllPeriods(getPeriodListUnit1y());
-        if (timeConfigInit.levelC === 2) setAllPeriods(getPeriodListUnit1m());
+        const timeConfigInit = { cevelId: initCevelId, timeStart: initTimeStart  } as timeConfig
 
         setTimeConfig(timeConfigInit);
-        setTimeFrom(timeConfigInit.period?.date ?? null);
-        setTimeConfig2(timeConfigInit);
     }, []);
 
     return (
         <WBar>
             <WLeft>
-                <FormControl
+                {/* <FormControl
                  
                     sx={{ 
                         textAlign: 'left',
@@ -92,31 +103,24 @@ export const TimeConfigBar = () => {
                         },
                     }}
                 >
-                    {/* //! Level */}
                     <InputLabel id="timeLevelLabel"></InputLabel>
                     <Select
                         labelId="timeLevelLabel"
                         id="timeLevelSelect"
-                        value={timeConfig2.levelC}
+                        value={timeConfig2.cevelId}
                         label="Current Level"
                         size='small'
                         onChange={(e) => {
-                            if (e.target.value !== timeConfig2.levelC) {
+                            if (e.target.value !== timeConfig2.cevelId) {
                                 const newLv = e.target.value as number;
                                 if (newLv === 0) {
-                                    const periodList = getPeriodListUnit100y();
-                                    setAllPeriods(periodList);
-                                    setTimeConfig2({ ...timeConfig2, levelC: newLv, period: periodList[0] });
+                                    setTimeConfig2({ ...timeConfig2, cevelId: newLv });
                                 }
                                 if (newLv === 1) {
-                                    const periodList = getPeriodListUnit1y();
-                                    setAllPeriods(periodList);
-                                    setTimeConfig2({ ...timeConfig2, levelC: newLv, period: periodList[0] });
+                                    setTimeConfig2({ ...timeConfig2, cevelId: newLv });
                                 }
                                 if (newLv === 2) {
-                                    const periodList = getPeriodListUnit1m();
-                                    setAllPeriods(periodList);
-                                    setTimeConfig2({ ...timeConfig2, levelC: newLv, period: periodList[0] });
+                                    setTimeConfig2({ ...timeConfig2, cevelId: newLv });
                                 }
                             }
                         }}
@@ -128,50 +132,15 @@ export const TimeConfigBar = () => {
                             )
                         })}
                     </Select>
-                </FormControl>
-                {/* //! 1000year */}
-                {/* <FormGroup sx={{ display: 'flex', flexDirection: 'row', gap: '4px' }} >
-                    <Autocomplete
-                        disablePortal
-                        size='small'
-                        options={allPeriods}
-                        sx={{ width: 200 }}
-                        value={timeConfig2.period}
-                        disabled={timeConfig2.levelC === 0}
-                        onChange={(e, value) => {
-                            if (value && value?.date !== timeConfig2.period?.date) {
-                                setTimeConfig2({ ...timeConfig2, period: value as cDateOption });
-                            }
-                        }}
-                        renderInput={(params) => <TextField {...params} error={timeConfig2.period === null} label="Period" />}
-                    />
-                    <Button
-                        variant="contained"
-                        size="small"
-                        sx={{ height: 40 }}
-                        onClick={() => {
-                            setTimeConfig(timeConfig2);
-                        }}
-                    >
-                        OK
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="small"
-                        sx={{ height: 40 }}
-                        onClick={() => {
-                            setTimeConfig2(timeConfig);
-                        }}
-                    >
-                        Reset
-                    </Button>
-                </FormGroup> */}
+                </FormControl> */}
+                <Typography variant='h2' sx={{color: 'gray', marginLeft: 10, fontSize: '32px !important'}}>{getTimeTitle(timeConfig)}</Typography>
             </WLeft>
             <WMid>
                 <IconButton aria-label="delete" 
-                    title={`Back ${clvs[timeConfig2.levelC].cevelD}`}
+                    title={`Back ${clvs[timeConfig.cevelId].cevelD}`}
                     onClick={() => {
-                        switch (clvs[timeConfig2.levelC].cevelC) {
+                        setZoomLv(1);
+                        switch (clvs[timeConfig.cevelId].cevelC) {
                             case sr.decade.c:
                                 break;
                             case sr.year.c:
@@ -179,7 +148,11 @@ export const TimeConfigBar = () => {
                             case sr.month.c:
                                 break;
                             case sr.week.c:
-                                setTimeFrom(dateToCDate(getDate$LastMonday(new Date(TIList[0].date))));
+                                setTimeConfig({ ...timeConfig, timeStart: dateToCDate(getDate$LastMonday(new Date(TIList[0].date))) });
+                                break;
+                            case sr.day.c:
+                                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 0, 0, -1, 0, 0)});
+
                                 break;
                             default:
                                 break;
@@ -258,9 +231,10 @@ export const TimeConfigBar = () => {
                 </Box>
                 <IconButton 
                     aria-label="delete"
-                    title={`Next ${clvs[timeConfig2.levelC].cevelD}`}
+                    title={`Next ${clvs[timeConfig.cevelId].cevelD}`}
                     onClick={() => {
-                        switch (clvs[timeConfig2.levelC].cevelC) {
+                        setZoomLv(1);
+                        switch (clvs[timeConfig.cevelId].cevelC) {
                             case sr.decade.c:
                                 break;
                             case sr.year.c:
@@ -268,7 +242,11 @@ export const TimeConfigBar = () => {
                             case sr.month.c:
                                 break;
                             case sr.week.c:
-                                setTimeFrom(dateToCDate(getDate$NextMonday(new Date(TIList[0].date))));
+                                setTimeConfig({ ...timeConfig, timeStart: dateToCDate(getDate$NextMonday(new Date(TIList[0].date))) });
+
+                                break;
+                            case sr.day.c:
+                                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart as cDate, 0, 0, 1, 0, 0) });
                                 break;
                             default:
                                 break;
@@ -282,7 +260,7 @@ export const TimeConfigBar = () => {
                     <NavigateNextIcon />
                 </IconButton>
             </WMid>
-            <div style={{width: 200}}></div>
+            <div style={{width: '33.3%'}}></div>
         </WBar>
     )
 }

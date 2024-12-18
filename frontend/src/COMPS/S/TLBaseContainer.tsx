@@ -9,7 +9,7 @@ import { TLBaseBg } from "./1_TLBaseBg/TLBaseBg";
 import { TLBaseFg } from "./2_TLBaseFg/TLBaseFg";
 import { iuEv } from "./TLAPIs";
 import { useSnackbar } from "notistack";
-import { EvsResult } from "./TLTypes";
+import { cDate, EvsResult } from "./TLTypes";
 import { EvStore } from "./4_Ev/EvStore";
 import { useEvHelpers } from "./4_Ev/EvHelpers";
 import { zoomLvMax } from "./TLConstants";
@@ -63,11 +63,11 @@ export const TLBaseContainer = () => {
 
     useEffect(() => {
         if (TLBaseFrameRef.current) {
-            if (timeConfig.period) {
-                const { y, m, d, h } = parseCDate(timeConfig.period.date);
+            if (timeConfig.timeStart) {
+                const { y, m, d, h } = parseCDate(timeConfig.timeStart);
                 // nếu đang có dateReal
-                if (timeConfig.levelC === 1 && y === dateReal.getFullYear() ||
-                    timeConfig.levelC === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
+                if (timeConfig.cevelId === 1 && y === dateReal.getFullYear() ||
+                    timeConfig.cevelId === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
                     TLBaseFrameRef.current.scrollLeft = w$BgStart_red - w$TLBaseFrame / 2;
                 }
                 // nếu k có dateReal 
@@ -215,7 +215,7 @@ export const TLBaseContainer = () => {
                                 // newZoomLv = 6;
 
                                 // downlevel nếu có thể
-                                // for(let i= timeConfig.levelC-1; i >= 0; i--) {
+                                // for(let i= timeConfig.cevelId-1; i >= 0; i--) {
                                 //     if(clvs[i].status === 'on') {
                                 //         newTimeConfig.levelC = i;
                                 //         break;
@@ -228,7 +228,7 @@ export const TLBaseContainer = () => {
                         }
 
                         setZoomLv(newZoomLv);
-                        if (newTimeConfig.levelC !== timeConfig.levelC)
+                        if (newTimeConfig.cevelId !== timeConfig.cevelId)
                             setTimeConfig(newTimeConfig);
                     }}
                 >
