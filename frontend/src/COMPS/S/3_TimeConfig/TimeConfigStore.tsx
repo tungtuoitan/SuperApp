@@ -9,8 +9,8 @@ export interface TimeConfigContextData {
 };
 
 export const timeConfigInit = {
-    cevelId: 0,
-    timeStart: dateToCDate(new Date())
+    cevelId: 5,
+    timeStart: dateToCDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0, 0))
 }
 
 export const TimeConfigContextDefaultValue: TimeConfigContextData = {

@@ -2,6 +2,11 @@
 import React, { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import { TI } from "../TLTypes";
 
+type KeyboardState = {
+    shift: boolean;
+    ctrl: boolean;
+    alt: boolean;
+}
 export interface TLBaseBgContextData {
     TIList: TI[];
     setTIList: Dispatch<SetStateAction<TI[]>>;
@@ -24,6 +29,9 @@ export interface TLBaseBgContextData {
     
     loadingTL: boolean;
     setLoadingTL: Dispatch<SetStateAction<boolean>>;
+
+    keyboardState: KeyboardState;
+    setKeyboardState: Dispatch<SetStateAction<KeyboardState>>;
     
 };
 
@@ -50,6 +58,9 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
     loadingTL: false,
     setLoadingTL: () => {},
 
+    keyboardState: {shift: false, ctrl: false, alt: false},
+    setKeyboardState: () => {},
+
 };
 const TLBaseBgStore = createContext<TLBaseBgContextData>(TLBaseBgContextDefaultValue);
 
@@ -70,6 +81,7 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [mouseDown, setMouseDown] = useState<boolean>(false);
 
     const [loadingTL, setLoadingTL] = useState<boolean>(true);
+    const [keyboardState, setKeyboardState] = useState<KeyboardState>({shift: false, ctrl: false, alt: false});
 
     return (
         <TLBaseBgStore.Provider
@@ -95,6 +107,9 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
                 loadingTL,
                 setLoadingTL,
+
+                keyboardState,
+                setKeyboardState,
 
 
             }}>

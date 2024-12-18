@@ -20,8 +20,8 @@ import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import { styled } from "@mui/system";
 import { helperMUIcss } from "../../Helpers/HelperMUIcss";
-import {cDate} from "../TLTypes";
-
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 const WLeft = styled(Box)({
     display: 'flex',
     flexDirection: 'row',
@@ -50,10 +50,17 @@ const WBar = styled(Box)({
     height: 50
 })
 
+const WArrowBtn = styled(IconButton)({
+    width: 40,
+    height: 40,
+    fontSize: '10px !important',
+    fontStyle: 'italic',
+})
+
 export const TimeConfigBar = () => {
     const {timeConfig, setTimeConfig } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
-    const { TIList, setZoomLv } = useTLBaseBgStore();
+    const { TIList, setZoomLv, keyboardState } = useTLBaseBgStore();
     const dpSelector = helperMUIcss.getDatePickerCSSSelector();
     const sSelector = helperMUIcss.getSelectCSSSelector();
 
@@ -81,91 +88,83 @@ export const TimeConfigBar = () => {
         setTimeConfig(timeConfigInit);
     }, []);
 
+    const clickPrevNext = (prev: 'prev'|'next') => {
+        const numb = prev === 'prev' ? -1 : 1;
+        setZoomLv(1);
+        switch (clvs[timeConfig.cevelId].cevelC) {
+            case sr.decade.c:
+                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 10*numb, 0, 0, 0, 0) });
+                break;
+            case sr.year.c:
+                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, numb, 0, 0, 0, 0) });
+                break;
+            case sr.month.c:
+                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 0, numb, 0, 0, 0) });
+                break;
+            case sr.week.c:
+                setTimeConfig({ ...timeConfig, timeStart: 
+                    dateToCDate(prev === 'prev' 
+                        ? getDate$LastMonday(new Date(TIList[0].date)) 
+                        : getDate$NextMonday(new Date(TIList[0].date)))}
+                    );
+                break;
+            case sr.day.c:
+                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 0, 0, numb, 0, 0)});
+                break;
+            default:
+                break;
+        }
+    }
+    const clickLevel = (updown: 'up'|'down') => {
+        if (timeConfig.cevelId <= 5) {
+            const newCevelId = timeConfig.cevelId + (updown === 'up' ? 1 : -1);
+            setTimeConfig({ 
+                timeStart: clvs[newCevelId].cevelC === sr.century.c
+                    ? dateToCDate(getDate$FirstDayOfCurrentCentury())
+                    :clvs[newCevelId].cevelC === sr.decade.c 
+                    ? dateToCDate(getDate$FirstDayOfCurrentDecade())
+                    : clvs[newCevelId].cevelC === sr.year.c
+                    ? dateToCDate(getDate$FirstDayOfCurrentYear())
+                    : clvs[newCevelId].cevelC === sr.month.c
+                    ? dateToCDate(getDate$FirstDayOfCurrentMonth())
+                    : clvs[newCevelId].cevelC === sr.week.c
+                    ? dateToCDate(getDate$MondayOfCurrentWeek())
+                    : clvs[newCevelId].cevelC === sr.day.c
+                    ? getDateOf('Today')
+                    : dateToCDate(new Date()), 
+                cevelId: newCevelId });
+        }
+    }
+    const clickNow = () => {
+        setTimeConfig({ cevelId: 5, timeStart: getDateOf('Today') });
+    }
+
     return (
         <WBar>
             <WLeft>
-                {/* <FormControl
-                 
-                    sx={{ 
-                        textAlign: 'left',
-                        height: 30, 
-                        width: 120,
-                        margin: 0,
-                        [`& ${sSelector.div1}`]: {
-                            height: 30,
-                        },
-                        [`& ${sSelector.input2}`]: {
-                            height: 30,
-                            padding: '0px 0px 0 10px',
-                        },
-                         [`& ${sSelector.legend2}`]: {
-                            width: '0 !important',
-                        },
-                    }}
-                >
-                    <InputLabel id="timeLevelLabel"></InputLabel>
-                    <Select
-                        labelId="timeLevelLabel"
-                        id="timeLevelSelect"
-                        value={timeConfig2.cevelId}
-                        label="Current Level"
-                        size='small'
-                        onChange={(e) => {
-                            if (e.target.value !== timeConfig2.cevelId) {
-                                const newLv = e.target.value as number;
-                                if (newLv === 0) {
-                                    setTimeConfig2({ ...timeConfig2, cevelId: newLv });
-                                }
-                                if (newLv === 1) {
-                                    setTimeConfig2({ ...timeConfig2, cevelId: newLv });
-                                }
-                                if (newLv === 2) {
-                                    setTimeConfig2({ ...timeConfig2, cevelId: newLv });
-                                }
-                            }
-                        }}
-                      
-                    >
-                        {clvs.map((option) => {
-                            return (
-                                <MenuItem key={option.id} value={option.id} disabled={!option.active}>{option.cevelD}</MenuItem>
-                            )
-                        })}
-                    </Select>
-                </FormControl> */}
                 <Typography variant='h2' sx={{color: 'gray', marginLeft: 10, fontSize: '32px !important'}}>{getTimeTitle(timeConfig)}</Typography>
             </WLeft>
             <WMid>
-                <IconButton aria-label="delete" 
-                    title={`Back ${clvs[timeConfig.cevelId].cevelD}`}
-                    onClick={() => {
-                        setZoomLv(1);
-                        switch (clvs[timeConfig.cevelId].cevelC) {
-                            case sr.decade.c:
-                                break;
-                            case sr.year.c:
-                                break;
-                            case sr.month.c:
-                                break;
-                            case sr.week.c:
-                                setTimeConfig({ ...timeConfig, timeStart: dateToCDate(getDate$LastMonday(new Date(TIList[0].date))) });
-                                break;
-                            case sr.day.c:
-                                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 0, 0, -1, 0, 0)});
-
-                                break;
-                            default:
-                                break;
-                        }
-                        
-                    }}
-                    sx={{
-                        width: 40,
-                        height: 40,
-                    }}
+                <WArrowBtn
+                    title={`Go Today`}
+                    onClick={clickNow}
+                >
+                    Now
+                </WArrowBtn>
+                <WArrowBtn  
+                    title={`To Level: ${clvs[timeConfig.cevelId+1<5 ? timeConfig.cevelId+1 : 5].cevelD}`}
+                    disabled={timeConfig.cevelId===5}
+                    onClick={()=>clickLevel('up')}
                 >
                     <NavigateBeforeIcon />
-                </IconButton>
+                </WArrowBtn>
+                <WArrowBtn  
+                    title={`Prev ${clvs[timeConfig.cevelId].cevelD}`}
+                    disabled={timeConfig.cevelId===0}
+                    onClick={()=>clickPrevNext('prev')}
+                >
+                    <KeyboardDoubleArrowLeftIcon />
+                </WArrowBtn>
                 <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
@@ -229,36 +228,20 @@ export const TimeConfigBar = () => {
                         />
                     </LocalizationProvider>
                 </Box>
-                <IconButton 
-                    aria-label="delete"
+                <WArrowBtn 
                     title={`Next ${clvs[timeConfig.cevelId].cevelD}`}
-                    onClick={() => {
-                        setZoomLv(1);
-                        switch (clvs[timeConfig.cevelId].cevelC) {
-                            case sr.decade.c:
-                                break;
-                            case sr.year.c:
-                                break;
-                            case sr.month.c:
-                                break;
-                            case sr.week.c:
-                                setTimeConfig({ ...timeConfig, timeStart: dateToCDate(getDate$NextMonday(new Date(TIList[0].date))) });
-
-                                break;
-                            case sr.day.c:
-                                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart as cDate, 0, 0, 1, 0, 0) });
-                                break;
-                            default:
-                                break;
-                        }
-                    }}
-                    sx={{
-                        width: 40,
-                        height: 40,
-                    }}
+                    disabled={timeConfig.cevelId===0}
+                    onClick={()=>clickPrevNext('next')}
+                >
+                    <KeyboardDoubleArrowRightIcon />
+                </WArrowBtn>
+                <WArrowBtn 
+                    title={`To Level: ${clvs[timeConfig.cevelId-1>=0 ? timeConfig.cevelId : 0].cevelD}`}
+                    disabled={timeConfig.cevelId===0}
+                    onClick={() => clickLevel('down')}
                 >
                     <NavigateNextIcon />
-                </IconButton>
+                </WArrowBtn>
             </WMid>
             <div style={{width: '33.3%'}}></div>
         </WBar>

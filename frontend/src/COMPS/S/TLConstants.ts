@@ -73,7 +73,7 @@ export const sr = {
 
 
 export const tt = {
-    beforeYesterday: 'Before YesterDay',
+    beforeYesterday: 'Before Yesterday',
     yesterday: 'Yesterday',
     today: 'Today',
     tomorrow: 'Tomorrow',
@@ -92,6 +92,7 @@ export const tt = {
     nextYear: 'Next Year',
 
     thisDecade: 'This Decade',
+    thisCentury: 'This Century',
 }
 
 
