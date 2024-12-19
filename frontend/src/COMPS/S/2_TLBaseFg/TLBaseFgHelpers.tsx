@@ -26,7 +26,7 @@ export const useTLBaseFgHelpers = () => {
             })
         }
         if (filterTypes.includes('active')) {
-            newEvs = newEvs.filter(ev => ev.activeC === null || ev.activeC === sr.active.c)
+            newEvs = newEvs.filter(ev => ev.activeC === null || ev.activeC === sr.active.active.c)
         }
 
         // 1.2

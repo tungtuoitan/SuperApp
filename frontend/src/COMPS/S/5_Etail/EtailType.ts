@@ -9,4 +9,7 @@ export type EtailForm = {
     timeStart: cDate;
     timeEnd: cDate;
     type: string|null;
+    prioriC: string;
+    statusC: string;
+    activeC: string;
 }

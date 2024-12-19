@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, FormControl, FormGroup, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import { Box, IconButton, Typography } from "@mui/material"
 import { clvs, sr } from "../TLConstants";
 import {useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
@@ -8,7 +8,8 @@ import { getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth,
     getDate$LastMonday,
     addTime,
     getDateOf,
-    getTimeTitle} from "./TimeHelpers";
+    getTimeTitle,
+    useTimeHelpers} from "./TimeHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -62,7 +63,7 @@ export const TimeConfigBar = () => {
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
     const { TIList, setZoomLv, keyboardState } = useTLBaseBgStore();
     const dpSelector = helperMUIcss.getDatePickerCSSSelector();
-    const sSelector = helperMUIcss.getSelectCSSSelector();
+    const { clickNow, changeTimeStart, changeLevel } = useTimeHelpers();
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
@@ -88,56 +89,6 @@ export const TimeConfigBar = () => {
         setTimeConfig(timeConfigInit);
     }, []);
 
-    const clickPrevNext = (prev: 'prev'|'next') => {
-        const numb = prev === 'prev' ? -1 : 1;
-        setZoomLv(1);
-        switch (clvs[timeConfig.cevelId].cevelC) {
-            case sr.decade.c:
-                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 10*numb, 0, 0, 0, 0) });
-                break;
-            case sr.year.c:
-                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, numb, 0, 0, 0, 0) });
-                break;
-            case sr.month.c:
-                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 0, numb, 0, 0, 0) });
-                break;
-            case sr.week.c:
-                setTimeConfig({ ...timeConfig, timeStart: 
-                    dateToCDate(prev === 'prev' 
-                        ? getDate$LastMonday(new Date(TIList[0].date)) 
-                        : getDate$NextMonday(new Date(TIList[0].date)))}
-                    );
-                break;
-            case sr.day.c:
-                setTimeConfig({ ...timeConfig, timeStart: addTime(timeConfig.timeStart, 0, 0, numb, 0, 0)});
-                break;
-            default:
-                break;
-        }
-    }
-    const clickLevel = (updown: 'up'|'down') => {
-        if (timeConfig.cevelId <= 5) {
-            const newCevelId = timeConfig.cevelId + (updown === 'up' ? 1 : -1);
-            setTimeConfig({ 
-                timeStart: clvs[newCevelId].cevelC === sr.century.c
-                    ? dateToCDate(getDate$FirstDayOfCurrentCentury())
-                    :clvs[newCevelId].cevelC === sr.decade.c 
-                    ? dateToCDate(getDate$FirstDayOfCurrentDecade())
-                    : clvs[newCevelId].cevelC === sr.year.c
-                    ? dateToCDate(getDate$FirstDayOfCurrentYear())
-                    : clvs[newCevelId].cevelC === sr.month.c
-                    ? dateToCDate(getDate$FirstDayOfCurrentMonth())
-                    : clvs[newCevelId].cevelC === sr.week.c
-                    ? dateToCDate(getDate$MondayOfCurrentWeek())
-                    : clvs[newCevelId].cevelC === sr.day.c
-                    ? getDateOf('Today')
-                    : dateToCDate(new Date()), 
-                cevelId: newCevelId });
-        }
-    }
-    const clickNow = () => {
-        setTimeConfig({ cevelId: 5, timeStart: getDateOf('Today') });
-    }
 
     return (
         <WBar>
@@ -148,20 +99,30 @@ export const TimeConfigBar = () => {
                 <WArrowBtn
                     title={`Go Today`}
                     onClick={clickNow}
+                    sx={{
+                        '&:hover': {
+                            color: 'red',
+                        },
+                    }}
                 >
                     Now
                 </WArrowBtn>
                 <WArrowBtn  
-                    title={`To Level: ${clvs[timeConfig.cevelId+1<5 ? timeConfig.cevelId+1 : 5].cevelD}`}
-                    disabled={timeConfig.cevelId===5}
-                    onClick={()=>clickLevel('up')}
+                    title={`Prev ${clvs[timeConfig.cevelId].cevelD}`}
+                    disabled={timeConfig.cevelId===0}
+                    sx={{
+                        '&:hover': {
+                            color: 'black',
+                        },
+                    }}
+                    onClick={()=>changeTimeStart('prev')}
                 >
                     <NavigateBeforeIcon />
                 </WArrowBtn>
                 <WArrowBtn  
-                    title={`Prev ${clvs[timeConfig.cevelId].cevelD}`}
-                    disabled={timeConfig.cevelId===0}
-                    onClick={()=>clickPrevNext('prev')}
+                    title={`Prev Level`}
+                    disabled={timeConfig.cevelId===5} 
+                    onClick={()=>changeLevel('up')}
                 >
                     <KeyboardDoubleArrowLeftIcon />
                 </WArrowBtn>
@@ -229,16 +190,16 @@ export const TimeConfigBar = () => {
                     </LocalizationProvider>
                 </Box>
                 <WArrowBtn 
-                    title={`Next ${clvs[timeConfig.cevelId].cevelD}`}
+                    title={`Next Level`}
                     disabled={timeConfig.cevelId===0}
-                    onClick={()=>clickPrevNext('next')}
+                    onClick={() => changeLevel('down')}
                 >
                     <KeyboardDoubleArrowRightIcon />
                 </WArrowBtn>
                 <WArrowBtn 
-                    title={`To Level: ${clvs[timeConfig.cevelId-1>=0 ? timeConfig.cevelId : 0].cevelD}`}
+                    title={`Next ${clvs[timeConfig.cevelId].cevelD}`}
                     disabled={timeConfig.cevelId===0}
-                    onClick={() => clickLevel('down')}
+                    onClick={()=>changeTimeStart('next')}
                 >
                     <NavigateNextIcon />
                 </WArrowBtn>

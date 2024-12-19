@@ -29,6 +29,8 @@
 - id luôn bắt đầu từ 0, tức id luôn bằng index trong array
 - mặc định thì dùng loại giờ: Gh, và time: cDate
 
+- khi đánh số, luôn luôn dùng số 0, cho đồng bộ với index, (các field phổ biến: Order, stt....)
+- luôn set value mặc định cho customField (vd: StatusC, Active,....), chứ k dùng null
 
 # 3.logic
 - khi di chuột, update spotlightmoment

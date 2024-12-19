@@ -12,6 +12,10 @@ export const _4css = {
     backgroundJobTask: '#000000',
     backgroundOverlap: 'red',
     backgroundLateNight: '#F24822',
+
+    backgroundOpen: '#0066FF',
+    backgroundInProgress: '#E8E848',
+    backgroundResolved: '#00FF66',
     
     display: 'flex',
     fontSize: '12px',
@@ -19,6 +23,16 @@ export const _4css = {
 
     // ParentEv
     heightOf2BordersOfParent: 4,
+
+    dot: {
+        width: 5,
+        height: 5,
+        borderRadius: 100,
+        bgHigh: 'red',
+        bgNormal: '#00FF66',
+        bgMedium: 'yellow',
+        bgLow: 'gray',
+    }
 
    
 }

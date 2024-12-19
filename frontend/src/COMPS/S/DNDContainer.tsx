@@ -12,6 +12,7 @@ import { iuEv } from './TLAPIs';
 import { Ev, EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
+import {sr} from './TLConstants';
 
 export default function DNDContainer() {
 
@@ -43,7 +44,9 @@ export default function DNDContainer() {
                     name: '',
                     type: null,
                     parentId: null,
-                    activeC: null,
+                    activeC: sr.active.active.c,
+                    prioriC: sr.priority.low.c,
+                    statusC: sr.status.open.c,
                     levelC: getLevelCOf('parentEv'),
                     timeStart: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop), 0),
                     timeEnd: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop + 100), 0), // 100 is width of TISample
@@ -59,7 +62,9 @@ export default function DNDContainer() {
                         name: '',
                         type: null,
                         parentId: parentEv.id,
-                        activeC: null,
+                        activeC: sr.active.active.c,
+                        prioriC: sr.priority.low.c,
+                        statusC: sr.status.open.c,
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
@@ -72,7 +77,9 @@ export default function DNDContainer() {
                         name: '',
                         type: null,
                         parentId: null,
-                        activeC: null,
+                        activeC: sr.active.active.c,
+                        prioriC: sr.priority.low.c,
+                        statusC: sr.status.open.c,
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample

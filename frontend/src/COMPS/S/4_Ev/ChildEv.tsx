@@ -13,8 +13,10 @@ import { useSnackbar } from "notistack";
 import { helperMUIcss } from "../../Helpers/HelperMUIcss";
 import BlackMini from "./BlackMini";
 import { Cooltip } from "../../Helpers/CoolTip";
-import { sr } from "../TLConstants";
+import { clvs, sr } from "../TLConstants";
 import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
+import {useTimeConfigStore} from "../3_TimeConfig/TimeConfigStore";
+import DotGroup from "./DotGroup";
 
 type EvProps = {
     childEv: Ev;
@@ -39,6 +41,7 @@ export const ChildEv = (props: EvProps) => {
     const { markEvs } = useTLBaseFgHelpers();
     const [tfValue, setTfValue] = useState(childEv.name);
     const { enqueueSnackbar } = useSnackbar();
+    const { timeConfig } = useTimeConfigStore();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = _4css.paddingTopOfParent + (_4css.height + _4css.gapBetweenChildren) * lineOrder;
@@ -49,7 +52,7 @@ export const ChildEv = (props: EvProps) => {
     const enabled = !isPast(childEv.timeEnd) && fevId === childEv.id && fevId !== null
 
     const getBg = () => {
-        if (isPast(childEv.timeEnd)) {
+         if (isPast(childEv.timeEnd)) {
             return _4css.pastBackground
         } 
         else if (childEv.isOverlap) {
@@ -118,6 +121,7 @@ export const ChildEv = (props: EvProps) => {
             }}
         >
             {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} />}
+            <DotGroup childEv={childEv}/>
             {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
             {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
             {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left' &&

@@ -9,3 +9,7 @@
 # StandardRegistry
 - all valus: 0 | 1 | null
 - null is default value, null === 1
+
+
+# ev.StatusC
+- null === not (notStart)

@@ -1,4 +1,4 @@
-import { CevelC, CevelD, Lv, TimeTitle } from "./TLTypes"
+import { CevelC, CevelD, EvStatusC, Lv, TimeTitle } from "./TLTypes"
 
 export const cevel = {
     hour: "hour",
@@ -32,13 +32,48 @@ export const zoomLvMax = 10;
 export const sr = {
     // 1
     active: {
-        c: 'Act',
-        d: 'Active',
+        active: {
+            c: 'Act',
+            d: 'Active',
+        },
+        inActive: {
+            c: 'InAct',
+            d: 'Inactive',
+        },
     },
-    inActive: {
-        c: 'InAct',
-        d: 'Inactive',
+    status: {
+        open: {
+            c: 'Ope' as EvStatusC,
+            d: 'Open',
+        },
+        inProgress: {
+            c: 'InP' as EvStatusC,
+            d: 'In Progress',
+        },
+        resolved: {
+            c: 'Res' as EvStatusC,
+            d: 'Resolved',
+        },
     },
+    priority: {
+        high: {
+            c: 'Hig',
+            d: 'High',
+        },
+        medium: {
+            c: 'Med',
+            d: 'Medium',
+        },
+        normal: {
+            c: 'Nor',
+            d: 'Normal',
+        },
+        low: {
+            c: 'Low',
+            d: 'Low',
+        },
+    },
+
 
     // 2
     hour: {

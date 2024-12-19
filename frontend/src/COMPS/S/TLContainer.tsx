@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import { EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
-import { addTime, cDateToUTCDate } from './3_TimeConfig/TimeHelpers';
+import { addTime, cDateToUTCDate, useTimeHelpers } from './3_TimeConfig/TimeHelpers';
 import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { sr } from './TLConstants';
@@ -21,6 +21,7 @@ export default function TLContainer() {
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
     const { RpxToRh } = useTLBaseBgHelpers();
     const { TIList } = useTLBaseBgStore();
+    const { changeLevel, changeTimeStart } = useTimeHelpers();
 
   return (
         <div id ='TLContainer' // this is the biggest container if TL
@@ -38,6 +39,14 @@ export default function TLContainer() {
                     setKeyboardState({...keyboardState, shift: true})
                 if(e.altKey)
                     setKeyboardState({...keyboardState, alt: true})
+                if(e.key === 'ArrowUp') 
+                    changeLevel('down')
+                if(e.key === 'ArrowDown')
+                    changeLevel('up')
+                if(e.key === 'ArrowLeft')
+                    changeTimeStart('prev')
+                if(e.key === 'ArrowRight')
+                    changeTimeStart('next');
 
                 if(focusTFId) return;
                 if (fevId) {
@@ -50,7 +59,7 @@ export default function TLContainer() {
                                // delete
                                 const newAllEvs = [...allEvs]
                                 const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
-                                fEv.activeC = sr.inActive.c;
+                                fEv.activeC = sr.active.inActive.c;
                                 setAllEvs(markEvs(newAllEvs))
                                 iuEv(fEv)
                                 .then((data: EvsResult) => {
@@ -106,16 +115,10 @@ export default function TLContainer() {
                                 })
                             }
                             break;
-
-
-
-
-
                             default:
-                            }
-                        } else {
-                        }
-                    }}
+                    }
+                } 
+            }}
             onKeyUp={(e: KeyboardEvent<HTMLDivElement>) => {
                 if(e.ctrlKey)
                     setKeyboardState({...keyboardState, ctrl: false})

@@ -11,6 +11,7 @@ import { useEtailFormStore } from "../5_Etail/EtailFormStore";
 import { getSRs } from "../TLAPIs";
 import { SR, useSRsStore } from "../8_SRs/SRsStore";
 import { IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete";
+import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 
 const WBadge = styled(Badge)<BadgeProps>(() => ({
     '& .MuiBadge-badge': {
@@ -62,6 +63,13 @@ export const TLAllTabs = () => {
     const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
     const [etailForm, setEtailForm] = useEtailFormStore();
     const { sRs, setSRs, setLevelOptions } = useSRsStore();
+    const { windowWidth, setWindowWidth } = useTLBaseBgStore();
+
+    useEffect(() => {
+      const handleResize = () => setWindowWidth(window.innerWidth);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleChange = (event: any, newTabIndex: SetStateAction<number>) => {
         setCurTabIndex(newTabIndex);

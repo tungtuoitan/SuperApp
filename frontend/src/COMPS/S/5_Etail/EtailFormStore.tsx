@@ -11,7 +11,10 @@ export const initEtailForm: EtailForm = {
     levelC: sr.day.c,
     timeStart: dateToCDate(new Date()),
     timeEnd: addTime(dateToCDate(new Date()), 0, 0, 0, 10, 0),
-    type: null
+    type: null,
+    prioriC: sr.priority.low.c,
+    statusC: sr.status.open.c,
+    activeC: sr.active.active.c,
 };
 const EtailFormStore = createContext<[EtailForm, React.Dispatch<Partial<EtailForm>>]>([initEtailForm, () => {}]);
 export const useEtailFormStore = () => useContext(EtailFormStore);

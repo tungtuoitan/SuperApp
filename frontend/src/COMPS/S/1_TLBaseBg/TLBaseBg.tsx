@@ -12,7 +12,7 @@ import { cDate, TI } from "../TLTypes";
 
 export const TLBaseBg = () => {
 
-    const { zoomLv, TLBaseBgRef, TIList, setTIList, dateReal } = useTLBaseBgStore();
+    const { zoomLv, TLBaseBgRef, TIList, setTIList, windowWidth } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
     const { h$G_BgStart, h$G_BgEnd, h$G_red, getLevelCOf, w$BaseTI } = useTLBaseBgHelpers();
@@ -91,7 +91,7 @@ export const TLBaseBg = () => {
         }
         setTIList(newTIList);
         if (isFirstTime) setIsFirstTime(false);
-    }, [timeConfig, timeConfig.timeStart]);
+    }, [timeConfig, timeConfig.timeStart, windowWidth]);
 
     return (
         <div

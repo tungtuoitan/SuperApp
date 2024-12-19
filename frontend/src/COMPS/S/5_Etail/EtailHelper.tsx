@@ -47,6 +47,13 @@ export const useEtailHelpers = () => {
             case 'timeEnd':
                 setEtailForm({ timeEnd: dateToCDate(value) });
                 break;
+            case 'priority':
+                console.log('value', value);
+                setEtailForm({ prioriC: value });
+                break;
+            case 'status':
+                setEtailForm({ statusC: value });
+                break;
         }
     }
 
