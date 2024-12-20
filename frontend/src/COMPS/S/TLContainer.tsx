@@ -39,14 +39,7 @@ export default function TLContainer() {
                     setKeyboardState({...keyboardState, shift: true})
                 if(e.altKey)
                     setKeyboardState({...keyboardState, alt: true})
-                if(e.key === 'ArrowUp') 
-                    changeLevel('down')
-                if(e.key === 'ArrowDown')
-                    changeLevel('up')
-                if(e.key === 'ArrowLeft')
-                    changeTimeStart('prev')
-                if(e.key === 'ArrowRight')
-                    changeTimeStart('next');
+                
 
                 if(focusTFId) return;
                 if (fevId) {
@@ -118,6 +111,16 @@ export default function TLContainer() {
                             default:
                     }
                 } 
+                else {
+                    if(e.key === 'ArrowUp') 
+                        changeLevel('down')
+                    if(e.key === 'ArrowDown')
+                        changeLevel('up')
+                    if(e.key === 'ArrowLeft')
+                        changeTimeStart('prev')
+                    if(e.key === 'ArrowRight')
+                        changeTimeStart('next');
+                }
             }}
             onKeyUp={(e: KeyboardEvent<HTMLDivElement>) => {
                 if(e.ctrlKey)

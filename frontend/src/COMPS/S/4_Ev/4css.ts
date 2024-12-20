@@ -31,7 +31,11 @@ export const _4css = {
         bgHigh: 'red',
         bgNormal: '#00FF66',
         bgMedium: 'yellow',
-        bgLow: 'gray',
+        bgLow: '#BDE3FF',
+
+        bgOpen: '#0066FF',
+        bgInProgress: 'yellow',
+        bgResolved: 'green',
     }
 
    

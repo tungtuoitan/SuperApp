@@ -7,6 +7,7 @@ import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 type MiniPopupProps = {
     childId: number,
     parentWidth?: number,
+    isBeggerGang?: boolean,
 }
 
 export default function BlackMini (props: MiniPopupProps) {
@@ -24,7 +25,6 @@ export default function BlackMini (props: MiniPopupProps) {
         // onMouseUp // k dùng mouseUp ở đây khi dragging, vì mouse dễ đi ra khỏi GrabEdge
      
         style={{
-           
             borderRadius: 12,
             position: 'absolute',
             justifyContent: 'center',

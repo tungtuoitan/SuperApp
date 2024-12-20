@@ -102,11 +102,10 @@ export default function Etail(props: EtailProps) {
                     levelC: etailForm.levelC ?? sr.hour.c,
                     timeStart: cDateToUTCDate(etailForm.timeStart),
                     timeEnd: cDateToUTCDate(etailForm.timeEnd),
-                    activeC: sr.active.active.c,
-                    statusC: sr.status.open.c,
-                    prioriC: etailForm.prioriC ?? sr.priority.low.c,
+                    activeC: etailForm.activeC,
+                    statusC: etailForm.statusC,
+                    prioriC: etailForm.prioriC,
                 }
-                console.log('x', x);
                 iuEv(x).then((data: any) => {
                     if (data.options.success) {
                         enqueueSnackbar(data.options.message, {
