@@ -49,10 +49,11 @@ export const ChildEv = (props: EvProps) => {
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
     const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
-    const enabled = !isPast(childEv.timeEnd) && fevId === childEv.id && fevId !== null
+    const enabled = fevId === childEv.id && fevId !== null
+    // const enabled = !isPast(childEv.timeEnd) && fevId === childEv.id && fevId !== null
 
     const getBg = () => {
-         if (isPast(childEv.timeEnd)) {
+         if (isPast(childEv.timeEnd) && childEv.prioriC === sr.status.resolved.c) {
             return _4css.pastBackground
         } 
         else if (childEv.isOverlap) {
@@ -109,7 +110,7 @@ export const ChildEv = (props: EvProps) => {
             }}
             onClick={(e) => {
                 e.stopPropagation();
-                if (isPast(childEv.timeEnd)) return;
+                // if (isPast(childEv.timeEnd)) return;
                 if (!grabEdge.mouseenter) {
                     setFevId(childEv.id);
                 }
@@ -120,10 +121,10 @@ export const ChildEv = (props: EvProps) => {
                 }
             }}
         >
-            {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} />}
+            {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} isBeggerGang={parentEv.id===999999999 || parentEv.id===null}/>}
             <DotGroup childEv={childEv}/>
-            {!isPast(childEv.timeStart) && <GrabEdge position='left' id={childEv.id} />}
-            {!isPast(childEv.timeEnd) && <GrabEdge position='right' id={childEv.id} />}
+            {!(isPast(childEv.timeStart) && childEv.prioriC === sr.status.resolved.c) && <GrabEdge position='left' id={childEv.id} />}
+            {!(isPast(childEv.timeEnd) && childEv.prioriC === sr.status.resolved.c) && <GrabEdge position='right' id={childEv.id} />}
             {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left' &&
                 <WTime sx={{left: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
             <Cooltip title={childEv.name} placement='top' enterDelay={500} leaveDelay={200} >
