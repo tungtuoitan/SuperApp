@@ -7,8 +7,8 @@ import { addTime, cDateToGh, dateToCDate, getDate$NextMonday, parseCDate } from 
 import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../3_TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
-import { RedLine } from "./RedLine";
 import { cDate, TI } from "../TLTypes";
+import {RedLine} from "./1uis";
 
 export const TLBaseBg = () => {
 

@@ -25,7 +25,7 @@ export const ParentEv = (props: ParentEvProps) => {
     const fiveLines = getFiveLines(childEvs);
 
     const left = RhToPx(cDateToGh(parentEv.timeStart as cDate) - h$G_BgStart)
-    const top = _4css.paddingTopOfTLBaseFrame + (100 + 10) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
+    const top = _4css.ptOfTLBaseFrame + (100 + 10) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
     const width = RhToPx(
         cDateToGh(parentEv.timeEnd as cDate) - cDateToGh(parentEv.timeStart as cDate)
     )
@@ -44,7 +44,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 left: left,
                 display: 'flex',
                 justifyContent: 'center',
-                height: _4css.paddingTopOfParent*2 + _4css.height * fiveLines.length + _4css.gapBetweenChildren * (fiveLines.length - 1) + _4css.heightOf2BordersOfParent,
+                height: _4css.ptOfParent*2 + _4css.he * fiveLines.length + _4css.gapBetweenChildren * (fiveLines.length - 1) + _4css.heOf2BordersOfParent,
                 top: isBeggerGang ? undefined : top,
                 bottom: isBeggerGang ? 0 : undefined,
                 flexDirection: 'column',
@@ -53,7 +53,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 zIndex: 100,
                 position: 'absolute',
                 borderRadius: isBeggerGang ? 0 : 20,
-                border: fevId && fevId === parentEv.id ? '2px solid ' + _4css.focusBorderColor : '2px solid transparent',
+                border: fevId && fevId === parentEv.id ? _4css.focusBo : '2px solid transparent',
             }}>
             <span style={{ position: 'absolute', left: 4, top: -20, color: 'gray' }}>{parentEv.name}</span>
             {fiveLines[0]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={0} />)}

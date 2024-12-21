@@ -44,7 +44,7 @@ export const ChildEv = (props: EvProps) => {
     const { enqueueSnackbar } = useSnackbar();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
-    const top = _4css.paddingTopOfParent + (_4css.height + _4css.gapBetweenChildren) * lineOrder;
+    const top = _4css.ptOfParent + (_4css.he + _4css.gapBetweenChildren) * lineOrder;
     const width = RhToPx(
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
@@ -55,30 +55,30 @@ export const ChildEv = (props: EvProps) => {
 
     const getBg = () => {
          if (isPast(childEv.timeEnd) && childEv.prioriC === sr.status.resolved.c) {
-            return _4css.pastBackground
+            return _4css.pastBg
         } 
         else if (childEv.isOverlap) {
-            return _4css.backgroundOverlap
+            return _4css.overlapBg
         }
         else if (childEv.isLateNight) {
-            return _4css.backgroundLateNight
+            return _4css.latenightBg
         }
         else if(isPresentEv(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
-                return _4css.backgroundDrag
+                return _4css.dragBg
             } else {
-                return _4css.presentBackground
+                return _4css.presentBg
             }
         }
         else {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
-                return _4css.backgroundDrag
+                return _4css.dragBg
             } 
             else if (childEv.type === 'jobtask') {
-                return _4css.backgroundJobTask
+                return _4css.jobtaskBg
             } 
             else {
-                return _4css.background
+                return _4css.bg
             }
         }
     }
@@ -88,14 +88,14 @@ export const ChildEv = (props: EvProps) => {
             id={'ChildEv-' + childEv.name}
             data-name={childEv.name + parentEv.name}
             style={{
-                height: _4css.height,
+                height: _4css.he,
                 width: width,
                 background: getBg(),
-                display: _4css.display,
+                display: 'flex',
                 transform: `translateX(${left}px)`,
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
                 // transform: `translateY(${top}px)`,
-                fontSize: _4css.fontSize,
+                fontSize: _4css.fs,
                 top: top,
                 position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
                 textAlign: 'left',
@@ -106,7 +106,7 @@ export const ChildEv = (props: EvProps) => {
                 borderRadius: '50px 50px',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
-                border: fevId && fevId === childEv.id ? '2px solid ' + _4css.focusBorderColor : '2px solid transparent',
+                border: fevId && fevId === childEv.id ? _4css.focusBo : '2px solid transparent',
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
             }}
             onClick={(e) => {

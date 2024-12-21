@@ -22,7 +22,7 @@ export default function TISample(props: DraggableProps) {
                 ...sx,
                 width: 100,
                 height: 30,
-                backgroundColor: _4css.background,
+                backgroundColor: _4css.bg,
                 borderRadius: 50,
                 color: 'white',
                 display: 'flex',
