@@ -21,7 +21,7 @@ const etailFormReducer = (state: EtailForm[], action: { type: string; payload?: 
 
 // Context và custom hook để truy cập store
 const EtailFormsStore = createContext<[EtailForm[], React.Dispatch<{ type: string; payload?: any }>]>([[], () => {}]);
-export const useEtailsStore = () => useContext(EtailFormsStore);
+export const useEtailFormStore = () => useContext(EtailFormsStore);
 
 // Provider component
 export const EtailFormsStoreProvider = ({ children }: { children: ReactNode }) => {

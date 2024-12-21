@@ -2,8 +2,9 @@ import { IconButton } from "@mui/material";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { useAllTabsStore } from "../6_AllTabs/AllTabsStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
-import {useEtailsStore} from "../5_Etail/EtailFormsStore";
 import {EtailForm} from "../5_Etail/EtailType";
+import {WBlackMini} from "./4uis";
+import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 
 type MiniPopupProps = {
     childId: number,
@@ -14,27 +15,13 @@ type MiniPopupProps = {
 export default function BlackMini (props: MiniPopupProps) {
     const {childId, parentWidth} = props;
     const {allTabIds, setAllTabIds, setCurTabIndex} = useAllTabsStore();
-    const [etails, dispatch] = useEtailsStore();
+    const [etails, dispatch] = useEtailFormStore();
     const {allEvs, setAllEvs} = useTLBaseFgStore();
 
     return (
-        <div 
-        id= {`miniPopup-${childId}`}
-        onMouseDown={() => {
-        }}
+        <WBlackMini id= {`miniPopup-${childId}`}
         // onMouseUp // k dùng mouseUp ở đây khi dragging, vì mouse dễ đi ra khỏi GrabEdge
-     
-        style={{
-            borderRadius: 12,
-            position: 'absolute',
-            justifyContent: 'center',
-            width: 200,
-            height: 40,
-            background: '#1E1E1E',
-            zIndex: 100,
-            alignItems: 'center',
-            display: 'flex',
-            bottom: -50,
+        sx={{
             left: parentWidth ? parentWidth / 2 - 100 : 0, // in parent, we have to center it ourselves
         }}>
             <IconButton onClick={()=>{
@@ -64,6 +51,6 @@ export default function BlackMini (props: MiniPopupProps) {
             }}>
                 <DoubleArrowIcon style={{color: 'white'}}/>
             </IconButton>
-        </div>
+        </WBlackMini>
     )
 }

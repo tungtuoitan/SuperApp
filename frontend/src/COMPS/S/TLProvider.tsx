@@ -2,7 +2,6 @@ import { TLBaseEvProvider } from "./4_Ev/EvStore"
 import { TimeConfigProvider } from "./3_TimeConfig/TimeConfigStore"
 import { TLBaseBgProvider } from "./1_TLBaseBg/TLBaseBgStore"
 import { TLBaseFgProvider } from "./2_TLBaseFg/TLBaseFgStore"
-import { EtailsProvider } from "./5_Etail/EtailsStore"
 import { TLAllTabs } from "./6_AllTabs/TLAllTabs"
 import { AllTabsProvider } from "./6_AllTabs/AllTabsStore"
 import { SRsProvider } from "./8_SRs/SRsStore"
@@ -18,9 +17,9 @@ export const TLProvider = () => {
                         <TimeConfigProvider>
                             <TLBaseEvProvider>
                                 <EtailFormsStoreProvider>
-                                    <EtailsProvider>
+                                    <EtailFormsStoreProvider>
                                         <TLAllTabs />
-                                    </EtailsProvider>
+                                    </EtailFormsStoreProvider>
                                 </EtailFormsStoreProvider>
                             </TLBaseEvProvider>
                         </TimeConfigProvider>
