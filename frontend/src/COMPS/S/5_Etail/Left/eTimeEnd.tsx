@@ -1,20 +1,20 @@
+
 import {
     DatePicker,
     LocalizationProvider,
     TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { _3css } from "../3_TimeConfig/3css";
-import { helperMUIcss } from "../../CommonHelpers/5_MUIcss";
-import { useEtailHelpers } from "./EtailHelper";
-import {useEtailFormStore} from "./EtailFormsStore";
-import {EtailForm} from "./EtailType";
-import { WRow} from "./5uis";
+import {EtailForm} from "../EtailType";
+import {useEtailFormStore} from "../EtailFormsStore";
+import {useEtailHelpers} from "../EtailHelper";
+import {helperMUIcss} from "../../../CommonHelpers/5_MUIcss";
+import {WRow} from "../5uis";
 
 type EtailProps = {
     id: number;
 };
-export default function ETimeStart(props: EtailProps) {
+export default function EtimeEnd(props: EtailProps) {
     const { handleChange } = useEtailHelpers();
     const dpSelector = helperMUIcss.getDatePickerCSSSelector();
     const [etails, dispatch] = useEtailFormStore();
@@ -24,13 +24,13 @@ export default function ETimeStart(props: EtailProps) {
         <WRow>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                    label="Date Start"
-                    name="dateStart"
-                    className="dateStartPicker"
-                    value={new Date(etail.timeStart)}
+                    label="Date End"
+                    name="timeEnd"
+                    className="DateEndPicker"
+                    value={new Date(etail.timeEnd)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange(etail.id, "timeStart", newValue);
+                            handleChange(etail.id, 'timeEnd', newValue);
                         }
                     }}
                     sx={{
@@ -63,13 +63,13 @@ export default function ETimeStart(props: EtailProps) {
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <TimePicker
-                    className="timeStartPicker"
-                    name="timeStart"
-                    label="Time Start"
-                    value={new Date(etail.timeStart)}
+                    className="timeEndPicker"
+                    name="timeEnd"
+                    label="Time End"
+                    value={new Date(etail.timeEnd)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange(etail.id, "timeStart", newValue);
+                            handleChange(etail.id, "timeEnd", newValue);
                         }
                     }}
                     sx={{
@@ -101,5 +101,5 @@ export default function ETimeStart(props: EtailProps) {
                 />
             </LocalizationProvider>
         </WRow>
-    );
+    )
 }

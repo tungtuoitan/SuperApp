@@ -8,6 +8,8 @@
 - tên file, folder phải viết hoa, và có s/es
 - tên phải ưu tiên dễ đọc, vd: Level thì "Le" thay vì "lv"
 <!-- - khi có nhiều tên liên quan, thì đưa từ chung ra trước, vd: bgRed, bgYellow,... (để ) -->
+- nếu chắc chắn source sẽ mở rộng, thì đặt tên theo version.mở rộng
+- nếu không, đổi tên là đơn giản, nên khi mở rộng rồi hẵng đổi
 
 # 3.type
 - id phải luôn là number nếu có thể

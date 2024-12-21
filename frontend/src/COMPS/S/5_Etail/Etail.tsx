@@ -3,14 +3,14 @@ import { useEffect } from "react";
 import { useEtailFormStore } from "./EtailFormsStore";
 import { EtailForm } from "./EtailType";
 import { EtailContainer, EtailPaper, WBar, WBody, WRow } from "./5uis";
-import { EBar } from "./eBar";
-import EIds from "./eIds";
-import EName from "./eName";
-import ELevel from "./eLevel";
-import ETimeStart from "./eTimeStart";
-import EtimeEnd from "./eTimeEnd";
-import EPriority from "./ePriority";
-import EStatus from "./eStatus";
+import EIds from "./Left/eIds";
+import EName from "./Left/eName";
+import ELevel from "./Left/eLevel";
+import EPriority from "./Left/ePriority";
+import EStatus from "./Left/eStatus";
+import ETimeStart from "./Left/eTimeStart";
+import EtimeEnd from "./Left/eTimeEnd";
+import {Bar} from "./Bar";
 
 type EtailProps = {
     id: number;
@@ -26,7 +26,7 @@ export default function Etail(props: EtailProps) {
 
     return (
         <EtailContainer>
-            <EBar id={props.id} />
+            <Bar id={props.id} />
             <WBody>
                 <EtailPaper>
                     <EIds id={props.id} />

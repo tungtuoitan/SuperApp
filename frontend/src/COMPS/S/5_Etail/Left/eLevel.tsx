@@ -4,14 +4,14 @@ import {
     MenuItem,
     Select,
 } from "@mui/material";
-import { _3css } from "../3_TimeConfig/3css";
-import { helperMUIcss } from "../../CommonHelpers/5_MUIcss";
-import { useEtailHelpers } from "./EtailHelper";
-import { clvs, sr } from "../TLConstants";
-import { useSRsStore } from "../8_SRs/SRsStore";
-import {useEtailFormStore} from "./EtailFormsStore";
-import {EtailForm} from "./EtailType";
-import { WRow} from "./5uis";
+import { _3css } from "../../3_TimeConfig/3css";
+import { helperMUIcss } from "../../../CommonHelpers/5_MUIcss";
+import { useEtailHelpers } from "../EtailHelper";
+import { clvs, sr } from "../../TLConstants";
+import { useSRsStore } from "../../8_SRs/SRsStore";
+import {useEtailFormStore} from "../EtailFormsStore";
+import {EtailForm} from "../EtailType";
+import { WRow} from "../5uis";
 
 type EtailProps = {
     id: number;

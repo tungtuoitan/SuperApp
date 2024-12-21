@@ -15,7 +15,7 @@ import {useEtailFormStore} from "./EtailFormsStore";
 type BarProp = {
     id: number;
 }
-export const EBar = (props: BarProp) => {
+export const Bar = (props: BarProp) => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { enqueueSnackbar } = useSnackbar();
     const [etails, dispatch] = useEtailFormStore();
