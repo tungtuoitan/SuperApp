@@ -3,15 +3,13 @@
 
 
 
-import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
-import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 import { SelectField } from "../TLTypes";
 import { useSRsStore } from "../8_SRs/SRsStore";
-import {useEtailsStore} from "./EtailFormsStore";
+import {useEtailFormStore} from "./EtailFormsStore";
 
 export const useEtailHelpers = () => {
-    const [etails, dispatch] = useEtailsStore();
+    const [etails, dispatch] = useEtailFormStore();
     const { levelOptions } = useSRsStore();
 
 

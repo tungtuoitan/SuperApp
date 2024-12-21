@@ -3,7 +3,7 @@ import { createContext, Dispatch, SetStateAction, useContext, useRef, useState }
 import { Ev } from "../TLTypes";
 import { v4 as uuid } from 'uuid';
 
-export type GragEdge = {
+export type GrabEdge = {
     id: number | null;
     position: 'left' | 'right';
     mouseenter: boolean;

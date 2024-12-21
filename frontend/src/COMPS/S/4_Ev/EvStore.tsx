@@ -1,21 +1,21 @@
 
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
-export type GragEdge = {
+export type IGrabEdge = {
     id: number | null;
     position: 'left' | 'right';
     mouseenter: boolean;
     mousedownAtGE: boolean;
 }
-const defaultGrabEdge: GragEdge = {id: null, position: 'left', mouseenter: false, mousedownAtGE: false};
+const defaultGrabEdge: IGrabEdge = {id: null, position: 'left', mouseenter: false, mousedownAtGE: false};
 
 export interface TLBaseEvContextData {
     mouseenter: boolean;
     setEnterGrabEdge: Dispatch<SetStateAction<boolean>>;
     mousedownAtGE: boolean;
     setGrabbing: Dispatch<SetStateAction<boolean>>;
-    grabEdge: GragEdge;
-    setGrabEdge: Dispatch<SetStateAction<GragEdge>>;
+    grabEdge: IGrabEdge;
+    setGrabEdge: Dispatch<SetStateAction<IGrabEdge>>;
 
     fevId: number | null;
     setFevId: Dispatch<SetStateAction<number | null>>;
@@ -49,7 +49,7 @@ export const EvStore = () => useContext(EvContext);
 export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [mouseenter, setEnterGrabEdge] = useState<boolean>(false);
     const [mousedownAtGE, setGrabbing] = useState<boolean>(false);
-    const [grabEdge, setGrabEdge] = useState<GragEdge>(defaultGrabEdge);
+    const [grabEdge, setGrabEdge] = useState<IGrabEdge>(defaultGrabEdge);
 
     const [fevId, setFevId] = useState<number | null>(null);
     const [cutEvId, setCutEvId] = useState<number | null>(null);
