@@ -61,33 +61,30 @@ const WArrowBtn = styled(IconButton)({
 export const TimeConfigBar = () => {
     const {timeConfig, setTimeConfig } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
-    const { TIList, setZoomLv, keyboardState } = useTLBaseBgStore();
+    const { TIList, setZoomLv, keyboardState, firstTimeInit } = useTLBaseBgStore();
     const dpSelector = helperMUIcss.getDatePickerCSSSelector();
     const { clickNow, changeTimeStart, changeLevel, isPast, isFuture } = useTimeHelpers();
     const timeTitle = getTimeTitle(timeConfig);
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
-        const initCevelId = 5; //! điều chỉnh CLevel ban đầu tại đây
-        const initTimeStart = clvs[initCevelId].cevelC === sr.century.c
+        if(!firstTimeInit) return;
+        const cevelId = 5; //! điều chỉnh CLevel ban đầu tại đây
+        const timeStart = clvs[cevelId].cevelC === sr.century.c
             ? dateToCDate(getDate$FirstDayOfCurrentCentury())
-            : clvs[initCevelId].cevelC === sr.decade.c
+            : clvs[cevelId].cevelC === sr.decade.c
             ? dateToCDate(getDate$FirstDayOfCurrentDecade())
-            : clvs[initCevelId].cevelC === sr.year.c
+            : clvs[cevelId].cevelC === sr.year.c
             ? dateToCDate(getDate$FirstDayOfCurrentYear())
-            : clvs[initCevelId].cevelC === sr.month.c
+            : clvs[cevelId].cevelC === sr.month.c
             ? dateToCDate(getDate$FirstDayOfCurrentMonth())
-            : clvs[initCevelId].cevelC === sr.week.c
+            : clvs[cevelId].cevelC === sr.week.c
             ? dateToCDate(getDate$MondayOfCurrentWeek())
-            : clvs[initCevelId].cevelC === sr.day.c
-            
+            : clvs[cevelId].cevelC === sr.day.c
             ? getDateOf('Today')
             : null;
 
-
-        const timeConfigInit = { cevelId: initCevelId, timeStart: initTimeStart  } as timeConfig
-
-        setTimeConfig(timeConfigInit);
+        setTimeConfig({ cevelId, timeStart } as timeConfig);
     }, []);
 
 

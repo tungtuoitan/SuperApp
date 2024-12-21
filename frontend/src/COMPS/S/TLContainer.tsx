@@ -2,7 +2,7 @@
 import { useTLBaseFgStore } from './2_TLBaseFg/TLBaseFgStore'
 import { TimeConfigBar } from './3_TimeConfig/TimeConfigBar'
 import DNDContainer from './DNDContainer'
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useEffect } from 'react';
 import { iuEv } from './TLAPIs';
 import { useSnackbar } from 'notistack';
 import { Ev, EvsResult } from './TLTypes';
@@ -15,14 +15,18 @@ import { sr } from './TLConstants';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { keyboardState, setKeyboardState, TIList } = useTLBaseBgStore();
+    const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
     const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
     const { RpxToRh, h$G_BgStart, w$BgStart_spot } = useTLBaseBgHelpers();
     const { changeLevel, changeTimeStart } = useTimeHelpers();
 
-  return (
+    useEffect(() => {
+        setFirstTimeInit(false);
+    }, []);
+
+    return (
         <div id ='TLContainer' // this is the biggest container if TL
             onClick={() => {
                 if (fevId) {
@@ -141,6 +145,6 @@ export default function TLContainer() {
             <TimeConfigBar/>
             <DNDContainer/>
         </div>
-  )
+    )
 }
 
