@@ -1,8 +1,9 @@
 import { IconButton } from "@mui/material";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { useAllTabsStore } from "../6_AllTabs/AllTabsStore";
-import { useEtailFormStore } from "../5_Etail/EtailFormStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
+import {useEtailsStore} from "../5_Etail/EtailFormsStore";
+import {EtailForm} from "../5_Etail/EtailType";
 
 type MiniPopupProps = {
     childId: number,
@@ -13,7 +14,7 @@ type MiniPopupProps = {
 export default function BlackMini (props: MiniPopupProps) {
     const {childId, parentWidth} = props;
     const {allTabIds, setAllTabIds, setCurTabIndex} = useAllTabsStore();
-    const [etailForm, setEtailForm] = useEtailFormStore();
+    const [etails, dispatch] = useEtailsStore();
     const {allEvs, setAllEvs} = useTLBaseFgStore();
 
 
@@ -48,15 +49,19 @@ export default function BlackMini (props: MiniPopupProps) {
                 }
     
                 const ev = allEvs.filter(ev => ev.id === childId)[0]
-                setEtailForm({
+                const etail: EtailForm = {
                     id: ev.id,
                     name: ev.name,
                     parentId: ev.parentId ?? null,
                     levelC: ev.levelC,
                     timeStart: ev.timeStart,
                     timeEnd: ev.timeEnd,
-                    type: ev.type, 
-                })
+                    type: ev.type ?? null, 
+                    activeC: ev.activeC,
+                    prioriC: ev.prioriC,
+                    statusC: ev.statusC,
+                }
+                dispatch({type: 'INSE', payload: etail})
             }}>
                 <DoubleArrowIcon style={{color: 'white'}}/>
             </IconButton>
