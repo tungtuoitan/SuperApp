@@ -79,21 +79,22 @@ export default function TLContainer() {
                                 const newAllEvs = [...allEvs]
                                 const cutEv: Ev = newAllEvs.filter(ev => ev.id === cutEvId)[0];
                                 const newTimeStart =  GhToCDate(h$G_BgStart + RpxToRh(w$BgStart_spot()))
+                                const newTimeEnd = addTime(newTimeStart, 0, 0, 0, cDateToGh(cutEv.timeEnd)-cDateToGh(cutEv.timeStart), 0)
+                                
                                 // if fevId is parentEv, go on
                                 if(fevId && filterEvs(['parentEv']).filter(ev => ev.id === fevId).length > 0) {
                                     // paste
                                     if(cutEvId) {
-                                        const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
                                         cutEv.parentId = fevId;
                                         cutEv.timeStart = newTimeStart;
-                                        cutEv.timeEnd = addTime(newTimeStart, 0, 0, 0, cDateToGh(cutEv.timeEnd)-cDateToGh(cutEv.timeStart), 0)
+                                        cutEv.timeEnd = newTimeEnd;
                                     }
                                 }
                                 // if fevId is BeggerGang
                                 else if (fevId === null || fevId === 999999999){
                                     cutEv.parentId = null;
-                                    cutEv.timeStart = TIList[0].date;
-                                    cutEv.timeEnd = addTime(TIList[0].date, 0, 0, 0, RpxToRh(250), 0)
+                                    cutEv.timeStart = newTimeStart;
+                                    cutEv.timeEnd = newTimeEnd;
                                 }
                                 
                                 setAllEvs(markEvs(newAllEvs))

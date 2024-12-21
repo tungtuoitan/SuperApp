@@ -17,7 +17,6 @@ export default function BlackMini (props: MiniPopupProps) {
     const [etails, dispatch] = useEtailsStore();
     const {allEvs, setAllEvs} = useTLBaseFgStore();
 
-
     return (
         <div 
         id= {`miniPopup-${childId}`}
@@ -43,7 +42,7 @@ export default function BlackMini (props: MiniPopupProps) {
                     setCurTabIndex(allTabIds.indexOf(childId))
                 } else {
                     setAllTabIds(prev => {
-                        setCurTabIndex(prev.length)
+                        setCurTabIndex(prev.length) // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
                         return [...prev, childId]
                     })
                 }

@@ -51,7 +51,7 @@ export const TLLoading = () => {
     );
 }
 export const TLBaseContainer = () => {
-    const { TLBaseFrameRef, mouseDown, setMouseDown,
+    const { TLBaseFrameRef, mouseDown, setMouseDown, frameScrollLeft, setFrameScrollLeft,
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, spotRatio, w$FrameLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
@@ -61,22 +61,25 @@ export const TLBaseContainer = () => {
     const { grabEdge, setGrabEdge } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
 
+
+    // reload scrollLeft
     useEffect(() => {
-        if (TLBaseFrameRef.current) {
-            if (timeConfig.timeStart) {
-                const { y, m, d, h } = parseCDate(timeConfig.timeStart);
-                // nếu đang có dateReal
-                if (timeConfig.cevelId === 1 && y === dateReal.getFullYear() ||
-                    timeConfig.cevelId === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
-                    TLBaseFrameRef.current.scrollLeft = w$BgStart_red - w$TLBaseFrame / 2;
-                }
-                // nếu k có dateReal 
-                else {
-                    TLBaseFrameRef.current.scrollLeft = 0
-                }
-            }
+        if (TLBaseFrameRef.current && timeConfig.timeStart) 
+            TLBaseFrameRef.current.scrollLeft = frameScrollLeft
+            // if (timeConfig.timeStart) {
+                // const { y, m, d, h } = parseCDate(timeConfig.timeStart);
+                // // nếu đang có dateReal
+                // if (timeConfig.cevelId === 1 && y === dateReal.getFullYear() ||
+                //     timeConfig.cevelId === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
+                //     TLBaseFrameRef.current.scrollLeft = w$BgStart_red - w$TLBaseFrame / 2;
+                // }
+                // // nếu k có dateReal 
+                // else {
+                //     TLBaseFrameRef.current.scrollLeft = 0
+                // }
+            // }
             // setLoadingTL(false)
-        }
+        
     }, [TIList])
 
     // giữ spotlight 
@@ -146,6 +149,7 @@ export const TLBaseContainer = () => {
                         }
                         if (mouseDown) {
                             setMouseDown(false);
+                            setFrameScrollLeft(TLBaseFrameRef?.current?.scrollLeft??0)
                         }
                     }}
                     onMouseMove={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

@@ -35,6 +35,9 @@ export interface TLBaseBgContextData {
 
     windowWidth: number;
     setWindowWidth: Dispatch<SetStateAction<number>>;
+
+    frameScrollLeft: number;
+    setFrameScrollLeft: Dispatch<SetStateAction<number>>;
     
 };
 
@@ -67,6 +70,9 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
     windowWidth: window.innerWidth,
     setWindowWidth: () => {},
 
+    frameScrollLeft: 0,
+    setFrameScrollLeft: () => {},
+
 };
 const TLBaseBgStore = createContext<TLBaseBgContextData>(TLBaseBgContextDefaultValue);
 
@@ -90,6 +96,7 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [keyboardState, setKeyboardState] = useState<KeyboardState>({shift: false, ctrl: false, alt: false});
 
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+    const [frameScrollLeft, setFrameScrollLeft] = useState<number>(0);
 
     return (
         <TLBaseBgStore.Provider
@@ -121,6 +128,9 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
                 windowWidth,
                 setWindowWidth,
+
+                frameScrollLeft,
+                setFrameScrollLeft,
 
 
             }}>
