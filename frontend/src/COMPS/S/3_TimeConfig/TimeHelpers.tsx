@@ -18,7 +18,7 @@ import { getWeek } from "date-fns";
 export const useTimeHelpers = () => {
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
-    const { TIList, setZoomLv, keyboardState } = useTLBaseBgStore();
+    const { TIList, setZoomLv, keyboardState, dateReal } = useTLBaseBgStore();
 
     const changeTimeStart = (prev: "prev" | "next") => {
         const numb = prev === "prev" ? -1 : 1;
@@ -98,8 +98,16 @@ export const useTimeHelpers = () => {
     const clickNow = () => {
         setTimeConfig({ cevelId: 5, timeStart: getDateOf("Today") });
     };
+    const isPast = (timeEnd: cDate) => cDateToGh(timeEnd) < cDateToGh(dateToCDate(dateReal));
+    const isFuture = (timeEnd: cDate) => cDateToGh(timeEnd) > cDateToGh(dateToCDate(dateReal));
 
-    return { changeTimeStart, changeLevel, clickNow };
+    return { 
+        changeTimeStart, 
+        changeLevel, 
+        clickNow, 
+        isPast,
+        isFuture,
+    };
 };
 
 // B1. to CDate

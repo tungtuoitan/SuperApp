@@ -88,12 +88,12 @@ export default function DNDContainer() {
                 }
             }
 
-            const newEvs: Ev[] = structuredClone([...allEvs, newEv] as Ev[])
+            let newEvs: Ev[] = structuredClone([...allEvs, newEv] as Ev[])
             setAllEvs(newEvs) // update state, to make the interactive smoother
             iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
                 .then((data: EvsResult) => {
-                    const newE = markEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))
-                    setAllEvs(newE) // update id
+                    newEvs = markEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))
+                    setAllEvs(newEvs) // update id
                     enqueueSnackbar(data.options.message ?? '', { variant: "success", autoHideDuration: 3000 });
                     setFevId(data.evs[0].id);
                 })

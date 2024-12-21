@@ -3,17 +3,17 @@
 export type Ev = {
   id: number,
   name: string,
-  parentId: number | null,
+  type?: string,
+  levelC: CevelC,
+
   timeStart: cDate,
   timeEnd: cDate,
+  parentId: number | null,
 
-  levelC: CevelC,
   activeC: string,
-  mainC: string,
   statusC: string,
   prioriC: string,
 
-  type?: string,
 
   lineOrder?: number,
 

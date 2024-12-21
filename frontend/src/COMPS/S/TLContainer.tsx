@@ -5,22 +5,21 @@ import DNDContainer from './DNDContainer'
 import { KeyboardEvent } from 'react';
 import { iuEv } from './TLAPIs';
 import { useSnackbar } from 'notistack';
-import { EvsResult } from './TLTypes';
+import { Ev, EvsResult } from './TLTypes';
 import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
-import { addTime, cDateToUTCDate, useTimeHelpers } from './3_TimeConfig/TimeHelpers';
+import { addTime, cDateToGh, cDateToUTCDate, GhToCDate, useTimeHelpers } from './3_TimeConfig/TimeHelpers';
 import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { sr } from './TLConstants';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { keyboardState, setKeyboardState } = useTLBaseBgStore();
+    const { keyboardState, setKeyboardState, TIList } = useTLBaseBgStore();
     const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
-    const { RpxToRh } = useTLBaseBgHelpers();
-    const { TIList } = useTLBaseBgStore();
+    const { RpxToRh, h$G_BgStart, w$BgStart_spot } = useTLBaseBgHelpers();
     const { changeLevel, changeTimeStart } = useTimeHelpers();
 
   return (
@@ -78,15 +77,16 @@ export default function TLContainer() {
                         case 'V':
                             if(e.ctrlKey) {
                                 const newAllEvs = [...allEvs]
-                                const cutEv = newAllEvs.filter(ev => ev.id === cutEvId)[0];
+                                const cutEv: Ev = newAllEvs.filter(ev => ev.id === cutEvId)[0];
+                                const newTimeStart =  GhToCDate(h$G_BgStart + RpxToRh(w$BgStart_spot()))
                                 // if fevId is parentEv, go on
                                 if(fevId && filterEvs(['parentEv']).filter(ev => ev.id === fevId).length > 0) {
                                     // paste
                                     if(cutEvId) {
                                         const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
                                         cutEv.parentId = fevId;
-                                        cutEv.timeStart = fEv.timeStart;
-                                        cutEv.timeEnd = addTime(fEv.timeStart, 0, 0, 0, RpxToRh(250), 0)
+                                        cutEv.timeStart = newTimeStart;
+                                        cutEv.timeEnd = addTime(newTimeStart, 0, 0, 0, cDateToGh(cutEv.timeEnd)-cDateToGh(cutEv.timeStart), 0)
                                     }
                                 }
                                 // if fevId is BeggerGang

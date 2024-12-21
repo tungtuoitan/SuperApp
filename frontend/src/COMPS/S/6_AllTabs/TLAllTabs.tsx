@@ -134,7 +134,7 @@ export const TLAllTabs = () => {
                                 <WBadge
                                     // badgeContent={ev.badge}
                                     color="primary" max={99}>
-                                    {ev.name}
+                                    {ev.name.length > 40 ? ev.name.slice(0, 35) + '...' : ev.name}
                                 </WBadge>}
                             icon={index > 0 ?
                                 <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important' }}>

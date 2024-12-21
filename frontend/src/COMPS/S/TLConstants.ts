@@ -43,15 +43,15 @@ export const sr = {
     },
     status: {
         open: {
-            c: 'Ope' as EvStatusC,
+            c: 'Ope',
             d: 'Open',
         },
         inProgress: {
-            c: 'InP' as EvStatusC,
+            c: 'InP',
             d: 'In Progress',
         },
         resolved: {
-            c: 'Res' as EvStatusC,
+            c: 'Res',
             d: 'Resolved',
         },
     },
