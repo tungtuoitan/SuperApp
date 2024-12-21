@@ -1,7 +1,6 @@
 
 
-# ev.MainC 
-## (db.dbo.Evs)
+# (db.dbo.Evs)
 - all values: 'Act' | 'Ina'| null
 - Null: is default value, same as 'Act', --> NULL === 'Act'
 

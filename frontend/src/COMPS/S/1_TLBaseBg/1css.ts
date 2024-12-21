@@ -2,7 +2,7 @@
 export const _1css = {
     redline: {
         w: 1,
-        bg: 'red',
+        bg: '#FFA629',
     },
     TI: {
         co: '#202020',

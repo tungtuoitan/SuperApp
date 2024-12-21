@@ -63,7 +63,8 @@ export const TimeConfigBar = () => {
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
     const { TIList, setZoomLv, keyboardState } = useTLBaseBgStore();
     const dpSelector = helperMUIcss.getDatePickerCSSSelector();
-    const { clickNow, changeTimeStart, changeLevel } = useTimeHelpers();
+    const { clickNow, changeTimeStart, changeLevel, isPast, isFuture } = useTimeHelpers();
+    const timeTitle = getTimeTitle(timeConfig);
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
@@ -93,7 +94,18 @@ export const TimeConfigBar = () => {
     return (
         <WBar>
             <WLeft>
-                <Typography variant='h2' sx={{color: 'gray', marginLeft: 10, fontSize: '32px !important'}}>{getTimeTitle(timeConfig)}</Typography>
+                <Typography variant='h2' 
+                    sx={{
+                            color: timeTitle === 'Today'|| timeTitle.includes('This') 
+                                ? _3css.timeTitle.nowColor
+                                : isPast(timeConfig.timeStart) 
+                                ? _3css.timeTitle.pastColor 
+                                : _3css.timeTitle.futureColor, 
+                            marginLeft: 10, 
+                            fontSize: '32px !important',
+
+                        }}
+                >{timeTitle}</Typography>
             </WLeft>
             <WMid>
                 <WArrowBtn

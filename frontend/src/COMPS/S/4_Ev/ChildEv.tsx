@@ -5,7 +5,7 @@ import { styled, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import { EvStore, GragEdge } from "./EvStore";
 import { useEvHelpers } from "./EvHelpers";
-import { cDateToGh, cDateToUTCDate, formatTime } from "../3_TimeConfig/TimeHelpers";
+import { cDateToGh, cDateToUTCDate, formatTime, useTimeHelpers } from "../3_TimeConfig/TimeHelpers";
 import { _4css } from "./4css";
 import { iuEv } from "../TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
@@ -34,14 +34,14 @@ const WTime = styled('p')({
 
 export const ChildEv = (props: EvProps) => {
     const { childEv, parentEv, lineOrder } = props;
-    const { RhToPx } = useTLBaseBgHelpers();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { grabEdge, fevId, setFevId, cutEvId, focusTFId, setFocusTFId } = EvStore();
-    const { isPast, isPresent } = useEvHelpers();
-    const { markEvs } = useTLBaseFgHelpers();
     const [tfValue, setTfValue] = useState(childEv.name);
+    const { RhToPx } = useTLBaseBgHelpers();
+    const { isPresentEv } = useEvHelpers();
+    const { markEvs } = useTLBaseFgHelpers();
+    const { isPast } = useTimeHelpers();
     const { enqueueSnackbar } = useSnackbar();
-    const { timeConfig } = useTimeConfigStore();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = _4css.paddingTopOfParent + (_4css.height + _4css.gapBetweenChildren) * lineOrder;
@@ -49,8 +49,9 @@ export const ChildEv = (props: EvProps) => {
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
     const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
-    const enabled = fevId === childEv.id && fevId !== null
-    // const enabled = !isPast(childEv.timeEnd) && fevId === childEv.id && fevId !== null
+    const enabledTF = fevId === childEv.id && fevId !== null && childEv.statusC !== sr.status.resolved.c
+    const enableLeftGrabEdge = !isPast(childEv.timeStart) && childEv.statusC !== sr.status.resolved.c
+    const enableRightGrabEdge = !isPast(childEv.timeEnd) && childEv.statusC !== sr.status.resolved.c
 
     const getBg = () => {
          if (isPast(childEv.timeEnd) && childEv.prioriC === sr.status.resolved.c) {
@@ -62,7 +63,7 @@ export const ChildEv = (props: EvProps) => {
         else if (childEv.isLateNight) {
             return _4css.backgroundLateNight
         }
-        else if(isPresent(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
+        else if(isPresentEv(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4css.backgroundDrag
             } else {
@@ -123,8 +124,8 @@ export const ChildEv = (props: EvProps) => {
         >
             {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} isBeggerGang={parentEv.id===999999999 || parentEv.id===null}/>}
             <DotGroup childEv={childEv}/>
-            {!(isPast(childEv.timeStart) && childEv.prioriC === sr.status.resolved.c) && <GrabEdge position='left' id={childEv.id} />}
-            {!(isPast(childEv.timeEnd) && childEv.prioriC === sr.status.resolved.c) && <GrabEdge position='right' id={childEv.id} />}
+            {enableLeftGrabEdge && <GrabEdge position='left' id={childEv.id} />}
+            {enableRightGrabEdge && <GrabEdge position='right' id={childEv.id} />}
             {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left' &&
                 <WTime sx={{left: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
             <Cooltip title={childEv.name} placement='top' enterDelay={500} leaveDelay={200} >
@@ -154,7 +155,7 @@ export const ChildEv = (props: EvProps) => {
                         setTfValue(e.target.value);
                     }}
                     autoComplete='off'
-                    disabled={!enabled}
+                    disabled={!enabledTF}
                     variant="outlined"
                     sx={{
                         width: 'calc(100% - 50px)', // 50(width of 2 GrabEdges)
@@ -165,8 +166,8 @@ export const ChildEv = (props: EvProps) => {
                             textAlign: 'center',
                             color: 'white',
                             padding: '0px',
-                            caretColor: enabled ? 'auto' : 'transparent',
-                            pointerEvents: enabled ? 'auto' : 'none', // keep this, if drop this, the TextField will not be able to focus
+                            caretColor: enabledTF ? 'auto' : 'transparent',
+                            pointerEvents: enabledTF ? 'auto' : 'none', // keep this, if drop this, the TextField will not be able to focus
                         },
                         [`& ${tfSelector.input2Disable}`]: {
                             '-webkit-text-fill-color': 'white !important',
