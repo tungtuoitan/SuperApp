@@ -4,9 +4,6 @@ import {useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
     getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury, 
     GhToCDate,
-    getDate$NextMonday,
-    getDate$LastMonday,
-    addTime,
     getDateOf,
     getTimeTitle,
     useTimeHelpers} from "./TimeHelpers";
@@ -91,55 +88,39 @@ export const TimeConfigBar = () => {
     return (
         <WBar>
             <WLeft>
-                <Typography variant='h2' 
-                    sx={{
+                <Typography variant='h2' sx={{ marginLeft: 10, fontSize: '32px !important',
                             color: timeTitle === 'Today'|| timeTitle.includes('This') 
-                                ? _3css.timeTitle.nowColor
+                                ? _3css.timeTitle.nowCo
                                 : isPast(timeConfig.timeStart) 
-                                ? _3css.timeTitle.pastColor 
-                                : _3css.timeTitle.futureColor, 
-                            marginLeft: 10, 
-                            fontSize: '32px !important',
-
-                        }}
-                >{timeTitle}</Typography>
+                                ? _3css.timeTitle.passCo 
+                                : _3css.timeTitle.futureCo, 
+                        }}>{timeTitle}</Typography>
             </WLeft>
             <WMid>
-                <WArrowBtn
-                    title={`Go Today`}
-                    onClick={clickNow}
+                <WArrowBtn title={`Go Today`} onClick={clickNow}
                     sx={{
                         '&:hover': {
                             color: 'red',
                         },
                     }}
-                >
-                    Now
-                </WArrowBtn>
-                <WArrowBtn  
-                    title={`Prev ${clvs[timeConfig.cevelId].cevelD}`}
-                    disabled={timeConfig.cevelId===0}
+                >Now</WArrowBtn>
+                <WArrowBtn title={`Prev ${clvs[timeConfig.cevelId].cevelD}`} disabled={timeConfig.cevelId===0} onClick={()=>changeTimeStart('prev')}
                     sx={{
                         '&:hover': {
                             color: 'black',
                         },
                     }}
-                    onClick={()=>changeTimeStart('prev')}
+                    
                 >
                     <NavigateBeforeIcon />
                 </WArrowBtn>
-                <WArrowBtn  
-                    title={`Prev Level`}
-                    disabled={timeConfig.cevelId===5} 
-                    onClick={()=>changeLevel('up')}
+                <WArrowBtn title={`Prev Level`} disabled={timeConfig.cevelId===5} onClick={()=>changeLevel('up')}
                 >
                     <KeyboardDoubleArrowLeftIcon />
                 </WArrowBtn>
                 <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            className="fromDatePicker"
-                            disabled
+                        <DatePicker className="fromDatePicker" disabled value={new Date(TIList[0]?.date)}
                             sx={{ 
                                 height: 30, 
                                 width: 150,
@@ -154,21 +135,13 @@ export const TimeConfigBar = () => {
                                     padding: '0px 0px 0 10px',
                                 },
                              }}
-                            // label="From"
-                            // format="DD/MM/YYYY"
-                            value={new Date(TIList[0]?.date)}
-                            onChange={(newValue) => {
-                                // setTimeConfig2({ ...timeConfig2, period: { id: 0, label: 'custom', date: newValue } });
-                            }}
-                            // renderInput={(params) => <TextField {...params} />}
+                            
                         />
                     </LocalizationProvider>
                 </Box>
                 <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            className="toDatePicker"
-                            disabled
+                        <DatePicker className="toDatePicker" disabled value={new Date(GhToCDate(h$G_BgEnd))}
                             sx={{ 
                                 height: 30, 
                                 width: 150,
@@ -187,14 +160,6 @@ export const TimeConfigBar = () => {
                                     padding: '0 !important',
                                 },
                             }}
-                            // label="To"
-                            // format="DD/MM/YYYY"
-                            value={new Date(GhToCDate(h$G_BgEnd))}
-                            onChange={(newValue) => {
-                                // update timeFrom here ....
-                    
-                            }}
-                            // renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
                 </Box>

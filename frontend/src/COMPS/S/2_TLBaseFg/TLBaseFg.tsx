@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
-import { isOverlap, useTLBaseFgHelpers } from "./TLBaseFgHelpers";
+import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import TISample from "../7_TLTools/TISample";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
@@ -11,6 +11,7 @@ import { getEvs } from "../TLAPIs";
 import { cDateToGh, GhToCDate } from "../3_TimeConfig/TimeHelpers";
 import {useSnackbar} from "notistack";
 import {sr} from "../TLConstants";
+import {WTLBaseFgContainer} from "./2uis";
 
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
@@ -72,24 +73,9 @@ export const TLBaseFg = () => {
         } as Ev : {} as Ev;
 
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
+
     return (
-        <div
-            id='TLBaseFg'
-            ref={setNodeRef}
-            style={{
-                width: w$Bg,
-                // border: isOver ? '4px solid lightblue' : '4px solid transparent',
-                background: isOver ? '#add8e698' : 'transparent',
-                overflowX: 'hidden',
-                overflowY: 'hidden',
-                height: 573,
-                flexDirection: 'column',
-                gap: 1,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 100,
-            }}>
+        <WTLBaseFgContainer id='TLBaseFg' ref={setNodeRef} sx={{ width: w$Bg, background: isOver ? '#add8e698' : 'transparent' }}>
             {[...fiveLines, [beggerEv]].map((line: Ev[], i) => {
                 return line.map(parontEv => {
                     return <ParentEv
@@ -109,6 +95,6 @@ export const TLBaseFg = () => {
                     ? <TISample id={activeId} type={isOver ? 'parentEv' : 'childEv'} />
                     : null}
             </DragOverlay>
-        </div>
+        </WTLBaseFgContainer>
     );
 }

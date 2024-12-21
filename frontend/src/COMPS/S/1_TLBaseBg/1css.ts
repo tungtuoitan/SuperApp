@@ -7,8 +7,6 @@ export const _1css = {
     TI: {
         co: '#202020',
         fs: 12,
-        bleftco: '#00000050',
-        btopco: '#bfbfbf',
     }
 
 }
