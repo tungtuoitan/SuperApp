@@ -4,12 +4,12 @@ import {
     TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { _3css } from "../3_TimeConfig/3css";
-import { helperMUIcss } from "../../CommonHelpers/5_MUIcss";
-import { useEtailHelpers } from "./EtailHelper";
-import {useEtailFormStore} from "./EtailFormsStore";
-import {EtailForm} from "./EtailType";
-import {EtailPaper, WBar, WBody, WRow} from "./5uis";
+import { _3css } from "../../3_TimeConfig/3css";
+import { helperMUIcss } from "../../../CommonHelpers/5_MUIcss";
+import { useEtailHelpers } from "../EtailHelper";
+import {useEtailFormStore} from "../EtailFormsStore";
+import {EtailForm} from "../EtailType";
+import {EtailPaper, WBar, WBody, WRow} from "../5uis";
 
 type EtailProps = {
     id: number;
