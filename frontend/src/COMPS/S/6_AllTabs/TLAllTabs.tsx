@@ -7,7 +7,6 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import Etail from "../5_Etail/Etail";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useAllTabsStore } from "./AllTabsStore";
-import { useEtailFormStore } from "../5_Etail/EtailFormStore";
 import { getSRs } from "../TLAPIs";
 import { SR, useSRsStore } from "../8_SRs/SRsStore";
 import { IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete";
@@ -61,7 +60,6 @@ const a11yProps = (index: number) => {
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
-    const [etailForm, setEtailForm] = useEtailFormStore();
     const { sRs, setSRs, setLevelOptions } = useSRsStore();
     const { windowWidth, setWindowWidth } = useTLBaseBgStore();
 
@@ -119,16 +117,6 @@ export const TLAllTabs = () => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 setCurTabIndex(index);
-                                const newTabIds = allTabIds[index]
-                                const ev = allEvs.filter(ev => ev.id === newTabIds)[0];
-                                setEtailForm({
-                                    id: ev.id,
-                                    name: ev.name,
-                                    parentId: ev.parentId ?? null,
-                                    timeStart: ev.timeStart,
-                                    timeEnd: ev.timeEnd,
-                                    type: ev.type
-                                })
                             }}
                             label={
                                 <WBadge

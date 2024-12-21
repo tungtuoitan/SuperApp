@@ -24,7 +24,6 @@ import { helperMUIcss } from "../../Helpers/HelperMUIcss";
 import { useEtailHelpers } from "./EtailHelper";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { clvs, sr } from "../TLConstants";
-import { useEtailFormStore } from "./EtailFormStore";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { iuEv } from "../TLAPIs";
@@ -32,6 +31,8 @@ import { cDateToUTCDate, dateToCDate } from "../3_TimeConfig/TimeHelpers";
 import { useSnackbar } from "notistack";
 import { useSRsStore } from "../8_SRs/SRsStore";
 import {useEffect} from "react";
+import {useEtailsStore} from "./EtailFormsStore";
+import {EtailForm} from "./EtailType";
 
 const EtailPaper = styled(Paper)({
     display: "flex",
@@ -75,7 +76,6 @@ type EtailProps = {
 };
 export default function Etail(props: EtailProps) {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const [etailForm, setEtailForm] = useEtailFormStore();
     const { enqueueSnackbar } = useSnackbar();
     const { handleChange } = useEtailHelpers();
 
@@ -85,10 +85,12 @@ export default function Etail(props: EtailProps) {
     const evIdSelector = helperMUIcss.getTextFieldCSSSelector("evID");
     const levelSelector = helperMUIcss.getSelectCSSSelector();
     const { levelOptions } = useSRsStore();
+    const [etails, dispatch] = useEtailsStore();
+    const etail = etails.find(etail => etail.id === props.id) ?? {} as EtailForm;
 
     useEffect(() => {
-        console.log('etailForm', etailForm.prioriC);
-    }, [etailForm]);
+        console.log('etail', etail);
+    }, [etail]);
     
     const Bar = () => {
         const saveEtail = (e: any) => {
@@ -97,14 +99,14 @@ export default function Etail(props: EtailProps) {
                 const x = {
                     ...ev,
                     id: ev.id,
-                    name: etailForm.name,
-                    parentId: etailForm.parentId ?? null,
-                    levelC: etailForm.levelC ?? sr.hour.c,
-                    timeStart: cDateToUTCDate(etailForm.timeStart),
-                    timeEnd: cDateToUTCDate(etailForm.timeEnd),
-                    activeC: etailForm.activeC,
-                    statusC: etailForm.statusC,
-                    prioriC: etailForm.prioriC,
+                    name: etail.name,
+                    parentId: etail.parentId ?? null,
+                    levelC: etail.levelC ?? sr.hour.c,
+                    timeStart: cDateToUTCDate(etail.timeStart),
+                    timeEnd: cDateToUTCDate(etail.timeEnd),
+                    activeC: etail.activeC,
+                    statusC: etail.statusC,
+                    prioriC: etail.prioriC,
                 }
                 iuEv(x).then((data: any) => {
                     if (data.options.success) {
@@ -148,7 +150,7 @@ export default function Etail(props: EtailProps) {
                 id="evId"
                 name="id"
                 label="ID"
-                value={etailForm.id}
+                value={etail.id}
                 disabled
                 sx={{
                     width: "100%", // 50(width of 2 GrabEdges)
@@ -169,7 +171,7 @@ export default function Etail(props: EtailProps) {
                 name="parentId"
                 label="Parent ID"
                 disabled
-                value={etailForm.parentId}
+                value={etail.parentId}
                 onChange={(e) => {
                     // update name here ....
                 }}
@@ -199,14 +201,14 @@ export default function Etail(props: EtailProps) {
     const EvName = () => (
         <WRow>
             <TextField
-                id={"evName" + etailForm.id}
+                id={"evName" + etail.id}
                 name="name"
                 label="Event Name"
-                value={etailForm.name}
+                value={etail.name}
                 onChange={(e) => {
                     // setEtailForm({ name: e.target.value });
                     if (e.target && e.target.value && e.target.name) {
-                        handleChange(e.target.name, e.target.value);
+                        handleChange(etail.id, e.target.name, e.target.value);
                     }
                 }}
                 sx={{
@@ -262,13 +264,13 @@ export default function Etail(props: EtailProps) {
                 <InputLabel id="timeLevelLabel">Level</InputLabel>
                 <Select
                     labelId="timeLevelLabel"
-                    name="level"
+                    name="levelC"
                     id="levelSelect"
-                    value={etailForm.levelC ?? sr.hour.c}
+                    value={etail.levelC ?? sr.hour.c}
                     label="Current Cevel"
                     onChange={(e) => {
                         if (e.target && e.target.name && e.target.value) {
-                            handleChange(e.target.name, e.target.value);
+                            handleChange(etail.id, e.target.name, e.target.value);
                         }
                     }}
                 >
@@ -293,10 +295,10 @@ export default function Etail(props: EtailProps) {
                     label="Date Start"
                     name="dateStart"
                     className="dateStartPicker"
-                    value={new Date(etailForm.timeStart)}
+                    value={new Date(etail.timeStart)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange("dateStart", newValue);
+                            handleChange(etail.id, "timeStart", newValue);
                         }
                     }}
                     sx={{
@@ -332,10 +334,10 @@ export default function Etail(props: EtailProps) {
                     className="timeStartPicker"
                     name="timeStart"
                     label="Time Start"
-                    value={new Date(etailForm.timeStart)}
+                    value={new Date(etail.timeStart)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange("timeStart", newValue);
+                            handleChange(etail.id, "timeStart", newValue);
                         }
                     }}
                     sx={{
@@ -373,12 +375,12 @@ export default function Etail(props: EtailProps) {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                     label="Date End"
-                    name="dateEnd"
+                    name="timeEnd"
                     className="DateEndPicker"
-                    value={new Date(etailForm.timeEnd)}
+                    value={new Date(etail.timeEnd)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange("dateEnd", newValue);
+                            handleChange(etail.id, 'timeEnd', newValue);
                         }
                     }}
                     sx={{
@@ -414,10 +416,10 @@ export default function Etail(props: EtailProps) {
                     className="timeEndPicker"
                     name="timeEnd"
                     label="Time End"
-                    value={new Date(etailForm.timeEnd)}
+                    value={new Date(etail.timeEnd)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange("timeEnd", newValue);
+                            handleChange(etail.id, "timeEnd", newValue);
                         }
                     }}
                     sx={{
@@ -450,7 +452,6 @@ export default function Etail(props: EtailProps) {
             </LocalizationProvider>
         </WRow>
     );
-
     const Status = () => {
         return (
         <WRow>
@@ -476,10 +477,10 @@ export default function Etail(props: EtailProps) {
                     }}
                 >Status</FormLabel>
                 <RadioGroup 
-                name="status" 
-                value={etailForm.statusC} 
+                name="statusC" 
+                value={etail.statusC} 
                 onChange={(e)=>{
-                    handleChange('status', e.target.value)
+                    handleChange(etail.id, e.target.name, e.target.value)
                 }}
                 sx={{
                     display: 'flex',
@@ -497,7 +498,6 @@ export default function Etail(props: EtailProps) {
             </FormControl>
         </WRow>
     )}
-
     const Priority = () => {
         return (
         <WRow>
@@ -523,10 +523,10 @@ export default function Etail(props: EtailProps) {
                     }}
                 >Priority</FormLabel>
                 <RadioGroup 
-                name="status" 
-                value={etailForm.prioriC} 
+                name="prioriC" 
+                value={etail.prioriC} 
                 onChange={(e)=>{
-                    handleChange('priority', e.target.value)
+                    handleChange(etail.id, e.target.name, e.target.value)
                 }}
                 sx={{
                     display: 'flex',
@@ -546,8 +546,6 @@ export default function Etail(props: EtailProps) {
         </WRow>
     )}
 
-
-    //! ###################################################################################################
     return (
         <>
             <div
