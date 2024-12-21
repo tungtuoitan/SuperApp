@@ -38,6 +38,9 @@ export interface TLBaseBgContextData {
 
     frameScrollLeft: number;
     setFrameScrollLeft: Dispatch<SetStateAction<number>>;
+
+    firstTimeInit: boolean;
+    setFirstTimeInit: Dispatch<SetStateAction<boolean>>;
     
 };
 
@@ -73,6 +76,9 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
     frameScrollLeft: 0,
     setFrameScrollLeft: () => {},
 
+    firstTimeInit: true,
+    setFirstTimeInit: () => {},
+
 };
 const TLBaseBgStore = createContext<TLBaseBgContextData>(TLBaseBgContextDefaultValue);
 
@@ -96,7 +102,10 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [keyboardState, setKeyboardState] = useState<KeyboardState>({shift: false, ctrl: false, alt: false});
 
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+    // temporary saving, these guys should on TLContainerStore (not created yet)
     const [frameScrollLeft, setFrameScrollLeft] = useState<number>(0);
+    const [firstTimeInit, setFirstTimeInit] = useState<boolean>(true);
 
     return (
         <TLBaseBgStore.Provider
@@ -131,6 +140,9 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
                 frameScrollLeft,
                 setFrameScrollLeft,
+
+                firstTimeInit,
+                setFirstTimeInit,
 
 
             }}>

@@ -76,10 +76,17 @@ export const TLAllTabs = () => {
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
         event?.preventDefault();
         event?.stopPropagation();
-        setAllTabIds(allTabIds.filter(tabId => tabId !== id));
-        if (curTabIndex === allTabIds.indexOf(id)) {
-            setCurTabIndex(0);
-        }
+        setAllTabIds(prev => {
+            const newAllTabIds = prev.filter(tabId => tabId !== id)
+            if (curTabIndex === allTabIds.indexOf(id)) {
+                setCurTabIndex(prev => prev-1);
+            } else {
+                const newCurTabIndex = newAllTabIds.indexOf(allTabIds[curTabIndex]);
+                setCurTabIndex(newCurTabIndex);
+            }
+
+            return newAllTabIds;
+        })
     }
 
     useEffect(() => {
