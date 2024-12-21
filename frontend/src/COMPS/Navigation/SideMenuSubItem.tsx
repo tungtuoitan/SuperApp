@@ -1,10 +1,10 @@
 import { ListItem, Tooltip, styled } from "@mui/material";
+import { SAComponent } from "./sitemap";
+import { useNavigationStore } from "./Store/NavigationStore";
+import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 import { forwardRef, useEffect, useState } from "react";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { useSideMenuSubItemEvents } from "./Hooks/SideMenuSubItemEvents";
-import { SAComponent } from "../../Config/sitemap";
-import { useNavigationStore } from "./Store/NavigationStore";
-import { useSideMenuHelper } from "./Hooks/SideMenuHelper";
 
 export interface ISideSubMenuProps{
     item: SAComponent
@@ -27,15 +27,6 @@ export const SubMenuItemLine = styled('div')({
     width: '100%',
     color: 'rgb(54, 69, 79)',
     padding: 0,
-    '& .sub-item-link.child': {
-        'svg': {
-            height: '.9rem',
-            width: '.9rem',
-        }
-    },
-    '& .sub-item-link.child.expanded': {
-        paddingLeft: '40px!important',
-    },
     '& .sub-item-link:hover': {
         backgroundColor: 'rgba(0, 0, 0, 0.87)!important',
         cursor: 'pointer',
@@ -76,7 +67,7 @@ export const SubItemLabel = styled('div')({
     paddingLeft: '10px',
 })
 
-export const SideMenuSubItemChild = (props: ISideSubMenuProps) => {
+export const SideMenuSubItem = (props: ISideSubMenuProps) => {
     const {item,popupMenu} = props;
     const {expanded} = useNavigationStore();
     const {menuItemIcon} = useSideMenuHelper();
@@ -91,7 +82,7 @@ export const SideMenuSubItemChild = (props: ISideSubMenuProps) => {
                     <ListItem 
                         onClick={(e: any) => onClickHandlerSubItem(e,item.code)}
                         onMouseEnter={onMouseEnterHandlerSubItem}
-                        className={`sub-item-link child ${expanded ? 'expanded' : ''} ${item.active ? 'active' : ''}`}
+                        className={`sub-item-link ${item.active ? 'active' : ''}`}
                         style={{
                             display: 'flex',
                             flexDirection: 'row',

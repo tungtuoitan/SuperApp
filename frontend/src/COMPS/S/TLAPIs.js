@@ -1,11 +1,10 @@
-import { constants } from "../../Config/constants.js";
-import { getLocaleLanguage } from "../../Utilities.js";
+import { constants } from "../../constants.js";
 
 
 export const getEvs = async (token, skip) => {
   const headers = new Headers({
       // Authorization: `Bearer ${token}`,
-      'Accept-Language': getLocaleLanguage(),
+      'Accept-Language': constants.getLocaleLanguage(),
       'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
   });
 
@@ -27,7 +26,7 @@ export const getEvs = async (token, skip) => {
 export const iuEv = async (params, token, skip) => {
     const headers = new Headers({
         // Authorization: `Bearer ${token}`,
-        'Accept-Language': getLocaleLanguage(),
+        'Accept-Language': constants.getLocaleLanguage(),
         'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone 
     });
   
@@ -58,7 +57,7 @@ export const iuEv = async (params, token, skip) => {
 export const getSRs = async (token, skip) => {
     const headers = new Headers({
         // Authorization: `Bearer ${token}`,
-        'Accept-Language': getLocaleLanguage(),
+        'Accept-Language': constants.getLocaleLanguage(),
         'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
     });
   

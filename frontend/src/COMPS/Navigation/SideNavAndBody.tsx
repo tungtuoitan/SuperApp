@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
 import { SnackbarKey, SnackbarProvider } from "notistack";
-import { CloseNotiBtn } from "../Helpers/CloseNotiBtn";
+import { CloseNotiBtn } from "../CommonHelpers/1_CloseNotiBtn";
 import { TLProvider } from "../S/TLProvider";
 
 export const SideNavRoot = styled('div')({

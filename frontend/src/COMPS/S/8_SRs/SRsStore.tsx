@@ -1,6 +1,6 @@
 
 import { createContext, useContext, useState } from "react";
-import { IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete";
+import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 
 export type SR = {
     id: number;
