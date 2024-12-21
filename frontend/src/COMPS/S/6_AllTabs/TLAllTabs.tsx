@@ -9,7 +9,7 @@ import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useAllTabsStore } from "./AllTabsStore";
 import { getSRs } from "../TLAPIs";
 import { SR, useSRsStore } from "../8_SRs/SRsStore";
-import { IAutoCompleteOptions } from "../../Helpers/GenericAutoComplete";
+import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 
 const WBadge = styled(Badge)<BadgeProps>(() => ({

@@ -3,7 +3,7 @@ import { Box, Button, Chip, FormControl, IconButton, Input, InputAdornment, Inpu
 import { useLoginStore } from './store/loginStore';
 import { Link } from 'react-router-dom';
 import { useLoginHelper } from './hook/useLoginHelper';
-import { constants } from '../../Config/constants';
+import { constants } from '../../constants';
 type Props = {}
 
 function SignUp({ }: Props) {
