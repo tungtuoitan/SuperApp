@@ -1,4 +1,5 @@
 import {useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
+import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 import { sr } from "../TLConstants";
 import { cDate, Ev } from "../TLTypes";
 import { _4cs } from "./4cs";
@@ -9,8 +10,10 @@ import {useChildEvHelpers} from "./ChildEvHelpers";
 export const use4he = () => {
     const { isPresentEv } = useChildEvHelpers();
     const { isPast } = useTimeHelpers();
+    const { allTabIds } = useAllTabsStore();
 
-    const getBg = (childEv: Ev, grabEdge: IGrabEdge) => {
+    const getBgChildEv = (childEv: Ev, grabEdge: IGrabEdge) => {
+        if (allTabIds.includes(childEv.id)) return _4cs.childEv.bgOpeningEtail;
         if (isPast(childEv.timeEnd) || childEv.statusC === sr.status.resolved.c) {
             return _4cs.childEv.bgPast;
         } 
@@ -39,7 +42,7 @@ export const use4he = () => {
             }
         }
     };
-    return { getBg };
+    return { getBgChildEv };
 };
 
 // B____________________________________________________________________________________________________________________
