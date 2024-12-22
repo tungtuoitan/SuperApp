@@ -4,7 +4,7 @@ import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { cDateToGh, parseCDate } from "../3_TimeConfig/TimeHelpers";
 import { lateNight, sr } from "../TLConstants";
-import {isLateNight, isOverlap} from "./2helpers";
+import {isLateNight, isOverlap} from "./2he";
 
 export const useTLBaseFgHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();

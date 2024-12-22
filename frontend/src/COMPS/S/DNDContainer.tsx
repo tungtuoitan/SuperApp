@@ -10,9 +10,9 @@ import { v4 as uuid } from 'uuid';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { iuEv } from './TLAPIs';
 import { Ev, EvsResult } from './TLTypes';
-import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import {sr} from './TLConstants';
+import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 
 export default function DNDContainer() {
 
@@ -21,7 +21,7 @@ export default function DNDContainer() {
     const { markEvs } = useTLBaseFgHelpers();
     const { TIList } = useTLBaseBgStore();
     const { enqueueSnackbar } = useSnackbar();
-    const { setFevId } = EvStore();
+    const { setFevId } = useChildEvStore();
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id);

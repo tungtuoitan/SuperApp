@@ -1,15 +1,9 @@
 
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
+import {IGrabEdge} from "./4ty";
+import {defaultGrabEdge} from "./4he";
 
-export type IGrabEdge = {
-    id: number | null;
-    position: 'left' | 'right';
-    mouseenter: boolean;
-    mousedownAtGE: boolean;
-}
-const defaultGrabEdge: IGrabEdge = {id: null, position: 'left', mouseenter: false, mousedownAtGE: false};
-
-export interface TLBaseEvContextData {
+export interface ChildEvContextData {
     mouseenter: boolean;
     setEnterGrabEdge: Dispatch<SetStateAction<boolean>>;
     mousedownAtGE: boolean;
@@ -27,7 +21,7 @@ export interface TLBaseEvContextData {
     setFocusTFId: Dispatch<SetStateAction<number | null>>;
 };
 
-export const EvContextDefaultValue: TLBaseEvContextData = {
+export const ChildEvContextDefaultValue: ChildEvContextData = {
     mouseenter: false,
     setEnterGrabEdge: () => {},
     mousedownAtGE: false,
@@ -43,10 +37,10 @@ export const EvContextDefaultValue: TLBaseEvContextData = {
     setFocusTFId: () => {},
 };
 
-const EvContext = createContext<TLBaseEvContextData>(EvContextDefaultValue);
-export const EvStore = () => useContext(EvContext);
+const ChildEvContext = createContext<ChildEvContextData>(ChildEvContextDefaultValue);
+export const useChildEvStore = () => useContext(ChildEvContext);
 
-export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+export const ChildEvProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [mouseenter, setEnterGrabEdge] = useState<boolean>(false);
     const [mousedownAtGE, setGrabbing] = useState<boolean>(false);
     const [grabEdge, setGrabEdge] = useState<IGrabEdge>(defaultGrabEdge);
@@ -57,7 +51,7 @@ export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithC
 
 
     return (
-        <EvContext.Provider
+        <ChildEvContext.Provider
             value={{
                 mouseenter,
                 setEnterGrabEdge,
@@ -74,6 +68,6 @@ export const TLBaseEvProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 setFocusTFId,
             }}>
             {children}
-        </EvContext.Provider>
+        </ChildEvContext.Provider>
     )
 }

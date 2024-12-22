@@ -1,4 +1,4 @@
-import { EvStore } from "./EvStore";
+import {useChildEvStore} from "./ChildEvStore";
 
 type GrabEdgeProps = {
     id: number,
@@ -8,7 +8,7 @@ type GrabEdgeProps = {
 
 export default function GrabEdge (props: GrabEdgeProps) {
     const {position, id, type = 'child'} = props;
-    const { grabEdge, setGrabEdge } = EvStore();
+    const { grabEdge, setGrabEdge } = useChildEvStore();
 
     return (
         <div 

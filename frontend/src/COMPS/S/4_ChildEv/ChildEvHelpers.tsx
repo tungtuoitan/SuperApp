@@ -5,7 +5,7 @@ import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { debounce } from "lodash";
 import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 
-export const useEvHelpers = () => {
+export const useChildEvHelpers = () => {
     const { TIList, dateReal } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { markEvs } = useTLBaseFgHelpers();

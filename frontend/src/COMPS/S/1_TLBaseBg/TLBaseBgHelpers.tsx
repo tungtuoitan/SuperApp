@@ -8,6 +8,7 @@ export const useTLBaseBgHelpers = () => {
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
+    // 1
     const getLevelCOf = (type: 'parentEv' | 'childEv' | 'TI') => { // means get level(hour/day/...) of childEv/ parentEv/ TI
         switch (type) {
             case 'parentEv':
@@ -23,31 +24,31 @@ export const useTLBaseBgHelpers = () => {
         }
     }
 
-    // C. TLBaseFrame
+    // 2. TLBaseFrame
     const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
     const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
 
-    // A. relate to TI
+    // 3. TI
     const hourPerTI = hper[(getLevelCOf('TI') === sr.week.c ? sr.day.c : getLevelCOf('TI')) as keyof typeof hper];
     const pxPerTI = w$BaseTI * zoomLv;
 
-    // B. Convert
+    // 4. Convert
     const RhPerPx = hourPerTI / pxPerTI;
     const RhToPx = (h: number) => h / RhPerPx
     const RpxToRh = (px: number) => px * RhPerPx
 
 
 
-    // D. TLBaseBg
+    // 5. TLBaseBg
     const w$Bg = w$BaseTI * zoomLv * TIList.length
     const h$G_BgStart = (TIList[0] && TIList[0].date) ? cDateToGh(TIList[0].date) : 0;
     const h$G_BgEnd = h$G_BgStart + w$Bg * RhPerPx;
     const maxScrollLeft = TLBaseFrameRef.current ? (TLBaseFrameRef.current.scrollWidth - TLBaseFrameRef.current.clientWidth) : 0;
 
-    // E. spot
+    // 6. spot
     const w$BgStart_spot = () => w$Bg * spotRatio.current; //! những value thế này, nếu viết theo kiểu hàm, thì đôi lúc nó sẽ không reset value
 
-    // F. Red line
+    // 7. Red line
     const realCDate = dateToCDate(dateReal);
     const h$G_red = cDateToGh(dateToCDate(dateReal));
     const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;

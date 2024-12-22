@@ -4,7 +4,7 @@ import {cDate, CevelC} from "../TLTypes"
 import {lateNight, sr} from "../TLConstants"
 
 
-export const _1helpers = {
+export const _1he = {
     getTIBg: (TILevel: CevelC, date: cDate) => {
         const lightPink = 'rgb(231, 226, 224)'
         const mediumPink = 'rgb(230, 215, 212)'

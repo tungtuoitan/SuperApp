@@ -6,17 +6,17 @@ import { KeyboardEvent, useEffect } from 'react';
 import { iuEv } from './TLAPIs';
 import { useSnackbar } from 'notistack';
 import { Ev, EvsResult } from './TLTypes';
-import { EvStore } from './4_Ev/EvStore';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import { addTime, cDateToGh, cDateToUTCDate, GhToCDate, useTimeHelpers } from './3_TimeConfig/TimeHelpers';
 import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { sr } from './TLConstants';
+import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
-    const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = EvStore();
+    const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = useChildEvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
     const { RpxToRh, h$G_BgStart, w$BgStart_spot } = useTLBaseBgHelpers();
