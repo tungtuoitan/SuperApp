@@ -10,10 +10,12 @@ import { ParentEv } from "../4_ChildEv/ParentEv";
 import { getEvs } from "../TLAPIs";
 import {WTLBaseFgContainer} from "./2ui";
 import {use2he} from "./2he";
+import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
 
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
-    const { setAllEvs, activeId, newEvId, allEvs } = useTLBaseFgStore();
+    const { allEvs, setAllEvs } = useTLBaseFgStore();
+    const { activeId, FIIDs } = useFloatToolsStore();
     const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
     const { w$Bg, getLevelCOf } = useTLBaseBgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
@@ -42,7 +44,7 @@ export const TLBaseFg = () => {
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
 
     return (
-        <WTLBaseFgContainer id='TLBaseFg' ref={setNodeRef} sx={{ width: w$Bg, background: isOver ? '#add8e698' : 'transparent' }}>
+        <WTLBaseFgContainer id='TLBaseFg' ref={activeId===FIIDs.parentEv ? setNodeRef : null} sx={{ width: w$Bg, background: isOver && activeId===FIIDs.parentEv ? '#add8e698' : 'transparent' }}>
             {[...fiveLines, [beggerEv]].map((line: Ev[], i) => {
                 return line.map(parontEv => {
                     return <ParentEv
@@ -58,9 +60,12 @@ export const TLBaseFg = () => {
             })
             }
             <DragOverlay>
-                {activeId === newEvId
-                    ? <TISample id={activeId} type={isOver ? 'parentEv' : 'childEv'} />
-                    : null}
+                {activeId === FIIDs.parentEv && activeId !== null
+                    ? <TISample id={FIIDs.parentEv} type={'parentEv'} /> : null}
+            </DragOverlay>
+            <DragOverlay>
+                {activeId === FIIDs.childEv && activeId !== null
+                    ? <TISample id={FIIDs.childEv} type={'childEv'} /> : null}
             </DragOverlay>
         </WTLBaseFgContainer>
     );
