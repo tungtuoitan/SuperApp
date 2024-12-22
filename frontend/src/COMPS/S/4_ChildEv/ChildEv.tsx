@@ -45,6 +45,7 @@ export const ChildEv = (props: ChildEvProps) => {
     const displayTimeLeft = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left'
     const displayTimeRight = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right'
     const displayDotGroup = width > 30
+    const isBeggerGang = parentEv.id === 999999999 || parentEv.id === null
 
     return <>
         <WChildEv
@@ -75,13 +76,13 @@ export const ChildEv = (props: ChildEvProps) => {
             }}
         >
             {displayDotGroup && <DotGroup childEv={childEv} />}
-            {displayBlackMini && <BlackMini childId={childEv.id} isBeggerGang={parentEv.id===999999999 || parentEv.id===null}/>}
+            {displayBlackMini && <BlackMini childId={childEv.id} isBeggerGang={isBeggerGang}/>}
             {displayLeftGrabEdge && <GrabEdge position='left' id={childEv.id} />}
             {displayRightGrabEdge && <GrabEdge position='right' id={childEv.id} />}
-            {displayTimeLeft && <WTime sx={{left: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
-            {displayTimeRight && <WTime sx={{right: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
+            {displayTimeLeft && <WTime sx={{left: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
+            {displayTimeRight && <WTime sx={{right: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
             
-            <Cooltip title={childEv.name} placement='top' enterDelay={500} leaveDelay={200} >
+            <Cooltip title={childEv.name} placement={isBeggerGang ? 'right': 'top'} enterDelay={500} leaveDelay={200} >
                 <ChildEvTextField
                     id={'childEvName' + childEv.id}
                     className={tfSelector.div0Class}
