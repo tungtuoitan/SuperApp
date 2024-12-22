@@ -128,11 +128,11 @@ export default function TLContainer() {
                 }
             }}
             onKeyUp={(e: KeyboardEvent<HTMLDivElement>) => {
-                if(e.ctrlKey)
+                if(e.key === 'Control')
                     setKeyboardState({...keyboardState, ctrl: false})
-                if(e.shiftKey)
+                if(e.key === 'Shift')
                     setKeyboardState({...keyboardState, shift: false})
-                if(e.altKey)
+                if(e.key === 'Alt')
                     setKeyboardState({...keyboardState, alt: false})
             }}
             style={{ 

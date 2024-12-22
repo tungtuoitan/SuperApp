@@ -66,20 +66,6 @@ export const TLBaseContainer = () => {
     useEffect(() => {
         if (TLBaseFrameRef.current && timeConfig.timeStart) 
             TLBaseFrameRef.current.scrollLeft = frameScrollLeft
-            // if (timeConfig.timeStart) {
-                // const { y, m, d, h } = parseCDate(timeConfig.timeStart);
-                // // nếu đang có dateReal
-                // if (timeConfig.cevelId === 1 && y === dateReal.getFullYear() ||
-                //     timeConfig.cevelId === 2 && y === dateReal.getFullYear() && m === dateReal.getMonth() + 1) {
-                //     TLBaseFrameRef.current.scrollLeft = w$BgStart_red - w$TLBaseFrame / 2;
-                // }
-                // // nếu k có dateReal 
-                // else {
-                //     TLBaseFrameRef.current.scrollLeft = 0
-                // }
-            // }
-            // setLoadingTL(false)
-        
     }, [TIList])
 
     // giữ spotlight 
@@ -183,7 +169,6 @@ export const TLBaseContainer = () => {
                     // onMouseEnter={() => { setMouseEnter(true) }}
                     onWheel={(e: React.WheelEvent) => {
                         if (!TLBaseFrameRef.current) return;
-                        // e.preventDefault();
                         let newTimeConfig = { ...timeConfig };
                         let newZoomLv = zoomLv;
 
@@ -191,42 +176,15 @@ export const TLBaseContainer = () => {
                         // ~zoom in
                         if (e.deltaY < 0) {
                             if (zoomLv >= zoomLvMax) {
-                                // console.log('uplevel')
-                                // uplevel nếu có thể
-                                // for(let i= newTimeConfig.levelC+1; i<clvs.length; i++) {
-                                //     if(clvs[i].status === 'on') {
-                                //         newTimeConfig.levelC = i;
-                                //         break;
-                                //     }
-                                // }
-                                // if(clvs[newTimeConfig.levelC].levelC === sr.year && timeConfig.period) {
-                                //     const newInYearsList = getInYearsList(timeConfig.period.date);
-                                //     newTimeConfig.inYearsVal = newInYearsList[0];
-                                // }
-
-                                // newZoomLv = 1;
                             } else {
-                                // console.log('upzoom')
                                 newZoomLv += 1;
-
                             }
                         }
 
                         // ~zoom out
                         if (e.deltaY > 0) {
                             if (zoomLv <= 1) {
-                                // console.log('downlevel')
-                                // newZoomLv = 6;
-
-                                // downlevel nếu có thể
-                                // for(let i= timeConfig.cevelId-1; i >= 0; i--) {
-                                //     if(clvs[i].status === 'on') {
-                                //         newTimeConfig.levelC = i;
-                                //         break;
-                                //     }
-                                // }
                             } else {
-                                // console.log('downzoom')
                                 newZoomLv -= 1;
                             }
                         }
@@ -236,9 +194,7 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <div id='FgBgContainer' style={{
-                        position: 'relative'
-                    }}>
+                    <div id='FgBgContainer' style={{position: 'relative'}}>
                         <TLBaseFg />
                         <TLBaseBg />
                     </div>
