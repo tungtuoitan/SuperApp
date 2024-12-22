@@ -4,19 +4,16 @@ import {
     MenuItem,
     Select,
 } from "@mui/material";
-import { _3css } from "../../3_TimeConfig/3css";
-import { helperMUIcss } from "../../../CommonHelpers/5_MUIcss";
-import { useEtailHelpers } from "../EtailHelper";
-import { clvs, sr } from "../../TLConstants";
-import { useSRsStore } from "../../8_SRs/SRsStore";
-import {useEtailFormStore} from "../EtailFormsStore";
-import {EtailForm} from "../EtailType";
-import { WRow} from "../5uis";
+import {useEtailHelpers} from "../5_Etail/EtailHelpers";
+import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
+import {useSRsStore} from "../8_SRs/SRsStore";
+import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
+import {sr} from "../TLConstants";
+import {EtailForm} from "../5_Etail/5ty";
+import {WRow} from "./5Lui";
+import {LaperLevelProps} from "./5Lty";
 
-type EtailProps = {
-    id: number;
-};
-export default function ELevel(props: EtailProps) {
+export default function LaperLevel(props: LaperLevelProps) {
     const { handleChange } = useEtailHelpers();
     const levelSelector = helperMUIcss.getSelectCSSSelector();
     const { levelOptions } = useSRsStore();

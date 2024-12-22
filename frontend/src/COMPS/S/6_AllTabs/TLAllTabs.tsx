@@ -1,6 +1,5 @@
 import { Box, Grow, IconButton, Tab, Tabs, styled } from "@mui/material";
 import { SetStateAction, useState, MouseEvent, useEffect } from "react";
-import Badge, { BadgeProps } from '@mui/material/Badge';
 import TLContainer from "../TLContainer";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
@@ -8,54 +7,12 @@ import Etail from "../5_Etail/Etail";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useAllTabsStore } from "./AllTabsStore";
 import { getSRs } from "../TLAPIs";
-import { SR, useSRsStore } from "../8_SRs/SRsStore";
+import { useSRsStore } from "../8_SRs/SRsStore";
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
-
-const WBadge = styled(Badge)<BadgeProps>(() => ({
-    '& .MuiBadge-badge': {
-        right: -5,
-        top: 0,
-        padding: '0 2px',
-        height: '16px',
-        minWidth: '16px',
-    },
-}));
-
-export const WTabsContainer = styled(Box)({
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgb(246, 246, 246)',
-})
-
-export const WTabBar = styled(Tabs)({
-    backgroundColor: '#fff',
-    marginRight: '30px',
-    width: '100%',
-    height: '50px',
-    [`& .MuiTabs-scroller`]: {
-        borderRightWidth: '0',
-    },
-})
-
-export interface ITabsContainer {
-    tabs: TabItem[]
-}
-
-export interface TabItem {
-    label: string
-    tabComponent: React.ReactNode
-    disabled?: boolean
-    badge?: number
-    icon?: React.ReactNode
-}
-
-const a11yProps = (index: number) => {
-    return {
-        id: `x-tab-${index}`,
-        'aria-controls': `tabs-tabpanel-${index}`,
-    };
-}
+import { WBadge, WTabBar, WTabsContainer} from "./6ui";
+import {a11yProps} from "./6he";
+import {SR} from "../8_SRs/8ty";
 
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -68,10 +25,6 @@ export const TLAllTabs = () => {
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const handleChange = (event: any, newTabIndex: SetStateAction<number>) => {
-        setCurTabIndex(newTabIndex);
-    };
 
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
         event?.preventDefault();
@@ -106,7 +59,7 @@ export const TLAllTabs = () => {
             <WTabBar
                 id='tabBar'
                 value={curTabIndex}
-                onChange={handleChange}
+                onChange={(e: any, newTabIndex: SetStateAction<number>) => setCurTabIndex(newTabIndex)}
                 aria-label="tabs">
                 {allTabIds.map((id: number | string, index: number) => {
                     if (id === 'ScheduleID') return <Tab key={index} icon={<CalendarTodayIcon />} {...a11yProps(index)} sx={{
@@ -154,7 +107,7 @@ export const TLAllTabs = () => {
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)' }}>
                 {(allTabIds.filter((id, index) => index === curTabIndex)[0]) === 'ScheduleID'
                     ? <TLContainer />
-                    : <Etail id={allTabIds[curTabIndex] as number} />}
+                    : <Etail etailId={allTabIds[curTabIndex] as number} />}
             </div>
         </WTabsContainer>
     )

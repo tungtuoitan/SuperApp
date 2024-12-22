@@ -1,24 +1,23 @@
 import { _3css } from "../3_TimeConfig/3css";
 import { useEffect } from "react";
 import { useEtailFormStore } from "./EtailFormsStore";
-import { EtailForm } from "./EtailType";
-import { EtailContainer, EtailPaper, WBar, WBody, WRow } from "./5uis";
-import EIds from "./Left/eIds";
-import EName from "./Left/eName";
-import ELevel from "./Left/eLevel";
-import EPriority from "./Left/ePriority";
-import EStatus from "./Left/eStatus";
-import ETimeStart from "./Left/eTimeStart";
-import EtimeEnd from "./Left/eTimeEnd";
-import {Bar} from "./Bar";
+import { EtailContainer, LeftEtailPaper, MidEtailPaper, RightEtailPaper, WBody } from "./5ui";
+import {EtailBar} from "./EtailBar";
+import LIds from "../5L_Laper/LaperIds";
+import LName from "../5L_Laper/LaperName";
+import LaperLevel from "../5L_Laper/LaperLevel";
+import LTimeStart from "../5L_Laper/LaperTimeStart";
+import LTimeEnd from "../5L_Laper/LaperTimeEnd";
+import LStatus from "../5L_Laper/LaperStatus";
+import LPriority from "../5L_Laper/LaperPriority";
+import {EtailForm, EtailProps} from "./5ty";
 
-type EtailProps = {
-    id: number;
-};
+
 export default function Etail(props: EtailProps) {
+    const { etailId } = props;
     const [etails, dispatch] = useEtailFormStore();
     const etail =
-        etails.find((etail) => etail.id === props.id) ?? ({} as EtailForm);
+        etails.find((etail) => etail.id === etailId) ?? ({} as EtailForm);
 
     useEffect(() => {
         console.log("etail", etail);
@@ -26,19 +25,19 @@ export default function Etail(props: EtailProps) {
 
     return (
         <EtailContainer>
-            <Bar id={props.id} />
+            <EtailBar id={etailId} />
             <WBody>
-                <EtailPaper>
-                    <EIds id={props.id} />
-                    <EName id={props.id} />
-                    <ELevel id={props.id} />
-                    <ETimeStart id={props.id} />
-                    <EtimeEnd id={props.id} />
-                    <EStatus id={props.id} />
-                    <EPriority id={props.id} />
-                </EtailPaper>
-                <EtailPaper></EtailPaper>
-                <EtailPaper></EtailPaper>
+                <LeftEtailPaper>
+                    <LIds id={etailId} />
+                    <LName id={etailId} />
+                    <LaperLevel id={etailId} />
+                    <LTimeStart id={etailId} />
+                    <LTimeEnd id={etailId} />
+                    <LStatus id={etailId} />
+                    <LPriority id={etailId} />
+                </LeftEtailPaper>
+                <MidEtailPaper></MidEtailPaper>
+                <RightEtailPaper></RightEtailPaper>
             </WBody>
         </EtailContainer>
     );

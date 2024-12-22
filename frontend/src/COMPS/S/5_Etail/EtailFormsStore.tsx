@@ -1,5 +1,5 @@
 import { useContext, createContext, useReducer, ReactNode } from 'react';
-import {EtailForm} from './EtailType';
+import {EtailForm} from './5ty';
 
 // Hàm reducer xử lý các hành động
 const etailFormReducer = (state: EtailForm[], action: { type: string; payload?: any }) => {

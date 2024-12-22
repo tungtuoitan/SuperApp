@@ -1,12 +1,8 @@
 import { useDraggable } from "@dnd-kit/core";
 import { _4cs } from "../4_ChildEv/4cs";
+import {DraggableProps} from "./7ty";
 
-type DraggableProps = {
-    children?: React.ReactNode;
-    sx?: React.CSSProperties;
-    id: string|number;
-    type?: 'childEv' | 'parentEv';
-}
+
 export default function TISample(props: DraggableProps) {
     const {id, sx, type= 'childEv'} = props;
     const {attributes, listeners, setNodeRef, transform} = useDraggable({

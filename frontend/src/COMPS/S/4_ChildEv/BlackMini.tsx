@@ -2,10 +2,10 @@ import { IconButton } from "@mui/material";
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { useAllTabsStore } from "../6_AllTabs/AllTabsStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
-import {EtailForm} from "../5_Etail/EtailType";
 import {WBlackMini} from "./4ui";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import {BlackMiniProps} from "./4ty";
+import {EtailForm} from "../5_Etail/5ty";
 
 
 

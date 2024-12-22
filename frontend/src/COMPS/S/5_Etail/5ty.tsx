@@ -1,5 +1,4 @@
-import { cDate, CevelC } from "../TLTypes";
-
+import {cDate, CevelC} from "../TLTypes";
 
 export type EtailForm = {
     id: number;
@@ -13,3 +12,7 @@ export type EtailForm = {
     statusC: string;
     activeC: string;
 }
+
+export type EtailProps = {
+    etailId: number;
+};

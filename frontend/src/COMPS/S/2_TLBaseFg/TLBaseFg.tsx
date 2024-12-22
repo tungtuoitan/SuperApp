@@ -4,7 +4,7 @@ import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { Ev } from "../TLTypes";
 import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
-import TISample from "../7_TLTools/TISample";
+import TISample from "../7_FloatTools/TISample";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { ParentEv } from "../4_ChildEv/ParentEv";
 import { getEvs } from "../TLAPIs";
