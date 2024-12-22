@@ -20,7 +20,7 @@ export default function Etail(props: EtailProps) {
         etails.find((etail) => etail.id === etailId) ?? ({} as EtailForm);
 
     useEffect(() => {
-        console.log("etail", etail);
+        // console.log("etail", etail);
     }, [etail]);
 
     return (

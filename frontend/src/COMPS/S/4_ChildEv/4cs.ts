@@ -22,6 +22,10 @@ export const _4cs = {
     parentEv: {
         pt: 12,
         heOf2borders: 4,
+        boFocus: '2px solid #0D99FF',
+        boNormal: '2px solid transparent',
+        bgIsOver: 'lightblue',
+        bgNormal: '#00000010',
     },
     dot: {
         wi: 5,

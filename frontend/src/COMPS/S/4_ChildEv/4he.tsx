@@ -1,7 +1,7 @@
 import {useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
 import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
-import { sr } from "../TLConstants";
-import { cDate, Ev } from "../TLTypes";
+import { hper, sr } from "../TLConstants";
+import { cDate, CevelC, Ev } from "../TLTypes";
 import { _4cs } from "./4cs";
 import {IGrabEdge} from "./4ty";
 import {useChildEvHelpers} from "./ChildEvHelpers";
@@ -42,9 +42,48 @@ export const use4he = () => {
             }
         }
     };
-    return { getBgChildEv };
+
+    
+    return { 
+        getBgChildEv,
+     };
 };
 
 // B____________________________________________________________________________________________________________________
 // 1
 export const defaultGrabEdge: IGrabEdge = {id: null, position: 'left', mouseenter: false, mousedownAtGE: false};
+
+// 2
+export const getMinMaxTimeOfEv = (levelC: CevelC, getMin: boolean = true): number => {
+    if(getMin) {
+        switch(levelC) {
+            case sr.year.c:
+                return hper.yea
+            case sr.month.c:
+                return hper.mon
+            case sr.week.c:
+                return hper.wee
+            case sr.day.c:
+                return hper.day/2
+            case sr.hour.c:
+                return hper.hou/4
+            default:
+                return hper.hou/4
+        }
+    } else {
+        switch(levelC) {
+            // case sr.year.c:
+            //     return hper.yea
+            // case sr.month.c:
+            //     return hper.mon
+            // case sr.week.c:
+            //     return hper.wee
+            // case sr.day.c:
+            //     return hper.day/2
+            // case sr.hour.c:
+            //     return hper.hou/4
+            default:
+                return hper.hou*24
+        }
+    }
+}
