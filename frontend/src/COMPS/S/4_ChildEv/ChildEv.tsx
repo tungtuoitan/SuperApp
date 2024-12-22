@@ -16,6 +16,7 @@ import {ChildEvTextField, DotGroup, WChildEv, WTime} from "./4ui";
 import {use4he} from "./4he";
 import {ChildEvProps} from "./4ty";
 import {useChildEvStore} from "./ChildEvStore";
+import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 
 
 export const ChildEv = (props: ChildEvProps) => {
@@ -26,8 +27,9 @@ export const ChildEv = (props: ChildEvProps) => {
     const { RhToPx } = useTLBaseBgHelpers();
     const { markEvs } = useTLBaseFgHelpers();
     const { isPast } = useTimeHelpers();
+    const { allTabIds } = useAllTabsStore();
     const { enqueueSnackbar } = useSnackbar();
-    const { getBg } = use4he();
+    const { getBgChildEv } = use4he();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = _4cs.parentEv.pt + (_4cs.childEv.he + _4cs.childEv.gapBetweenChildren) * lineOrder;
@@ -35,9 +37,10 @@ export const ChildEv = (props: ChildEvProps) => {
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
     const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
+    const isEtailOpen = allTabIds.includes(childEv.id);
     const enabledTF = fevId === childEv.id && fevId !== null && childEv.statusC !== sr.status.resolved.c
-    const displayLeftGrabEdge = !isPast(childEv.timeStart) && childEv.statusC !== sr.status.resolved.c
-    const displayRightGrabEdge = !isPast(childEv.timeEnd) && childEv.statusC !== sr.status.resolved.c
+    const displayLeftGrabEdge = !isPast(childEv.timeStart) && childEv.statusC !== sr.status.resolved.c && !isEtailOpen
+    const displayRightGrabEdge = !isPast(childEv.timeEnd) && childEv.statusC !== sr.status.resolved.c && !isEtailOpen
     const displayBlackMini = fevId && fevId === childEv.id
     const displayTimeLeft = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left'
     const displayTimeRight = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right'
@@ -48,7 +51,7 @@ export const ChildEv = (props: ChildEvProps) => {
             id={'ChildEv-' + childEv.name} data-name={childEv.name + parentEv.name}
             style={{
                 width: width,
-                background: getBg(childEv, grabEdge),
+                background: getBgChildEv(childEv, grabEdge),
                 transform: `translateX(${left}px)`,
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
                 // transform: `translateY(${top}px)`,
@@ -58,12 +61,14 @@ export const ChildEv = (props: ChildEvProps) => {
             }}
             onClick={(e) => {
                 e.stopPropagation();
+                if(isEtailOpen) return;
                 // if (isPast(childEv.timeEnd)) return;
                 if (!grabEdge.mouseenter) {
                     setFevId(childEv.id);
                 }
             }}
             onDoubleClick={(e) => {
+                if(isEtailOpen) return;
                 if (fevId === childEv.id) {
                     setFocusTFId(childEv.id);
                 }
@@ -82,6 +87,7 @@ export const ChildEv = (props: ChildEvProps) => {
                     className={tfSelector.div0Class}
                     value={tfValue}
                     onFocus={() => {
+                        if(isEtailOpen) return;
                         setFocusTFId(childEv.id);
                     }}
                     onBlur={() => {

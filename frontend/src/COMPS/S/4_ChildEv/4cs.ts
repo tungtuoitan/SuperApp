@@ -8,6 +8,7 @@ export const _4cs = {
         boFocus: '2px solid #0D99FF',
 
         bgNormal: '#828282',
+        bgOpeningEtail: '#0D99FF50',
         bgPast: '#82828220',
         bgPresent: '#FFCD29',
         bgDrag: 'black',

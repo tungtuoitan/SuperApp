@@ -6,14 +6,14 @@ import {WBlackMini} from "./4ui";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import {BlackMiniProps} from "./4ty";
 import {EtailForm} from "../5_Etail/5ty";
-
-
+import {useChildEvStore} from "./ChildEvStore";
 
 export default function BlackMini (props: BlackMiniProps) {
     const {childId, parentWidth} = props;
     const {allTabIds, setAllTabIds, setCurTabIndex} = useAllTabsStore();
     const [etails, dispatch] = useEtailFormStore();
     const {allEvs, setAllEvs} = useTLBaseFgStore();
+    const {fevId, setFevId, setFocusTFId} = useChildEvStore();
 
     return (
         <WBlackMini id= {`miniPopup-${childId}`}
@@ -22,9 +22,13 @@ export default function BlackMini (props: BlackMiniProps) {
             left: parentWidth ? parentWidth / 2 - 100 : 0, // in parent, we have to center it ourselves
         }}>
             <IconButton onClick={()=>{
+                setFevId(null) //! khi click, FevId k dc set lại, tại saoooo ?
+                setFocusTFId(null)
+           
                 if(allTabIds.includes(childId)) {
                     setCurTabIndex(allTabIds.indexOf(childId))
-                } else {
+                } 
+                else {
                     setAllTabIds(prev => {
                         setCurTabIndex(prev.length) // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
                         return [...prev, childId]
