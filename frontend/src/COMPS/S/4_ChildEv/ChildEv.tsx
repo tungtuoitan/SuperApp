@@ -36,8 +36,12 @@ export const ChildEv = (props: ChildEvProps) => {
     )
     const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
     const enabledTF = fevId === childEv.id && fevId !== null && childEv.statusC !== sr.status.resolved.c
-    const enableLeftGrabEdge = !isPast(childEv.timeStart) && childEv.statusC !== sr.status.resolved.c
-    const enableRightGrabEdge = !isPast(childEv.timeEnd) && childEv.statusC !== sr.status.resolved.c
+    const displayLeftGrabEdge = !isPast(childEv.timeStart) && childEv.statusC !== sr.status.resolved.c
+    const displayRightGrabEdge = !isPast(childEv.timeEnd) && childEv.statusC !== sr.status.resolved.c
+    const displayBlackMini = fevId && fevId === childEv.id
+    const displayTimeLeft = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left'
+    const displayTimeRight = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right'
+    const displayDotGroup = width > 30
 
     return <>
         <WChildEv
@@ -65,12 +69,12 @@ export const ChildEv = (props: ChildEvProps) => {
                 }
             }}
         >
-            {fevId && fevId === childEv.id && <BlackMini childId={childEv.id} isBeggerGang={parentEv.id===999999999 || parentEv.id===null}/>}
-            <DotGroup childEv={childEv}/>
-            {enableLeftGrabEdge && <GrabEdge position='left' id={childEv.id} />}
-            {enableRightGrabEdge && <GrabEdge position='right' id={childEv.id} />}
-            {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left' &&
-                <WTime sx={{left: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
+            {displayDotGroup && <DotGroup childEv={childEv} />}
+            {displayBlackMini && <BlackMini childId={childEv.id} isBeggerGang={parentEv.id===999999999 || parentEv.id===null}/>}
+            {displayLeftGrabEdge && <GrabEdge position='left' id={childEv.id} />}
+            {displayRightGrabEdge && <GrabEdge position='right' id={childEv.id} />}
+            {displayTimeLeft && <WTime sx={{left: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
+            {displayTimeRight && <WTime sx={{right: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
             
             <Cooltip title={childEv.name} placement='top' enterDelay={500} leaveDelay={200} >
                 <ChildEvTextField
@@ -109,8 +113,6 @@ export const ChildEv = (props: ChildEvProps) => {
                     }}
                 />
             </Cooltip>
-            {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right' &&
-                <WTime sx={{right: 0, top: parentEv.id === null || parentEv.id === 999999999 ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
         </WChildEv>
     </>
 }

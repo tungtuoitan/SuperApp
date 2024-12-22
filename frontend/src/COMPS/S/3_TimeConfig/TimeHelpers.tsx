@@ -75,7 +75,6 @@ export const useTimeHelpers = () => {
         if (0<=timeConfig.cevelId && timeConfig.cevelId<=5) {
             const newCevelId = timeConfig.cevelId + (updown === "up" ? 1 : -1);
             if(newCevelId<0 || newCevelId>6) return;
-            console.log(newCevelId, clvs[newCevelId])
             setTimeConfig({
                 timeStart:
                     clvs[newCevelId].cevelC === sr.century.c

@@ -11,16 +11,16 @@ export const use4he = () => {
     const { isPast } = useTimeHelpers();
 
     const getBg = (childEv: Ev, grabEdge: IGrabEdge) => {
-        if (
-            isPast(childEv.timeEnd) &&
-            childEv.prioriC === sr.status.resolved.c
-        ) {
+        if (isPast(childEv.timeEnd) || childEv.statusC === sr.status.resolved.c) {
             return _4cs.childEv.bgPast;
-        } else if (childEv.isOverlap) {
+        } 
+        else if (childEv.isOverlap) {
             return _4cs.childEv.bgOverlap;
-        } else if (childEv.isLateNight) {
+        } 
+        else if (childEv.isLateNight) {
             return _4cs.childEv.bgLatenight;
-        } else if (
+        } 
+        else if (
             isPresentEv(childEv.timeStart as cDate, childEv.timeEnd as cDate)
         ) {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
@@ -28,7 +28,8 @@ export const use4he = () => {
             } else {
                 return _4cs.childEv.bgPresent;
             }
-        } else {
+        } 
+        else {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4cs.childEv.bgDrag;
             } else if (childEv.type === "jobtask") {

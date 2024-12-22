@@ -1,6 +1,5 @@
 import {styled, TextField} from "@mui/material";
 import {sr} from "../TLConstants";
-import {Ev} from "../TLTypes";
 import {_4cs} from "./4cs";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {DotGroupProps, DotProps} from "./4ty";
@@ -14,6 +13,7 @@ export function Dot (props: DotProps) {
             width: _4cs.dot.wi,
             borderRadius: _4cs.dot.br,
             background: bg,
+            flexShrink: 0,
         }}>
         </div>
     )
@@ -25,13 +25,15 @@ export function DotGroup (props: DotGroupProps) {
     const { childEv } = props;
 
     return (
-        <div style={{
+        <div id={'DotGroup-' + childEv.name}
+        style={{
             display: 'flex',
             height: 4,
             gap: 2,
             width: '100%',
-            padding: '0 10px',
+            padding: '0 0 0 10px',
             position: 'absolute',
+            flex: 1,
             left: 0,
             // opacity: 0.5,
 
