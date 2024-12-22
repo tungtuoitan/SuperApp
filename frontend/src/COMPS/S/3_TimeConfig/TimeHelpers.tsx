@@ -120,7 +120,8 @@ export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
     const hour = pad(h);
     const minute = pad(p);
 
-    return `${year}-${month}-${day}T${hour}:${minute}:00.000+07:00` as cDate;
+    return `${year}-${month}-${day}T${hour}:${minute}:00` as cDate;
+    // return `${year}-${month}-${day}T${hour}:${minute}:00.000+07:00` as cDate;
 };
 export const dateToCDate = (date: Date) => {
     const y = date.getFullYear();

@@ -19,15 +19,11 @@ export const hper: Record<CevelC, number> = {
     "cen": 365.25*100*24,
 }
 export const miliperh = 1000*60*60
-export const paddingTop$TLBaseFg = 20
-export const currentYearcDate = '2024-01-01T00:00:00.000+07:00'
 export const lateNight = {
     start: 23,
     end: 6,
 }
 export const zoomLvMax = 10;
-
-
 
 export const sr = {
     // 1

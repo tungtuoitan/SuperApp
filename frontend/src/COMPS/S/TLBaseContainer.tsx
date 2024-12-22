@@ -2,7 +2,7 @@ import { useTLBaseBgStore } from "./1_TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./3_TimeConfig/TimeConfigStore";
 import { useTLBaseBgHelpers } from "./1_TLBaseBg/TLBaseBgHelpers";
-import { addTime, cDateToUTCDate, hToRoundedHM, parseCDate } from "./3_TimeConfig/TimeHelpers";
+import { addTime, cDateToGh, cDateToUTCDate, hToRoundedHM, parseCDate } from "./3_TimeConfig/TimeHelpers";
 import { useEffect, useLayoutEffect } from "react";
 import { useTLBaseFgStore } from "./2_TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./1_TLBaseBg/TLBaseBg";
@@ -115,22 +115,23 @@ export const TLBaseContainer = () => {
                         }
                     }}
                     onMouseUp={() => {
+                        // update db.Evs (this is temp, should use allEvs0, and write this code directly in debounce$UpdateEv)
                         if(grabEdge.mousedownAtGE) {
                             const { id, position } = grabEdge;
                             const { roundedH, roundedM } = hToRoundedHM(RpxToRh(w$BgStart_spot()), true)
                             const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM)
                             const newEv = allEvs.filter(ev => ev.id === id)[0];
+
                             iuEv({...newEv, 
                                 timeStart: cDateToUTCDate(position === 'left' ? newTime : newEv.timeStart), 
                                 timeEnd: cDateToUTCDate(position === 'right' ? newTime : newEv.timeEnd)}
                             ).then((data: EvsResult) => {
                                 if(data.options.success) {
-                                    enqueueSnackbar(data.options.message ?? '', { variant: "success", autoHideDuration: 3000 });
+                                    enqueueSnackbar(data.options.message ?? '', { variant: "success" });
                                 } else {
-                                    enqueueSnackbar(data.options.message ?? '', { variant: "error", autoHideDuration: 3000 });
+                                    enqueueSnackbar(data.options.message ?? '', { variant: "error" });
                                 }
                             })
-
                             setGrabEdge({ ...grabEdge, id: null, mousedownAtGE: false }); // phải set mousedownAtGE = false tại đây, vì  khi dragging, mouse có thể k nằm trong GE nữa
                         }
                         if (mouseDown) {
