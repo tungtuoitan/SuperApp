@@ -1,10 +1,5 @@
+import {GrabEdgeProps} from "./4ty";
 import {useChildEvStore} from "./ChildEvStore";
-
-type GrabEdgeProps = {
-    id: number,
-    position: 'left' | 'right'
-    type?: 'parent' | 'child'
-}
 
 export default function GrabEdge (props: GrabEdgeProps) {
     const {position, id, type = 'child'} = props;
@@ -47,9 +42,9 @@ export default function GrabEdge (props: GrabEdgeProps) {
                 width: 40,
                 height: 30,
             }),
+            cursor: grabEdge.mousedownAtGE ? 'grabbing' : 'grab',
             borderRadius: 500,
             position: 'absolute',
-            cursor: grabEdge.mousedownAtGE ? 'grabbing' : 'grab',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

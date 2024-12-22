@@ -34,3 +34,9 @@ export type ParentEvProps = {
     lineOrder: number;
     isBeggerGang?: boolean;
 }
+
+export type GrabEdgeProps = {
+    id: number,
+    position: 'left' | 'right'
+    type?: 'parent' | 'child'
+}
