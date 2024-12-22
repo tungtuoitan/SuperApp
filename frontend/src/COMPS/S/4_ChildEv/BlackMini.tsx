@@ -3,16 +3,13 @@ import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { useAllTabsStore } from "../6_AllTabs/AllTabsStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import {EtailForm} from "../5_Etail/EtailType";
-import {WBlackMini} from "./4uis";
+import {WBlackMini} from "./4ui";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
+import {BlackMiniProps} from "./4ty";
 
-type MiniPopupProps = {
-    childId: number,
-    parentWidth?: number,
-    isBeggerGang?: boolean,
-}
 
-export default function BlackMini (props: MiniPopupProps) {
+
+export default function BlackMini (props: BlackMiniProps) {
     const {childId, parentWidth} = props;
     const {allTabIds, setAllTabIds, setCurTabIndex} = useAllTabsStore();
     const [etails, dispatch] = useEtailFormStore();

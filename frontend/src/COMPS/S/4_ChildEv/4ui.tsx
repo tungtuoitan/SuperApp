@@ -1,19 +1,18 @@
 import {styled, TextField} from "@mui/material";
 import {sr} from "../TLConstants";
 import {Ev} from "../TLTypes";
-import {_4css} from "./4css";
+import {_4cs} from "./4cs";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
+import {DotGroupProps, DotProps} from "./4ty";
 
-type DotProps = {
-    bg?: string;
-}
+
 export function Dot (props: DotProps) {
-    const { bg = _4css.dot.bgLow } = props;
+    const { bg = _4cs.dot.bgLow } = props;
     return (
         <div style={{
-            height: _4css.dot.he,
-            width: _4css.dot.wi,
-            borderRadius: _4css.dot.br,
+            height: _4cs.dot.he,
+            width: _4cs.dot.wi,
+            borderRadius: _4cs.dot.br,
             background: bg,
         }}>
         </div>
@@ -21,9 +20,7 @@ export function Dot (props: DotProps) {
     
 }
 
-type DotGroupProps = {
-    childEv: Ev;
-}
+
 export function DotGroup (props: DotGroupProps) {
     const { childEv } = props;
 
@@ -40,17 +37,17 @@ export function DotGroup (props: DotGroupProps) {
 
         }}>
             <Dot bg={
-                childEv.statusC === sr.status.open.c ? _4css.dot.bgOpen
-                : childEv.statusC === sr.status.inProgress.c ? _4css.dot.bgInProgress
-                : childEv.statusC === sr.status.resolved.c ? _4css.dot.bgResolved
-                : _4css.dot.bgOpen
+                childEv.statusC === sr.status.open.c ? _4cs.dot.bgOpen
+                : childEv.statusC === sr.status.inProgress.c ? _4cs.dot.bgInProgress
+                : childEv.statusC === sr.status.resolved.c ? _4cs.dot.bgResolved
+                : _4cs.dot.bgOpen
             }/>
             <Dot bg={
-                childEv.prioriC === sr.priority.high.c ? _4css.dot.bgHigh
-                : childEv.prioriC === sr.priority.medium.c ? _4css.dot.bgMedium
-                : childEv.prioriC === sr.priority.normal.c ? _4css.dot.bgNormal
-                : childEv.prioriC === sr.priority.low.c ? _4css.dot.bgLow
-                : _4css.dot.bgLow
+                childEv.prioriC === sr.priority.high.c ? _4cs.dot.bgHigh
+                : childEv.prioriC === sr.priority.medium.c ? _4cs.dot.bgMedium
+                : childEv.prioriC === sr.priority.normal.c ? _4cs.dot.bgNormal
+                : childEv.prioriC === sr.priority.low.c ? _4cs.dot.bgLow
+                : _4cs.dot.bgLow
             }/>
             <Dot />
         </div>
@@ -60,8 +57,8 @@ export function DotGroup (props: DotGroupProps) {
 
 
 export const WChildEv = styled('div')({
-    fontSize: _4css.fs,
-    height: _4css.he,
+    fontSize: _4cs.childEv.fs,
+    height: _4cs.childEv.he,
     display: 'flex',
     position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
     textAlign: 'left',

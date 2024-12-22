@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTimeConfigStore } from "../3_TimeConfig/TimeConfigStore";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { cDate, TI } from "../TLTypes";
-import {RedLine} from "./1uis";
+import {RedLine} from "./1ui";
 
 export const TLBaseBg = () => {
 

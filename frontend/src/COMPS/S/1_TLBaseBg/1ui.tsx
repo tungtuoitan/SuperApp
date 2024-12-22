@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { _1css } from "./1css";
+import { _1css } from "./1cs";
 import {
     getDAYOfWeek,
     getMonthShortName,
@@ -8,10 +8,11 @@ import {
 import { cDate, CevelC } from "../TLTypes";
 import { sr } from "../TLConstants";
 import {useTLBaseBgHelpers} from "./TLBaseBgHelpers";
+import {CellProps, ContainerTIProps, TLColumnProps} from "./1ty";
 
 
 // 1
-export const WContainerTI = styled("div")({
+export const WTIContainer = styled("div")({
     display: "flex",
     color: _1css.TI.co,
     overflow: "visible",
@@ -25,10 +26,10 @@ export const WContainerTI = styled("div")({
 });
 
 // 2
-export const WColumnContainer = styled("div")({
-    width: "100%",
-    height: "100%",
-});
+// export const WColumnContainer = styled("div")({
+//     width: "100%",
+//     height: "100%",
+// });
 
 
 // 3
@@ -129,14 +130,7 @@ export const BigTime = function (props: {width: number;TILevel: CevelC;date: cDa
 
 
 
-type CellProps = {
-    val?: string,
-    borderLeft?: boolean,
-    borderRight?: boolean,
-    borderTop?: boolean,
-    borderBottom?: boolean,
-    isMilestone?: boolean,
-}
+
 
 // 5
 export const Cell = (props: CellProps) => {
@@ -163,12 +157,7 @@ export const Cell = (props: CellProps) => {
 
 
 
-type TLColumnProps = {
-    val: string,
-    id: string,
-    val2?: string,
-    width: string,
-}
+
 // 6
 export const TLColumn = ({ val, val2, width, id  }: TLColumnProps) => {
     return (
@@ -206,16 +195,7 @@ export const GroupColumn = ({ val, width, id }: TLColumnProps) => {
 }
 
 
-type ContainerTIProps = {
-    borderLeft?: boolean,
-    borderRight?: boolean,
-    borderTop?: boolean,
-    borderBottom?: boolean,
-    isMilestone?: boolean,
-    children?: React.ReactNode,
-    width: number,
 
-}
 
 // 8
 export const ContainerTI = (props: ContainerTIProps) => {

@@ -6,21 +6,18 @@ import { useTLBaseFgHelpers } from "./TLBaseFgHelpers";
 import { DragOverlay, useDroppable } from "@dnd-kit/core";
 import TISample from "../7_TLTools/TISample";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
-import { ParentEv } from "../4_Ev/ParentEv";
+import { ParentEv } from "../4_ChildEv/ParentEv";
 import { getEvs } from "../TLAPIs";
-import { cDateToGh, GhToCDate } from "../3_TimeConfig/TimeHelpers";
-import {useSnackbar} from "notistack";
-import {sr} from "../TLConstants";
-import {WTLBaseFgContainer} from "./2uis";
+import {WTLBaseFgContainer} from "./2ui";
+import {use2he} from "./2he";
 
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
-    const { hourPerTI } = useTLBaseBgHelpers();
     const { setAllEvs, activeId, newEvId, allEvs } = useTLBaseFgStore();
     const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
     const { w$Bg, getLevelCOf } = useTLBaseBgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
-    const { enqueueSnackbar } = useSnackbar();
+    const { checkData, beggerEv } = use2he();
 
     useEffect(() => {
         getEvs()
@@ -31,46 +28,16 @@ export const TLBaseFg = () => {
 
     }, []);
 
-    // CHECKER
     useEffect(() => {
-        allEvs.forEach(ev => {
-            if(cDateToGh(ev.timeEnd) < cDateToGh(ev.timeStart)) {
-                enqueueSnackbar(`Warning: EVID:${ev.id} is out of time range`, { variant: "warning" })
-                return}
-            if(!ev.timeEnd){
-                enqueueSnackbar(`Warning: EVID:${ev.id} has no timeEnd`, { variant: "warning" })
-                return
-            }
-            if(![sr.active.inActive.c, sr.active.active.c].includes(ev.activeC)){
-                enqueueSnackbar(`Warning: EVID:${ev.id} active has problem: ${ev.activeC}`, { variant: "warning" })
-                return
-            }
-            if(![sr.priority.low.c, sr.priority.medium.c, sr.priority.normal.c, sr.priority.high.c].includes(ev.prioriC)){
-                enqueueSnackbar(`Warning: EVID:${ev.id} priority has problem: ${ev.prioriC}`, { variant: "warning" })
-                return
-            }
-            if(![sr.status.open.c, sr.status.resolved.c, sr.status.inProgress.c].includes(ev.statusC)){
-                enqueueSnackbar(`Warning: EVID:${ev.id} status has problem: ${ev.statusC}`, { variant: "warning" })
-                return
-            }
-        });
+        checkData();
     }, [allEvs]);
     
-    // mỗi 1 phút cập nhật lại thời gian thực
+    // update dateReal
     useEffect(() => {
         const interval = setInterval(() => setDateReal(new Date()), 60 * 1000);
         return () => clearInterval(interval);
     }, []);
 
-    const beggerEv = TIList.length > 0
-        ? {
-            id: 999999999,
-            name: 'Begger Gang',
-            parentId: null,
-            levelC: getLevelCOf('parentEv'),
-            timeStart: TIList[0].date,
-            timeEnd: GhToCDate(cDateToGh(TIList[TIList.length - 1].date) + hourPerTI)
-        } as Ev : {} as Ev;
 
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
 

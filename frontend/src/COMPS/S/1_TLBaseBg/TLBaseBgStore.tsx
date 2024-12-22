@@ -88,10 +88,10 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [zoomLv, setZoomLv] = useState<number>(1);
     const spotRatio = useRef<number>(0.5);
     const TLBaseFrameRef = useRef<null| HTMLDivElement>(null);
+    const w$FrameLeft_spot = useRef<number>(0);
     const TLBaseBgRef = useRef<null| HTMLDivElement>(null);
     const [dateReal, setDateReal] = useState<Date>(new Date());
     
-    const w$FrameLeft_spot = useRef<number>(0);
     
     const startX = useRef<number>(0);
     const startScrollX = useRef<number>(0);
@@ -99,13 +99,13 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [mouseDown, setMouseDown] = useState<boolean>(false);
 
     const [loadingTL, setLoadingTL] = useState<boolean>(true);
-    const [keyboardState, setKeyboardState] = useState<KeyboardState>({shift: false, ctrl: false, alt: false});
-
-    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-
+    
+    
     // temporary saving, these guys should on TLContainerStore (not created yet)
+    const [keyboardState, setKeyboardState] = useState<KeyboardState>({shift: false, ctrl: false, alt: false});
     const [frameScrollLeft, setFrameScrollLeft] = useState<number>(0);
     const [firstTimeInit, setFirstTimeInit] = useState<boolean>(true);
+    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
     return (
         <TLBaseBgStore.Provider

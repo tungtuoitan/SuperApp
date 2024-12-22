@@ -2,9 +2,8 @@ import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev, EvsResult } from "../TLTypes";
 import GrabEdge from "./GrabEdge";
 import { useRef, useState } from "react";
-import { EvStore, IGrabEdge } from "./EvStore";
 import { cDateToGh, cDateToUTCDate, formatTime, useTimeHelpers } from "../3_TimeConfig/TimeHelpers";
-import { _4css } from "./4css";
+import { _4cs } from "./4cs";
 import { iuEv } from "../TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useSnackbar } from "notistack";
@@ -13,30 +12,25 @@ import BlackMini from "./BlackMini";
 import { Cooltip } from "../../CommonHelpers/2_CoolTip";
 import { clvs, sr } from "../TLConstants";
 import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
-import {ChildEvTextField, DotGroup, WChildEv, WTime} from "./4uis";
-import {use4Helpers} from "./4helpers";
-
-type EvProps = {
-    childEv: Ev;
-    parentEv: Ev;
-    lineOrder: number;
-}
+import {ChildEvTextField, DotGroup, WChildEv, WTime} from "./4ui";
+import {use4he} from "./4he";
+import {ChildEvProps} from "./4ty";
+import {useChildEvStore} from "./ChildEvStore";
 
 
-
-export const ChildEv = (props: EvProps) => {
+export const ChildEv = (props: ChildEvProps) => {
     const { childEv, parentEv, lineOrder } = props;
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { grabEdge, fevId, setFevId, cutEvId, focusTFId, setFocusTFId } = EvStore();
+    const { grabEdge, fevId, setFevId, cutEvId, focusTFId, setFocusTFId } = useChildEvStore();
     const [tfValue, setTfValue] = useState(childEv.name);
     const { RhToPx } = useTLBaseBgHelpers();
     const { markEvs } = useTLBaseFgHelpers();
     const { isPast } = useTimeHelpers();
     const { enqueueSnackbar } = useSnackbar();
-    const { getBg } = use4Helpers();
+    const { getBg } = use4he();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
-    const top = _4css.ptOfParent + (_4css.he + _4css.gapBetweenChildren) * lineOrder;
+    const top = _4cs.parentEv.pt + (_4cs.childEv.he + _4cs.childEv.gapBetweenChildren) * lineOrder;
     const width = RhToPx(
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
@@ -55,7 +49,7 @@ export const ChildEv = (props: EvProps) => {
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
                 // transform: `translateY(${top}px)`,
                 top: top,
-                border: fevId && fevId === childEv.id ? _4css.focusBo : '2px solid transparent',
+                border: fevId && fevId === childEv.id ? _4cs.childEv.boFocus : '2px solid transparent',
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
             }}
             onClick={(e) => {
