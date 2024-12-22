@@ -9,6 +9,7 @@ import { _4cs } from "./4cs";
 import BlackMini from "./BlackMini";
 import {useChildEvStore} from "./ChildEvStore";
 import {ParentEvProps} from "./4ty";
+import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
 
 
 export const ParentEv = (props: ParentEvProps) => {
@@ -17,6 +18,7 @@ export const ParentEv = (props: ParentEvProps) => {
     const { setNodeRef, isOver } = useDroppable({ id: parentEv.id });
     const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
     const { setFevId, fevId } = useChildEvStore();
+    const { activeId, FIIDs } = useFloatToolsStore(); 
 
     const fiveLines = getFiveLines(childEvs);
 
@@ -30,7 +32,7 @@ export const ParentEv = (props: ParentEvProps) => {
         <div
             id={'ParentEv-' + parentEv.name}
             data-name={parentEv.name}
-            ref={setNodeRef}
+            ref={activeId===FIIDs.childEv ? setNodeRef : null}
             onClick={() => {
                 setFevId(parentEv.id)
             }}
@@ -41,7 +43,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 height: _4cs.parentEv.pt*2 + _4cs.childEv.he * fiveLines.length + _4cs.childEv.gapBetweenChildren * (fiveLines.length - 1) + _4cs.parentEv.heOf2borders,
                 top: isBeggerGang ? undefined : top,
                 bottom: isBeggerGang ? 0 : undefined,
-                background: isOver ? _4cs.parentEv.bgIsOver : _4cs.parentEv.bgNormal,
+                background: isOver && activeId===FIIDs.childEv ? _4cs.parentEv.bgIsOver : _4cs.parentEv.bgNormal,
                 borderRadius: isBeggerGang ? 0 : 20,
                 border: fevId && fevId === parentEv.id ? _4cs.parentEv.boFocus : _4cs.parentEv.boNormal,
                 display: 'flex',

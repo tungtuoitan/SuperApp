@@ -17,7 +17,7 @@ export default function TISample(props: DraggableProps) {
                 // transform: CSS.Transform.toString(transform),
                 ...sx,
                 width: 100,
-                height: 30,
+                height: type === 'parentEv' ? 30 : 20,
                 backgroundColor: _4cs.childEv.bgNormal,
                 borderRadius: 50,
                 color: 'white',

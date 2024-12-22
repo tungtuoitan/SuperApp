@@ -1,13 +1,16 @@
 import TISample from './TISample';
-import { useTLBaseFgStore } from '../2_TLBaseFg/TLBaseFgStore';
 import {FloatContainer} from './7ui';
+import {useFloatToolsStore} from './FloatToolsStore';
 
 export default function FloatTools () {
-    const {newEvId, activeId} = useTLBaseFgStore();
+    const { activeId, FIIDs} = useFloatToolsStore();
     
     return (
         <FloatContainer>
-            {activeId === newEvId ? null : <TISample id= {newEvId}/>}
+            {activeId === FIIDs.parentEv ? null : 
+                <TISample id= {FIIDs.parentEv} type='parentEv'/>}
+            {activeId === FIIDs.childEv ? null : 
+                <TISample id= {FIIDs.childEv}/>}
         </FloatContainer>
     )
 }

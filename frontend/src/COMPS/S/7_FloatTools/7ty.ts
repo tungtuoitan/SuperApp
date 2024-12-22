@@ -7,3 +7,7 @@ export type DraggableProps = {
 }
 
 
+export type FIIDs = {
+    parentEv: string;
+    childEv: string;
+}

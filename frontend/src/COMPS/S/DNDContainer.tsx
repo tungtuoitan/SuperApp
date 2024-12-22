@@ -13,10 +13,12 @@ import { Ev, EvsResult } from './TLTypes';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import {sr} from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
+import {useFloatToolsStore} from './7_FloatTools/FloatToolsStore';
 
 export default function DNDContainer() {
 
-    const { allEvs, setAllEvs, activeId, setActiveId, setNewEvId } = useTLBaseFgStore();
+    const { allEvs, setAllEvs } = useTLBaseFgStore();
+    const { activeId, setActiveId, FIIDs, setFIIDs} = useFloatToolsStore();
     const { getLevelCOf, h$G_BgStart, RpxToRh } = useTLBaseBgHelpers();
     const { markEvs } = useTLBaseFgHelpers();
     const { TIList } = useTLBaseBgStore();
@@ -35,10 +37,10 @@ export default function DNDContainer() {
             const droppableRect = over.rect;
             const draggableRect = active.rect;
             const px$Draggable_drop = draggableRect.current.translated.left - droppableRect.left;
-
             let newEv;
+
             // drop on TLBaseFg --> create parentEv
-            if (over.id === 'TLBaseFg-droppable') {
+            if (over.id === 'TLBaseFg-droppable' && activeId === FIIDs.parentEv ) {
                 newEv = {
                     id: 0,
                     name: '',
@@ -53,7 +55,7 @@ export default function DNDContainer() {
                 };
             } 
             // drop on ParentEv --> create childEv
-            else {
+            else if(over.id>0 && activeId === FIIDs.childEv) {
                 const parentEv = allEvs.filter(ev => ev.id === over.id)[0];
                 // if drop on ParentEv
                 if(parentEv) {
@@ -88,23 +90,25 @@ export default function DNDContainer() {
                 }
             }
 
-            let newEvs: Ev[] = structuredClone([...allEvs, newEv] as Ev[])
-            setAllEvs(newEvs) // update state, to make the interactive smoother
-            iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
-                .then((data: EvsResult) => {
-                    newEvs = markEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))
-                    setAllEvs(newEvs) // update id
-                    enqueueSnackbar(data.options.message ?? '', { variant: "success", autoHideDuration: 3000 });
-                    setFevId(data.evs[0].id);
-                })
-                .catch((err: any) => {
-                    console.log(err);
-                    enqueueSnackbar(err.message ?? 'There is error on insertupdate Ev', { variant: "error", autoHideDuration: 3000 });
-                })
+            if(newEv) {
+                let newEvs: Ev[] = structuredClone([...allEvs, newEv] as Ev[])
+                setAllEvs(newEvs) // update state, to make the interactive smoother
+                iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
+                    .then((data: EvsResult) => {
+                        newEvs = markEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))
+                        setAllEvs(newEvs) // update id
+                        enqueueSnackbar(data.options.message ?? '', { variant: "success"});
+                        setFevId(data.evs[0].id);
+                    })
+                    .catch((err: any) => {
+                        console.log(err);
+                        enqueueSnackbar(err.message ?? 'There is error on insertupdate Ev', { variant: "error"});
+                    })
+            }
         }
 
         setActiveId(null);
-        setNewEvId(uuid());
+        setFIIDs({parentEv: uuid(), childEv: uuid()});
     };
 
     return (
