@@ -5,18 +5,14 @@ import {
     Radio,
     RadioGroup,
 } from "@mui/material";
+import {useEtailHelpers} from "../5_Etail/EtailHelpers";
+import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
+import {sr} from "../TLConstants";
+import {EtailForm} from "../5_Etail/5ty";
+import {WRow} from "./5Lui";
+import {LaperStatusProps} from "./5Lty";
 
-import { _3css } from "../../3_TimeConfig/3css";
-import { useEtailHelpers } from "../EtailHelper";
-import { clvs, sr } from "../../TLConstants";
-import { useEtailFormStore } from "../EtailFormsStore";
-import { EtailForm } from "../EtailType";
-import { EtailPaper, WBar, WBody, WRow } from "../5uis";
-
-type EtailProps = {
-    id: number;
-};
-export default function EStatus(props: EtailProps) {
+export default function LaperStatus(props: LaperStatusProps) {
     const { handleChange } = useEtailHelpers();
     const [etails, dispatch] = useEtailFormStore();
     const etail =

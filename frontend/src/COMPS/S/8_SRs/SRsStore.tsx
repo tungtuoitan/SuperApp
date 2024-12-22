@@ -1,14 +1,9 @@
 
 import { createContext, useContext, useState } from "react";
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
+import {SR} from "./8ty";
 
-export type SR = {
-    id: number;
-    code: string;
-    desc: string;
-    type: string;
-    active: number|null;
-}
+
 
 export interface SRsContextData {
     sRs: SR[];

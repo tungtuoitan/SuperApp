@@ -1,17 +1,14 @@
 import {
     TextField,
 } from "@mui/material";
-import { _3css } from "../../3_TimeConfig/3css";
-import { helperMUIcss } from "../../../CommonHelpers/5_MUIcss";
-import { useEtailHelpers } from "../EtailHelper";
-import {useEtailFormStore} from "../EtailFormsStore";
-import {EtailForm} from "../EtailType";
-import {EtailPaper, WBar, WBody, WRow} from "../5uis";
+import {useEtailHelpers} from "../5_Etail/EtailHelpers";
+import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
+import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
+import {EtailForm} from "../5_Etail/5ty";
+import {WRow} from "./5Lui";
+import {LaperNameProps} from "./5Lty";
 
-type EtailProps = {
-    id: number;
-};
-export default function EName(props: EtailProps) {
+export default function LaperName(props: LaperNameProps) {
     const { handleChange } = useEtailHelpers();
     const evNameSelector = helperMUIcss.getTextFieldCSSSelector("evName");
     const [etails, dispatch] = useEtailFormStore();

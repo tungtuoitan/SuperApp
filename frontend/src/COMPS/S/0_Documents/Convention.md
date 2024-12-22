@@ -20,6 +20,14 @@
 - nếu không, đổi tên là đơn giản, nên khi mở rộng rồi hẵng đổi
 - khi tên dài, phần đặc trưng lớn nhất phải đưa ra trước, vd: TI, Redline....
 
+- khi nào thì viết tắt ??
+- khi tên đó quá phổ biến
+- khi đó là [DANH TỪ RIÊNG]
+- sử dụng nhiều
+- khi nào k nên viết tắt ??
+- khi tên đó đã có chứa từ viết tắt rồi (vd: EtailBar
+)
+
 # 3.type
 - id phải luôn là number nếu có thể
 - code: string 

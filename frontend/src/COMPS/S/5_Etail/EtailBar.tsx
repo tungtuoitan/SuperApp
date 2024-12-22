@@ -1,8 +1,7 @@
 import {IconButton, Tooltip} from "@mui/material";
-import {WBar} from "./5uis";
+import {WBar} from "./5ui";
 import {useTLBaseFgStore} from "../2_TLBaseFg/TLBaseFgStore";
 import {useSnackbar} from "notistack";
-import {EtailForm} from "./EtailType";
 import {cDateToUTCDate} from "../3_TimeConfig/TimeHelpers";
 import {sr} from "../TLConstants";
 import {iuEv} from "../TLAPIs";
@@ -10,12 +9,13 @@ import { _3css } from "../3_TimeConfig/3css";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import {useEtailFormStore} from "./EtailFormsStore";
+import {EtailForm} from "./5ty";
 
 
-type BarProp = {
+type EtailBarProps = {
     id: number;
 }
-export const Bar = (props: BarProp) => {
+export const EtailBar = (props: EtailBarProps) => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { enqueueSnackbar } = useSnackbar();
     const [etails, dispatch] = useEtailFormStore();

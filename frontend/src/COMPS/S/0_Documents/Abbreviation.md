@@ -17,6 +17,11 @@
 - Gh: God hour, tức thời gian tính theo mốc God, từ 1975 (theo value đầu tiên của Date())
 - Rh: Root hour, tức thời gian tính từ mốc của TLBaseBgContent
 
+# 3. in Etail and child
+- Etail: Ev Detail
+- Laper: Left Paper
+- Maper: Mid Paper
+- Raper: Right Paper
 
 # 3.css
 
