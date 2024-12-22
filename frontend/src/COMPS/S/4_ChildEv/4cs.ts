@@ -1,4 +1,3 @@
-
 export const _4cs = {
     childEv: {
         he: 16,
@@ -40,6 +39,9 @@ export const _4cs = {
         bgOpen: '#0066FF',
         bgInProgress: 'yellow',
         bgResolved: '#00FF66',
+    },
+    blackMini: {
+        bg: '#1E1E1E',
     }
 
    

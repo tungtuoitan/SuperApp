@@ -11,11 +11,18 @@ import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { debounce } from "lodash";
 import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 import { getMinMaxTimeOfEv, use4he } from "./4he";
+import {EtailForm} from "../5_Etail/5ty";
+import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
+import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
+import {useChildEvStore} from "./ChildEvStore";
 
 export const useChildEvHelpers = () => {
     const { TIList, dateReal, keyboardState } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { markEvs } = useTLBaseFgHelpers();
+    const {allTabIds, setAllTabIds, setCurTabIndex} = useAllTabsStore();
+    const [etails, dispatch] = useEtailFormStore();
+    const {fevId, setFevId, setFocusTFId} = useChildEvStore();
 
     // 3. update Ev (khi Grab)
     const debounce$UpdateEv = debounce((id, position, roundedH, roundedM) => {
@@ -70,8 +77,39 @@ export const useChildEvHelpers = () => {
         return Gh_timeStart <= Gh_dateReal && Gh_dateReal <= Gh_timeEnd;
     };
 
+    const openEtail = (childId: number, parentWidth: number)=>{
+            setFevId(null) //! khi click, FevId k dc set lại, tại saoooo ?
+            setFocusTFId(null)
+    
+            if(allTabIds.includes(childId)) {
+                setCurTabIndex(allTabIds.indexOf(childId))
+            } 
+            else {
+                setAllTabIds(prev => {
+                    setCurTabIndex(prev.length) // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
+                    return [...prev, childId]
+                })
+            }
+    
+            const ev = allEvs.filter(ev => ev.id === childId)[0]
+            const etail: EtailForm = {
+                id: ev.id,
+                name: ev.name,
+                parentId: ev.parentId ?? null,
+                levelC: ev.levelC,
+                timeStart: ev.timeStart,
+                timeEnd: ev.timeEnd,
+                type: ev.type ?? null, 
+                activeC: ev.activeC,
+                prioriC: ev.prioriC,
+                statusC: ev.statusC,
+            }
+            dispatch({type: 'INSE', payload: etail})
+        }
+
     return {
         debounce$UpdateEv,
         isPresentEv,
+        openEtail
     };
 };

@@ -110,9 +110,8 @@ export const WBlackMini = styled('div')({
     justifyContent: 'center',
     width: 200,
     height: 40,
-    background: '#1E1E1E',
+    background: _4cs.blackMini.bg,
     zIndex: 100,
     alignItems: 'center',
     display: 'flex',
-    bottom: -50,
 })
