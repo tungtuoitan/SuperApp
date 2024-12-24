@@ -13,8 +13,8 @@ export const getEvs = async (token, skip) => {
       headers: headers,
   };
 
-  // URL = Domain + APIEnpoint + Params
-  const res = await window.fetch(`${constants.domain.getTLDomain()}${constants.apiEndpoints.getEvents}`, options);
+  // URL = env + APIEnpoint + Params
+  const res = await window.fetch(`${constants.env.getBaseUrl()}${constants.endpoints.getEvents}`, options);
   if (res.ok) {
       const ret = await res.json();
       return ret;
@@ -44,8 +44,9 @@ export const iuEv = async (params, token, skip) => {
         body: formData,
     };
   
-    // URL = Domain + APIEnpoint + Params
-    const res = await window.fetch(`${constants.domain.getTLDomain()}${constants.apiEndpoints.iuEv}`, options);
+    // console.log(constants.env.getBaseUrl())
+    // URL = env + APIEnpoint + Params
+    const res = await window.fetch(`${constants.env.getBaseUrl()}${constants.endpoints.iuEv}`, options);
     if (res.ok) {
         const ret = await res.json();
         return ret;
@@ -66,8 +67,8 @@ export const getSRs = async (token, skip) => {
         headers: headers,
     };
   
-    // URL = Domain + APIEnpoint + Params
-    const res = await window.fetch(`${constants.domain.getTLDomain()}${constants.apiEndpoints.getSRs}`, options);
+    // URL = env + APIEnpoint + Params
+    const res = await window.fetch(`${constants.env.getBaseUrl()}${constants.endpoints.getSRs}`, options);
     if (res.ok) {
         const ret = await res.json();
         return ret;
