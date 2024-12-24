@@ -2,8 +2,8 @@ export const constants = {
     env: {
         timeline: {
             pro: {
-                hostname: "general-server",
-                baseUrl: "http://157.66.218.17/",
+                hostname: "157.66.218.17", // hostname is IP, cauze we dont have domain name
+                baseUrl: "http://157.66.218.17:5000/",
             },
             loc: {
                 hostname: "localhost",

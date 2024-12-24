@@ -49,13 +49,13 @@ export const TopNavigation = () => {
   return (
     <div className="top-navigation" style={classes.root}>
       <AppBar sx={classes.appBar} position="sticky" >
-        <Toolbar>
+        <Toolbar sx={{marginLeft: -2}}>
           <IconButton edge="start" style={classes.menuButton} color="inherit" aria-label="menu">
-            <img style={classes.logo} src="/tung-icon.ico" alt="Van Thiel" />
+            <img style={classes.logo} src="/timeline-avt2.png" alt="Limetine" />
           </IconButton>
           <div style={classes.companyName}>
-            <Typography variant="h6" style={{color: 'black'}}>
-              2042
+            <Typography variant="h6" style={{color: 'black', fontStyle: 'italic'}}>
+              Have a god day!
             </Typography>
             {/* <Typography variant="h6" style={classes.subtitle}>
               Web Applications Portal
