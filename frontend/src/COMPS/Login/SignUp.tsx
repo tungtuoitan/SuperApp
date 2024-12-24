@@ -3,10 +3,9 @@ import { Box, Button, Chip, FormControl, IconButton, Input, InputAdornment, Inpu
 import { useLoginStore } from './store/loginStore';
 import { Link } from 'react-router-dom';
 import { useLoginHelper } from './hook/useLoginHelper';
-import { constants } from '../../constants';
-type Props = {}
+import {lonstants} from './lonstants';
 
-function SignUp({ }: Props) {
+function SignUp() {
     const { loginForm, setLoginForm, formHelper, setFormHelper } = useLoginStore()
     const { validateEmail, validatePassword } = useLoginHelper();
             
@@ -38,7 +37,7 @@ function SignUp({ }: Props) {
                 value={loginForm.name}
                 onChange={(e) => {
                     setLoginForm({ ...loginForm, name: e.target.value })
-                    if (e.target.value.length < 3) setFormHelper({ ...formHelper, nameError: true, nameErrorMessage: constants.login.errorMessage.shortName })
+                    if (e.target.value.length < 3) setFormHelper({ ...formHelper, nameError: true, nameErrorMessage: lonstants.login.errorMessage.shortName })
                         else setFormHelper({ ...formHelper, nameError: false, nameErrorMessage: '' })
                 }}
             />
@@ -62,7 +61,7 @@ function SignUp({ }: Props) {
                     if (validateEmail(e.target.value))
                         setFormHelper({ ...formHelper, emailError: false, emailErrorMessage: '' });
                     else
-                        setFormHelper({ ...formHelper, emailError: true, emailErrorMessage: constants.login.errorMessage.invalidEmail });
+                        setFormHelper({ ...formHelper, emailError: true, emailErrorMessage: lonstants.login.errorMessage.invalidEmail });
                 }}
             />
 
@@ -79,7 +78,7 @@ function SignUp({ }: Props) {
                         if (validatePassword(e.target.value))
                             setFormHelper({ ...formHelper, passwordError: false,  passwordErrorMessage: '' });
                         else
-                            setFormHelper({ ...formHelper, passwordError: true, passwordErrorMessage: constants.login.errorMessage.invalidPassword });
+                            setFormHelper({ ...formHelper, passwordError: true, passwordErrorMessage: lonstants.login.errorMessage.invalidPassword });
                     }}
                     endAdornment={
                         <InputAdornment position="end">
@@ -117,10 +116,10 @@ function SignUp({ }: Props) {
                             if (e.target.value === loginForm.password)
                                 setFormHelper({ ...formHelper, confirmPasswordError: false, confirmPassErrorMessage: '' });
                             else
-                                setFormHelper({ ...formHelper, confirmPasswordError: true, confirmPassErrorMessage: constants.login.errorMessage.notMatchConfirmPassword });
+                                setFormHelper({ ...formHelper, confirmPasswordError: true, confirmPassErrorMessage: lonstants.login.errorMessage.notMatchConfirmPassword });
                         } 
                         else {
-                            setFormHelper({ ...formHelper, confirmPasswordError: true, confirmPassErrorMessage: constants.login.errorMessage.invalidPassword });
+                            setFormHelper({ ...formHelper, confirmPasswordError: true, confirmPassErrorMessage: lonstants.login.errorMessage.invalidPassword });
                         }
                     }}
                     error={formHelper.confirmPasswordError}
