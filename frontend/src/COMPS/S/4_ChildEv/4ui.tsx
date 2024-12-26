@@ -115,3 +115,10 @@ export const WBlackMini = styled('div')({
     alignItems: 'center',
     display: 'flex',
 })
+
+export const ParentTitle = styled('span')({
+    position: 'absolute', 
+    whiteSpace: 'nowrap',
+    overflow: 'visible',
+    top: -20, color: 'gray'
+})

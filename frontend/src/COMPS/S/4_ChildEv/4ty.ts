@@ -33,6 +33,7 @@ export type ParentEvProps = {
     parentEv: Ev;
     lineOrder: number;
     isBeggerGang?: boolean;
+    top: number;
 }
 
 export type GrabEdgeProps = {

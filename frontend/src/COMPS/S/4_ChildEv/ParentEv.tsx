@@ -10,23 +10,30 @@ import BlackMini from "./BlackMini";
 import {useChildEvStore} from "./ChildEvStore";
 import {ParentEvProps} from "./4ty";
 import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
-
+import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
+import {ParentTitle} from "./4ui";
 
 export const ParentEv = (props: ParentEvProps) => {
-    const { childEvs, parentEv, lineOrder, isBeggerGang = false } = props;
+    const { childEvs, parentEv, lineOrder, isBeggerGang = false, top } = props;
     const { getFiveLines } = useTLBaseFgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: parentEv.id });
-    const { RhToPx, h$G_BgStart } = useTLBaseBgHelpers();
+    const { RhToPx, h$G_BgStart,RpxToRh } = useTLBaseBgHelpers();
     const { setFevId, fevId } = useChildEvStore();
     const { activeId, FIIDs } = useFloatToolsStore(); 
+    const { TLBaseFrameScrollLeft, TLBaseFrameRef } = useTLBaseBgStore();
 
     const fiveLines = getFiveLines(childEvs);
 
     const left = RhToPx(cDateToGh(parentEv.timeStart as cDate) - h$G_BgStart)
-    const top = _4cs.TLBaseFrame.pt + (100 + 10) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
+    // const top = _4cs.TLBaseFrame.pt + (100 + 10) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
     const width = RhToPx(
         cDateToGh(parentEv.timeEnd as cDate) - cDateToGh(parentEv.timeStart as cDate)
     )
+
+    const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
+    const left$Parent_title = cDateToGh(parentEv.timeStart)<h$G_TLBaseFrameLeft && cDateToGh(parentEv.timeEnd)>h$G_TLBaseFrameLeft
+        ? RhToPx(h$G_BgStart-cDateToGh(parentEv.timeStart)) + (TLBaseFrameRef?.current?.scrollLeft??0)         
+        : 4
 
     return (
         <div
@@ -53,7 +60,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 zIndex: 100,
                 position: 'absolute',
             }}>
-            <span style={{ position: 'absolute', left: 4, top: -20, color: 'gray' }}>{parentEv.name}</span>
+            <ParentTitle sx={{ left: left$Parent_title}}>{parentEv.name}</ParentTitle>
             {fiveLines[0]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={0} />)}
             {fiveLines[1]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={1} />)}
             {fiveLines[2]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={2} />)}

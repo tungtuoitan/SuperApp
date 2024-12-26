@@ -51,7 +51,7 @@ export const TLLoading = () => {
     );
 }
 export const TLBaseContainer = () => {
-    const { TLBaseFrameRef, mouseDown, setMouseDown, frameScrollLeft, setFrameScrollLeft,
+    const { TLBaseFrameRef, mouseDown, setMouseDown, frameScrollLeft, setFrameScrollLeft, setTLBaseFrameScrollLeft,
         startScrollX, scrollByHand, startX, loadingTL, zoomLv, setZoomLv, dateReal, TIList, setLoadingTL, TLBaseBgRef, spotRatio, w$FrameLeft_spot
     } = useTLBaseBgStore();
     const { timeConfig, setTimeConfig } = useTimeConfigStore();
@@ -72,6 +72,7 @@ export const TLBaseContainer = () => {
     useLayoutEffect(() => { // khi wheeling hơi bị giật, nên phải dùng useLayoutEffect
         if (TLBaseFrameRef.current) {
             TLBaseFrameRef.current.scrollLeft = w$BgStart_spot() - w$FrameLeft_spot.current
+            setTLBaseFrameScrollLeft(TLBaseFrameRef.current.scrollLeft)
         }
     }, [zoomLv])
 
@@ -154,6 +155,7 @@ export const TLBaseContainer = () => {
                             const ISPosition = TLBaseFrameRef.current.getBoundingClientRect().left + window.scrollX; // toạ độ của infiniteScroll so với Screen
                             const endX = e.pageX - ISPosition;
                             TLBaseFrameRef.current.scrollLeft = startScrollX.current + (startX.current - endX);
+                            setTLBaseFrameScrollLeft(TLBaseFrameRef.current.scrollLeft);
                         }
 
                         // 3. resize TI

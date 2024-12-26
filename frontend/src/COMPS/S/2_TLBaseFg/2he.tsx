@@ -5,6 +5,8 @@ import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { cDateToGh, GhToCDate, parseCDate } from "../3_TimeConfig/TimeHelpers";
 import { lateNight, sr } from "../TLConstants";
 import {useSnackbar} from "notistack";
+import {useTLBaseFgHelpers} from "./TLBaseFgHelpers";
+import {_4cs} from "../4_ChildEv/4cs";
 
 // A
 export const use2he = () => {
@@ -12,6 +14,7 @@ export const use2he = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { h$G_BgStart, h$G_BgEnd, getLevelCOf, hourPerTI } = useTLBaseBgHelpers();
     const { enqueueSnackbar } = useSnackbar();
+    const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
 
     // 1
     const checkData = () => {
@@ -38,6 +41,30 @@ export const use2he = () => {
         });
     }
 
+    const getTopsOf5ParentLines = ():number[]=> {
+        const fiveParentLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
+        const fiveMaxH: number[] = [];
+        fiveParentLines.forEach(line => {
+            let h$Line = 0;
+            line.forEach(paront => {
+                const childEvs = filterEvs(['inside-TL', 'active']).filter(childEv => childEv.parentId === paront.id);
+                const totalChildEvs = getFiveLines(childEvs).length;
+                const h$Parent = totalChildEvs * _4cs.childEv.he + (totalChildEvs - 1) * _4cs.childEv.gapBetweenChildren + _4cs.parentEv.heOf2borders + _4cs.parentEv.pt*2
+                if(h$Parent > h$Line) h$Line = h$Parent;
+            })
+            if(h$Line > 0) fiveMaxH.push(h$Line);
+        })
+        const fiveTops: number[] = fiveMaxH.map((h, i) => {
+            if(i===0) return _4cs.TLBaseFrame.pt;
+            if(i===1) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + 10*i
+            if(i===2) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + 10*i
+            if(i===3) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + 10*i
+            if(i===4) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + fiveMaxH[i-4] + 10*i
+            return 0;
+        })
+        return fiveTops;
+    }
+
     const beggerEv = TIList.length > 0
         ? {
             id: 999999999,
@@ -51,7 +78,8 @@ export const use2he = () => {
 
     return {
         checkData,
-        beggerEv
+        beggerEv,
+        getTopsOf5ParentLines
     }
 }
 
