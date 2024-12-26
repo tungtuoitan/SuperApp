@@ -11,7 +11,8 @@ import { getEvs } from "../TLAPIs";
 import {WTLBaseFgContainer} from "./2ui";
 import {use2he} from "./2he";
 import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
-
+import {_4cs} from "../4_ChildEv/4cs";
+  
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -19,7 +20,7 @@ export const TLBaseFg = () => {
     const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
     const { w$Bg, getLevelCOf } = useTLBaseBgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
-    const { checkData, beggerEv } = use2he();
+    const { checkData, beggerEv, getTopsOf5ParentLines } = use2he();
 
     useEffect(() => {
         getEvs()
@@ -40,21 +41,24 @@ export const TLBaseFg = () => {
         return () => clearInterval(interval);
     }, []);
 
-
+    const childEvsOfBegger = filterEvs(['inside-TL', 'active', 'childEv', 'nonParent'])
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
+    const parentTops = getTopsOf5ParentLines();
 
     return (
-        <WTLBaseFgContainer id='TLBaseFg' ref={activeId===FIIDs.parentEv ? setNodeRef : null} sx={{ width: w$Bg, background: isOver && activeId===FIIDs.parentEv ? '#add8e698' : 'transparent' }}>
+        <WTLBaseFgContainer id='TLBaseFg' ref={activeId===FIIDs.parentEv ? setNodeRef : null} sx={{ width: w$Bg, background: isOver && activeId===FIIDs.parentEv ? _4cs.TLBaseFg.bgOver : _4cs.TLBaseFg.bgNormal }}>
             {[...fiveLines, [beggerEv]].map((line: Ev[], i) => {
                 return line.map(parontEv => {
+                    const childEvs = filterEvs(['inside-TL', 'active']).filter(ev => ev.parentId === parontEv.id)
                     return <ParentEv
                         key={parontEv.id}
                         parentEv={parontEv}
                         childEvs={parontEv.id === beggerEv.id || parontEv.id === null
-                            ? filterEvs(['inside-TL', 'active', 'childEv', 'nonParent'])
-                            : filterEvs(['inside-TL', 'active']).filter(ev => ev.parentId === parontEv.id)}
+                            ? childEvsOfBegger
+                            : childEvs}
                         lineOrder={i}
                         isBeggerGang={parontEv.id === beggerEv.id}
+                        top={parentTops[i]}
                     />
                 })
             })

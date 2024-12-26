@@ -1,4 +1,8 @@
 export const _4cs = {
+    TLBaseFg: {
+        bgNormal: 'transparent',
+        bgOver:  '#add8e698',
+    },
     childEv: {
         he: 16,
         gapBetweenChildren: 6,

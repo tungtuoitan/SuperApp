@@ -46,7 +46,6 @@ const classes =
   }
 
 export const TopNavigation = () => {
-    console.log(window.location.port)
   return (
     <div className="top-navigation" style={classes.root}>
       <AppBar sx={classes.appBar} position="sticky" >

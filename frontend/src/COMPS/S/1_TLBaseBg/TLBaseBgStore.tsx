@@ -19,6 +19,8 @@ export interface TLBaseBgContextData {
     w$FrameLeft_spot: React.MutableRefObject<number>;
 
     TLBaseFrameRef: React.RefObject<HTMLDivElement>;
+    TLBaseFrameScrollLeft: number;
+    setTLBaseFrameScrollLeft: Dispatch<SetStateAction<number>>;
     TLBaseBgRef: React.RefObject<HTMLDivElement>;
     scrollByHand: React.MutableRefObject<boolean>;
 
@@ -56,6 +58,8 @@ export const TLBaseBgContextDefaultValue: TLBaseBgContextData = {
     w$FrameLeft_spot: {current: 0},
 
     TLBaseFrameRef: {current: null},
+    TLBaseFrameScrollLeft: 0,
+    setTLBaseFrameScrollLeft: () => {},
     TLBaseBgRef: {current: null},
     scrollByHand: {current: true},
 
@@ -88,6 +92,7 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
     const [zoomLv, setZoomLv] = useState<number>(1);
     const spotRatio = useRef<number>(0.5);
     const TLBaseFrameRef = useRef<null| HTMLDivElement>(null);
+    const [TLBaseFrameScrollLeft, setTLBaseFrameScrollLeft] = useState<number>(0);
     const w$FrameLeft_spot = useRef<number>(0);
     const TLBaseBgRef = useRef<null| HTMLDivElement>(null);
     const [dateReal, setDateReal] = useState<Date>(new Date());
@@ -121,6 +126,8 @@ export const TLBaseBgProvider: React.FC<React.PropsWithChildren<React.PropsWithC
                 w$FrameLeft_spot,
 
                 TLBaseFrameRef,
+                TLBaseFrameScrollLeft,
+                setTLBaseFrameScrollLeft,
                 TLBaseBgRef,
                 scrollByHand,
 
