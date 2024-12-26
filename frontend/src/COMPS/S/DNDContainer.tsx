@@ -14,6 +14,7 @@ import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import {sr} from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 import {useFloatToolsStore} from './7_FloatTools/FloatToolsStore';
+import {getMinMaxTimeOfEv} from './4_ChildEv/4he';
 
 export default function DNDContainer() {
 
@@ -51,7 +52,7 @@ export default function DNDContainer() {
                     statusC: sr.status.open.c,
                     levelC: getLevelCOf('parentEv'),
                     timeStart: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop), 0),
-                    timeEnd: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop + 100), 0), // 100 is width of TISample
+                    timeEnd: addTime(TIList[0].date, 0, 0, 0,RpxToRh(px$Draggable_drop) + getMinMaxTimeOfEv(getLevelCOf('parentEv')), 0), // 100 is width of TISample
                 };
             } 
             // drop on ParentEv --> create childEv
@@ -69,7 +70,7 @@ export default function DNDContainer() {
                         statusC: sr.status.open.c,
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
-                        timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
+                        timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop) + getMinMaxTimeOfEv(getLevelCOf('childEv'))), // 100 is width of TISample
                     };
                 }
                 // if drop on BeggerEv
@@ -84,7 +85,7 @@ export default function DNDContainer() {
                         statusC: sr.status.open.c,
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
-                        timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop + 100)), // 100 is width of TISample
+                        timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop) + getMinMaxTimeOfEv(getLevelCOf('parentEv'))), // 100 is width of TISample
                     };
 
                 }

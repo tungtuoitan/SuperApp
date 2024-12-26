@@ -3,6 +3,12 @@ import {sr} from "../TLConstants";
 import {_4cs} from "./4cs";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {DotGroupProps, DotProps} from "./4ty";
+import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
+import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
+import {useTLBaseFgHelpers} from "../2_TLBaseFg/TLBaseFgHelpers";
+import {use2he} from "../2_TLBaseFg/2he";
+import {cDateToGh} from "../3_TimeConfig/TimeHelpers";
+import {Ev} from "../TLTypes";
 
 
 export function Dot (props: DotProps) {
@@ -111,7 +117,7 @@ export const WBlackMini = styled('div')({
     width: 200,
     height: 40,
     background: _4cs.blackMini.bg,
-    zIndex: 100,
+    zIndex: 101,
     alignItems: 'center',
     display: 'flex',
 })
@@ -122,3 +128,27 @@ export const ParentTitle = styled('span')({
     overflow: 'visible',
     top: -20, color: 'gray'
 })
+
+export const StickTitle = styled('span')({
+    position:'absolute', 
+    left: 4,
+    zIndex: 101,
+    fontSize: 12,
+})
+
+export function StickParentTitles () {
+     const { TLBaseFrameScrollLeft} = useTLBaseBgStore();
+        const { RpxToRh, h$G_BgStart } = useTLBaseBgHelpers();
+        const { getTopsOf5ParentLines } = use2he();
+        const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
+        const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
+        const parentTops = getTopsOf5ParentLines();
+
+        return <>
+            {fiveLines.map((line: Ev[], i) => {
+                const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
+                const isStickTitle = cDateToGh(line[0].timeStart)<h$G_TLBaseFrameLeft && cDateToGh(line[0].timeEnd)>h$G_TLBaseFrameLeft
+                return line.map(parontEv =>  <StickTitle id={'stickTitle'+i} sx={{display:isStickTitle?'block':'none', top: parentTops[i]+2}}>{parontEv.name}</StickTitle>)
+            })}
+        </>
+}

@@ -11,7 +11,7 @@ import {useChildEvStore} from "./ChildEvStore";
 import {ParentEvProps} from "./4ty";
 import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
-import {ParentTitle} from "./4ui";
+import {StickTitle} from "./4ui";
 
 export const ParentEv = (props: ParentEvProps) => {
     const { childEvs, parentEv, lineOrder, isBeggerGang = false, top } = props;
@@ -29,11 +29,6 @@ export const ParentEv = (props: ParentEvProps) => {
     const width = RhToPx(
         cDateToGh(parentEv.timeEnd as cDate) - cDateToGh(parentEv.timeStart as cDate)
     )
-
-    const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
-    const left$Parent_title = cDateToGh(parentEv.timeStart)<h$G_TLBaseFrameLeft && cDateToGh(parentEv.timeEnd)>h$G_TLBaseFrameLeft
-        ? RhToPx(h$G_BgStart-cDateToGh(parentEv.timeStart)) + (TLBaseFrameRef?.current?.scrollLeft??0)         
-        : 4
 
     return (
         <div
@@ -60,7 +55,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 zIndex: 100,
                 position: 'absolute',
             }}>
-            <ParentTitle sx={{ left: left$Parent_title}}>{parentEv.name}</ParentTitle>
+            <StickTitle sx={{ display: 'block' }}>{parentEv.name}</StickTitle>
             {fiveLines[0]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={0} />)}
             {fiveLines[1]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={1} />)}
             {fiveLines[2]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={2} />)}
