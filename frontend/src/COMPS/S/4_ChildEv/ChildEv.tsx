@@ -83,7 +83,7 @@ export const ChildEv = (props: ChildEvProps) => {
             {displayTimeRight && <WTime sx={{right: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
             {!displayTextField && <MiNime width={width} childName={childEv.name} />}
             
-            {displayTextField ?? <ChildEvTextField
+            {displayTextField && <ChildEvTextField
                     id={'childEvName' + childEv.id}
                     className={tfSelector.div0Class}
                     value={tfValue}
