@@ -2,7 +2,7 @@ import {styled, TextField} from "@mui/material";
 import {sr} from "../TLConstants";
 import {_4cs} from "./4cs";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
-import {DotGroupProps, DotProps} from "./4ty";
+import {DotGroupProps, DotProps, MiNimeProps} from "./4ty";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
 import {useTLBaseFgHelpers} from "../2_TLBaseFg/TLBaseFgHelpers";
@@ -40,9 +40,7 @@ export function DotGroup (props: DotGroupProps) {
             padding: '0 0 0 10px',
             position: 'absolute',
             flex: 1,
-            left: 0,
-            // opacity: 0.5,
-
+            left: -6,
         }}>
             <Dot bg={
                 childEv.statusC === sr.status.open.c ? _4cs.dot.bgOpen
@@ -57,7 +55,7 @@ export function DotGroup (props: DotGroupProps) {
                 : childEv.prioriC === sr.priority.low.c ? _4cs.dot.bgLow
                 : _4cs.dot.bgLow
             }/>
-            <Dot />
+            {/* <Dot /> */}
         </div>
     )
     
@@ -83,14 +81,13 @@ export const WChildEv = styled('div')({
 
 const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
 export const ChildEvTextField = styled(TextField)({
-    width: 'calc(100% - 50px)', // 50(width of 2 GrabEdges)
+    width: '100%', 
     textAlign: 'center',
     outline: 'none',
     [`& ${tfSelector.input2}`]: {
-        fontSize: '12px',
         textAlign: 'center',
         color: 'white',
-        padding: '0px',
+        padding: '0 20px',
     },
     [`& ${tfSelector.input2Disable}`]: {
         '-webkit-text-fill-color': 'white !important',
@@ -133,7 +130,13 @@ export const StickTitle = styled('span')({
     position:'absolute', 
     left: 4,
     zIndex: 101,
-    fontSize: 12,
+    top:-8, 
+    fontSize: 8, 
+    fontWeight: 'bold',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    textAlign: 'left'
 })
 
 export function StickParentTitles () {
@@ -148,7 +151,31 @@ export function StickParentTitles () {
             {fiveLines.map((line: Ev[], i) => {
                 const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
                 const isStickTitle = cDateToGh(line[0].timeStart)<h$G_TLBaseFrameLeft && cDateToGh(line[0].timeEnd)>h$G_TLBaseFrameLeft
-                return line.map(parontEv =>  <StickTitle id={'stickTitle'+i} sx={{display:isStickTitle?'block':'none', top: parentTops[i]+2}}>{parontEv.name}</StickTitle>)
+                return line.map((parontEv, index) =>  <StickTitle id={'stickTitle'+i} sx={{display:isStickTitle&&index===0?'block':'none', top: parentTops[i]-6}}>{parontEv.name}</StickTitle>)
             })}
         </>
+}
+
+
+export function MiNime (props: MiNimeProps) {
+    const { width, childName } = props;
+    return (
+        <span 
+            style={{
+                textAlign: 'center',
+                fontSize: 8,
+                color: '#00000080',
+                position: 'relative',
+                top: -14,
+            }}>
+                {
+                    width<20 ? childName.slice(0, 8) 
+                    : width>20&&width<40 ? childName.slice(0, 10)
+                    : width>40&&width<60 ? childName.slice(0, 16)
+                    : width>60&&width<80 ? childName.slice(0, 20)
+                    : width>80&&width<100 ? childName.slice(0, 24)
+                    : childName
+                }
+        </span>
+    )
 }

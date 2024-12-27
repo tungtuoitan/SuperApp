@@ -1,67 +1,36 @@
-import { Box, IconButton, Typography } from "@mui/material"
-import { clvs, sr } from "../TLConstants";
+import { Box, Typography } from "@mui/material"
+import { clvs, sr, tt } from "../TLConstants";
 import {useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { getDate$MondayOfCurrentWeek, getDate$FirstDayOfCurrentMonth, 
     getDate$FirstDayOfCurrentYear, getDate$FirstDayOfCurrentDecade, getDate$FirstDayOfCurrentCentury, 
     GhToCDate,
     getDateOf,
     getTimeTitle,
-    useTimeHelpers} from "./TimeHelpers";
+    useTimeHelpers,
+    parseCDate,
+    pad,
+    getMonthShortName} from "./TimeHelpers";
 import { timeConfig, useTimeConfigStore } from "./TimeConfigStore";
 import { useEffect } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from "@mui/x-date-pickers";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { _3css } from "./3css";
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
-import { styled } from "@mui/system";
-import { helperMUIcss } from "../../CommonHelpers/5_MUIcss";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-const WLeft = styled(Box)({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'left',
-    paddingLeft: 10,
-    alignItems: 'center',
-    gap: 10,
-    height: '100%',
-    width: "33.3%",
-    
-})
-const WMid = styled(Box)({
-    display: 'flex',
-    flexDirection: 'row',  
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-    height: '100%',
-    width: "33.3%"
-})
-const WBar = styled(Box)({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 50
-})
+import {FromDatePicker, ToDatePicker, WArrowBtn, WBar, WLeft, WMid} from "./3ui";
+import {getWeek} from "date-fns";
 
-const WArrowBtn = styled(IconButton)({
-    width: 40,
-    height: 40,
-    fontSize: '10px !important',
-    fontStyle: 'italic',
-})
 
 export const TimeConfigBar = () => {
     const {timeConfig, setTimeConfig } = useTimeConfigStore();
     const { dateToCDate, h$G_BgEnd } = useTLBaseBgHelpers();
-    const { TIList, setZoomLv, keyboardState, firstTimeInit } = useTLBaseBgStore();
-    const dpSelector = helperMUIcss.getDatePickerCSSSelector();
-    const { clickNow, changeTimeStart, changeLevel, isPast, isFuture } = useTimeHelpers();
+    const { TIList, firstTimeInit } = useTLBaseBgStore();
+    const { clickNow, changeTimeStart, changeLevel, isPast } = useTimeHelpers();
     const timeTitle = getTimeTitle(timeConfig);
+    const {y, m, d } = parseCDate(timeConfig.timeStart);
 
     // init các value mặc định / tương tự từ userProfile load lên
     useEffect(() => {
@@ -88,15 +57,29 @@ export const TimeConfigBar = () => {
     return (
         <WBar>
             <WLeft>
-                <Typography variant='h2' sx={{ marginLeft: 10, fontSize: '32px !important',
-                            color: timeTitle === 'Today'|| timeTitle.includes('This') 
+                <Box display={'flex'} alignItems={'center'}>
+                    <Typography variant='h2' sx={{  fontSize: '32px !important',
+                                color: timeTitle === tt.today || timeTitle.includes('This') 
                                 ? _3css.timeTitle.nowCo
                                 : isPast(timeConfig.timeStart) 
                                 ? _3css.timeTitle.passCo 
                                 : _3css.timeTitle.futureCo, 
-                        }}>{timeTitle}</Typography>
+                            }}>{timeTitle}</Typography>
+                            <Typography sx={{fontSize: '12px !important', color: '#00000040', marginLeft:1, marginBottom: -1.7}}>{
+                                [tt.today, tt.tomorrow, tt.yesterday, tt.afterTomorrow, tt.beforeYesterday].includes(timeTitle) 
+                                ? `${pad(d)}.${pad(m)}`
+                                : [tt.thisWeek, tt.nextWeek, tt.lastWeek].includes(timeTitle)
+                                ? pad(getWeek(new Date(timeConfig.timeStart)))
+                                : [tt.thisMonth, tt.nextMonth, tt.lastMonth].includes(timeTitle)
+                                ? `${getMonthShortName(m)}.${y}`
+                                : [tt.thisYear, tt.nextYear, tt.lastYear].includes(timeTitle)
+                                ? y.toString()
+                                : ''
+                            }</Typography>
+
+                </Box>
             </WLeft>
-            <WMid>
+            <WMid>  
                 <WArrowBtn title={`Go Today`} onClick={clickNow}
                     sx={{
                         '&:hover': {
@@ -110,7 +93,6 @@ export const TimeConfigBar = () => {
                             color: 'black',
                         },
                     }}
-                    
                 >
                     <NavigateBeforeIcon />
                 </WArrowBtn>
@@ -120,47 +102,12 @@ export const TimeConfigBar = () => {
                 </WArrowBtn>
                 <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker className="fromDatePicker" disabled value={new Date(TIList[0]?.date)}
-                            sx={{ 
-                                height: 30, 
-                                width: 150,
-                                [`& ${dpSelector.div1}`]: {
-                                    height: 30,
-                                },
-                                [`& ${dpSelector.label1NoShrink}`]: {
-                                    top: -8,
-                                },
-                                [`& ${dpSelector.input2}`]: {
-                                    height: 30,
-                                    padding: '0px 0px 0 10px',
-                                },
-                             }}
-                            
-                        />
+                        <FromDatePicker className="fromDatePicker" disabled value={new Date(TIList[0]?.date)}/>
                     </LocalizationProvider>
                 </Box>
                 <Box display={'flex'} alignItems={'center'}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker className="toDatePicker" disabled value={new Date(GhToCDate(h$G_BgEnd))}
-                            sx={{ 
-                                height: 30, 
-                                width: 150,
-                                [`& ${dpSelector.div1}`]: {
-                                    height: 30,
-                                },
-                                [`& ${dpSelector.label1NoShrink}`]: {
-                                    top: -8,
-                                },
-                                [`& ${dpSelector.input2}`]: {
-                                    height: 30,
-                                    padding: '0px 0px 0 10px',
-                                },
-                                [`& ${dpSelector.button3}`]: {
-                                    // height: 30,
-                                    padding: '0 !important',
-                                },
-                            }}
-                        />
+                        <ToDatePicker className="toDatePicker" disabled value={new Date(GhToCDate(h$G_BgEnd))}/>
                     </LocalizationProvider>
                 </Box>
                 <WArrowBtn 

@@ -1,7 +1,7 @@
 
 export const _1css = {
     redline: {
-        w: 1,
+        w: 2,
         bg: 'red',
     },
     TI: {

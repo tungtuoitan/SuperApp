@@ -37,8 +37,8 @@ export default function GrabEdge (props: GrabEdgeProps) {
                 // background: 'red',
             } : {
                 
-                left: position === 'left' ? -10 : 'auto',
-                right: position === 'right' ? -10 : 'auto',
+                left: position === 'left' ? -20 : 'auto',
+                right: position === 'right' ? -20 : 'auto',
                 width: 40,
                 height: 30,
             }),
@@ -48,15 +48,27 @@ export default function GrabEdge (props: GrabEdgeProps) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            zIndex: 102,
         }}>
-            {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === id && 
+            {/* {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === id && 
                 <span style={{
                     background: 'red',
                     fontWeight: 'bold',
                     width: type === 'parent' ? 8 : 4,
-                    height: type === 'parent' ? 8 : 4,
+                    height: type === 'parent' ? 8 : 16,
+                    borderRadius: 500,
+                    // position: 'absolute',
+                    // ...(type === 'parent' ? 
+                    //     {
+                    //     left: position === 'left' ? -50 : 'auto',
+                    //     right: position === 'right' ? -50 : 'auto',
+                    // } :
+                    // {
+                    //     left: position === 'left' ? -20 : 'auto',
+                    //     right: position === 'right' ? -20 : 'auto',
+                    // })
                 }}/>
-            }
+            } */}
         </div>
     )
 }

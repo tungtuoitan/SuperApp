@@ -9,8 +9,10 @@ export const useTLBaseBgHelpers = () => {
     const { dateReal } = useTLBaseBgStore();
 
     // 1
-    const getLevelCOf = (type: 'parentEv' | 'childEv' | 'TI') => { // means get level(hour/day/...) of childEv/ parentEv/ TI
+    const getLevelCOf = (type: 'cevel' | 'parentEv' | 'childEv' | 'TI') => { // means get level(hour/day/...) of childEv/ parentEv/ TI
         switch (type) {
+            case 'cevel':
+                return clvs[timeConfig.cevelId].cevelC
             case 'parentEv':
                 return timeConfig.cevelId === 5 
                 ? clvs[timeConfig.cevelId + 1 > clvs.length - 1 ? clvs.length - 1 : timeConfig.cevelId + 0].cevelC
