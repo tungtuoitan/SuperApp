@@ -167,15 +167,10 @@ export function MiNime (props: MiNimeProps) {
                 color: '#00000080',
                 position: 'relative',
                 top: -14,
+                width: width,
+                overflow: 'hidden',
             }}>
-                {
-                    width<20 ? childName.slice(0, 8) 
-                    : width>20&&width<40 ? childName.slice(0, 10)
-                    : width>40&&width<60 ? childName.slice(0, 16)
-                    : width>60&&width<80 ? childName.slice(0, 20)
-                    : width>80&&width<100 ? childName.slice(0, 24)
-                    : childName
-                }
+                {childName}
         </span>
     )
 }
