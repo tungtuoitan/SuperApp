@@ -34,10 +34,16 @@ export type ParentEvProps = {
     lineOrder: number;
     isBeggerGang?: boolean;
     top: number;
+    index: number;
 }
 
 export type GrabEdgeProps = {
     id: number,
     position: 'left' | 'right'
     type?: 'parent' | 'child'
+}
+
+export type MiNimeProps = {
+    width: number;
+    childName: string;
 }

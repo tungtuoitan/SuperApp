@@ -12,7 +12,7 @@ export const _4cs = {
 
         bgNormal: '#828282',
         bgOpeningEtail: '#0D99FF50',
-        bgPast: '#82828220',
+        bgPast: '#82828260',
         bgPresent: '#FFCD29',
         bgDrag: 'black',
         bgJobtask: '#000000',

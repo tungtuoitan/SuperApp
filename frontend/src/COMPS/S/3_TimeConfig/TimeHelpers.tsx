@@ -112,8 +112,8 @@ export const useTimeHelpers = () => {
 };
 
 // B1. to CDate
+export const pad = (num: number): string => num.toString().padStart(2, "0");
 export const numbToCDate = (y: y, m: m, d: d, h: h, p: p): cDate => {
-    const pad = (num: number): string => num.toString().padStart(2, "0");
     const year = y.toString();
     const month = pad(m);
     const day = pad(d);
@@ -377,7 +377,7 @@ function isEqualDate(date1: cDate, date2: cDate) {
 
     return year1 === year2 && month1 === month2 && day1 === day2;
 }
-export function getTimeTitle(timeConfig: timeConfig): TimeTitle | string {
+export function getTimeTitle(timeConfig: timeConfig): TimeTitle | string{
     const cevelC = clvs[timeConfig.cevelId].cevelC;
     const timeStart = timeConfig.timeStart;
 
@@ -423,7 +423,7 @@ export function getTimeTitle(timeConfig: timeConfig): TimeTitle | string {
                 isEqualDate(timeStart, getDateOf(tt.nextWeek as TimeTitle))
             )
                 return tt.nextWeek as TimeTitle;
-            else return "Week: " + getWeek(new Date(timeStart));
+            else return "Week: " + pad(getWeek(new Date(timeStart)));
         case sr.month.c:
             if (isEqualDate(timeStart, getDateOf(tt.thisMonth as TimeTitle)))
                 return tt.thisMonth as TimeTitle;
@@ -451,7 +451,7 @@ export function getTimeTitle(timeConfig: timeConfig): TimeTitle | string {
         case sr.decade.c:
             if (isEqualDate(timeStart, getDateOf(tt.thisDecade as TimeTitle)))
                 return tt.thisDecade as TimeTitle;
-            else return `${Math.floor(y / 10)}0s`;
+            else return `${Math.floor(y / 10)}0s+`;
         case sr.century.c:
             if (isEqualDate(timeStart, getDateOf(tt.thisCentury as TimeTitle)))
                 return tt.thisCentury as TimeTitle;

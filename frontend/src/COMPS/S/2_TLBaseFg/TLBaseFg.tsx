@@ -48,11 +48,12 @@ export const TLBaseFg = () => {
     return (
         <WTLBaseFgContainer id='TLBaseFg' ref={activeId===FIIDs.parentEv ? setNodeRef : null} sx={{ width: w$Bg, background: isOver && activeId===FIIDs.parentEv ? _4cs.TLBaseFg.bgOver : _4cs.TLBaseFg.bgNormal }}>
             {[...fiveLines, [beggerEv]].map((line: Ev[], i) => {
-                return line.map(parontEv => {
+                return line.map((parontEv,index) => {
                     const childEvs = filterEvs(['inside-TL', 'active']).filter(ev => ev.parentId === parontEv.id)
                     return <ParentEv
                         key={parontEv.id}
                         parentEv={parontEv}
+                        index={index}
                         childEvs={parontEv.id === beggerEv.id || parontEv.id === null
                             ? childEvsOfBegger
                             : childEvs}
