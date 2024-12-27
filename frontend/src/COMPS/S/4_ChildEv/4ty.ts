@@ -1,9 +1,11 @@
+import {CSSProperties} from "react";
 import {Ev} from "../TLTypes";
 
 export type BlackMiniProps = {
     childId: number,
     parentWidth?: number,
     isBeggerGang?: boolean,
+    sx?: CSSProperties
 }
 
 

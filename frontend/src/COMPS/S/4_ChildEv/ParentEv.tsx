@@ -29,9 +29,14 @@ export const ParentEv = (props: ParentEvProps) => {
     const width = RhToPx(
         cDateToGh(parentEv.timeEnd as cDate) - cDateToGh(parentEv.timeStart as cDate)
     )
+    const height =  _4cs.parentEv.pt*2 + _4cs.childEv.he * fiveLines.length + _4cs.childEv.gapBetweenChildren * (fiveLines.length - 1) + _4cs.parentEv.heOf2borders
 
     const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
     const isStickTitle = cDateToGh(parentEv.timeStart)<h$G_TLBaseFrameLeft && cDateToGh(parentEv.timeEnd)>h$G_TLBaseFrameLeft
+
+    const displayLeftGrabEdge = fevId===parentEv.id && !isBeggerGang
+    const displayRightGrabEdge = fevId===parentEv.id && !isBeggerGang
+    const displayBlackMini = !isBeggerGang && fevId && fevId === parentEv.id
 
     return (
         <div
@@ -45,7 +50,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 width: width,
                 // transform: `translateX(${left}px)`, // this is better for performance, but it has problem while dropping
                 left: left,
-                height: _4cs.parentEv.pt*2 + _4cs.childEv.he * fiveLines.length + _4cs.childEv.gapBetweenChildren * (fiveLines.length - 1) + _4cs.parentEv.heOf2borders,
+                height: height,
                 top: isBeggerGang ? undefined : top,
                 bottom: isBeggerGang ? 0 : undefined,
                 background: isOver && activeId===FIIDs.childEv ? _4cs.parentEv.bgIsOver : _4cs.parentEv.bgNormal,
@@ -64,9 +69,9 @@ export const ParentEv = (props: ParentEvProps) => {
             {fiveLines[2]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={2} />)}
             {fiveLines[3]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={3} />)}
             {fiveLines[4]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={4} />)}
-            {!isBeggerGang && <GrabEdge position='left' id={parentEv.id} type='parent' />}
-            {!isBeggerGang && <GrabEdge position='right' id={parentEv.id} type='parent' />}
-            {!isBeggerGang && fevId && fevId === parentEv.id && <BlackMini childId={parentEv.id} parentWidth={width}/>}
+            {displayLeftGrabEdge && <GrabEdge position='left' id={parentEv.id} type='parent' />}
+            {displayRightGrabEdge && <GrabEdge position='right' id={parentEv.id} type='parent' />}
+            {displayBlackMini && <BlackMini childId={parentEv.id} parentWidth={width} sx={{top: height+5}}/>}
         </div>
     );
 }

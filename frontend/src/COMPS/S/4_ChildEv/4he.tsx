@@ -55,9 +55,9 @@ export const defaultGrabEdge: IGrabEdge = {id: null, position: 'left', mouseente
 
 // 2
 
-export const getMinMaxTimeOfEv = (levelC: CevelC, getMin: boolean = true): number => {
+export const getMinMaxTimeOfEv = (levelCOfEv: CevelC, getMin: boolean = true): number => {
     if(getMin) {
-        switch(levelC) {
+        switch(levelCOfEv) {
             case sr.century.c:
                 return hper.yea*100
             case sr.year.c:
@@ -74,7 +74,7 @@ export const getMinMaxTimeOfEv = (levelC: CevelC, getMin: boolean = true): numbe
                 return hper.hou/4
         }
     } else {
-        switch(levelC) {
+        switch(levelCOfEv) {
             // case sr.year.c:
             //     return hper.yea
             // case sr.month.c:
@@ -91,21 +91,21 @@ export const getMinMaxTimeOfEv = (levelC: CevelC, getMin: boolean = true): numbe
     }
 }
 
-export const getBaseW = (CevelC: CevelC): number => {
-    switch(CevelC) {
-        case sr.century.c:
-            return hper.yea*6
-        case sr.decade.c:
-            return hper.mon*8
-        case sr.year.c:
-            return hper.day*20
-        case sr.month.c:
-            return hper.day*3
-        case sr.week.c:
-            return hper.hou*20
-        case sr.day.c:
-            return hper.hou*4
-        default:
-            return hper.hou/4
-    }
-} 
+// export const getBaseW = (CevelC: CevelC): number => {
+//     switch(CevelC) {
+//         case sr.century.c:
+//             return hper.yea*6
+//         case sr.decade.c:
+//             return hper.mon*8
+//         case sr.year.c:
+//             return hper.day*20
+//         case sr.month.c:
+//             return hper.day*3
+//         case sr.week.c:
+//             return hper.hou*20
+//         case sr.day.c:
+//             return getMinMaxTimeOfEv(cevelC)
+//         default:
+//             return hper.hou/4
+//     }
+// } 
