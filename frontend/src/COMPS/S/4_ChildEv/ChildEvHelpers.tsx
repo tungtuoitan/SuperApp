@@ -32,9 +32,9 @@ export const useChildEvHelpers = () => {
         const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM);
         if (newTime === ev.timeStart || newTime === ev.timeEnd) return;
         let minTime = getMinMaxTimeOfEv(ev.levelC);
-        if (!keyboardState.shift && 
-            (position === "left" && cDateToGh(ev.timeEnd) - cDateToGh(newTime) < minTime ||
-            position === "right" && cDateToGh(newTime) - cDateToGh(ev.timeStart) < minTime)) return;
+        // if (!keyboardState.shift && 
+        //     (position === "left" && cDateToGh(ev.timeEnd) - cDateToGh(newTime) < minTime ||
+        //     position === "right" && cDateToGh(newTime) - cDateToGh(ev.timeStart) < minTime)) return;
 
         if (position === "left") {
             newAllEvs = newAllEvs.map((_ev: Ev) => {
