@@ -3,18 +3,20 @@
 export type Ev = {
   id: number,
   name: string,
-  type?: string,
+  type: string|null,
   levelC: CevelC,
 
   timeStart: cDate,
   timeEnd: cDate,
-  parentId: number | null,
+  parentId: number|null,
 
   activeC: string,
   statusC: string,
   prioriC: string,
+  fink: string|null,
 
 
+  // for orderUI
   lineOrder?: number,
 
   // these twos are just used for hourEv
