@@ -1,6 +1,9 @@
 import {Paper, styled} from "@mui/material";
 import {DatePicker, TimePicker} from "@mui/x-date-pickers";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
+import {Link} from "react-router-dom";
+import {FinkToProtocol} from "../5_Etail/5he";
+import {EtailForm, FigmaButtonProps} from "../5_Etail/5ty";
 
 export const WRow = styled("div")({
     display: "flex",
@@ -119,3 +122,20 @@ export const StartTimePicker = styled(TimePicker)({
     },
 
 });
+
+
+export const FigmaButton = (props: FigmaButtonProps) => <Link 
+    to={FinkToProtocol(props.etail.fink??'')??''} 
+    target="_self" 
+    className={props.etail.fink ? 'figma-button':''}  
+    style={{ 
+        width: 24, 
+        height: '100%', 
+        border: '1px solid #00000050', 
+        borderRadius: 4, 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+    }}>
+    <img src={props.etail.fink ? '/figma-icon.png' : '/figma-gray-icon.png'} alt="Figma Icon" style={{ width: 24, height: 24 }} />
+</Link>

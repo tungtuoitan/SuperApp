@@ -103,6 +103,7 @@ export const useChildEvHelpers = () => {
                 activeC: ev.activeC,
                 prioriC: ev.prioriC,
                 statusC: ev.statusC,
+                fink: ev.fink,
             }
             dispatch({type: 'INSE', payload: etail})
         }

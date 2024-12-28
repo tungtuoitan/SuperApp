@@ -1,18 +1,11 @@
-import {cDate, CevelC} from "../TLTypes";
+import { Ev} from "../TLTypes";
 
-export type EtailForm = {
-    id: number;
-    parentId: number|null;
-    name: string;
-    levelC: CevelC;
-    timeStart: cDate;
-    timeEnd: cDate;
-    type: string|null;
-    prioriC: string;
-    statusC: string;
-    activeC: string;
-}
+export type EtailForm = Omit<Ev, 'isOverlap' | 'isLateNight' | 'lineOrder'>;
 
 export type EtailProps = {
     etailId: number;
 };
+
+export type FigmaButtonProps = {
+    etail: EtailForm
+}

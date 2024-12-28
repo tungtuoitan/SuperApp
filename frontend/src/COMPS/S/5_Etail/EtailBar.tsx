@@ -35,6 +35,7 @@ export const EtailBar = (props: EtailBarProps) => {
                 activeC: etail.activeC,
                 statusC: etail.statusC,
                 prioriC: etail.prioriC,
+                fink: etail.fink,
             }
             iuEv(x).then((data: any) => {
                 if (data.options.success) {

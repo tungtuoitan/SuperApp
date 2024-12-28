@@ -1,8 +1,3 @@
-
-
-
-
-
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 import { SelectField } from "../TLTypes";
 import { useSRsStore } from "../8_SRs/SRsStore";
@@ -27,7 +22,7 @@ export const useEtailHelpers = () => {
     };
 
     const handleChange = (id: number, fieldName: string, value: any) => {
-        console.log('fieldName', fieldName, 'value', value);
+        // console.log('fieldName', fieldName, 'value', value);
         dispatch({type: 'UPDA', payload: {id, [fieldName]: value }});
     }
 

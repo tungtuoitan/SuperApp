@@ -11,6 +11,7 @@ import LTimeEnd from "../5L_Laper/LaperTimeEnd";
 import LStatus from "../5L_Laper/LaperStatus";
 import LPriority from "../5L_Laper/LaperPriority";
 import {EtailForm, EtailProps} from "./5ty";
+import LaperFink from "../5L_Laper/LaperFink";
 
 
 export default function Etail(props: EtailProps) {
@@ -35,6 +36,7 @@ export default function Etail(props: EtailProps) {
                     <LTimeEnd id={etailId} />
                     <LStatus id={etailId} />
                     <LPriority id={etailId} />
+                    <LaperFink id={etailId} />
                 </LeftEtailPaper>
                 <MidEtailPaper></MidEtailPaper>
                 <RightEtailPaper></RightEtailPaper>

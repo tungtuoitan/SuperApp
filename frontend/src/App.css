@@ -72,3 +72,8 @@ code {
 #TLBaseFrame::-webkit-scrollbar {
 display: none ; 
 } */
+
+
+.figma-button:hover {
+    background-color: #1a1a1a;
+}
