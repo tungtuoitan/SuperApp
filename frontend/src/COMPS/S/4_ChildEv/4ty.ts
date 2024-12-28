@@ -4,7 +4,7 @@ import {Ev} from "../TLTypes";
 export type BlackMiniProps = {
     childId: number,
     parentWidth?: number,
-    isBeggerGang?: boolean,
+    isBegger?: boolean,
     sx?: CSSProperties
 }
 
@@ -17,6 +17,7 @@ export type ChildEvProps = {
 
 export type DotGroupProps = {
     childEv: Ev;
+    sx?: CSSProperties;
 }
 
 export type DotProps = {
