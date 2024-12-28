@@ -13,7 +13,7 @@ import { cDate, EvsResult } from "./TLTypes";
 import { useChildEvHelpers } from "./4_ChildEv/ChildEvHelpers";
 import { zoomLvMax } from "./TLConstants";
 import {useChildEvStore} from "./4_ChildEv/ChildEvStore";
-import {StickParentTitles} from "./4_ChildEv/4ui";
+import {StickPames} from "./4_ChildEv/4ui";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -198,7 +198,7 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <StickParentTitles/>
+                    <StickPames/>
                     <div id='FgBgContainer' style={{position: 'relative'}}>
                         <TLBaseFg />
                         <TLBaseBg />

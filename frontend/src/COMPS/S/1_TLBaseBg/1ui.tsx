@@ -102,7 +102,7 @@ export const BigTime = function (props: {width: number;TILevel: CevelC;date: cDa
                     if (m === 1) text = y.toString();
                 } else if (TILevel === sr.week.c || TILevel === sr.day.c) {
                     if (d === 1) text = getMonthShortName(m);
-                    if (new Date(date).getDay() === 1 && width > 18) text = "M";
+                    if (new Date(date).getDay() === 1 && width > 18) text = "..";
                 } else if (TILevel === sr.hour.c) {
                     if (h === 0)
                         text =

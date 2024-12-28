@@ -98,7 +98,7 @@ export const useTLBaseFgHelpers = () => {
         }
 
         while (remainEvs.length > 0) { // maximun 5 lines
-            if (allLines.length > 5) return [...allLines, remainEvs];
+            if (allLines.length > 10) return [...allLines, remainEvs];
             const line = getLine(remainEvs);
             allLines.push(line);
             remainEvs = remainEvs.filter(rEv => !line.filter(e => e.id === rEv.id).length);
