@@ -126,7 +126,7 @@ export const ParentTitle = styled('span')({
     top: -20, color: 'gray'
 })
 
-export const StickTitle = styled('span')({
+export const Pame = styled('span')({
     position:'absolute', 
     left: 4,
     zIndex: 101,
@@ -136,10 +136,11 @@ export const StickTitle = styled('span')({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    textAlign: 'left'
+    textAlign: 'left',
+    pointerEvents: 'none',
 })
 
-export function StickParentTitles () {
+export function StickPames () {
      const { TLBaseFrameScrollLeft} = useTLBaseBgStore();
         const { RpxToRh, h$G_BgStart } = useTLBaseBgHelpers();
         const { getTopsOf5ParentLines } = use2he();
@@ -151,13 +152,13 @@ export function StickParentTitles () {
             {fiveLines.map((line: Ev[], i) => {
                 const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
                 const isStickTitle = cDateToGh(line[0].timeStart)<h$G_TLBaseFrameLeft && cDateToGh(line[0].timeEnd)>h$G_TLBaseFrameLeft
-                return line.map((parontEv, index) =>  <StickTitle id={'stickTitle'+i} sx={{display:isStickTitle&&index===0?'block':'none', top: parentTops[i]-6}}>{parontEv.name}</StickTitle>)
+                return line.map((parontEv, index) =>  <Pame id={'stickTitle'+i} sx={{display:isStickTitle&&index===0?'block':'none', top: parentTops[i]-6}}>{parontEv.name}</Pame>)
             })}
         </>
 }
 
 
-export function MiNime (props: MiNimeProps) {
+export function MiniCame (props: MiNimeProps) {
     const { width, childName } = props;
     return (
         <span 

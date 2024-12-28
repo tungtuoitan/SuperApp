@@ -11,7 +11,7 @@ import {useChildEvStore} from "./ChildEvStore";
 import {ParentEvProps} from "./4ty";
 import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
-import {StickTitle} from "./4ui";
+import {Pame} from "./4ui";
 
 export const ParentEv = (props: ParentEvProps) => {
     const { childEvs, parentEv, lineOrder, isBeggerGang = false, top, index } = props;
@@ -63,7 +63,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 zIndex: 100,
                 position: 'absolute',
             }}>
-            <StickTitle sx={{ display: isStickTitle&&index===0? 'none': 'block', top:-8, left: 12, width: width-12*2 }}>{parentEv.name}</StickTitle>
+            <Pame sx={{ display: isStickTitle&&index===0? 'none': 'block', top:-8, left: 12, width: width-12*2 }}>{parentEv.name}</Pame>
             {fiveLines[0]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={0} />)}
             {fiveLines[1]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={1} />)}
             {fiveLines[2]?.map((childEv: Ev, i) => <ChildEv key={childEv.id} parentEv={parentEv} childEv={childEv} lineOrder={2} />)}

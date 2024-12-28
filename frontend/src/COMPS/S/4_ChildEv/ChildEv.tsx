@@ -11,7 +11,7 @@ import { helperMUIcss } from "../../CommonHelpers/5_MUIcss";
 import BlackMini from "./BlackMini";
 import { sr } from "../TLConstants";
 import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
-import {ChildEvTextField, MiNime, DotGroup, WChildEv, WTime} from "./4ui";
+import {ChildEvTextField, MiniCame, DotGroup, WChildEv, WTime} from "./4ui";
 import {use4he} from "./4he";
 import {ChildEvProps} from "./4ty";
 import {useChildEvStore} from "./ChildEvStore";
@@ -38,8 +38,10 @@ export const ChildEv = (props: ChildEvProps) => {
     const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
     const isEtailOpen = allTabIds.includes(childEv.id);
     const enabledTF = fevId === childEv.id && fevId !== null && childEv.statusC !== sr.status.resolved.c
-    const displayLeftGrabEdge = fevId===childEv.id && !isPast(childEv.timeStart) && childEv.statusC !== sr.status.resolved.c && !isEtailOpen
-    const displayRightGrabEdge = fevId===childEv.id && !isPast(childEv.timeEnd) && childEv.statusC !== sr.status.resolved.c && !isEtailOpen
+    const displayLeftGrabEdge = fevId===childEv.id  && childEv.statusC !== sr.status.resolved.c && !isEtailOpen 
+    // && !isPast(childEv.timeStart)
+    const displayRightGrabEdge = fevId===childEv.id  && childEv.statusC !== sr.status.resolved.c && !isEtailOpen 
+    // && !isPast(childEv.timeEnd)
     const displayBlackMini = fevId && fevId === childEv.id
     const displayTimeLeft = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left'
     const displayTimeRight = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right'
@@ -81,7 +83,7 @@ export const ChildEv = (props: ChildEvProps) => {
             {displayRightGrabEdge && <GrabEdge position='right' id={childEv.id} />}
             {displayTimeLeft && <WTime sx={{left: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
             {displayTimeRight && <WTime sx={{right: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
-            {!displayTextField && <MiNime width={width} childName={childEv.name} />}
+            {!displayTextField && <MiniCame width={width} childName={childEv.name} />}
             
             {displayTextField && <ChildEvTextField
                     id={'childEvName' + childEv.id}

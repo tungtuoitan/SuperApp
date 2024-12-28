@@ -16,10 +16,10 @@ import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
-    const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId } = useChildEvStore();
+    const { fevId, setFevId, cutEvId, setCutEvId, focusTFId, setFocusTFId, mousedownAtGE } = useChildEvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
-    const { RpxToRh, h$G_BgStart, w$BgStart_spot } = useTLBaseBgHelpers();
+    const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } = useTLBaseBgHelpers();
     const { changeLevel, changeTimeStart } = useTimeHelpers();
 
     useEffect(() => {
@@ -84,11 +84,16 @@ export default function TLContainer() {
                                 const cutEv: Ev = newAllEvs.filter(ev => ev.id === cutEvId)[0];
                                 const newTimeStart =  GhToCDate(h$G_BgStart + RpxToRh(w$BgStart_spot()))
                                 const newTimeEnd = addTime(newTimeStart, 0, 0, 0, cDateToGh(cutEv.timeEnd)-cDateToGh(cutEv.timeStart), 0)
+                                const parentEv = newAllEvs.filter(ev => ev.id === fevId)[0];
                                 
                                 // if fevId is parentEv, go on
-                                if(fevId && filterEvs(['parentEv']).filter(ev => ev.id === fevId).length > 0) {
+                                if(fevId && parentEv) {
+                                    if(parentEv.levelC !== getLevelCOf('parentEv') || cutEv.levelC !== getLevelCOf('childEv')) {
+                                        enqueueSnackbar('Past Fail', { variant: "error" });
+                                        return
+                                    }
                                     // paste
-                                    if(cutEvId) {
+                                    else if(cutEvId) {
                                         cutEv.parentId = fevId;
                                         cutEv.timeStart = newTimeStart;
                                         cutEv.timeEnd = newTimeEnd;
@@ -98,17 +103,17 @@ export default function TLContainer() {
                                 else if (fevId === null || fevId === 999999999){
                                     cutEv.parentId = null;
                                     cutEv.timeStart = newTimeStart;
-                                    cutEv.timeEnd = newTimeEnd;
+                                    cutEv.timeEnd = newTimeEnd; 
                                 }
                                 
                                 setAllEvs(markEvs(newAllEvs))
                                 iuEv({ ...cutEv, timeStart: cDateToUTCDate(cutEv.timeStart), timeEnd: cDateToUTCDate(cutEv.timeEnd) })
                                 .then((data: EvsResult) => {
                                     if(data.options.success) {
-                                        enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
+                                        enqueueSnackbar(data.options.message, { variant: "success"});
                                         setCutEvId(null);
                                     } else {
-                                        enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
+                                        enqueueSnackbar(data.options.message, { variant: "error"});
                                     }
                                 })
                             }

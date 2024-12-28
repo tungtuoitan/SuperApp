@@ -60,6 +60,10 @@ export const use2he = () => {
             if(i===2) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + 10*i
             if(i===3) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + 10*i
             if(i===4) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + fiveMaxH[i-4] + 10*i
+            if(i===5) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + fiveMaxH[i-4] + fiveMaxH[i-5]  + 10*i
+            if(i===6) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + fiveMaxH[i-4] + fiveMaxH[i-5] + fiveMaxH[i-6] + 10*i
+            if(i===7) return _4cs.TLBaseFrame.pt + fiveMaxH[i-1] + fiveMaxH[i-2] + fiveMaxH[i-3] + fiveMaxH[i-4] + fiveMaxH[i-5] + fiveMaxH[i-6] + fiveMaxH[i-7] + 10*i
+
             return 0;
         })
         return fiveTops;

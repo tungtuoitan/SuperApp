@@ -1,3 +1,4 @@
+import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
 import {useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
 import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 import { hper, sr } from "../TLConstants";
@@ -11,6 +12,7 @@ export const use4he = () => {
     const { isPresentEv } = useChildEvHelpers();
     const { isPast } = useTimeHelpers();
     const { allTabIds } = useAllTabsStore();
+    const { getLevelCOf } = useTLBaseBgHelpers();
 
     const getBgChildEv = (childEv: Ev, grabEdge: IGrabEdge) => {
         if (allTabIds.includes(childEv.id)) return _4cs.childEv.bgOpeningEtail;
@@ -23,13 +25,15 @@ export const use4he = () => {
         else if (childEv.isLateNight) {
             return _4cs.childEv.bgLatenight;
         } 
-        else if (
-            isPresentEv(childEv.timeStart as cDate, childEv.timeEnd as cDate)
-        ) {
+        else if (isPresentEv(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4cs.childEv.bgDrag;
-            } else {
+            } 
+            else if (getLevelCOf('childEv') === sr.hour.c) {
                 return _4cs.childEv.bgPresent;
+            }
+            else {
+                return _4cs.childEv.bgNormal;
             }
         } 
         else {
