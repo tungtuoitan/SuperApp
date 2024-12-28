@@ -97,7 +97,7 @@ export const useTLBaseFgHelpers = () => {
             return nextLine;
         }
 
-        while (remainEvs.length > 0) { // maximun 5 lines
+        while (remainEvs.length > 0) { // maximun 10 lines
             if (allLines.length > 10) return [...allLines, remainEvs];
             const line = getLine(remainEvs);
             allLines.push(line);

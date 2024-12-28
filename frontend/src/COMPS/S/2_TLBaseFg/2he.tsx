@@ -48,7 +48,7 @@ export const use2he = () => {
             let h$Line = 0;
             line.forEach(paront => {
                 const childEvs = filterEvs(['inside-TL', 'active']).filter(childEv => childEv.parentId === paront.id);
-                const totalChildEvs = getFiveLines(childEvs).length;
+                const totalChildEvs = getFiveLines(childEvs).length>0 ? getFiveLines(childEvs).length : 1; // to avoid 0, easy to calculate
                 const h$Parent = totalChildEvs * _4cs.childEv.he + (totalChildEvs - 1) * _4cs.childEv.gapBetweenChildren + _4cs.parentEv.heOf2borders + _4cs.parentEv.pt*2
                 if(h$Parent > h$Line) h$Line = h$Parent;
             })

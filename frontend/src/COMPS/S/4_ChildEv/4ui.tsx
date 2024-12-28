@@ -3,12 +3,14 @@ import {sr} from "../TLConstants";
 import {_4cs} from "./4cs";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {DotGroupProps, DotProps, MiNimeProps} from "./4ty";
-import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
 import {useTLBaseFgHelpers} from "../2_TLBaseFg/TLBaseFgHelpers";
 import {use2he} from "../2_TLBaseFg/2he";
 import {cDateToGh} from "../3_TimeConfig/TimeHelpers";
 import {Ev} from "../TLTypes";
+import {use4he} from "./4he";
+import BlackMini from "./BlackMini";
+import {useChildEvStore} from "./ChildEvStore";
 
 
 export function Dot (props: DotProps) {
@@ -28,7 +30,7 @@ export function Dot (props: DotProps) {
 
 
 export function DotGroup (props: DotGroupProps) {
-    const { childEv } = props;
+    const { childEv, sx } = props;
 
     return (
         <div id={'DotGroup-' + childEv.name}
@@ -40,7 +42,10 @@ export function DotGroup (props: DotGroupProps) {
             padding: '0 0 0 10px',
             position: 'absolute',
             flex: 1,
+            zIndex: 102,
+            pointerEvents: 'none',
             left: -6,
+            ...sx
         }}>
             <Dot bg={
                 childEv.statusC === sr.status.open.c ? _4cs.dot.bgOpen
@@ -75,7 +80,6 @@ export const WChildEv = styled('div')({
     borderRadius: '50px 50px',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-
 })
 
 
@@ -84,10 +88,13 @@ export const ChildEvTextField = styled(TextField)({
     width: '100%', 
     textAlign: 'center',
     outline: 'none',
+    [`& ${tfSelector.div1}`]: {
+        justifyContent: 'right',
+    },
     [`& ${tfSelector.input2}`]: {
         textAlign: 'center',
         color: 'white',
-        padding: '0 20px',
+        padding: '0',
     },
     [`& ${tfSelector.input2Disable}`]: {
         '-webkit-text-fill-color': 'white !important',
@@ -114,7 +121,7 @@ export const WBlackMini = styled('div')({
     width: 200,
     height: 40,
     background: _4cs.blackMini.bg,
-    zIndex: 101,
+    zIndex: 103,
     alignItems: 'center',
     display: 'flex',
 })
@@ -139,22 +146,60 @@ export const Pame = styled('span')({
     textAlign: 'left',
     pointerEvents: 'none',
 })
+export const Came = styled('span')({
+    position:'absolute', 
+    left: 20,
+    zIndex: 101,
+    top:0, 
+    fontSize: 8, 
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    textAlign: 'left',
+    pointerEvents: 'none',
+    color: 'white',
+    width: '100%',
+})
 
-export function StickPames () {
-     const { TLBaseFrameScrollLeft} = useTLBaseBgStore();
-        const { RpxToRh, h$G_BgStart } = useTLBaseBgHelpers();
-        const { getTopsOf5ParentLines } = use2he();
-        const { filterEvs, getFiveLines, markEvs } = useTLBaseFgHelpers();
-        const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
-        const parentTops = getTopsOf5ParentLines();
+export function StickLayer () {
+    const { getTopsOf5ParentLines } = use2he();
+    const { isStickEv } = use4he();
+    const { filterEvs, getFiveLines } = useTLBaseFgHelpers();
+    const { h$G_TLBaseFrameLeft, RhToPx } = useTLBaseBgHelpers();
+    const fivePines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
+    const parentTops = getTopsOf5ParentLines();
+    const {fevId } = useChildEvStore();
 
-        return <>
-            {fiveLines.map((line: Ev[], i) => {
-                const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
-                const isStickTitle = cDateToGh(line[0].timeStart)<h$G_TLBaseFrameLeft && cDateToGh(line[0].timeEnd)>h$G_TLBaseFrameLeft
-                return line.map((parontEv, index) =>  <Pame id={'stickTitle'+i} sx={{display:isStickTitle&&index===0?'block':'none', top: parentTops[i]-6}}>{parontEv.name}</Pame>)
-            })}
-        </>
+    return <>
+        {[...fivePines].map((pine: Ev[], i) => {
+            const stickPEv = pine.find(ev => isStickEv(ev))
+            if(!stickPEv) return null;
+            const childEvs = filterEvs(['inside-TL', 'childEv', 'active']).filter(ev => ev.parentId === stickPEv.id)
+            const fiveCines = getFiveLines(childEvs);
+            const displayBlackMini = fevId && fevId === stickPEv?.id && stickPEv
+            const displayDotGroup = childEvs.length===0&&stickPEv
+            const isBegger = stickPEv.parentId === 999999999 || stickPEv.parentId === null 
+                
+            return <>
+                {stickPEv && <Pame sx={{top: parentTops[i]-6}}>{stickPEv.name}</Pame>}
+                {displayDotGroup && <DotGroup childEv={stickPEv} sx={{top: parentTops[i]+20}} />}
+                {displayBlackMini && <BlackMini childId={stickPEv.id} isBegger={isBegger} sx={{top: parentTops[i+1]}}/>}
+
+                {fiveCines.map((cine: Ev[], j) => {
+                    const stickCEv = cine.find(ev => isStickEv(ev))
+                    if(!stickCEv) return null;
+                    const w = RhToPx(cDateToGh(stickCEv.timeEnd)-h$G_TLBaseFrameLeft)
+                    const displayBlackMini2 = fevId && fevId === stickCEv.id && stickCEv
+                    const isBegger2 = stickCEv.parentId === 999999999 || stickCEv.parentId === null
+                    return <>
+                        {stickCEv && <Came sx={{top: (parentTops[i]+(w>100?13:16)) + j*22, fontSize: w>100?12:8,width: w-30>0?w-30:0}}>
+                            {stickCEv.name}</Came>}
+                        {stickCEv && <DotGroup childEv={stickCEv} sx={{top: (parentTops[i]+20) + j*22}} />}
+                        {displayBlackMini2 && <BlackMini childId={stickCEv.id} isBegger={isBegger2} sx={{top: parentTops[i] + j*22 +34}}/>}
+                    </>})}
+            </>
+        })}
+    </>
 }
 
 

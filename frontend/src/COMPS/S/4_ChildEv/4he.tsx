@@ -1,5 +1,6 @@
 import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
-import {useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
+import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
+import {cDateToGh, useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
 import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 import { hper, sr } from "../TLConstants";
 import { cDate, CevelC, Ev } from "../TLTypes";
@@ -12,7 +13,8 @@ export const use4he = () => {
     const { isPresentEv } = useChildEvHelpers();
     const { isPast } = useTimeHelpers();
     const { allTabIds } = useAllTabsStore();
-    const { getLevelCOf } = useTLBaseBgHelpers();
+    const { TLBaseFrameScrollLeft } = useTLBaseBgStore();
+    const { getLevelCOf, h$G_BgStart, RpxToRh } = useTLBaseBgHelpers();
 
     const getBgChildEv = (childEv: Ev, grabEdge: IGrabEdge) => {
         if (allTabIds.includes(childEv.id)) return _4cs.childEv.bgOpeningEtail;
@@ -47,9 +49,16 @@ export const use4he = () => {
         }
     };
 
+    const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
+
+    const isStickEv = (ev:Ev) => {
+        return cDateToGh(ev.timeStart)<h$G_TLBaseFrameLeft && cDateToGh(ev.timeEnd)>h$G_TLBaseFrameLeft
+    }
+
     
     return { 
         getBgChildEv,
+        isStickEv,
      };
 };
 

@@ -2,7 +2,7 @@ import { useTLBaseBgStore } from "./1_TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./3_TimeConfig/TimeConfigStore";
 import { useTLBaseBgHelpers } from "./1_TLBaseBg/TLBaseBgHelpers";
-import { addTime, cDateToGh, cDateToUTCDate, hToRoundedHM, parseCDate } from "./3_TimeConfig/TimeHelpers";
+import { addTime, cDateToUTCDate, hToRoundedHM } from "./3_TimeConfig/TimeHelpers";
 import { useEffect, useLayoutEffect } from "react";
 import { useTLBaseFgStore } from "./2_TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./1_TLBaseBg/TLBaseBg";
@@ -13,7 +13,7 @@ import { cDate, EvsResult } from "./TLTypes";
 import { useChildEvHelpers } from "./4_ChildEv/ChildEvHelpers";
 import { zoomLvMax } from "./TLConstants";
 import {useChildEvStore} from "./4_ChildEv/ChildEvStore";
-import {StickPames} from "./4_ChildEv/4ui";
+import {StickLayer} from "./4_ChildEv/4ui";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -198,7 +198,7 @@ export const TLBaseContainer = () => {
                             setTimeConfig(newTimeConfig);
                     }}
                 >
-                    <StickPames/>
+                    <StickLayer/>
                     <div id='FgBgContainer' style={{position: 'relative'}}>
                         <TLBaseFg />
                         <TLBaseBg />

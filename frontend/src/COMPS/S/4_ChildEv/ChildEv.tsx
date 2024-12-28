@@ -23,12 +23,12 @@ export const ChildEv = (props: ChildEvProps) => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { grabEdge, fevId, setFevId, cutEvId, focusTFId, setFocusTFId } = useChildEvStore();
     const [tfValue, setTfValue] = useState(childEv.name);
-    const { RhToPx } = useTLBaseBgHelpers();
+    const { RhToPx, h$G_TLBaseFrameLeft } = useTLBaseBgHelpers();
     const { markEvs } = useTLBaseFgHelpers();
     const { isPast } = useTimeHelpers();
     const { allTabIds } = useAllTabsStore();
     const { enqueueSnackbar } = useSnackbar();
-    const { getBgChildEv } = use4he();
+    const { getBgChildEv, isStickEv } = use4he();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = _4cs.parentEv.pt + (_4cs.childEv.he + _4cs.childEv.gapBetweenChildren) * lineOrder;
@@ -42,12 +42,15 @@ export const ChildEv = (props: ChildEvProps) => {
     // && !isPast(childEv.timeStart)
     const displayRightGrabEdge = fevId===childEv.id  && childEv.statusC !== sr.status.resolved.c && !isEtailOpen 
     // && !isPast(childEv.timeEnd)
-    const displayBlackMini = fevId && fevId === childEv.id
+    const displayBlackMini = fevId && fevId === childEv.id && !isStickEv(childEv)
     const displayTimeLeft = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'left'
     const displayTimeRight = (grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === childEv.id && grabEdge.position === 'right'
     const displayDotGroup = width > 30
-    const isBeggerGang = parentEv.id === 999999999 || parentEv.id === null
-    const displayTextField = width > 100
+    const isBegger = parentEv.id === 999999999 || parentEv.id === null
+    const displayTextField = width > 100 && !isStickEv(childEv)
+    const displayMiNiCame = width <= 100 && !isStickEv(childEv)
+    const distance = RhToPx(h$G_TLBaseFrameLeft - cDateToGh(childEv.timeStart))
+    if(fevId === childEv.id) console.log(distance)
 
     return <>
         <WChildEv
@@ -78,12 +81,12 @@ export const ChildEv = (props: ChildEvProps) => {
             }}
         >
             {displayDotGroup && <DotGroup childEv={childEv} />}
-            {displayBlackMini && <BlackMini childId={childEv.id} isBeggerGang={isBeggerGang}/>}
+            {displayBlackMini && <BlackMini childId={childEv.id} isBegger={isBegger}/>}
             {displayLeftGrabEdge && <GrabEdge position='left' id={childEv.id} />}
             {displayRightGrabEdge && <GrabEdge position='right' id={childEv.id} />}
-            {displayTimeLeft && <WTime sx={{left: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
-            {displayTimeRight && <WTime sx={{right: 0, top: isBeggerGang ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
-            {!displayTextField && <MiniCame width={width} childName={childEv.name} />}
+            {displayTimeLeft && <WTime sx={{left: 0, top: isBegger ? -50 : 10}}>{formatTime(childEv.timeStart, sr.hour.c)}</WTime>}
+            {displayTimeRight && <WTime sx={{right: 0, top: isBegger ? -50 : 10}}>{formatTime(childEv.timeEnd, sr.hour.c)}</WTime>}
+            {displayMiNiCame && <MiniCame width={width} childName={childEv.name} />}
             
             {displayTextField && <ChildEvTextField
                     id={'childEvName' + childEv.id}
@@ -117,8 +120,8 @@ export const ChildEv = (props: ChildEvProps) => {
                     sx={{
                         [`& ${tfSelector.input2}`]: {
                             caretColor: enabledTF ? 'auto' : 'transparent',
-                            fontSize: width > 150 ? '12px' : '8px',
                             pointerEvents: 'none', // keep this, if drop this, the TextField will not be able to focus
+                            fontSize: width > 150 ? '12px' : '8px',
                         },
                     }}
                 />}

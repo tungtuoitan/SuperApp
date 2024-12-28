@@ -4,7 +4,7 @@ import { useTLBaseBgStore } from "./TLBaseBgStore";
 import { cDateToGh, dateToCDate } from "../3_TimeConfig/TimeHelpers";
 
 export const useTLBaseBgHelpers = () => {
-    const { TIList, zoomLv, TLBaseFrameRef, spotRatio } = useTLBaseBgStore();
+    const { TIList, zoomLv, TLBaseFrameRef, spotRatio, TLBaseFrameScrollLeft } = useTLBaseBgStore();
     const { timeConfig } = useTimeConfigStore();
     const { dateReal } = useTLBaseBgStore();
 
@@ -29,11 +29,11 @@ export const useTLBaseBgHelpers = () => {
     // 2. TLBaseFrame
     const w$TLBaseFrame = TLBaseFrameRef.current ? TLBaseFrameRef.current.clientWidth : 0;
     const w$BaseTI = TIList.length > 0 ? w$TLBaseFrame / TIList.length : 0;
-
+    
     // 3. TI
     const hourPerTI = hper[(getLevelCOf('TI') === sr.week.c ? sr.day.c : getLevelCOf('TI')) as keyof typeof hper];
     const pxPerTI = w$BaseTI * zoomLv;
-
+    
     // 4. Convert
     const RhPerPx = hourPerTI / pxPerTI;
     const RhToPx = (h: number) => h / RhPerPx
@@ -54,7 +54,8 @@ export const useTLBaseBgHelpers = () => {
     const realCDate = dateToCDate(dateReal);
     const h$G_red = cDateToGh(dateToCDate(dateReal));
     const w$BgStart_red = (cDateToGh(realCDate) - h$G_BgStart) / RhPerPx;
-
+    
+    const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
 
     return {
         hourPerTI,
@@ -76,6 +77,8 @@ export const useTLBaseBgHelpers = () => {
 
         dateToCDate,
         getLevelCOf,
+
+        h$G_TLBaseFrameLeft,
     }
 }
 
