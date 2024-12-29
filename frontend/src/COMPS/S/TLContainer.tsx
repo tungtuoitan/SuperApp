@@ -12,6 +12,7 @@ import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { sr } from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
+import {getAllDescendants} from './2_TLBaseFg/2he';
 
 export default function TLContainer() {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -35,7 +36,7 @@ export default function TLContainer() {
                 }
             }}
             tabIndex={0} // to enable onKeyDown
-            onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => { 
+            onKeyDown={async (e: KeyboardEvent<HTMLDivElement>) => { 
                 if(e.ctrlKey)
                     setKeyboardState({...keyboardState, ctrl: true})
                 if(e.shiftKey)
@@ -54,17 +55,24 @@ export default function TLContainer() {
                             if (fevId) {
                                // delete
                                 const newAllEvs = [...allEvs]
-                                const fEv = newAllEvs.filter(ev => ev.id === fevId)[0];
-                                fEv.activeC = sr.active.inActive.c;
+                                const allDescendants:Ev[] = getAllDescendants(newAllEvs, fevId)
+                                
+                                allDescendants.forEach(ev=> ev.activeC = sr.active.inActive.c)
                                 setAllEvs(markEvs(newAllEvs))
-                                iuEv(fEv)
-                                .then((data: EvsResult) => {
-                                    if(data.options.success) {
-                                        enqueueSnackbar(data.options.message, { variant: "success", autoHideDuration: 3000 });
-                                    } else {
-                                        enqueueSnackbar(data.options.message, { variant: "error", autoHideDuration: 3000 });
-                                    }
-                               })
+                                try {
+                                    await Promise.all(allDescendants.map(ev => iuEv(ev)))
+                                    .then((data: EvsResult[])=> {
+                                        const failResult = data.find(r => !r.options.success)
+                                        if(!failResult) {
+                                            enqueueSnackbar(data[0].options.message, { variant: "success"});
+                                        } else {
+                                            enqueueSnackbar(failResult.options.message, { variant: "error"})
+                                        }
+                                    })
+                                }
+                                catch {
+                                    enqueueSnackbar('SOMETHING WRONG!', { variant: "error"})
+                                }
                            }
                            break;
                         case 'x': 
@@ -80,40 +88,66 @@ export default function TLContainer() {
                         case 'v':
                         case 'V':
                             if(e.ctrlKey) {
-                                const newAllEvs = [...allEvs]
-                                const cutEv: Ev = newAllEvs.filter(ev => ev.id === cutEvId)[0];
+                                if(cutEvId === null) {
+                                    enqueueSnackbar('Past Fail', { variant: "error" });
+                                    return
+                                }
+                                let newAllEvs = [...allEvs]
+                                const cutEv:Ev = newAllEvs.filter(ev => ev.id === cutEvId)[0];
                                 const newTimeStart =  GhToCDate(h$G_BgStart + RpxToRh(w$BgStart_spot()))
                                 const newTimeEnd = addTime(newTimeStart, 0, 0, 0, cDateToGh(cutEv.timeEnd)-cDateToGh(cutEv.timeStart), 0)
                                 const parentEv = newAllEvs.filter(ev => ev.id === fevId)[0];
+                                const h$difference = cDateToGh(newTimeStart) - cDateToGh(cutEv.timeStart); 
+                                let allDescendants:Ev[] = getAllDescendants(newAllEvs, cutEvId)
                                 
                                 // if fevId is parentEv, go on
                                 if(fevId && parentEv) {
-                                    if(parentEv.levelC !== getLevelCOf('parentEv') || cutEv.levelC !== getLevelCOf('childEv')) {
+                                    if(parentEv.levelC !== getLevelCOf('parentEv') || cutEv.levelC !== getLevelCOf('childEv')) { // we have to separate 2 cases, bcz of this condition
                                         enqueueSnackbar('Past Fail', { variant: "error" });
                                         return
                                     }
                                     // paste
                                     else if(cutEvId) {
-                                        cutEv.parentId = fevId;
-                                        cutEv.timeStart = newTimeStart;
-                                        cutEv.timeEnd = newTimeEnd;
+                                        newAllEvs = newAllEvs.map((_ev: Ev) => {
+                                            if (_ev.id === cutEvId) {
+                                                return { ..._ev, parentId: fevId, timeStart: newTimeStart, timeEnd: newTimeEnd };
+                                            } else if (allDescendants.find(e => e.id === _ev.id)) {
+                                                return { 
+                                                    ..._ev, 
+                                                    timeStart: GhToCDate(cDateToGh(_ev.timeStart) + h$difference), 
+                                                    timeEnd: GhToCDate(cDateToGh(_ev.timeEnd) + h$difference) 
+                                                };
+                                            }
+                                            return _ev;
+                                        });
                                     }
                                 }
-                                // if fevId is BeggerGang
-                                else if (fevId === null || fevId === 999999999){
-                                    cutEv.parentId = null;
-                                    cutEv.timeStart = newTimeStart;
-                                    cutEv.timeEnd = newTimeEnd; 
+                                else if(fevId === null || fevId === 999999999){
+                                    // paste
+                                    newAllEvs = newAllEvs.map((_ev: Ev) => {
+                                        if (_ev.id === cutEvId) {
+                                            return { ..._ev, parentId: null, timeStart: newTimeStart, timeEnd: newTimeEnd };
+                                        } else if (allDescendants.find(e => e.id === _ev.id)) {
+                                            return { 
+                                                ..._ev, 
+                                                timeStart: GhToCDate(cDateToGh(_ev.timeStart) + h$difference), 
+                                                timeEnd: GhToCDate(cDateToGh(_ev.timeEnd) + h$difference) 
+                                            };
+                                        }
+                                        return _ev;
+                                    });
                                 }
                                 
                                 setAllEvs(markEvs(newAllEvs))
-                                iuEv({ ...cutEv, timeStart: cDateToUTCDate(cutEv.timeStart), timeEnd: cDateToUTCDate(cutEv.timeEnd) })
-                                .then((data: EvsResult) => {
-                                    if(data.options.success) {
-                                        enqueueSnackbar(data.options.message, { variant: "success"});
+                                allDescendants = getAllDescendants(newAllEvs, cutEvId)
+                                await Promise.all(allDescendants.map(ev => iuEv({ ...ev, timeStart: cDateToUTCDate(ev.timeStart), timeEnd: cDateToUTCDate(ev.timeEnd)})))
+                                .then((data: EvsResult[])=> {
+                                    const failResult = data.find(r => !r.options.success)
+                                    if(!failResult) {
                                         setCutEvId(null);
+                                        enqueueSnackbar(data[0].options.message, { variant: "success"});
                                     } else {
-                                        enqueueSnackbar(data.options.message, { variant: "error"});
+                                        enqueueSnackbar(failResult.options.message, { variant: "error"})
                                     }
                                 })
                             }

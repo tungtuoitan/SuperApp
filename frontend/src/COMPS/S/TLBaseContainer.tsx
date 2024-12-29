@@ -2,18 +2,19 @@ import { useTLBaseBgStore } from "./1_TLBaseBg/TLBaseBgStore";
 import { CircularProgress } from "@mui/material";
 import { useTimeConfigStore } from "./3_TimeConfig/TimeConfigStore";
 import { useTLBaseBgHelpers } from "./1_TLBaseBg/TLBaseBgHelpers";
-import { addTime, cDateToUTCDate, hToRoundedHM } from "./3_TimeConfig/TimeHelpers";
+import { cDateToUTCDate, hToRoundedHM } from "./3_TimeConfig/TimeHelpers";
 import { useEffect, useLayoutEffect } from "react";
 import { useTLBaseFgStore } from "./2_TLBaseFg/TLBaseFgStore";
 import { TLBaseBg } from "./1_TLBaseBg/TLBaseBg";
 import { TLBaseFg } from "./2_TLBaseFg/TLBaseFg";
 import { iuEv } from "./TLAPIs";
 import { useSnackbar } from "notistack";
-import { cDate, EvsResult } from "./TLTypes";
+import { EvsResult } from "./TLTypes";
 import { useChildEvHelpers } from "./4_ChildEv/ChildEvHelpers";
 import { zoomLvMax } from "./TLConstants";
 import {useChildEvStore} from "./4_ChildEv/ChildEvStore";
 import {StickLayer} from "./4_ChildEv/4ui";
+import {getAllDescendants} from "./2_TLBaseFg/2he";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -120,20 +121,22 @@ export const TLBaseContainer = () => {
                         // update db.Evs (this is temp, should use allEvs0, and write this code directly in debounce$UpdateEv)
                         if(grabEdge.mousedownAtGE) {
                             const { id, position } = grabEdge;
-                            const { roundedH, roundedM } = hToRoundedHM(RpxToRh(w$BgStart_spot()), true)
-                            const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM)
-                            const newEv = allEvs.filter(ev => ev.id === id)[0];
+                            if(id === null) return;
 
-                            iuEv({...newEv, 
-                                timeStart: cDateToUTCDate(position === 'left' ? newTime : newEv.timeStart), 
-                                timeEnd: cDateToUTCDate(position === 'right' ? newTime : newEv.timeEnd)}
-                            ).then((data: EvsResult) => {
-                                if(data.options.success) {
-                                    enqueueSnackbar(data.options.message ?? '', { variant: "success" });
-                                } else {
-                                    enqueueSnackbar(data.options.message ?? '', { variant: "error" });
-                                }
-                            })
+                            //make sure: allEvs is updated 
+                            setTimeout(async() => {
+                                const allDescendants = getAllDescendants(allEvs, id)
+                                await Promise.all(allDescendants.map(ev => iuEv({...ev, timeStart: cDateToUTCDate(ev.timeStart), timeEnd: cDateToUTCDate(ev.timeEnd)})))  
+                                .then((data: EvsResult[])=> {
+                                    const failResult = data.find(r => !r.options.success)
+                                    if(!failResult) {
+                                        enqueueSnackbar(data[0].options.message, { variant: "success"});
+                                    } else {
+                                        enqueueSnackbar(failResult.options.message, { variant: "error"})
+                                    }
+                                })
+                            }, 1000)
+
                             setGrabEdge({ ...grabEdge, id: null, mousedownAtGE: false }); // phải set mousedownAtGE = false tại đây, vì  khi dragging, mouse có thể k nằm trong GE nữa
                         }
                         if (mouseDown) {

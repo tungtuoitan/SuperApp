@@ -18,6 +18,8 @@ export const _4cs = {
         bgJobtask: '#000000',
         bgOverlap: 'red',
         bgLatenight: '#F24822',
+        boOutside: '2px solid #FF0000',
+        boTransparent: '2px solid transparent',
     },
     TLBaseFrame: {
         pt: 20,
@@ -26,6 +28,7 @@ export const _4cs = {
         pt: 12,
         heOf2borders: 4,
         boFocus: '2px solid #0D99FF',
+        boOutsideChild: '2px solid #FF0000',
         boNormal: '2px solid transparent',
         bgIsOver: 'lightblue',
         bgNormal: '#00000010',

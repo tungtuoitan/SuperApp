@@ -1,3 +1,4 @@
+import {useSnackbar} from "notistack";
 import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import {cDateToGh, useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
@@ -7,10 +8,12 @@ import { cDate, CevelC, Ev } from "../TLTypes";
 import { _4cs } from "./4cs";
 import {IGrabEdge} from "./4ty";
 import {useChildEvHelpers} from "./ChildEvHelpers";
+import {useChildEvStore} from "./ChildEvStore";
 
 // A____________________________________________________________________________________________________________________
 export const use4he = () => {
     const { isPresentEv } = useChildEvHelpers();
+    const { fevId } = useChildEvStore();
     const { isPast } = useTimeHelpers();
     const { allTabIds } = useAllTabsStore();
     const { TLBaseFrameScrollLeft } = useTLBaseBgStore();
@@ -49,6 +52,31 @@ export const use4he = () => {
         }
     };
 
+    const hasOutsideChild = (childEvs: Ev[], parentEv: Ev) => {
+        if(parentEv.id===null||parentEv.id === 999999999) return false
+        let hasOutsideChild = false
+        childEvs.forEach(ev => {
+            if(cDateToGh(ev.timeStart) < cDateToGh(parentEv.timeStart) || cDateToGh(ev.timeEnd) > cDateToGh(parentEv.timeEnd)) {
+                hasOutsideChild = true
+            }
+        })
+        return hasOutsideChild
+    }
+    const isOutSideChild = (childEv: Ev, parentEv: Ev) => {
+        if(parentEv.id===null||parentEv.id === 999999999) return false
+        return cDateToGh(childEv.timeStart) < cDateToGh(parentEv.timeStart) || cDateToGh(childEv.timeEnd) > cDateToGh(parentEv.timeEnd)
+    }
+    const getBoChild = (childEv:Ev,isOutSide: boolean) => {
+            if(isOutSide) return _4cs.childEv.boOutside
+            if(fevId && fevId === childEv.id) return _4cs.childEv.boFocus
+            return _4cs.childEv.boTransparent
+        }
+    const getBoParent = (parentId: number, hasOutsideChild: boolean) => {
+        if(hasOutsideChild) return _4cs.parentEv.boOutsideChild
+        if(fevId && fevId === parentId) return _4cs.parentEv.boFocus
+        return _4cs.parentEv.boNormal
+    }
+
     const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
 
     const isStickEv = (ev:Ev, side: 'left'|'right' = 'left') => {
@@ -64,6 +92,10 @@ export const use4he = () => {
     return { 
         getBgChildEv,
         isStickEv,
+        hasOutsideChild,
+        isOutSideChild,
+        getBoParent,
+        getBoChild
      };
 };
 

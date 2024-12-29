@@ -1,5 +1,5 @@
 import { useTLBaseBgStore } from "../1_TLBaseBg/TLBaseBgStore";
-import { cDate, Ev, EvsResult, FilterType, Mark } from "../TLTypes";
+import { cDate, Ev } from "../TLTypes";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { cDateToGh, GhToCDate, parseCDate } from "../3_TimeConfig/TimeHelpers";
@@ -38,11 +38,11 @@ export const use2he = () => {
                 enqueueSnackbar(`Warning: EV:${ev.id} status has problem: ${ev.statusC}`, { variant: "warning" })
                 return
             }
-            if(allEvs.filter(e => e.id == ev.parentId).length === 0 && ev.parentId !== null){
+            if(allEvs.filter(e2 => e2.id == ev.parentId).length === 0 && ev.parentId !== null){
                 enqueueSnackbar(`Warning: EV:${ev.id} has Ghost parent`, { variant: "warning" })
                 return
             }
-            if(allEvs.filter(e => e.id == ev.parentId)[0] && allEvs.filter(e => e.id == ev.parentId)[0]?.activeC===sr.active.inActive.c){
+            if(ev.activeC===sr.active.active.c && allEvs.filter(e2 => e2.id == ev.parentId)[0] && allEvs.filter(e2 => e2.id == ev.parentId)[0]?.activeC===sr.active.inActive.c){
                 enqueueSnackbar(`Warning: EV:${ev.id} has InActive parent`, { variant: "warning" })
                 return
             }
@@ -118,4 +118,30 @@ export const isLateNight = (ev: Ev): boolean => {
     const hs = h + p/60
     const he = h2 + p2/60
     return hs < lateNight.end || hs > lateNight.start || he > lateNight.start || he < lateNight.end || d !== d2
+}
+
+
+export function getAllDescendants(allItems: Ev[], id: number, includeSelf: boolean = true): Ev[] {
+    const result: Ev[] = [];
+  
+    // Hàm đệ quy để tìm tất cả con cháu
+    function collectChildren(parentId: number) {
+        // Tìm chính nó
+        const currentItem = allItems.find((item) => item.id === parentId);
+        if (currentItem) {
+            result.push(currentItem);
+    
+            // Tìm tất cả các con trực tiếp
+            const children = allItems.filter((item) => item.parentId === parentId);
+            for (const child of children) {
+                collectChildren(child.id); // Đệ quy cho từng con
+            }
+        }
+    }
+  
+    // Bắt đầu đệ quy từ id ban đầu
+    collectChildren(id);
+    if(!includeSelf) result.shift();
+  
+    return result;
 }
