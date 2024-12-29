@@ -14,7 +14,7 @@ export const use4he = () => {
     const { isPast } = useTimeHelpers();
     const { allTabIds } = useAllTabsStore();
     const { TLBaseFrameScrollLeft } = useTLBaseBgStore();
-    const { getLevelCOf, h$G_BgStart, RpxToRh } = useTLBaseBgHelpers();
+    const { getLevelCOf, h$G_BgStart, RpxToRh, w$TLBaseFrame } = useTLBaseBgHelpers();
 
     const getBgChildEv = (childEv: Ev, grabEdge: IGrabEdge) => {
         if (allTabIds.includes(childEv.id)) return _4cs.childEv.bgOpeningEtail;
@@ -51,8 +51,13 @@ export const use4he = () => {
 
     const h$G_TLBaseFrameLeft = h$G_BgStart + RpxToRh(TLBaseFrameScrollLeft)
 
-    const isStickEv = (ev:Ev) => {
-        return cDateToGh(ev.timeStart)<h$G_TLBaseFrameLeft && cDateToGh(ev.timeEnd)>h$G_TLBaseFrameLeft
+    const isStickEv = (ev:Ev, side: 'left'|'right' = 'left') => {
+        if(side==='left') {
+            return cDateToGh(ev.timeStart)<h$G_TLBaseFrameLeft && cDateToGh(ev.timeEnd)>h$G_TLBaseFrameLeft
+        } else {
+            const h$G_TLBaseFrameRight = h$G_TLBaseFrameLeft + RpxToRh(w$TLBaseFrame)
+            return cDateToGh(ev.timeStart)<h$G_TLBaseFrameRight && cDateToGh(ev.timeEnd)>h$G_TLBaseFrameRight
+        }
     }
 
     
