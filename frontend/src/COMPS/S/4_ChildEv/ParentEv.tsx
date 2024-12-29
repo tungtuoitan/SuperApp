@@ -12,20 +12,24 @@ import {ParentEvProps} from "./4ty";
 import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import {DotGroup, Pame} from "./4ui";
+import {use4he} from "./4he";
+import {useSnackbar} from "notistack";
 
 export const ParentEv = (props: ParentEvProps) => {
-    const { childEvs, parentEv, lineOrder, isBeggerGang = false, top, index } = props;
-    const { getFiveLines } = useTLBaseFgHelpers();
+    const { childEvs, parentEv, isBeggerGang = false, top, index } = props;
+    const { enqueueSnackbar } = useSnackbar();
+    const { getFiveLines, } = useTLBaseFgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: parentEv.id });
     const { RhToPx, h$G_BgStart,RpxToRh } = useTLBaseBgHelpers();
     const { setFevId, fevId } = useChildEvStore();
     const { activeId, FIIDs } = useFloatToolsStore(); 
     const { TLBaseFrameScrollLeft, TLBaseFrameRef } = useTLBaseBgStore();
-
+    const { isStickEv, hasOutsideChild, getBoParent } = use4he();
     const fiveLines = getFiveLines(childEvs);
+    const hasOutside = hasOutsideChild(childEvs, parentEv)
+    if(hasOutside) enqueueSnackbar(`Warning: ParentEv:${parentEv.id} has outside child`, { variant: "warning" })
 
     const left = RhToPx(cDateToGh(parentEv.timeStart as cDate) - h$G_BgStart)
-    // const top = _4cs.TLBaseFrame.pt + (100 + 10) * lineOrder; // 20 là height của Ev, 2 là gap giữa các line
     const width = RhToPx(
         cDateToGh(parentEv.timeEnd as cDate) - cDateToGh(parentEv.timeStart as cDate)
     )
@@ -37,7 +41,7 @@ export const ParentEv = (props: ParentEvProps) => {
 
     const displayLeftGrabEdge = fevId===parentEv.id && !isBeggerGang
     const displayRightGrabEdge = fevId===parentEv.id && !isBeggerGang
-    const displayBlackMini = !isBeggerGang && fevId && fevId === parentEv.id
+    const displayBlackMini = !isBeggerGang && fevId && fevId === parentEv.id && !isStickEv(parentEv)
     const displayDotGroup = width > 30 && childEvs.length===0
 
     return (
@@ -57,7 +61,7 @@ export const ParentEv = (props: ParentEvProps) => {
                 bottom: isBeggerGang ? 0 : undefined,
                 background: isOver && activeId===FIIDs.childEv ? _4cs.parentEv.bgIsOver : _4cs.parentEv.bgNormal,
                 borderRadius: isBeggerGang ? 0 : 20,
-                border: fevId && fevId === parentEv.id ? _4cs.parentEv.boFocus : _4cs.parentEv.boNormal,
+                border: getBoParent(parentEv.id, hasOutside),
                 display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'column',

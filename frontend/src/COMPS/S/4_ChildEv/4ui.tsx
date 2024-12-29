@@ -176,14 +176,15 @@ export function StickLayer () {
             if(!stickPEv) return null;
             const childEvs = filterEvs(['inside-TL', 'childEv', 'active']).filter(ev => ev.parentId === stickPEv.id)
             const fiveCines = getFiveLines(childEvs);
-            const displayBlackMini = fevId && fevId === stickPEv?.id && stickPEv
+            const displayBlackMini = fevId && stickPEv && fevId === stickPEv.id
             const displayDotGroup = childEvs.length===0&&stickPEv
             const isBegger = stickPEv.parentId === 999999999 || stickPEv.parentId === null 
+            const top$BlackMini = parentTops[i] + (childEvs.length||1)*_4cs.childEv.he + ((childEvs.length||1)-1)*_4cs.childEv.gapBetweenChildren + _4cs.parentEv.heOf2borders + _4cs.parentEv.pt*2 + 6
                 
             return <>
                 {stickPEv && <Pame sx={{top: parentTops[i]-6}}>{stickPEv.name}</Pame>}
                 {displayDotGroup && <DotGroup childEv={stickPEv} sx={{top: parentTops[i]+20}} />}
-                {displayBlackMini && <BlackMini childId={stickPEv.id} isBegger={isBegger} sx={{top: parentTops[i+1]}}/>}
+                {displayBlackMini && <BlackMini childId={stickPEv.id} isBegger={isBegger} sx={{top: top$BlackMini}}/>}
 
                 {fiveCines.map((cine: Ev[], j) => {
                     const stickCEv = cine.find(ev => isStickEv(ev))

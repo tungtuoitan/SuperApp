@@ -27,7 +27,7 @@ export const ChildEv = (props: ChildEvProps) => {
     const { markEvs } = useTLBaseFgHelpers();
     const { allTabIds } = useAllTabsStore();
     const { enqueueSnackbar } = useSnackbar();
-    const { getBgChildEv, isStickEv } = use4he();
+    const { getBgChildEv, isStickEv, isOutSideChild, getBoChild } = use4he();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = _4cs.parentEv.pt + (_4cs.childEv.he + _4cs.childEv.gapBetweenChildren) * lineOrder;
@@ -49,6 +49,10 @@ export const ChildEv = (props: ChildEvProps) => {
     const displayTextField = width > 100 && !isStickEv(childEv)
     const displayMiNiCame = width <= 100 && !isStickEv(childEv)
 
+    const isOutSide = isOutSideChild(childEv, parentEv)
+    if(isOutSide) enqueueSnackbar(`Warning: ChildEv:${childEv.id} is outside`, { variant: "warning" })
+    
+
     return <>
         <WChildEv
             id={'ChildEv-' + childEv.name} data-name={childEv.name + parentEv.name}
@@ -59,7 +63,7 @@ export const ChildEv = (props: ChildEvProps) => {
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
                 // transform: `translateY(${top}px)`,
                 top: top,
-                border: fevId && fevId === childEv.id ? _4cs.childEv.boFocus : '2px solid transparent',
+                border: getBoChild(childEv,isOutSide),
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
             }}
             onClick={(e) => {
