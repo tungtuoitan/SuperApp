@@ -127,7 +127,7 @@ export const StartTimePicker = styled(TimePicker)({
 export const FigmaButton = (props: FigmaButtonProps) => <Link 
     to={FinkToProtocol(props.etail.fink??'')??''} 
     target="_self" 
-    className={props.etail.fink ? 'figma-button':''}  
+    className={props.etail.fink ? 'figma-button':''}
     style={{ 
         width: 24, 
         height: '100%', 
@@ -136,6 +136,7 @@ export const FigmaButton = (props: FigmaButtonProps) => <Link
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center',
+        pointerEvents: props.etail.fink ? 'auto' : 'none',
     }}>
     <img src={props.etail.fink ? '/figma-icon.png' : '/figma-gray-icon.png'} alt="Figma Icon" style={{ width: 24, height: 24 }} />
 </Link>

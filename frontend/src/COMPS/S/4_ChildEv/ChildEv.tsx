@@ -2,7 +2,7 @@ import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDate, Ev, EvsResult } from "../TLTypes";
 import GrabEdge from "./GrabEdge";
 import { useState } from "react";
-import { cDateToGh, cDateToUTCDate, formatTime, useTimeHelpers } from "../3_TimeConfig/TimeHelpers";
+import { cDateToGh, cDateToUTCDate, formatTime } from "../3_TimeConfig/TimeHelpers";
 import { _4cs } from "./4cs";
 import { iuEv } from "../TLAPIs";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
@@ -20,12 +20,11 @@ import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 
 export const ChildEv = (props: ChildEvProps) => {
     const { childEv, parentEv, lineOrder } = props;
-    const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { grabEdge, fevId, setFevId, cutEvId, focusTFId, setFocusTFId } = useChildEvStore();
+    const {  setAllEvs } = useTLBaseFgStore();
+    const { grabEdge, fevId, setFevId, cutEvId, setFocusTFId } = useChildEvStore();
     const [tfValue, setTfValue] = useState(childEv.name);
-    const { RhToPx, h$G_TLBaseFrameLeft } = useTLBaseBgHelpers();
+    const { RhToPx } = useTLBaseBgHelpers();
     const { markEvs } = useTLBaseFgHelpers();
-    const { isPast } = useTimeHelpers();
     const { allTabIds } = useAllTabsStore();
     const { enqueueSnackbar } = useSnackbar();
     const { getBgChildEv, isStickEv } = use4he();
@@ -49,8 +48,6 @@ export const ChildEv = (props: ChildEvProps) => {
     const isBegger = parentEv.id === 999999999 || parentEv.id === null
     const displayTextField = width > 100 && !isStickEv(childEv)
     const displayMiNiCame = width <= 100 && !isStickEv(childEv)
-    const distance = RhToPx(h$G_TLBaseFrameLeft - cDateToGh(childEv.timeStart))
-    if(fevId === childEv.id) console.log(distance)
 
     return <>
         <WChildEv
@@ -72,6 +69,7 @@ export const ChildEv = (props: ChildEvProps) => {
                 if (!grabEdge.mouseenter) {
                     setFevId(childEv.id);
                 }
+                console.log('click nè')
             }}
             onDoubleClick={(e) => {
                 if(isEtailOpen) return;
@@ -122,6 +120,8 @@ export const ChildEv = (props: ChildEvProps) => {
                             caretColor: enabledTF ? 'auto' : 'transparent',
                             pointerEvents: 'none', // keep this, if drop this, the TextField will not be able to focus
                             fontSize: width > 150 ? '12px' : '8px',
+                            textAlign: isStickEv(childEv,'right') ? 'left' : 'center',
+                            padding: isStickEv(childEv,'right') ? '0 20px 0 20px' : '0 20px',
                         },
                     }}
                 />}

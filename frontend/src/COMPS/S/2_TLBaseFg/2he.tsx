@@ -20,22 +20,30 @@ export const use2he = () => {
     const checkData = () => {
         allEvs.forEach(ev => {
             if(cDateToGh(ev.timeEnd) < cDateToGh(ev.timeStart)) {
-                enqueueSnackbar(`Warning: EVID:${ev.id} is out of time range`, { variant: "warning" })
+                enqueueSnackbar(`Warning: EV:${ev.id} is out of time range`, { variant: "warning" })
                 return}
             if(!ev.timeEnd){
-                enqueueSnackbar(`Warning: EVID:${ev.id} has no timeEnd`, { variant: "warning" })
+                enqueueSnackbar(`Warning: EV:${ev.id} has no timeEnd`, { variant: "warning" })
                 return
             }
             if(![sr.active.inActive.c, sr.active.active.c].includes(ev.activeC)){
-                enqueueSnackbar(`Warning: EVID:${ev.id} active has problem: ${ev.activeC}`, { variant: "warning" })
+                enqueueSnackbar(`Warning: EV:${ev.id} active has problem: ${ev.activeC}`, { variant: "warning" })
                 return
             }
             if(![sr.priority.low.c, sr.priority.medium.c, sr.priority.normal.c, sr.priority.high.c].includes(ev.prioriC)){
-                enqueueSnackbar(`Warning: EVID:${ev.id} priority has problem: ${ev.prioriC}`, { variant: "warning" })
+                enqueueSnackbar(`Warning: EV:${ev.id} priority has problem: ${ev.prioriC}`, { variant: "warning" })
                 return
             }
             if(![sr.status.open.c, sr.status.resolved.c, sr.status.inProgress.c].includes(ev.statusC)){
-                enqueueSnackbar(`Warning: EVID:${ev.id} status has problem: ${ev.statusC}`, { variant: "warning" })
+                enqueueSnackbar(`Warning: EV:${ev.id} status has problem: ${ev.statusC}`, { variant: "warning" })
+                return
+            }
+            if(allEvs.filter(e => e.id == ev.parentId).length === 0 && ev.parentId !== null){
+                enqueueSnackbar(`Warning: EV:${ev.id} has Ghost parent`, { variant: "warning" })
+                return
+            }
+            if(allEvs.filter(e => e.id == ev.parentId)[0] && allEvs.filter(e => e.id == ev.parentId)[0]?.activeC===sr.active.inActive.c){
+                enqueueSnackbar(`Warning: EV:${ev.id} has InActive parent`, { variant: "warning" })
                 return
             }
         });
