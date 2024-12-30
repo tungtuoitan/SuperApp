@@ -14,6 +14,7 @@ import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import {useChildEvStore} from "./ChildEvStore";
 import {getAllDescendants} from "../2_TLBaseFg/2he";
+import {evType} from "../TLConstants";
 
 export const useChildEvHelpers = () => {
     const { TIList, dateReal, keyboardState } = useTLBaseBgStore();
@@ -30,43 +31,54 @@ export const useChildEvHelpers = () => {
         const h$start_end = cDateToGh(ev.timeEnd) - cDateToGh(ev.timeStart);
         const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM);
         if (newTime === ev.timeStart || newTime === ev.timeEnd) return;
+
+        switch(ev.type) {
+            case evType.task:
+                if (position === "left") {
+                    const h$difference = cDateToGh(newTime) - cDateToGh(ev.timeStart); 
+                    newAllEvs = newAllEvs.map((_ev: Ev) => {
+                        // this guy
+                        if (_ev.id === id) {
+                            if (keyboardState.shift)
+                                return {..._ev,timeStart: newTime,timeEnd: GhToCDate(cDateToGh(newTime) + h$start_end)};
+                            else 
+                                return { ..._ev, timeStart: newTime };
+                        }
+                        // his descendants
+                        else if(allDescendants.find(e => e.id===_ev.id)){
+                            return {..._ev,timeStart: GhToCDate(cDateToGh(_ev.timeStart)+ h$difference),timeEnd: GhToCDate(cDateToGh(_ev.timeEnd)+ h$difference)};
+                        }
+                        return _ev;
+                    });
+                } 
+                else if (position === "right") {
+                    const h$difference = cDateToGh(newTime) - cDateToGh(ev.timeEnd); 
+                    newAllEvs = newAllEvs.map((_ev: Ev) => {
+                        if (_ev.id === id) {
+                            if (keyboardState.shift)
+                                return {..._ev,timeStart: GhToCDate(cDateToGh(newTime) - h$start_end),timeEnd: newTime,};
+                            else 
+                                return { ..._ev, timeEnd: newTime };
+                        }
+                        else if(allDescendants.find(e => e.id===_ev.id)){
+                            if (keyboardState.shift)
+                                return {..._ev,timeStart: GhToCDate(cDateToGh(_ev.timeStart)+ h$difference),timeEnd: GhToCDate(cDateToGh(_ev.timeEnd)+ h$difference)}
+                            else
+                                return _ev;
+                        }
+                        return _ev;
+                    });
+                }
+                break;
+            case evType.event:
+                newAllEvs = newAllEvs.map((_ev: Ev) => {
+                    if (_ev.id === id) 
+                        return {..._ev,timeStart: newTime,timeEnd: GhToCDate(cDateToGh(newTime) + 1)};
+                    return _ev;
+                });
+        }
         
         const allDescendants = getAllDescendants(newAllEvs, id)
-        if (position === "left") {
-            const h$difference = cDateToGh(newTime) - cDateToGh(ev.timeStart); 
-            newAllEvs = newAllEvs.map((_ev: Ev) => {
-                // this guy
-                if (_ev.id === id) {
-                    if (keyboardState.shift)
-                        return {..._ev,timeStart: newTime,timeEnd: GhToCDate(cDateToGh(newTime) + h$start_end)};
-                    else 
-                        return { ..._ev, timeStart: newTime };
-                }
-                // his descendants
-                else if(allDescendants.find(e => e.id===_ev.id)){
-                    return {..._ev,timeStart: GhToCDate(cDateToGh(_ev.timeStart)+ h$difference),timeEnd: GhToCDate(cDateToGh(_ev.timeEnd)+ h$difference)};
-                }
-                return _ev;
-            });
-        } 
-        else if (position === "right") {
-            const h$difference = cDateToGh(newTime) - cDateToGh(ev.timeEnd); 
-            newAllEvs = newAllEvs.map((_ev: Ev) => {
-                if (_ev.id === id) {
-                    if (keyboardState.shift)
-                        return {..._ev,timeStart: GhToCDate(cDateToGh(newTime) - h$start_end),timeEnd: newTime,};
-                    else 
-                        return { ..._ev, timeEnd: newTime };
-                }
-                else if(allDescendants.find(e => e.id===_ev.id)){
-                    if (keyboardState.shift)
-                        return {..._ev,timeStart: GhToCDate(cDateToGh(_ev.timeStart)+ h$difference),timeEnd: GhToCDate(cDateToGh(_ev.timeEnd)+ h$difference)}
-                    else
-                        return _ev;
-                }
-                return _ev;
-            });
-        }
         setAllEvs(markEvs(newAllEvs));
     }, 6);
 

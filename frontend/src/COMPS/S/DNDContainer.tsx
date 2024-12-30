@@ -11,7 +11,7 @@ import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { iuEv } from './TLAPIs';
 import { Ev, EvsResult } from './TLTypes';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
-import {sr} from './TLConstants';
+import {evType, sr} from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 import {useFloatToolsStore} from './7_FloatTools/FloatToolsStore';
 
@@ -45,7 +45,7 @@ export default function DNDContainer() {
                 newEv = {
                     id: 0,
                     name: '',
-                    type: null,
+                    type: evType.task,
                     parentId: null,
                     activeC: sr.active.active.c,
                     prioriC: sr.priority.low.c,
@@ -62,7 +62,7 @@ export default function DNDContainer() {
                 if(parentEv) {
                     newEv = {
                         id: 0,
-                        name: '',
+                        name: evType.task,
                         type: null,
                         parentId: parentEv.id,
                         activeC: sr.active.active.c,
@@ -78,7 +78,7 @@ export default function DNDContainer() {
                     newEv = {
                         id: 0,
                         name: '',
-                        type: null,
+                        type: evType.task,
                         parentId: null,
                         activeC: sr.active.active.c,
                         prioriC: sr.priority.low.c,

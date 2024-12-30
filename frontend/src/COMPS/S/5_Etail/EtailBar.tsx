@@ -28,6 +28,7 @@ export const EtailBar = (props: EtailBarProps) => {
                 ...ev,
                 id: ev.id,
                 name: etail.name,
+                type: etail.type,
                 parentId: etail.parentId ?? null,
                 levelC: etail.levelC ?? sr.hour.c,
                 timeStart: cDateToUTCDate(etail.timeStart),
@@ -53,7 +54,24 @@ export const EtailBar = (props: EtailBarProps) => {
         }
     };
     const cancelEtail = (e: any) => {
-        // cancel etail here ....
+        const ev = allEvs.find((ev) => ev.id === props.id);
+        if (ev) {
+            const x = {
+                ...ev,
+                id: ev.id,
+                name: ev.name,
+                type: ev.type,
+                parentId: ev.parentId ?? null,
+                levelC: ev.levelC ?? sr.hour.c,
+                timeStart: cDateToUTCDate(ev.timeStart),
+                timeEnd: cDateToUTCDate(ev.timeEnd),
+                activeC: ev.activeC,
+                statusC: ev.statusC,
+                prioriC: ev.prioriC,
+                fink: ev.fink,
+            }
+            dispatch({type: 'UPDA', payload: x});
+        }
     };
     return (
     <WBar>

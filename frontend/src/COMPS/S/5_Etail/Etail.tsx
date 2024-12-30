@@ -12,6 +12,7 @@ import LStatus from "../5L_Laper/LaperStatus";
 import LPriority from "../5L_Laper/LaperPriority";
 import {EtailForm, EtailProps} from "./5ty";
 import LaperFink from "../5L_Laper/LaperFink";
+import LaperType from "../5L_Laper/LaperType";
 
 
 export default function Etail(props: EtailProps) {
@@ -21,7 +22,7 @@ export default function Etail(props: EtailProps) {
         etails.find((etail) => etail.id === etailId) ?? ({} as EtailForm);
 
     useEffect(() => {
-        // console.log("etail", etail);
+        // console.log("etail", etail.type);
     }, [etail]);
 
     return (
@@ -37,6 +38,7 @@ export default function Etail(props: EtailProps) {
                     <LStatus id={etailId} />
                     <LPriority id={etailId} />
                     <LaperFink id={etailId} />
+                    <LaperType id={etailId} />
                 </LeftEtailPaper>
                 <MidEtailPaper></MidEtailPaper>
                 <RightEtailPaper></RightEtailPaper>

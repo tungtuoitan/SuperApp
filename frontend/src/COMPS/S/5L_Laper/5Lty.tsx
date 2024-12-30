@@ -7,6 +7,9 @@ export type LaperLevelProps = {
 export type LaperNameProps = {
     id: number;
 };
+export type LaperTypeProps = {
+    id: number;
+};
 export type LaperFinkProps = {
     id: number;
 };

@@ -1,9 +1,10 @@
+import {EvType} from "./TLConstants";
 
 
 export type Ev = {
   id: number,
   name: string,
-  type: string|null,
+  type: string,
   levelC: CevelC,
 
   timeStart: cDate,
@@ -59,7 +60,7 @@ export type EvStatusC = 'Ope' | 'Inp' |'Res'
 export type FilterType = 
     'inside-TL' | 'active' | 'parentEv' | 'childEv' | 'hasParent' | 'nonParent' | 
     'hourEv' | 'dayEv' | 'weekEv' | 'monthEv' | 'yearEv' | 'decadeEv' | 'centuryEv' |
-    'isOverlap' | 'isLateNight' 
+    'isOverlap' | 'isLateNight' | `type:${EvType}`
 
 export type TimeTitle =  'Before YesterDay' | 'Yesterday' | 'Today' | 'Tomorrow' | 'After Tomorrow' |
     'Last Week' | 'This Week' | 'Next Week' | 
