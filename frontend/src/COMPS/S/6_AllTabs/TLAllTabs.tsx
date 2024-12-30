@@ -1,8 +1,7 @@
-import { Box, Grow, IconButton, Tab, Tabs, styled } from "@mui/material";
+import { IconButton, Tab } from "@mui/material";
 import { SetStateAction, useState, MouseEvent, useEffect } from "react";
 import TLContainer from "../TLContainer";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import Etail from "../5_Etail/Etail";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useAllTabsStore } from "./AllTabsStore";
@@ -13,12 +12,16 @@ import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import { WBadge, WTabBar, WTabsContainer} from "./6ui";
 import {a11yProps} from "./6he";
 import {SR} from "../8_SRs/8ty";
+import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
+import CloseIcon from '@mui/icons-material/Close';
 
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
     const { sRs, setSRs, setLevelOptions } = useSRsStore();
     const { windowWidth, setWindowWidth } = useTLBaseBgStore();
+    const [etails, dispatch] = useEtailFormStore();
+    const [hoverId, setHoverId] = useState<number | string | null>(null);
 
     useEffect(() => {
       const handleResize = () => setWindowWidth(window.innerWidth);
@@ -30,6 +33,7 @@ export const TLAllTabs = () => {
         event?.preventDefault();
         event?.stopPropagation();
         setAllTabIds(prev => {
+            dispatch({ type: 'REMO', payload: {id} });
             const newAllTabIds = prev.filter(tabId => tabId !== id)
             if (curTabIndex === allTabIds.indexOf(id)) {
                 setCurTabIndex(prev => prev-1);
@@ -78,6 +82,8 @@ export const TLAllTabs = () => {
                                 e.stopPropagation();
                                 setCurTabIndex(index);
                             }}
+                            onMouseEnter={() => setHoverId(id)}
+                            onMouseLeave={() => setHoverId(null)}
                             label={
                                 <WBadge
                                     // badgeContent={ev.badge}
@@ -85,8 +91,8 @@ export const TLAllTabs = () => {
                                     {ev.name.length > 40 ? ev.name.slice(0, 35) + '...' : ev.name}
                                 </WBadge>}
                             icon={index > 0 ?
-                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important' }}>
-                                    <HighlightOffOutlinedIcon />
+                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
+                                    <CloseIcon sx={{fontSize:12}} />
                                 </IconButton> : <></>}
                             {...a11yProps(index)}
                             style={{

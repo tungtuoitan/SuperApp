@@ -127,6 +127,19 @@ export const tt = {
 }
 
 
+export type EvType = 'event' | 'task' | 'note' | 'habit' | 'repask' | 'myState' | 'truth'
+export const evType: Record<EvType, EvType> = {
+    event: 'event',
+    habit: 'habit',
+    myState: 'myState',
+    note: 'note',
+    task: 'task',
+    truth: 'truth',
+    repask: 'repask',
+}
+
+
+
 export const clvs: Lv[] = [ // đây là array chứa các timelineLevel
     { id: 0, cevelC: sr.century.c, cevelD: sr.century.d, active: true }, 
     { id: 1, cevelC: sr.decade.c,  cevelD: sr.decade.d,  active: true }, 

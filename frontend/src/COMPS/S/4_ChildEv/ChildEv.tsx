@@ -20,7 +20,7 @@ import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
 
 export const ChildEv = (props: ChildEvProps) => {
     const { childEv, parentEv, lineOrder } = props;
-    const {  setAllEvs } = useTLBaseFgStore();
+    const { setAllEvs } = useTLBaseFgStore();
     const { grabEdge, fevId, setFevId, cutEvId, setFocusTFId } = useChildEvStore();
     const [tfValue, setTfValue] = useState(childEv.name);
     const { RhToPx } = useTLBaseBgHelpers();

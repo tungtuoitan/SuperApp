@@ -27,6 +27,12 @@ export const useTLBaseFgHelpers = () => {
         if (filterTypes.includes('active')) {
             newEvs = newEvs.filter(ev => ev.activeC === null || ev.activeC === sr.active.active.c)
         }
+        if (filterTypes.includes('type:task')) {
+            newEvs = newEvs.filter(ev => ev.type.includes('task'))
+        }
+        if (filterTypes.includes('type:event')) {
+            newEvs = newEvs.filter(ev => ev.type.includes('event'))
+        }
 
         // 1.2
         if (filterTypes.includes('parentEv')) {
@@ -38,7 +44,7 @@ export const useTLBaseFgHelpers = () => {
 
         // 1.3
         if (filterTypes.includes('hasParent')) {
-            newEvs = newEvs.filter(ev => ev.parentId !== null)
+            newEvs = newEvs.filter(ev => ev.parentId !== null && ev.parentId !== 999999999)
         }
         if (filterTypes.includes('nonParent')) {
             newEvs = newEvs.filter(ev => ev.parentId === null || ev.parentId === 999999999)

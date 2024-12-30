@@ -43,7 +43,8 @@ export type ParentEvProps = {
 export type GrabEdgeProps = {
     id: number,
     position: 'left' | 'right'
-    type?: 'parent' | 'child'
+    type?: 'parent' | 'child',
+    sx?: CSSProperties
 }
 
 export type MiNimeProps = {

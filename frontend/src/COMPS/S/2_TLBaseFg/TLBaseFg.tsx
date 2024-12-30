@@ -41,7 +41,10 @@ export const TLBaseFg = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const childEvsOfBegger = filterEvs(['inside-TL', 'active', 'childEv', 'nonParent'])
+    const childEvsOfBegger = [
+        ...filterEvs(['inside-TL', 'active','type:task', 'childEv', 'nonParent']),
+        ...filterEvs(['inside-TL', 'active','type:event', 'nonParent']),
+]
     const fiveLines = getFiveLines(filterEvs(['inside-TL', 'parentEv', 'active']));
     const parentTops = getTopsOf5ParentLines();
 

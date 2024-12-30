@@ -14,6 +14,8 @@ import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import {DotGroup, Pame} from "./4ui";
 import {use4he} from "./4he";
 import {useSnackbar} from "notistack";
+import {evType} from "../TLConstants";
+import {Cevent} from "../4C_Cevent/Cevent";
 
 export const ParentEv = (props: ParentEvProps) => {
     const { childEvs, parentEv, isBeggerGang = false, top, index } = props;
@@ -70,16 +72,15 @@ export const ParentEv = (props: ParentEvProps) => {
                 position: 'absolute',
             }}>
             <Pame sx={{ display: isStickTitle&&index===0? 'none': 'block', top:-8, left: 12, width: width-12*2 }}>{parentEv.name}</Pame>
-            {fiveLines[0]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={0} />)}
-            {fiveLines[1]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={1} />)}
-            {fiveLines[2]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={2} />)}
-            {fiveLines[3]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={3} />)}
-            {fiveLines[4]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={4} />)}
-            {fiveLines[5]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={5} />)}
-            {fiveLines[6]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={6} />)}
-            {fiveLines[7]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={7} />)}
-            {fiveLines[8]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={8} />)}
-            {fiveLines[9]?.map(c => <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={9} />)}
+            {[0,1,2,3,4,5,6,7,8,9].map(i => {
+                return fiveLines[i]?.map(c => (c.type ===evType.task||c.type==='') 
+                    ? <ChildEv key={c.id} parentEv={parentEv} childEv={c} lineOrder={i} />
+                    : c.type===evType.event 
+                    ? <Cevent key={c.id} parentEv={parentEv} childEv={c} lineOrder={i}/>
+                    : <></>
+                )
+            })}
+            
             {displayLeftGrabEdge && <GrabEdge position='left' id={parentEv.id} type='parent' />}
             {displayRightGrabEdge && <GrabEdge position='right' id={parentEv.id} type='parent' />}
             {displayBlackMini && <BlackMini childId={parentEv.id} parentWidth={width} sx={{top: height+5}}/>}

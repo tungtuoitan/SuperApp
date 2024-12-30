@@ -2,7 +2,7 @@ import {GrabEdgeProps} from "./4ty";
 import {useChildEvStore} from "./ChildEvStore";
 
 export default function GrabEdge (props: GrabEdgeProps) {
-    const {position, id, type = 'child'} = props;
+    const {position, id, type = 'child', sx} = props;
     const { grabEdge, setGrabEdge } = useChildEvStore();
 
     return (
@@ -49,6 +49,7 @@ export default function GrabEdge (props: GrabEdgeProps) {
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 102,
+            ...sx
         }}>
             {/* {(grabEdge.mouseenter || grabEdge.mousedownAtGE) && grabEdge.id === id && 
                 <span style={{
