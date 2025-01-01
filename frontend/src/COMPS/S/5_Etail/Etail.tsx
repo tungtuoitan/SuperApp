@@ -14,6 +14,7 @@ import {EtailForm, EtailProps} from "./5ty";
 import LaperFink from "../5L_Laper/LaperFink";
 import LaperType from "../5L_Laper/LaperType";
 import LaperSubType from "../5L_Laper/LaperSubType";
+import LaperDetail from "../5L_Laper/LaperDetail";
 
 
 export default function Etail(props: EtailProps) {
@@ -42,7 +43,9 @@ export default function Etail(props: EtailProps) {
                     <LaperType id={etailId} />
                     <LaperSubType id={etailId} />
                 </LeftEtailPaper>
-                <MidEtailPaper></MidEtailPaper>
+                <MidEtailPaper>
+                    <LaperDetail id={etailId} />
+                </MidEtailPaper>
                 <RightEtailPaper></RightEtailPaper>
             </WBody>
         </EtailContainer>

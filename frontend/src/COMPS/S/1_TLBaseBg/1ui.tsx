@@ -47,7 +47,7 @@ export const SmallTime = function (props: {
                 width: "100%",
                 textAlign: "left",
                 paddingLeft: "5px",
-                height: 30,
+                height: 0,
                 color: "#202020",
             }}
         >
@@ -63,9 +63,9 @@ export const SmallTime = function (props: {
                         return d;
                     case sr.hour.c:
                         return h > 11 ? (
-                            <span>{h - 12}"</span>
+                            <div>{h - 12}"</div>
                         ) : (
-                            <span>{h}"</span>
+                            <div>{h}"</div>
                         );
                     default:
                         return "";
@@ -87,7 +87,7 @@ export const BigTime = function (props: {width: number;TILevel: CevelC;date: cDa
                 width: "100%",
                 textAlign: "left",
                 paddingLeft: "3px",
-                height: 30,
+                height: 10,
                 fontSize: "16px",
                 color: "#202020",
                 position: "relative",
