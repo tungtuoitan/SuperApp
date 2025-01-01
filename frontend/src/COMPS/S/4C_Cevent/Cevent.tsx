@@ -10,7 +10,7 @@ import {use4Che} from "./4Che";
 import {_4cs} from "../4_ChildEv/4cs";
 import {useChildEvStore} from "../4_ChildEv/ChildEvStore";
 import {CeventProps} from "./4Cty";
-import {CeventName} from "./4Cui";
+import {CeventName, WCevent} from "./4Cui";
 
 
 export const Cevent = (props: CeventProps) => {
@@ -18,7 +18,7 @@ export const Cevent = (props: CeventProps) => {
     const { grabEdge, fevId, setFevId, cutEvId, setFocusTFId } = useChildEvStore();
     const { RhToPx } = useTLBaseBgHelpers();
     const { allTabIds } = useAllTabsStore();
-    const { getBoCevent } = use4Che();
+    const { getBoCevent, getBgCevent } = use4Che();
 
     const left = RhToPx(cDateToGh(childEv.timeStart) - cDateToGh(parentEv.timeStart)) // relative to ParentEv
     const top = _4cs.parentEv.pt + (_4cs.childEv.he + _4cs.childEv.gapBetweenChildren) * lineOrder;
@@ -29,22 +29,17 @@ export const Cevent = (props: CeventProps) => {
     
 
     return <>
-        <div
+        <WCevent
             id={'ChildEv-' + childEv.name} data-name={childEv.name + parentEv.name}
-            style={{
-                width: 100,
-                height: 20,
-                background: 'transparent',
+            sx={{
                 transform: `translateX(${left}px)`,
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
                 top: top,
                 borderTop: getBoCevent(childEv),
                 borderRight: getBoCevent(childEv),
                 borderBottom: getBoCevent(childEv),
-                zIndex: fevId && fevId === childEv.id ? '1000' : '100',
-                overflow: 'visible',  
-                borderRadius: 100,
-                display: 'flex',
+                zIndex: fevId && fevId === childEv.id ? '1000' : '100',  
+                background: getBgCevent(childEv, grabEdge), 
             }}
             onClick={(e) => {
                 e.stopPropagation();
@@ -63,12 +58,12 @@ export const Cevent = (props: CeventProps) => {
 
             <div style={{display: 'flex', flexDirection: 'row', gap:2, alignItems: 'center', justifyContent: 'start', marginLeft: -11}}>
                 <Icon sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', color: 'black'}}>
-                    <HexagonIcon sx={{fontSize:16}}/>
+                    <HexagonIcon sx={{fontSize:8}}/>
                 </Icon> 
-                <CeventName childName={childEv.name} sx={{width: '80%', fontSize: 12, textAlign:'left', marginTop: -3}} />
+                <CeventName childName={childEv.name} sx={{width: '80%', fontSize: 12, textAlign:'left', marginTop: -3, marginLeft: -4}} />
             </div>
             {displayBlackMini && <BlackMini childId={childEv.id} isBegger={isBegger}/>}
             {displayLeftGrabEdge && <GrabEdge position='left' id={childEv.id} sx={{top:-2}} />}
-        </div>
+        </WCevent>
     </>
 }

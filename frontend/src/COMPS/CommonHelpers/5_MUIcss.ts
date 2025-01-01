@@ -77,5 +77,31 @@ export const helperMUIcss = {
             // 4. children of fieldset
             span2: `${div1} fieldset legend span`,
         }
-    }
+    },
+    getTextFieldMultipleLineCSSSelector: (name: string) => {
+        const div0Class = `TFContainer-${name}`; 
+
+        return {
+            
+            //! 0. 
+            div0Class: div0Class, //! no use, bcz we write this in the className of the TextField
+            
+            // 1.children of div0Class
+            div1: `div`,
+            label1Shrink: `label[data-shrink="true"]`,
+            label1NoShrink: `label[data-shrink="false"]`,
+            
+            // 2. children of divChild
+            textarea2: `div textarea[aria-invalid="false"]`,
+            textarea2Disable: `div textarea[aria-hidden="true"]`,
+            input2Disable: `div input.Mui-disabled`,
+            fieldset2: `div fieldset`,
+
+            // 3. child of fieldset
+            legend3: `div fieldset legend`,
+
+            // 4. child of legend
+            span4: `div fieldset legend span`,
+        }
+    },
 }

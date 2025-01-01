@@ -13,7 +13,7 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
             <div id='column' style={{width: '100%', height: '100%'}}>
                 <div id='longDiv'
                     style={{
-                        height: 'calc(100% - 60px)',  // 60px is height of timeDiv
+                        height: 'calc(100% - 16px)',  // 60px is height of timeDiv
                         background: _1he.getTIBg(TILevel, date),
                         borderLeft: _1he.getBorderLeft(TILevel, date, index),
                     }}>
@@ -21,7 +21,7 @@ export const TIc = (props: TIcProps) => { // TODO: item này re-render rất nhi
                 </div>
                 <div id='shortDiv' style={{borderLeft: _1he.getBorderLeft(TILevel, date, index, '1px solid transparent')}}>
                     <SmallTime width={width} TILevel={TILevel} date={date}/>
-                    <BigTime width={width} TILevel={TILevel} date={date}/>
+                    {/* <BigTime width={width} TILevel={TILevel} date={date}/> */}
                 </div>
             </div>
         </WTIContainer>

@@ -1,8 +1,9 @@
-import {Icon} from "@mui/material";
+import {Icon, styled} from "@mui/material";
 
 import HexagonIcon from '@mui/icons-material/Hexagon';
 import {_4Ccs} from "./4Ccs";
 import { CeventNameProps, IconGroupProps} from "./4Cty";
+import {_4cs} from "../4_ChildEv/4cs";
 
 
 export function IconGroup (props: IconGroupProps) {
@@ -32,3 +33,16 @@ export function CeventName (props: CeventNameProps) {
         </span>
     )
 }
+
+export const WCevent = styled('div')({
+    fontSize: _4Ccs.cevent.fs,
+    width: _4Ccs.cevent.wi,
+    height: _4Ccs.cevent.he,
+    display: 'flex',
+    position: 'absolute', // static: mỗi dòng 1 TI, absolute: mỗi dòng nhiều TI k đụng nhau
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'visible', 
+    background: 'transparent',
+    borderRadius: 100,
+})
