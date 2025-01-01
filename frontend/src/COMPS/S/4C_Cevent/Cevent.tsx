@@ -33,6 +33,7 @@ export const Cevent = (props: CeventProps) => {
             id={'ChildEv-' + childEv.name} data-name={childEv.name + parentEv.name}
             style={{
                 width: 100,
+                height: 20,
                 background: 'transparent',
                 transform: `translateX(${left}px)`,
                 opacity: childEv.id === cutEvId ? '0.5' : '1',
@@ -43,6 +44,7 @@ export const Cevent = (props: CeventProps) => {
                 zIndex: fevId && fevId === childEv.id ? '1000' : '100',
                 overflow: 'visible',  
                 borderRadius: 100,
+                display: 'flex',
             }}
             onClick={(e) => {
                 e.stopPropagation();

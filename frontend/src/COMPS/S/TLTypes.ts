@@ -5,7 +5,9 @@ export type Ev = {
   id: number,
   name: string,
   type: string,
+  subType: string,
   levelC: CevelC,
+  evelC: string|null,
 
   timeStart: cDate,
   timeEnd: cDate,
@@ -14,7 +16,9 @@ export type Ev = {
   activeC: string,
   statusC: string,
   prioriC: string,
+  
   fink: string|null,
+  desc: string,
 
 
   // for orderUI

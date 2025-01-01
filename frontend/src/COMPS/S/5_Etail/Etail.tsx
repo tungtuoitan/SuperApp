@@ -13,6 +13,7 @@ import LPriority from "../5L_Laper/LaperPriority";
 import {EtailForm, EtailProps} from "./5ty";
 import LaperFink from "../5L_Laper/LaperFink";
 import LaperType from "../5L_Laper/LaperType";
+import LaperSubType from "../5L_Laper/LaperSubType";
 
 
 export default function Etail(props: EtailProps) {
@@ -39,6 +40,7 @@ export default function Etail(props: EtailProps) {
                     <LPriority id={etailId} />
                     <LaperFink id={etailId} />
                     <LaperType id={etailId} />
+                    <LaperSubType id={etailId} />
                 </LeftEtailPaper>
                 <MidEtailPaper></MidEtailPaper>
                 <RightEtailPaper></RightEtailPaper>

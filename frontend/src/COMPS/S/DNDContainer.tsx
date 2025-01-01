@@ -11,7 +11,7 @@ import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
 import { iuEv } from './TLAPIs';
 import { Ev, EvsResult } from './TLTypes';
 import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
-import {evType, sr} from './TLConstants';
+import {evType, sr, subType} from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 import {useFloatToolsStore} from './7_FloatTools/FloatToolsStore';
 
@@ -36,7 +36,7 @@ export default function DNDContainer() {
         if (over) {
             const droppableRect = over.rect;
             const draggableRect = active.rect;
-            const px$Draggable_drop = draggableRect.current.translated.left - droppableRect.left;
+            const px$Draggable_drop = draggableRect.current.translated.left -    droppableRect.left;
             const h$start_end = RpxToRh(px$Draggable_drop+200)
             let newEv;
 
@@ -53,6 +53,9 @@ export default function DNDContainer() {
                     levelC: getLevelCOf('parentEv'),
                     timeStart: addTime(TIList[0].date, 0, 0, 0, RpxToRh(px$Draggable_drop), 0),
                     timeEnd:   addTime(TIList[0].date, 0, 0, 0, h$start_end, 0), // 100 is width of TISample
+                    desc: '',
+                    evelC: sr.evelC.small.c,
+                    subType: subType.task.normalTask,
                 };
             } 
             // drop on ParentEv --> create childEv
@@ -62,8 +65,8 @@ export default function DNDContainer() {
                 if(parentEv) {
                     newEv = {
                         id: 0,
-                        name: evType.task,
-                        type: null,
+                        name: '',
+                        type: evType.task,
                         parentId: parentEv.id,
                         activeC: sr.active.active.c,
                         prioriC: sr.priority.low.c,
@@ -71,6 +74,9 @@ export default function DNDContainer() {
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(parentEv.timeStart) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(parentEv.timeStart) + h$start_end), // 100 is width of TISample
+                        desc: '',
+                        evelC: sr.evelC.small.c,
+                        subType: subType.task.normalTask,
                     };
                 }
                 // if drop on BeggerEv
@@ -86,6 +92,9 @@ export default function DNDContainer() {
                         levelC: getLevelCOf('childEv'),
                         timeStart: GhToCDate(cDateToGh(TIList[0].date) + RpxToRh(px$Draggable_drop)),
                         timeEnd:  GhToCDate(cDateToGh(TIList[0].date) + h$start_end), // 100 is width of TISample
+                        desc: '',
+                        evelC: sr.evelC.small.c,
+                        subType: subType.task.normalTask,
                     };
 
                 }
