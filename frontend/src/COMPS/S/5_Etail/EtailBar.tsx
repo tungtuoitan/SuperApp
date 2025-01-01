@@ -37,6 +37,9 @@ export const EtailBar = (props: EtailBarProps) => {
                 statusC: etail.statusC,
                 prioriC: etail.prioriC,
                 fink: etail.fink,
+                desc: etail.desc,
+                evelC: etail.evelC,
+                subType: etail.subType,
             }
             iuEv(x).then((data: any) => {
                 if (data.options.success) {
@@ -69,6 +72,9 @@ export const EtailBar = (props: EtailBarProps) => {
                 statusC: ev.statusC,
                 prioriC: ev.prioriC,
                 fink: ev.fink,
+                desc: ev.desc,
+                evelC: ev.evelC,
+                subType: ev.subType
             }
             dispatch({type: 'UPDA', payload: x});
         }

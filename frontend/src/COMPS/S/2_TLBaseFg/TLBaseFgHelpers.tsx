@@ -3,7 +3,7 @@ import { cDate, Ev, EvsResult, FilterType, Mark } from "../TLTypes";
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { useTLBaseFgStore } from "./TLBaseFgStore";
 import { cDateToGh, parseCDate } from "../3_TimeConfig/TimeHelpers";
-import { lateNight, sr } from "../TLConstants";
+import { evType, lateNight, sr } from "../TLConstants";
 import {isLateNight, isOverlap} from "./2he";
 
 export const useTLBaseFgHelpers = () => {
@@ -28,10 +28,10 @@ export const useTLBaseFgHelpers = () => {
             newEvs = newEvs.filter(ev => ev.activeC === null || ev.activeC === sr.active.active.c)
         }
         if (filterTypes.includes('type:task')) {
-            newEvs = newEvs.filter(ev => ev.type.includes('task'))
+            newEvs = newEvs.filter(ev => ev.type=== evType.task)
         }
         if (filterTypes.includes('type:event')) {
-            newEvs = newEvs.filter(ev => ev.type.includes('event'))
+            newEvs = newEvs.filter(ev => ev.type === evType.event)
         }
 
         // 1.2

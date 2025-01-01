@@ -4,6 +4,7 @@ export const LeftEtailPaper = styled(Paper)({
     display: "flex",
     flexFlow: "column",
     margin: 0,
+    maxWidth: '32%',
     padding: 20,
     flex: 1,
     [`& .card-content`]: {

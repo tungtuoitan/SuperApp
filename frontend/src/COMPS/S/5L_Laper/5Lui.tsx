@@ -1,4 +1,4 @@
-import {FormControl, Paper, styled} from "@mui/material";
+import {FormControl, FormLabel, Paper, RadioGroup, styled} from "@mui/material";
 import {DatePicker, TimePicker} from "@mui/x-date-pickers";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {Link} from "react-router-dom";
@@ -141,8 +141,38 @@ export const FigmaButton = (props: FigmaButtonProps) => <Link
     <img src={props.etail.fink ? '/figma-icon.png' : '/figma-gray-icon.png'} alt="Figma Icon" style={{ width: 24, height: 24 }} />
 </Link>
 
-export const FCType = styled(FormControl)({
+export const FCSubType = styled(FormControl)({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+});
+
+
+export const FCType = styled(FormControl)({
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid rgb(199, 199, 199)",
+    borderRadius: "5px",
+    height: "30px",
+    width: "100%",
+});
+
+export const FLType = styled(FormLabel)({
+    textAlign: "left",
+    fontSize: 10,
+    position: "relative",
+    width: 42,
+    background: "white",
+    top: "-8px",
+    left: "10px",
+    padding: "0 5px 0 5px",
+});
+
+export const RGType = styled(RadioGroup)({
+    display: "flex",
+    flexDirection: "row",
+    fontSize: "12px",
+    position: "relative",
+    top: "-19px",
+    padding: "0 10px 0 10px",
 });

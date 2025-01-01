@@ -30,6 +30,7 @@ export const useChildEvHelpers = () => {
         const ev = allEvs.filter((ev) => ev.id === id)[0];
         const h$start_end = cDateToGh(ev.timeEnd) - cDateToGh(ev.timeStart);
         const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM);
+        let allDescendants = getAllDescendants(newAllEvs, id)
         if (newTime === ev.timeStart || newTime === ev.timeEnd) return;
 
         switch(ev.type) {
@@ -78,7 +79,7 @@ export const useChildEvHelpers = () => {
                 });
         }
         
-        const allDescendants = getAllDescendants(newAllEvs, id)
+        allDescendants = getAllDescendants(newAllEvs, id)
         setAllEvs(markEvs(newAllEvs));
     }, 6);
 
@@ -116,6 +117,9 @@ export const useChildEvHelpers = () => {
                 prioriC: ev.prioriC,
                 statusC: ev.statusC,
                 fink: ev.fink,
+                desc: ev.desc,
+                evelC: ev.evelC,
+                subType: ev.subType,
             }
             dispatch({type: 'INSE', payload: etail})
         }

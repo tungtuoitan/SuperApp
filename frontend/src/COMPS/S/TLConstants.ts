@@ -69,6 +69,20 @@ export const sr = {
             d: 'Low',
         },
     },
+    evelC: {
+        small: {
+            c: 'Sma',
+            d: 'Small',
+        },
+        middle: {
+            c: 'Mid',
+            d: 'Middle',
+        },
+        big: {
+            c: 'Big',
+            d: 'Big',
+        },
+    },
 
 
     // 2
@@ -102,6 +116,12 @@ export const sr = {
     },
 }
 
+export const subType = {
+    task: {
+        normalTask: 'normalTask',
+    }
+}
+
 
 export const tt = {
     beforeYesterday: 'Before Yesterday',
@@ -127,15 +147,26 @@ export const tt = {
 }
 
 
-export type EvType = 'event' | 'task' | 'note' | 'habit' | 'repask' | 'myState' | 'truth'
+export type EvType = 'event' | 'task' 
+export type EvSubType = 'normalTask' | 'habitTask' | 'truthActive' | 'repeatTask' | 'normalEvent' | 'repeatEvent' | 'note' | 'myMood' | 'reminder'
 export const evType: Record<EvType, EvType> = {
-    event: 'event',
-    habit: 'habit',
-    myState: 'myState',
-    note: 'note',
     task: 'task',
-    truth: 'truth',
-    repask: 'repask',
+    event: 'event',
+}
+export const evSubType = {
+    task: {
+        normalTask: 'normalTask',
+        habitTask: 'habitTask',
+        truthActive: 'truthActive',
+        repeatTask: 'repeatTask',
+    },
+    event: {
+        normalEvent: 'normalEvent',
+        repeatEvent: 'repeatEvent',
+        note: 'note',
+        myMood: 'myMood',
+        reminder: 'reminder',
+    }
 }
 
 
