@@ -1,70 +1,15 @@
 import styled from "@emotion/styled";
-import { useNavigationStore } from "./Store/NavigationStore";
+import { useNavigationStore } from "./NavigationStore";
 import { Drawer } from "@mui/material";
 import { Route, Routes } from 'react-router-dom'
-
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import { CloseNotiBtn } from "../CommonHelpers/1_CloseNotiBtn";
-import { TLProvider } from "../S/TLProvider";
-
-export const SideNavRoot = styled('div')({
-  flexGrow: 1,
-  backgroundColor: '#f6f6f6',
-  display: 'flex',
-  // width: '100%',
-  // height: '100%',
-  flexDirection: 'row',
-  // flexGrow: 1,
-
-  // for sidebar
-  '& .expanded': {
-    transitionDuration: '500ms',
-    width: '200px',
-    '& div.expander': {
-      flexDirection: 'row-reverse'
-    }
-  },
-  '& .collapsed': {
-    transitionDuration: '500ms',
-    width: '48px',
-    '& div.expander': {
-      flexDirection: 'row',
-    }
-  },
+import {TLAllTabs} from "../S/6_AllTabs/TLAllTabs";
+import {BodyWrapper, SideNavRoot} from "./Nui";
 
 
-  
-  '& .MuiDrawer-paperAnchorDockedLeft': {
-    top: '64px!important',
-    //width: '227px',
-    background: '#36454f',
-    flex: '0 0 auto',
-    '& .MuiListItemButton-root': {
-      backgroundcolor: '#36454f!important',
-      color: '#fff!important',
-    }
-  },
-  '& .MuiList-root': {
-    backgroundColor: '#36454f!important',
-  },
-  '& nav.MuiList-root': {
-    marginBottom: '75px',
-  },
-  '& .MuiTypography-root': {
-    fontSize: '.95em'
-  },
-  '& ul li a.MuiListItem-root.active': {
-    backgroundColor: 'rgb(0 0 0 / 30%)!important',
-  }
-})
-
-export const BodyWrapper = styled('div')({
-  display: 'flex',
-  flexGrow: 1,
-  height: '100%',
-})
 
 const SideNavAndBody: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = () => {
   const { expanded, sideNavigationRef, bodyWrapperRef, moduleName } = useNavigationStore();
@@ -104,7 +49,7 @@ const SideNavAndBody: React.FC<React.PropsWithChildren<React.PropsWithChildren<u
                 <Routes>
                     <Route path="/login" Component={LoginContainer} />
                     <Route path="/signup" Component={LoginContainer} />
-                    <Route path="/schedule" Component={TLProvider} />
+                    <Route path="/schedule" Component={TLAllTabs} />
                 </Routes>
             </SnackbarProvider>
         </BodyWrapper>

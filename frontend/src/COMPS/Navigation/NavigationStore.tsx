@@ -1,13 +1,12 @@
 
 import { PopoverPosition } from "@mui/material";
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import { Breadcrumb, SAModule, sitemaps } from "../sitemap";
+import {SAModule} from "./Nty";
+import {sitemaps} from "./Nhe";
 
 export interface NavigationContextData {
     tabValue: number;
     setTabValue: Dispatch<SetStateAction<number>>;
-    breadcrumbs: Breadcrumb;
-    setBreadcrumbs: Dispatch<SetStateAction<Breadcrumb>>;
     version: string;
     setVersion: Dispatch<SetStateAction<string>>;
     moduleName: string;
@@ -40,8 +39,6 @@ export interface NavigationContextData {
 export const navigationContextDefaultValue: NavigationContextData = {
     tabValue: 0,
     setTabValue: () => { },
-    breadcrumbs: {} as Breadcrumb,
-    setBreadcrumbs: () => { },
     version: '',
     setVersion: () => { },
     moduleName: '',
@@ -76,7 +73,6 @@ export const useNavigationStore = () => useContext(NavigationStore);
 
 export const NavigationProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [tabValue, setTabValue] = useState<number>(0);
-    const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb>({} as Breadcrumb);
     const [version, setVersion] = useState('');
     const [moduleName, setModuleName] = useState('');
     const [expanded, setExpanded] = useState<boolean | null | undefined>(false);
@@ -98,8 +94,6 @@ export const NavigationProvider: React.FC<React.PropsWithChildren<React.PropsWit
             value={{
                 tabValue,
                 setTabValue,
-                breadcrumbs,
-                setBreadcrumbs,
                 version,
                 setVersion,
                 moduleName,
