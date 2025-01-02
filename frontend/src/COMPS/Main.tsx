@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
-import { TopNavigation } from "./Navigation/TopNavigation";
-import SideNavAndBody from "./Navigation/SideNavAndBody";
+import { TopNav } from "./Nav/TopNav";
+import SideNav from "./Nav/SideNav";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import { CloseNotiBtn } from "./CommonHelpers/1_CloseNotiBtn";
 import { LoginProvider } from "./Login/store/loginStore";
@@ -37,7 +37,7 @@ export const Main = () => {
                                                 <ChildEvProvider>
                                                     <EtailFormsStoreProvider>
                                                         <EtailFormsStoreProvider>    
-                                                            <SideNavAndBody />
+                                                            <SideNav />
                                                         </EtailFormsStoreProvider>
                                                     </EtailFormsStoreProvider>
                                                 </ChildEvProvider>

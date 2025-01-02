@@ -1,6 +1,6 @@
 import './App.css';
 import { Main } from './COMPS/Main';
-import { NavigationProvider } from './COMPS/Navigation/NavigationStore';
+import { NavProvider } from './COMPS/Nav/NavStore';
 
 function App() {
   
@@ -14,9 +14,9 @@ function App() {
       // border: '10px solid black',
       overflowX: 'hidden',
     }}>
-      <NavigationProvider>
+      <NavProvider>
         <Main />
-      </NavigationProvider>
+      </NavProvider>
     </div>
   );
 }
