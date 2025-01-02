@@ -4,7 +4,6 @@ import { useTLBaseBgHelpers } from './1_TLBaseBg/TLBaseBgHelpers';
 import { addTime, cDateToGh, cDateToUTCDate, GhToCDate } from './3_TimeConfig/TimeHelpers';
 import { TLBaseContainer } from './TLBaseContainer'
 import { useTLBaseFgStore } from './2_TLBaseFg/TLBaseFgStore';
-import TLToolsPopup from './7_FloatTools/FloatTools'
 import { DndContext } from '@dnd-kit/core'
 import { v4 as uuid } from 'uuid';
 import { useTLBaseBgStore } from './1_TLBaseBg/TLBaseBgStore';
@@ -14,6 +13,7 @@ import { useTLBaseFgHelpers } from './2_TLBaseFg/TLBaseFgHelpers';
 import {evType, sr, subType} from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 import {useFloatToolsStore} from './7_FloatTools/FloatToolsStore';
+import FloatTools from './7_FloatTools/FloatTools';
 
 export default function DNDContainer() {
 
@@ -128,7 +128,7 @@ export default function DNDContainer() {
         // collisionDetection={closestCorners}
         >
             <TLBaseContainer />
-            <TLToolsPopup />
+            <FloatTools />
         </DndContext>
     )
 }

@@ -36,8 +36,7 @@ export const Main = () => {
                                             <TimeConfigProvider>
                                                 <ChildEvProvider>
                                                     <EtailFormsStoreProvider>
-                                                        <EtailFormsStoreProvider>
-                                                            <TopNavigation />
+                                                        <EtailFormsStoreProvider>    
                                                             <SideNavAndBody />
                                                         </EtailFormsStoreProvider>
                                                     </EtailFormsStoreProvider>

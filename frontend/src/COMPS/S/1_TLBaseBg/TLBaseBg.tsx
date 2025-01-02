@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { TIc } from "./TIc";
 import { clvs, sr } from "../TLConstants";
 import { useTLBaseBgStore } from "./TLBaseBgStore";
@@ -17,7 +17,7 @@ export const TLBaseBg = () => {
     const { isFirstTime, setIsFirstTime } = useTLBaseFgStore();
     const { h$G_BgStart, h$G_BgEnd, h$G_red, getLevelCOf, w$BaseTI } = useTLBaseBgHelpers();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const newTIList = [] as TI[];
         if (!timeConfig.timeStart) return;
         const { y, m, d, h, p } = parseCDate(timeConfig.timeStart);

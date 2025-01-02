@@ -46,7 +46,7 @@ export default function LaperFink(props: LaperFinkProps) {
                     },
                 }}
             />
-            <FigmaButton etail={etail} />
+            <FigmaButton fink={etail.fink??''} />
         </WRow>
     )
 }

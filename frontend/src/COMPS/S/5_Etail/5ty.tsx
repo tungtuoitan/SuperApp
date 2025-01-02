@@ -7,5 +7,5 @@ export type EtailProps = {
 };
 
 export type FigmaButtonProps = {
-    etail: EtailForm
+    fink: string;
 }
