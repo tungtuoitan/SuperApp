@@ -60,7 +60,7 @@ export const Cevent = (props: CeventProps) => {
                 <Icon sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', color: 'black'}}>
                     <HexagonIcon sx={{fontSize:8}}/>
                 </Icon> 
-                <CeventName childName={childEv.name} sx={{width: '80%', fontSize: 12, textAlign:'left', marginTop: -3, marginLeft: -4}} />
+                <CeventName childName={childEv.name} sx={{fontSize: 12, textAlign:'left', marginTop: -3, marginLeft: -4}} />
             </div>
             {displayBlackMini && <BlackMini childId={childEv.id} isBegger={isBegger}/>}
             {displayLeftGrabEdge && <GrabEdge position='left' id={childEv.id} sx={{top:-2}} />}

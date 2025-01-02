@@ -1,4 +1,5 @@
 
+import zIndex from "@mui/material/styles/zIndex";
 import { FinkToProtocol } from "../S/5_Etail/5he";
 import { SAModule } from "./Nty";
 
@@ -9,7 +10,8 @@ export const classes =
       },
       root: {
           flexGrow: 1,
-          backgroundColor: '#fff!important'
+          backgroundColor: '#fff!important',
+          zIndex:10000000000,
       },
       appBar: {
         backgroundColor: '#fff!important',

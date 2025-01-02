@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 export const SideNavRoot = styled("div")({
     flexGrow: 1,
     backgroundColor: "#f6f6f6",
+    height: "calc(100% - 64px)",
     display: "flex",
     // width: '100%',
     // height: '100%',
