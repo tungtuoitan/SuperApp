@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import { useNavigationStore } from "./NavigationStore";
+import { useNavigationStore } from "./NavStore";
 import { Drawer } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import { SideMenu } from "./SideMenu";
@@ -25,16 +24,14 @@ import { getAllDescendants } from "../S/2_TLBaseFg/2he";
 import { iuEv } from "../S/TLAPIs";
 import {sr} from "../S/TLConstants";
 import {KeyboardEvent} from "react";
-import {TopNavigation} from "./TopNavigation";
+import {TopNav} from "./TopNav";
 
-const SideNavAndBody: React.FC<
+const SideNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
 > = () => {
-    const { expanded, sideNavigationRef, bodyWrapperRef, moduleName } =
-        useNavigationStore();
+    const {sideNavigationRef, bodyWrapperRef } = useNavigationStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
-    const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } =
-        useTLBaseBgStore();
+    const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
     const {
         fevId,
         setFevId,
@@ -51,7 +48,7 @@ const SideNavAndBody: React.FC<
     const { changeLevel, changeTimeStart } = useTimeHelpers();
 
     return (
-        <div
+        <div style={{outline: 'none'}}
         onClick={() => {
             if (fevId) {
                 setFevId(null);
@@ -301,7 +298,7 @@ const SideNavAndBody: React.FC<
         }}
         
         >
-            <TopNavigation />
+            <TopNav />
             <SideNavRoot
                 className={`side-tabs`}
                 
@@ -309,8 +306,8 @@ const SideNavAndBody: React.FC<
                 <Drawer
                     ref={sideNavigationRef}
                     variant="permanent"
-                    className={`side-navigation ${
-                        (expanded ?? false) === true ? "expanded" : "collapsed"
+                    className={`side-navigation ${ "collapsed"
+                        // (expanded ?? false) === true ? "expanded" : "collapsed"
                     }`}
                     style={{
                         transitionDuration: "500ms",
@@ -328,9 +325,10 @@ const SideNavAndBody: React.FC<
                 <BodyWrapper
                     ref={bodyWrapperRef}
                     style={{
-                        width: expanded
-                            ? "calc(100% - 200px)"
-                            : "calc(100% - 48px)",
+                        width: "calc(100% - 48px)",
+                        // width: expanded
+                        //     ? "calc(100% - 200px)"
+                        //     : "calc(100% - 48px)",
                         // border: '4px solid red',
                     }}
                 >
@@ -350,4 +348,4 @@ const SideNavAndBody: React.FC<
     );
 };
 
-export default SideNavAndBody;
+export default SideNav;

@@ -1,8 +1,14 @@
 
-import zIndex from "@mui/material/styles/zIndex";
 import { FinkToProtocol } from "../S/5_Etail/5he";
 import { SAModule } from "./Nty";
-
+import WindowIcon from '@mui/icons-material/Window';
+import LoginIcon from '@mui/icons-material/Login';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import WeekendIcon from '@mui/icons-material/Weekend';
+import FolderSharedIcon from '@mui/icons-material/FolderShared';
+import SavingsIcon from '@mui/icons-material/Savings';
 export const classes =  
   {
       grow: {
@@ -76,4 +82,27 @@ export const sitemaps = [
         ),
         open: true,
     } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "Finance",
+        code: "finance",
+        link: FinkToProtocol(
+            "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6858-6967&t=uJB31J2oksQK9Vcg-11"
+        ),
+        open: true,
+    } as SAModule,
 ] as SAModule[];
+
+
+export const getIcon = (code: string) => {
+    switch(code){
+        case 'playground': { return <WeekendIcon/>}
+        // case 'general': { return <WindowIcon />}
+        // case 'login': { return <LoginIcon />}
+        // case 'signup': { return <FirstPageIcon  style={{ transform: 'rotate(180deg)'}} />}
+        // case 'logout': { return <ExitToAppIcon />}
+        case 'schedule': { return <TimelineIcon />}
+        case 'accounts': { return <FolderSharedIcon />}
+        case 'finance': { return <SavingsIcon />}
+    }
+}

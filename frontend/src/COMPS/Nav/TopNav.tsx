@@ -3,7 +3,7 @@ import {classes} from './Nhe';
 
 
 
-export const TopNavigation = () => {
+export const TopNav = () => {
   return (
     <div className="top-navigation" style={classes.root}>
       <AppBar sx={classes.appBar} position="sticky" >

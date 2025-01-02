@@ -1,6 +1,10 @@
 import {styled} from "@mui/material";
 import {SAModule} from "./Nty";
 import {Link} from "react-router-dom";
+import { Tooltip } from "@mui/material";
+import { useNavigationStore } from "./NavStore";
+import {getIcon} from "./Nhe";
+
 
 export const SideNavRoot = styled("div")({
     flexGrow: 1,
@@ -209,3 +213,21 @@ const Grow = styled('div')({
 export const ExpanderArrow = styled('div')({
     display: 'flex',
 })
+
+
+
+
+export const SideMenuItem = (props: ISideMenuProps) => {
+    return (
+        <MenuItemWrapper
+            style={{ marginTop: '5px' }}>
+            <Tooltip title={props.item.name} placement="right">
+                <Wink id={props.item.id} className="single-link" to={props.item.link}>
+                    <IconWrapper>
+                        {getIcon(props.item.code)}
+                    </IconWrapper>
+                </Wink>
+            </Tooltip>
+        </MenuItemWrapper>
+    )
+}
