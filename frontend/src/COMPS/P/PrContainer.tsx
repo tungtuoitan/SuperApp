@@ -9,7 +9,8 @@ export default function PRContainer() {
     const { setAllPrs } = usePridContainerStore();
 
     useEffect(() => {
-        getPrs().then((data: Pr[]) => setAllPrs(data))
+        getPrs()
+        .then((data: Pr[]) => setAllPrs(data.filter((pr) => pr.activeC== 'Act')));
     }, []);
 
     return (
