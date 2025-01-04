@@ -97,7 +97,7 @@ export const ChildEvTextField = styled(TextField)({
         padding: '0',
     },
     [`& ${tfSelector.input2Disable}`]: {
-        '-webkit-text-fill-color': 'white !important',
+        WebkitTextFillColor: 'white !important',
     },
     [`& ${tfSelector.fieldset2}`]: {
         display: 'none',

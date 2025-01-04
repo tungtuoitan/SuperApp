@@ -1,3 +1,4 @@
+
 export const constants = {
     env: {
         timeline: {
@@ -28,6 +29,8 @@ export const constants = {
         getEvents: "Ev/GetEvs",
         iuEv: "Ev/IuEv",
         getSRs: "SRs/GetSRs",
+        getPrs: "Pr/GetPrs",
+        iuPr: "Pr/IuPr",
     },
     accessRightsComponents: {
         finShark: "finShark",

@@ -20,7 +20,7 @@ export const AllTabsContextDefaultValue: AllTabsContextData = {
 const AllTabsContext = createContext<AllTabsContextData>(AllTabsContextDefaultValue);
 export const useAllTabsStore = () => useContext(AllTabsContext);
 
-export const AllTabsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+export const TLAllTabsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [allTabIds, setAllTabIds] = useState<(number|string)[]>(['ScheduleID']);
     const [curTabIndex, setCurTabIndex] = useState<number>(0);
  

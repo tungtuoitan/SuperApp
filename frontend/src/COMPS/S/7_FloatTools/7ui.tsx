@@ -11,7 +11,7 @@ export const FloatContainer = styled('div')({
     // zIndex: 100,
     gap: '10px',
     left: '50%',
-    bottom: '-74px',
+    bottom: '10px',
     transform: 'translateX(-50%)',
     boxShadow:'0 2px 4px rgba(0, 0, 0, 0.1)',
     display: 'flex',

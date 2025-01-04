@@ -1,4 +1,4 @@
-import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
+import {useAllTabsStore} from "../6_AllTabs/TLAllTabsStore";
 import { cDate, Ev } from "../TLTypes";
 import {_4Ccs} from "./4Ccs";
 import {useChildEvStore} from "../4_ChildEv/ChildEvStore";

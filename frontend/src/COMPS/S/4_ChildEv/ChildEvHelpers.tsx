@@ -10,7 +10,7 @@ import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import _, { debounce } from "lodash";
 import { useTLBaseFgHelpers } from "../2_TLBaseFg/TLBaseFgHelpers";
 import {EtailForm} from "../5_Etail/5ty";
-import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
+import {useAllTabsStore} from "../6_AllTabs/TLAllTabsStore";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import {useChildEvStore} from "./ChildEvStore";
 import {getAllDescendants} from "../2_TLBaseFg/2he";
@@ -28,7 +28,7 @@ export const useChildEvHelpers = () => {
     const debounce$UpdateEv = debounce((id, position, roundedH, roundedM) => {
         let newAllEvs = structuredClone(allEvs);
         const ev = allEvs.filter((ev) => ev.id === id)[0];
-        const h$start_end = cDateToGh(ev.timeEnd) - cDateToGh(ev.timeStart);
+        const h$start_end = Math.abs(cDateToGh(ev.timeEnd) - cDateToGh(ev.timeStart));
         const newTime = addTime(TIList[0].date, 0, 0, 0, roundedH, roundedM);
         let allDescendants = getAllDescendants(newAllEvs, id)
         if (newTime === ev.timeStart || newTime === ev.timeEnd) return;
