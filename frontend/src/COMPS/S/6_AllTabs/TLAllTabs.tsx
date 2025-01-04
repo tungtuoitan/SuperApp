@@ -4,7 +4,7 @@ import TLContainer from "../TLContainer";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import Etail from "../5_Etail/Etail";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
-import { useAllTabsStore } from "./AllTabsStore";
+import { useAllTabsStore } from "./TLAllTabsStore";
 import { getSRs } from "../TLAPIs";
 import { useSRsStore } from "../8_SRs/SRsStore";
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";

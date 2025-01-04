@@ -1,7 +1,7 @@
 import { useTLBaseBgHelpers } from "../1_TLBaseBg/TLBaseBgHelpers";
 import { cDateToGh } from "../3_TimeConfig/TimeHelpers";
 import { sr } from "../TLConstants";
-import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
+import {useAllTabsStore} from "../6_AllTabs/TLAllTabsStore";
 import HexagonIcon from '@mui/icons-material/Hexagon';
 import {Icon} from "@mui/material";
 import BlackMini from "../4_ChildEv/BlackMini";

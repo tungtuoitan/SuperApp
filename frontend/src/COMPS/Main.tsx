@@ -1,17 +1,18 @@
 import { BrowserRouter } from "react-router-dom";
-import { TopNav } from "./Nav/TopNav";
 import SideNav from "./Nav/SideNav";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import { CloseNotiBtn } from "./CommonHelpers/1_CloseNotiBtn";
 import { LoginProvider } from "./Login/store/loginStore";
 import {SRsProvider} from "./S/8_SRs/SRsStore";
-import {AllTabsProvider} from "./S/6_AllTabs/AllTabsStore";
+import { TLAllTabsProvider} from "./S/6_AllTabs/TLAllTabsStore";
 import {TLBaseBgProvider} from "./S/1_TLBaseBg/TLBaseBgStore";
 import {TLBaseFgProvider} from "./S/2_TLBaseFg/TLBaseFgStore";
 import {FloatToolsProvider} from "./S/7_FloatTools/FloatToolsStore";
 import {TimeConfigProvider} from "./S/3_TimeConfig/TimeConfigStore";
 import {ChildEvProvider} from "./S/4_ChildEv/ChildEvStore";
 import {EtailFormsStoreProvider} from "./S/5_Etail/EtailFormsStore";
+import {PRAllTabsProvider} from "./P/1_PrAllTabs/PrAllTabsStore";
+import {PridProvider} from "./P/2_PridContainer/PridContainerStore";
 
 export const Main = () => {
     return (
@@ -29,15 +30,22 @@ export const Main = () => {
                 <SnackbarProvider action={(id: SnackbarKey) => <CloseNotiBtn id={id} />}autoHideDuration={3000}>
                    <LoginProvider>
                         <SRsProvider>
-                            <AllTabsProvider>
+
+                            <TLAllTabsProvider>
                                 <TLBaseBgProvider>
                                     <TLBaseFgProvider>
                                         <FloatToolsProvider>
                                             <TimeConfigProvider>
                                                 <ChildEvProvider>
                                                     <EtailFormsStoreProvider>
-                                                        <EtailFormsStoreProvider>    
-                                                            <SideNav />
+                                                        <EtailFormsStoreProvider>  
+
+                                                            <PRAllTabsProvider>
+                                                                <PridProvider>
+                                                                    <SideNav />
+                                                                </PridProvider>
+                                                            </PRAllTabsProvider>
+
                                                         </EtailFormsStoreProvider>
                                                     </EtailFormsStoreProvider>
                                                 </ChildEvProvider>
@@ -45,7 +53,8 @@ export const Main = () => {
                                         </FloatToolsProvider>
                                     </TLBaseFgProvider>
                                 </TLBaseBgProvider>
-                            </AllTabsProvider>
+                            </TLAllTabsProvider>
+
                         </SRsProvider>
                     </LoginProvider>
                 </SnackbarProvider>

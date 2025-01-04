@@ -15,7 +15,7 @@ import {ChildEvTextField, MiniCame, DotGroup, WChildEv, WTime} from "./4ui";
 import {use4he} from "./4he";
 import {ChildEvProps} from "./4ty";
 import {useChildEvStore} from "./ChildEvStore";
-import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
+import {useAllTabsStore} from "../6_AllTabs/TLAllTabsStore";
 
 
 export const ChildEv = (props: ChildEvProps) => {

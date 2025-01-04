@@ -2,7 +2,7 @@ import {useSnackbar} from "notistack";
 import {useTLBaseBgHelpers} from "../1_TLBaseBg/TLBaseBgHelpers";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import {cDateToGh, useTimeHelpers} from "../3_TimeConfig/TimeHelpers";
-import {useAllTabsStore} from "../6_AllTabs/AllTabsStore";
+import {useAllTabsStore} from "../6_AllTabs/TLAllTabsStore";
 import { hper, sr } from "../TLConstants";
 import { cDate, CevelC, Ev } from "../TLTypes";
 import { _4cs } from "./4cs";

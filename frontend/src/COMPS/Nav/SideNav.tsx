@@ -25,6 +25,7 @@ import { iuEv } from "../S/TLAPIs";
 import {sr} from "../S/TLConstants";
 import {KeyboardEvent} from "react";
 import {TopNav} from "./TopNav";
+import {PRAllTabs} from "../P/1_PrAllTabs/PrAllTabs";
 
 const SideNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -322,14 +323,14 @@ const SideNav: React.FC<
                 >
                     <SideMenu />
                 </Drawer>
-                <BodyWrapper
+                <BodyWrapper id='bodyWrapper'
                     ref={bodyWrapperRef}
                     style={{
-                        width: "calc(100% - 48px)",
+                        
                         // width: expanded
                         //     ? "calc(100% - 200px)"
                         //     : "calc(100% - 48px)",
-                        // border: '4px solid red',
+                        // border: '4px solid blue',
                     }}
                 >
                     <SnackbarProvider
@@ -340,6 +341,7 @@ const SideNav: React.FC<
                             <Route path="/login" Component={LoginContainer} />
                             <Route path="/signup" Component={LoginContainer} />
                             <Route path="/schedule" Component={TLAllTabs} />
+                            <Route path="/practice" Component={PRAllTabs} />
                         </Routes>
                     </SnackbarProvider>
                 </BodyWrapper>

@@ -9,7 +9,8 @@ import {getIcon} from "./Nhe";
 export const SideNavRoot = styled("div")({
     flexGrow: 1,
     backgroundColor: "#f6f6f6",
-    height: "calc(100% - 64px)",
+    height: "calc(100vh - 64px)",
+    // border: '4px solid black',
     display: "flex",
     // width: '100%',
     // height: '100%',
@@ -59,7 +60,9 @@ export const SideNavRoot = styled("div")({
 export const BodyWrapper = styled("div")({
     display: "flex",
     flexGrow: 1,
-    height: "100%",
+    width: "calc(100% - 48px)",
+    height: "calc(100vh - 64px)",
+    // border: "1px solid black",
 });
 
 
