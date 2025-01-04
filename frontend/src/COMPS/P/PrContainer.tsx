@@ -2,11 +2,11 @@ import {useEffect} from "react";
 import PridContainer from "./2_PridContainer/PridContainer";
 import { getPrs} from "./PrAPIs";
 import {Pr} from "./PrTypes";
-import {usePridStore} from "./2_PridContainer/PridContainerStore";
+import {usePridContainerStore} from "./2_PridContainer/PridContainerStore";
 
 
 export default function PRContainer() {
-    const { setAllPrs } = usePridStore();
+    const { setAllPrs } = usePridContainerStore();
 
     useEffect(() => {
         getPrs().then((data: Pr[]) => setAllPrs(data))

@@ -5,20 +5,15 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import Etail from "../5_Etail/Etail";
 import { useTLBaseFgStore } from "../2_TLBaseFg/TLBaseFgStore";
 import { useAllTabsStore } from "./TLAllTabsStore";
-import { getSRs } from "../TLAPIs";
-import { useSRsStore } from "../8_SRs/SRsStore";
-import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 import {useTLBaseBgStore} from "../1_TLBaseBg/TLBaseBgStore";
 import { WBadge, WTabBar, WTabsContainer} from "./6ui";
 import {a11yProps} from "./6he";
-import {SR} from "../8_SRs/8ty";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import CloseIcon from '@mui/icons-material/Close';
 
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
-    const { sRs, setSRs, setLevelOptions } = useSRsStore();
     const { windowWidth, setWindowWidth } = useTLBaseBgStore();
     const [etails, dispatch] = useEtailFormStore();
     const [hoverId, setHoverId] = useState<number | string | null>(null);
@@ -46,17 +41,7 @@ export const TLAllTabs = () => {
         })
     }
 
-    useEffect(() => {
-        getSRs()
-            .then((srs: SR[]) => {
-                setSRs(srs);
-                const levelOptions = srs.filter(sr => sr.type === 'Cevel');
-                setLevelOptions(levelOptions.map(sr => (
-                    { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
-                )));
 
-            })
-    }, [])
 
     return (
         <WTabsContainer id='TLAllTabs'>

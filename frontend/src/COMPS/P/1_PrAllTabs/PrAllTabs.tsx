@@ -3,42 +3,35 @@ import { SetStateAction, useState, MouseEvent, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PRContainer from "../PrContainer";
-import {usePRAllTabsStore} from "./PrAllTabsStore";
+import {usePrAllTabsStore} from "./PrAllTabsStore";
 import {a11yProps} from "../../S/6_AllTabs/6he";
 import {WBadge, WTabBar, WTabsContainer} from "./1ui";
+import Petail from "../3_Petail/Petail";
+import {usePridContainerStore} from "../2_PridContainer/PridContainerStore";
+import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 
 export const PRAllTabs = () => {
-    const { pRAllTabIds, setpRAllTabIds, curTabIndex, setCurTabIndex } = usePRAllTabsStore();
+    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } = usePrAllTabsStore();
     const [hoverId, setHoverId] = useState<number | string | null>(null);
+    const { allPrs} = usePridContainerStore();
+    const [petails, dispatch] = usePetailFormStore();
 
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
         event?.preventDefault();
         event?.stopPropagation();
-        // setAllTabIds(prev => {
-        //     dispatch({ type: 'REMO', payload: {id} });
-        //     const newAllTabIds = prev.filter(tabId => tabId !== id)
-        //     if (curTabIndex === allTabIds.indexOf(id)) {
-        //         setCurTabIndex(prev => prev-1);
-        //     } else {
-        //         const newCurTabIndex = newAllTabIds.indexOf(allTabIds[curTabIndex]);
-        //         setCurTabIndex(newCurTabIndex);
-        //     }
+        setPrAllTabIds(prev => {
+            dispatch({ type: 'REMO', payload: {id} });
+            const newAllTabIds = prev.filter(tabId => tabId !== id)
+            if (curTabIndex === prAllTabIds.indexOf(id)) {
+                setCurTabIndex(prev => prev-1);
+            } else {
+                const newCurTabIndex = newAllTabIds.indexOf(prAllTabIds[curTabIndex]);
+                setCurTabIndex(newCurTabIndex);
+            }
 
-        //     return newAllTabIds;
-        // })
+            return newAllTabIds;
+        })
     }
-
-    // useEffect(() => {
-    //     getSRs()
-    //         .then((srs: SR[]) => {
-    //             setSRs(srs);
-    //             const levelOptions = srs.filter(sr => sr.type === 'Cevel');
-    //             setLevelOptions(levelOptions.map(sr => (
-    //                 { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
-    //             )));
-
-    //         })
-    // }, [])
 
     return (
         <WTabsContainer id='PRAllTabs'>
@@ -47,18 +40,18 @@ export const PRAllTabs = () => {
                 value={curTabIndex}
                 onChange={(e: any, newTabIndex: SetStateAction<number>) => setCurTabIndex(newTabIndex)}
                 aria-label="tabs">
-                {pRAllTabIds.map((id: number | string, index: number) => {
-                    if (id === 'ScheduleID') return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{
-                        height: '48px',
-                        minHeight: '48px',
+                {prAllTabIds.map((id: number | string, index: number) => {
+                    if (id === 'PridID') 
+                        return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{
+                            height: '48px',
+                            minHeight: '48px',
+                        }} />
 
-                    }} />
-
-                    const ev = {id:1, name:'name'}//allEvs.filter(ev => ev.id === id)[0];
+                    const pr = allPrs.filter(pr => pr.id === id)[0];
                     return (
                         <Tab
                             key={index}
-                            // disabled={ev.disabled ?? false}
+                            // disabled={pr.disabled ?? false}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -68,9 +61,9 @@ export const PRAllTabs = () => {
                             onMouseLeave={() => setHoverId(null)}
                             label={
                                 <WBadge
-                                    // badgeContent={ev.badge}
+                                    // badgeContent={pr.badge}
                                     color="primary" max={99}>
-                                    {ev.name.length > 40 ? ev.name.slice(0, 35) + '...' : ev.name}
+                                    {pr.name.length > 40 ? pr.name.slice(0, 35) + '...' : pr.name}
                                 </WBadge>}
                             icon={index > 0 ?
                                 <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
@@ -93,14 +86,10 @@ export const PRAllTabs = () => {
             </WTabBar>
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
-                <PRContainer />
-                {(pRAllTabIds.filter((id, index) => index === curTabIndex)[0]) === 'PridID'
+                {(prAllTabIds.filter((id, index) => index === curTabIndex)[0]) === 'PridID'
                     ? <PRContainer />
-                    : (pRAllTabIds.filter((id, index) => index === curTabIndex)[0]) === 'PetailID'
-                    // <Etail etailId={allTabIds[curTabIndex] as number} />
-                    ?<></>
-                    : <></>
-                    }
+                    : <Petail petailId={prAllTabIds[curTabIndex] as number} />
+                }
             </div>
         </WTabsContainer>
     )

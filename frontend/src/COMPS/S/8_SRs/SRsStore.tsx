@@ -10,6 +10,8 @@ export interface SRsContextData {
     setSRs: (SRs: SR[]) => void;
     levelOptions: IAutoCompleteOptions[];
     setLevelOptions: (options: IAutoCompleteOptions[]) => void;
+    repeatTypeOptions: IAutoCompleteOptions[];
+    setRepeatTypeOptions: (options: IAutoCompleteOptions[]) => void;
 };
 
 export const SRsContextDefaultValue: SRsContextData = {
@@ -17,6 +19,8 @@ export const SRsContextDefaultValue: SRsContextData = {
     setSRs: () => {},
     levelOptions: [],
     setLevelOptions: () => {},
+    repeatTypeOptions: [],
+    setRepeatTypeOptions: () => {},
 };
 
 const sRsContext = createContext<SRsContextData>(SRsContextDefaultValue);
@@ -25,6 +29,7 @@ export const useSRsStore = () => useContext(sRsContext);
 export const SRsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [sRs, setSRs] = useState<SR[]>([]);
     const [levelOptions, setLevelOptions] = useState<IAutoCompleteOptions[]>([]);
+    const [repeatTypeOptions, setRepeatTypeOptions] = useState<IAutoCompleteOptions[]>([]);
 
     return (
         <sRsContext.Provider
@@ -32,7 +37,9 @@ export const SRsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildr
                 sRs,
                 setSRs,
                 levelOptions,
-                setLevelOptions
+                setLevelOptions,
+                repeatTypeOptions,
+                setRepeatTypeOptions,
             }}>
             {children}
         </sRsContext.Provider>
