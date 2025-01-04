@@ -94,6 +94,13 @@ export const PRAllTabs = () => {
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
                 <PRContainer />
+                {(pRAllTabIds.filter((id, index) => index === curTabIndex)[0]) === 'PridID'
+                    ? <PRContainer />
+                    : (pRAllTabIds.filter((id, index) => index === curTabIndex)[0]) === 'PetailID'
+                    // <Etail etailId={allTabIds[curTabIndex] as number} />
+                    ?<></>
+                    : <></>
+                    }
             </div>
         </WTabsContainer>
     )

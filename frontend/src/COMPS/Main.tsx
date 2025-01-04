@@ -13,6 +13,7 @@ import {ChildEvProvider} from "./S/4_ChildEv/ChildEvStore";
 import {EtailFormsStoreProvider} from "./S/5_Etail/EtailFormsStore";
 import {PRAllTabsProvider} from "./P/1_PrAllTabs/PrAllTabsStore";
 import {PridProvider} from "./P/2_PridContainer/PridContainerStore";
+import {PetailFormsStoreProvider} from "./P/3_Petail/PetailFormsStore";
 
 export const Main = () => {
     return (
@@ -42,7 +43,9 @@ export const Main = () => {
 
                                                             <PRAllTabsProvider>
                                                                 <PridProvider>
-                                                                    <SideNav />
+                                                                    <PetailFormsStoreProvider>
+                                                                        <SideNav />
+                                                                    </PetailFormsStoreProvider>
                                                                 </PridProvider>
                                                             </PRAllTabsProvider>
 

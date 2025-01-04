@@ -1,35 +1,14 @@
-import {cDate} from "../S/TLTypes";
+import {cDate, Ev, ResultOptions} from "../S/TLTypes";
 
-export type Pr = {
-    id: number;
-    name: string;
-    desc?: string;
-    timeStart: cDate;
-    timeEnd?: cDate;
-    repeatType: string;
-    parentId?: number;
-    pypes: string;
-    activeC: string;
-    prioriC: string;
-    history: string;
-    note: string;
-}
+export type Pr = 
+    (Omit<Ev, 'isOverlap' | 'isLateNight' | 'lineOrder' | 'subType' | 'evelC' | 'levelC' | 'subType' | 'type'>)
+    & { 
+        types: string;
+        repeatType: string;
+        history: string;
+     };
 
-
-
-export type ResultOptions = {
-        success: boolean;
-        message?: string;
-        reference?: string;
-        reference2?: string;
-        reference3?: string;
-        reference4?: string;
-        reference5?: string;
-        object?: any;
-        status?: number;
-}
-
-export type EvsResult = {
-    evs: Pr[];
+export type PrsResult = {
+    prs: Pr[];
     options: ResultOptions;
 }
