@@ -21,11 +21,14 @@ import {
 } from "../S/3_TimeConfig/TimeHelpers";
 import { Ev, EvsResult } from "../S/TLTypes";
 import { getAllDescendants } from "../S/2_TLBaseFg/2he";
-import { iuEv } from "../S/TLAPIs";
+import { getSRs, iuEv } from "../S/TLAPIs";
 import {sr} from "../S/TLConstants";
-import {KeyboardEvent} from "react";
+import {KeyboardEvent, useEffect} from "react";
 import {TopNav} from "./TopNav";
 import {PRAllTabs} from "../P/1_PrAllTabs/PrAllTabs";
+import {SR} from "../S/8_SRs/8ty";
+import {useSRsStore} from "../S/8_SRs/SRsStore";
+import {IAutoCompleteOptions} from "../CommonHelpers/4_GenericAutoComplete";
 
 const SideNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -33,20 +36,29 @@ const SideNav: React.FC<
     const {sideNavigationRef, bodyWrapperRef } = useNavigationStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
-    const {
-        fevId,
-        setFevId,
-        cutEvId,
-        setCutEvId,
-        focusTFId,
-        setFocusTFId,
-        mousedownAtGE,
-    } = useChildEvStore();
+    const {fevId,setFevId,cutEvId,setCutEvId,focusTFId,setFocusTFId} = useChildEvStore();
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
-    const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } =
-        useTLBaseBgHelpers();
+    const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } =useTLBaseBgHelpers();
     const { changeLevel, changeTimeStart } = useTimeHelpers();
+    const { sRs, setSRs, setLevelOptions, setRepeatTypeOptions } = useSRsStore();
+
+
+    useEffect(() => {
+        getSRs()
+            .then((srs: SR[]) => {
+                setSRs(srs);
+                const levelOptions = srs.filter(sr => sr.type === 'Cevel');
+                setLevelOptions(levelOptions.map(sr => (
+                    { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
+                )));
+                const repeatTypeOptions = srs.filter(sr => sr.type === 'PrRepeatType');
+                setRepeatTypeOptions(repeatTypeOptions.map(sr => (
+                    { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
+                )));
+
+            })
+    }, [])
 
     return (
         <div style={{outline: 'none'}}
@@ -326,7 +338,6 @@ const SideNav: React.FC<
                 <BodyWrapper id='bodyWrapper'
                     ref={bodyWrapperRef}
                     style={{
-                        
                         // width: expanded
                         //     ? "calc(100% - 200px)"
                         //     : "calc(100% - 48px)",

@@ -2,26 +2,26 @@
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
 export interface PRAllTabsContextData {
-    pRAllTabIds: (number|string)[];
-    setpRAllTabIds: Dispatch<SetStateAction<(number|string)[]>>;
+    prAllTabIds: (number|string)[];
+    setPrAllTabIds: Dispatch<SetStateAction<(number|string)[]>>;
     curTabIndex: number;
     setCurTabIndex: Dispatch<SetStateAction<number>>;
     
 };
 
 export const PRAllTabsContextDefaultValue: PRAllTabsContextData = {
-    pRAllTabIds: [],
-    setpRAllTabIds: () => {},
+    prAllTabIds: [],
+    setPrAllTabIds: () => {},
     curTabIndex: 0,
     setCurTabIndex: () => {},
     
 };
 
 const PRAllTabsContext = createContext<PRAllTabsContextData>(PRAllTabsContextDefaultValue);
-export const usePRAllTabsStore = () => useContext(PRAllTabsContext);
+export const usePrAllTabsStore = () => useContext(PRAllTabsContext);
 
 export const PRAllTabsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
-    const [pRAllTabIds, setpRAllTabIds] = useState<(number|string)[]>(['ScheduleID']);
+    const [prAllTabIds, setPrAllTabIds] = useState<(number|string)[]>(['PridID']);
     const [curTabIndex, setCurTabIndex] = useState<number>(0);
  
 
@@ -29,8 +29,8 @@ export const PRAllTabsProvider: React.FC<React.PropsWithChildren<React.PropsWith
     return (
         <PRAllTabsContext.Provider
             value={{
-                pRAllTabIds,
-                setpRAllTabIds,
+                prAllTabIds,
+                setPrAllTabIds,
                 curTabIndex,
                 setCurTabIndex,
                

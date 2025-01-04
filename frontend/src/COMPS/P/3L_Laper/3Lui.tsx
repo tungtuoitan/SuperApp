@@ -26,6 +26,7 @@ export const EndDatePicker = styled(DatePicker)({
     },
     [`& ${dpSelector.label1NoShrink}`]: {
         top: -8,
+        fontSize: "12px",
     },
     [`& ${dpSelector.input2}`]: {
         height: 30,
@@ -162,6 +163,16 @@ export const FLType = styled(FormLabel)({
     fontSize: 10,
     position: "relative",
     width: 42,
+    background: "white",
+    top: "-8px",
+    left: "10px",
+    padding: "0 5px 0 5px",
+});
+export const FLRepeatType = styled(FormLabel)({
+    textAlign: "left",
+    fontSize: 10,
+    position: "relative",
+    width: 70,
     background: "white",
     top: "-8px",
     left: "10px",

@@ -6,7 +6,7 @@ import {usePetailHelpers} from "../3_Petail/PetailHelpers";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {PetailForm} from "../3_Petail/3ty";
 
-export default function LaperDetail(props: LaperNameProps) {
+export default function LaperDesc(props: LaperNameProps) {
     const { handleChange } = usePetailHelpers();
     const evDescSelector = helperMUIcss.getTextFieldMultipleLineCSSSelector("evDesc");
     const [petails, dispatch] = usePetailFormStore();

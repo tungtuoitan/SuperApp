@@ -2,29 +2,29 @@
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import {Pr} from "../PrTypes";
 
-export interface PridContextData {
+export interface PridContainerContextData {
     allPrs: Pr[];
     setAllPrs: Dispatch<SetStateAction<any[]>>;
     isFirstTime: boolean;
     setIsFirstTime: Dispatch<SetStateAction<boolean>>;
 };
 
-export const PridContextDefaultValue: PridContextData = {
+export const PridContainerContextDefaultValue: PridContainerContextData = {
     allPrs: [],
     setAllPrs: () => { },
     isFirstTime: true,
     setIsFirstTime: () => { },
 };
 
-const PridStore = createContext<PridContextData>(PridContextDefaultValue);
-export const usePridStore = () => useContext(PridStore);
+const PridContainerStore = createContext<PridContainerContextData>(PridContainerContextDefaultValue);
+export const usePridContainerStore = () => useContext(PridContainerStore);
 
-export const PridProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+export const PridContainerProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [allPrs, setAllPrs] = useState<Pr[]>([]);
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
 
     return (
-        <PridStore.Provider
+        <PridContainerStore.Provider
             value={{
                 allPrs,
                 setAllPrs,
@@ -32,6 +32,6 @@ export const PridProvider: React.FC<React.PropsWithChildren<React.PropsWithChild
                 setIsFirstTime,
             }}>
             {children}
-        </PridStore.Provider>
+        </PridContainerStore.Provider>
     )
 }

@@ -6,41 +6,43 @@ import {toggleX} from "./3Lhe";
 import {usePetailHelpers} from "../3_Petail/PetailHelpers";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {PetailForm} from "../3_Petail/3ty";
+import {useSRsStore} from "../../S/8_SRs/SRsStore";
 
 
 
-export default function LaperSubType(props: LaperTypeProps) {
+export default function LaperTypes(props: LaperTypeProps) {
     const { handleChange } = usePetailHelpers();
     const {id} = props;
     const [petails, dispatch] = usePetailFormStore();
     const petail = petails.find(petail => petail.id === id) ?? {} as PetailForm;
+    const { sRs } = useSRsStore();
+    const allPrTypes = sRs.filter((sr) => sr.type === "PrType")
 
     return (
         <WRow>
             <FCSubType sx={{display: 'flex', flexDirection: 'row'}}>
-                {/* {Object.values(evSubType[petail.type as EvType]).map((value, index) => (
-                    <FormControlLabel 
+                {(allPrTypes??[]).map((value, index) => {
+                    const {code, desc} = value;
+                    return <FormControlLabel 
                         control={<Checkbox 
-                            checked={petail.subType.includes(value) ? true : false} 
-                            onChange={()=>handleChange(id, 'subType', toggleX(petail.subType??'', value))}
+                            checked={petail.types?.includes(code) ? true : false} 
+                            onChange={()=>handleChange(id, 'types', toggleX(petail.types??'', code))}
                             sx={{display:'none'}} 
                             />} 
-                        label={value} 
+                        label={desc} 
                         key={index}
                         sx={{
-                            color: petail.subType.includes(value) ? '#00000080' : '#00000040',
+                            color: petail.types?.includes(code) ? '#00000080' : '#00000040',
                             margin: '0px 10px 0px 0px',
                             height: 24,
                             fontSize: 12,
-                            border: petail.subType.includes(value) ? '1px solid #00000020' : '1px solid transparent',
-                            background: petail.subType.includes(value) ? '#00000010' : '#00000000',
+                            border: petail.types?.includes(code) ? '1px solid #00000020' : '1px solid transparent',
+                            background: petail.types?.includes(code) ? '#00000010' : '#00000000',
                             borderRadius: 50,
                             padding: '0px 10px',
-                            
-                            
                         }}
                     />
-            ))} */}
+        })}
             </FCSubType>
     </WRow>
     )

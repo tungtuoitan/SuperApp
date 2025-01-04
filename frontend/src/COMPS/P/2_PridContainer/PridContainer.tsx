@@ -1,10 +1,11 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import {usePridStore} from "./PridContainerStore";
-import {pridColumns} from "./PridContainerHelpers";
+import { DataGrid } from "@mui/x-data-grid";
+import {usePridContainerStore} from "./PridContainerStore";
+import { usePridContainerHelpers} from "./PridContainerHelpers";
 
 
 export default function PridContainer() {
-    const { allPrs } = usePridStore();
+    const { allPrs } = usePridContainerStore();
+    const { pridColumns } = usePridContainerHelpers();
 
     return (
         <div id="PridContainer" style={{ width: "100%", height: "100%", fontSize: "12px" }}>
@@ -21,8 +22,9 @@ export default function PridContainer() {
             >
                 <DataGrid
                     rows={allPrs}
-                    rowHeight={85}
                     columns={pridColumns}
+                    //
+                    rowHeight={85}
                     checkboxSelection
                     disableRowSelectionOnClick
                 />
