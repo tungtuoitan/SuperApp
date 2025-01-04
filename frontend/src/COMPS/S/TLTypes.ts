@@ -18,7 +18,7 @@ export type Ev = {
   prioriC: string,
   
   fink: string|null,
-  desc: string,
+  desc: string|null,
 
 
   // for orderUI

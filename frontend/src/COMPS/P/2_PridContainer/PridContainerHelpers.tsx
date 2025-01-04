@@ -10,14 +10,16 @@ import {useSRsStore} from "../../S/8_SRs/SRsStore";
 
 export const usePridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
-    const { allPrs } = usePridContainerStore();
+    const { allPrs, rowSelectionModel } = usePridContainerStore();
     const { prAllTabIds,setPrAllTabIds,curTabIndex, setCurTabIndex} = usePrAllTabsStore();
     const { sRs } = useSRsStore();
 
     const openPetail = (prId: number) => {
+        if (rowSelectionModel.includes(prId) || rowSelectionModel.includes(prId.toString())) return;
         if (prAllTabIds.includes(prId)) {
             setCurTabIndex(prAllTabIds.indexOf(prId));
-        } else {
+        } 
+        else {
             setPrAllTabIds((prev) => {
                 setCurTabIndex(prev.length); // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
                 return [...prev, prId];
@@ -92,7 +94,7 @@ export const usePridContainerHelpers = () => {
                         {Line("Types", r.types?.split(',').map(t => sRs.filter(sr => sr.code === t)[0]?.desc).join(", "))}
                         {Line("Repeat Type", sRs.filter(sr => sr.code === r.repeatType)[0]?.desc)}
                         {Line("Time Start", displayCDate(r.timeStart))}
-                        {Line("Time End", displayCDate(r.timeEnd ?? ""))}
+                        {Line("Time End", r.timeEnd ? displayCDate(r.timeEnd) : null)}
                     </div>
                 );
             },

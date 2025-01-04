@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import {usePridContainerHelpers} from "./PridContainerHelpers";
+import {usePridContainerStore} from "./PridContainerStore";
 
 export const Line = (name: string, value: any) => {
     return (
@@ -12,15 +13,22 @@ export const Line = (name: string, value: any) => {
 
 export const Nink = (id: number, title: string, link: string) => {
     const {openPetail} = usePridContainerHelpers();
+    const {rowSelectionModel} = usePridContainerStore();
 
     return (
-        <Link 
-            className="nink" 
-            to={link} 
-            style={{ textDecoration: "none", fontWeight: "bold" }}
-            onClick={(e) => openPetail(id)}
-            >
-                {title.toUpperCase()}
-        </Link>
+        <>
+            {(rowSelectionModel.includes(id)||rowSelectionModel.includes(id.toString())) 
+                ? <div style={{fontWeight:'bold'}}>{title.toUpperCase()}</div>
+                : 
+                <Link 
+                    className="nink" 
+                    to={link} 
+                    style={{ textDecoration: "none", fontWeight: "bold" }}
+                    onClick={(e) => openPetail(id)}
+                    >
+                        {title.toUpperCase()}
+                </Link>
+            }
+        </>
     );
 };

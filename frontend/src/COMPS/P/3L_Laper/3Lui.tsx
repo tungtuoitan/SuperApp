@@ -3,7 +3,7 @@ import {DatePicker, TimePicker} from "@mui/x-date-pickers";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {Link} from "react-router-dom";
 import {FigmaButtonProps} from "../../S/5_Etail/5ty";
-import {FinkToProtocol} from "../3_Petail/3he";
+import {FinkToProtocol} from "../../S/5_Etail/5he";
 
 export const WRow = styled("div")({
     display: "flex",

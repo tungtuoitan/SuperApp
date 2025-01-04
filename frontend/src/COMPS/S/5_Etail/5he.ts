@@ -1,6 +1,7 @@
 
 
 export function FinkToProtocol(link: string): string | null {
+    if(!link || link.length <10) return null;
     try {
         const url = new URL(link);
 
@@ -16,7 +17,8 @@ export function FinkToProtocol(link: string): string | null {
         // Tạo link dạng figma://
         const figmaLink: string = `figma://board/${boardId}${nodeId ? `?node-id=${nodeId}` : ""}`;
         return figmaLink;
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Error converting Figma link:", (error as Error).message);
         return null;
     }

@@ -9,12 +9,17 @@ import {WBadge, WTabBar, WTabsContainer} from "./1ui";
 import Petail from "../3_Petail/Petail";
 import {usePridContainerStore} from "../2_PridContainer/PridContainerStore";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
+import AddIcon from "@mui/icons-material/Add";
+import {usePrAllTabHelpers} from "./PrAllTabHelpers";
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 export const PRAllTabs = () => {
-    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } = usePrAllTabsStore();
+    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } =
+        usePrAllTabsStore();
     const [hoverId, setHoverId] = useState<number | string | null>(null);
-    const { allPrs} = usePridContainerStore();
+    const { allPrs, rowSelectionModel } = usePridContainerStore();
     const [petails, dispatch] = usePetailFormStore();
+    const { createNewPetail, deletePrs } = usePrAllTabHelpers();
 
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
         event?.preventDefault();
@@ -42,16 +47,12 @@ export const PRAllTabs = () => {
                 aria-label="tabs">
                 {prAllTabIds.map((id: number | string, index: number) => {
                     if (id === 'PridID') 
-                        return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{
-                            height: '48px',
-                            minHeight: '48px',
-                        }} />
+                        return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{ height: '48px',minHeight: '48px'}} />
 
                     const pr = allPrs.filter(pr => pr.id === id)[0];
                     return (
                         <Tab
                             key={index}
-                            // disabled={pr.disabled ?? false}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -60,10 +61,8 @@ export const PRAllTabs = () => {
                             onMouseEnter={() => setHoverId(id)}
                             onMouseLeave={() => setHoverId(null)}
                             label={
-                                <WBadge
-                                    // badgeContent={pr.badge}
-                                    color="primary" max={99}>
-                                    {pr.name.length > 40 ? pr.name.slice(0, 35) + '...' : pr.name}
+                                <WBadge color="primary" max={99}>
+                                    {(pr && pr.name.length > 40 ? pr.name.slice(0, 35) + "..." : pr?.name) ?? "New Pr"}
                                 </WBadge>}
                             icon={index > 0 ?
                                 <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
@@ -71,25 +70,35 @@ export const PRAllTabs = () => {
                                 </IconButton> : <></>}
                             {...a11yProps(index)}
                             style={{
-                                display: 'flex',
-                                flexDirection: 'row-reverse',
+                                display: "flex",
+                                flexDirection: "row-reverse",
                                 gap: 10,
-                                padding: '0 0 0 16px',
-                                height: '48px',
-                                minHeight: '48px',
+                                padding: "0 0 0 16px",
+                                height: "48px",
+                                minHeight: "48px",
                             }}
                         />
-                    )
+                    );
                 })}
-                {/* <Grow><div/></Grow> */}
-                {/* RIGHT THINGS HERE */}
+                {!prAllTabIds.includes(0) &&
+                    <IconButton onClick={createNewPetail} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
+                        <AddIcon sx={{ fontSize: 16 }} />
+                    </IconButton>
+                }
+                {rowSelectionModel.length > 0 &&
+                    <IconButton onClick={deletePrs} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
+                        <RemoveCircleIcon sx={{ fontSize: 16, color: 'red' }} />
+                    </IconButton>
+                }
             </WTabBar>
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
-                {(prAllTabIds.filter((id, index) => index === curTabIndex)[0]) === 'PridID'
-                    ? <PRContainer />
-                    : <Petail petailId={prAllTabIds[curTabIndex] as number} />
-                }
+                {prAllTabIds.filter((id, index) => index === curTabIndex)[0] ===
+                "PridID" ? (
+                    <PRContainer />
+                ) : (
+                    <Petail petailId={prAllTabIds[curTabIndex] as number} />
+                )}
             </div>
         </WTabsContainer>
     )

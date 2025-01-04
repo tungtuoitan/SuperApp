@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { EtailContainer, LeftEtailPaper, MidEtailPaper, RightEtailPaper, WBody } from "./3ui";
-import {EtailBar} from "./PetailBar";
+import {PetailBar} from "./PetailBar";
 import {PetailForm, PetailProps} from "./3ty";
 import LaperIds from "../3L_Laper/LaperIds";
 import LaperName from "../3L_Laper/LaperName";
@@ -18,8 +18,7 @@ import LaperDetail from "../3L_Laper/LaperDesc";
 export default function Petail(props: PetailProps) {
     const { petailId } = props;
     const [petails, dispatch] = usePetailFormStore();
-    const petail =
-        petails.find((petail:PetailForm) => petail.id === petailId) ?? ({} as PetailForm);
+    const petail = petails.find((petail:PetailForm) => petail.id === petailId) ?? ({} as PetailForm);
 
     useEffect(() => {
         // console.log("petail", petail);
@@ -27,7 +26,7 @@ export default function Petail(props: PetailProps) {
 
     return (
         <EtailContainer>
-            <EtailBar id={petailId} />
+            <PetailBar id={petailId} />
             <WBody>
                 <LeftEtailPaper>
                     <LaperIds id={petailId} />
