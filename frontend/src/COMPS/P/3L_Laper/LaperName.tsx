@@ -1,6 +1,4 @@
-import {
-    TextField,
-} from "@mui/material";
+import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {WRow} from "./3Lui";
 import {LaperNameProps} from "./3Lty";
@@ -17,9 +15,9 @@ export default function LaperName(props: LaperNameProps) {
      return (   
         <WRow>
             <TextField
-                id={"evName" + petail.id}
+                id={"prName" + petail.id}
                 name="name"
-                label="Event Name"
+                label="Pr Name"
                 value={petail.name??''}
                 onChange={(e) => {
                     // setEtailForm({ name: e.target.value });

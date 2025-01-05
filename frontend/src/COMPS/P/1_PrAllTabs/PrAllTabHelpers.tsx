@@ -4,7 +4,7 @@ import {PetailForm} from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {getPrs, iuPr} from "../PrAPIs";
 import {usePrAllTabsStore} from "./PrAllTabsStore";
-import {Pr} from "../PrTypes";
+import {Pr, Pr2} from "../PrTypes";
 import {useSnackbar} from "notistack";
 
 export const usePrAllTabHelpers = () => {
@@ -39,10 +39,11 @@ export const usePrAllTabHelpers = () => {
                     statusC: "Ope",
                     prioriC: "Low",
     
-                    history: "",
+                    pesults: [],
     
                     fink: null,
                     desc: null,
+
                 };
                 dispatch({ type: "INSE", payload: newPetail });
                 setCurTabIndex(prev.length)
@@ -62,8 +63,10 @@ export const usePrAllTabHelpers = () => {
             .then((results) => {
                 if(results.every((r) => r.options.success)) {
                     getPrs()
-                    .then((prs) => {
-                        setAllPrs(prs.filter((pr: Pr) => pr.activeC === 'Act'));
+                    .then((prs:Pr2[]) => {
+                        let proData = prs.filter((pr) => pr.activeC== 'Act')
+                        proData.forEach((pr) => pr.pesults ? JSON.parse(pr.pesults) : [])
+                        setAllPrs(proData);
                         enqueueSnackbar("Prs deleted successfully", { variant: "success" });
                     })
                 }

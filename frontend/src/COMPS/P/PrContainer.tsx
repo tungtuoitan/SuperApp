@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import PridContainer from "./2_PridContainer/PridContainer";
 import { getPrs} from "./PrAPIs";
-import {Pr} from "./PrTypes";
+import {Pr, Pr2} from "./PrTypes";
 import {usePridContainerStore} from "./2_PridContainer/PridContainerStore";
 
 
@@ -10,7 +10,14 @@ export default function PRContainer() {
 
     useEffect(() => {
         getPrs()
-        .then((data: Pr[]) => setAllPrs(data.filter((pr) => pr.activeC== 'Act')));
+        .then((data: Pr2[]) => {
+            let proData = data.filter((pr) => pr.activeC== 'Act')
+            proData.map((pr) => {
+                pr.pesults = pr.pesults ? JSON.parse(pr.pesults) : []
+                return pr
+            })
+            setAllPrs(proData);
+        });
     }, []);
 
     return (

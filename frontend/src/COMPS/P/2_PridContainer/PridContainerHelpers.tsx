@@ -7,10 +7,23 @@ import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {usePridContainerStore} from "./PridContainerStore";
 import {usePrAllTabsStore} from "../1_PrAllTabs/PrAllTabsStore";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
+import {his} from "../4_PeridContainer/4ty";
+import {IconButton} from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import {Cooltip} from "../../CommonHelpers/2_CoolTip";
+import {useADiStore} from "../5_Adi/ADiStore";
+import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
 
+
+const fakeHistory = 'FPPPP____FP_F_P_________________PPPP_FFPPFPPPP____FP_F_P_________________PPPP_FPP____FP_F_P_________'
++ 'FPPPP____FP_F_P_________________PPPP_FFPPFPPPP____FP_F_P_________________PPPP_FPP____FP_F_P_________'
++ 'FPPPP____FP_F_P_________________PPPP_FFPPFPPPP____FP_F_P_________________PPPP_FPP____FP_F_P_________'
++ 'FPPPP____FP_F_P_________________P_FPP____FP_F_P_________'
 export const usePridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const { allPrs, rowSelectionModel } = usePridContainerStore();
+    const { setADia, aDia } = useADiStore();
+    const { openDia } = useADiaHelpers();
     const { prAllTabIds,setPrAllTabIds,curTabIndex, setCurTabIndex} = usePrAllTabsStore();
     const { sRs } = useSRsStore();
 
@@ -40,10 +53,12 @@ export const usePridContainerHelpers = () => {
             desc: ev.desc,
             types: ev.types,
             repeatType: ev.repeatType,
-            history: ev.history,
+            pesults: [],
         };
         dispatch({ type: "INSE", payload: petail });
     };
+
+
 
     const pridColumns: GridColDef[] = [
         // { field: "id", headerName: "ID", width: 20 },
@@ -104,7 +119,24 @@ export const usePridContainerHelpers = () => {
             headerName: "History",
             width: 800,
             editable: true,
-            renderCell: (params) => <strong>{params.value}</strong>,
+            renderCell: (params) => <div style={{display:'flex', height: '100%', width: '100%', position:'relative'}}>
+                <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
+                    {fakeHistory.split('').map((c, i) => {
+                        return <div style={{width:'2px', height:'6px', overflow:'hidden',
+                            background: c === his.pass.c ? 'green' : c === his.fail.c ? 'red' : '#00000050',
+                        }}>.</div>
+                    })}
+                </div>
+                {!aDia &&
+                    <Cooltip title='Add Pesult' placement='top' arrow sx={{position:'absolute', right:0}}>
+                        <IconButton onClick={() => openDia(params.row as Pr)}
+                             sx={{ width: '32px', height: '32px', marginTop: '25px'}}
+                            >
+                            <AddIcon></AddIcon>
+                        </IconButton>
+                    </Cooltip>
+                }
+            </div>
         },
     
         {
@@ -118,6 +150,7 @@ export const usePridContainerHelpers = () => {
     return {
         openPetail,
         pridColumns,
+
     };
 };
 

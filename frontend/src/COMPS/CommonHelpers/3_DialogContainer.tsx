@@ -2,7 +2,6 @@ import { AppBar, Box, Dialog, DialogContent, Grow, IconButton, SxProps, Theme, T
 import { CSSProperties } from "@mui/styles"
 import React, { MouseEventHandler } from "react"
 import CloseIcon from '@mui/icons-material/Close';
-
 export interface IDialogContentProps {
     children: React.ReactNode | null,
     style?: CSSProperties | undefined
@@ -14,7 +13,7 @@ export interface IDialogContainer {
     sx?: SxProps<Theme> | undefined
     style?: CSSProperties | undefined
     fullscreen?: boolean | undefined
-    openDialog: boolean
+    open: boolean
     dialogContentProps?: IDialogContentProps | undefined
     onClose: ((event: {}, reason: "backdropClick" | "escapeKeyDown") => void) | undefined
     onClickClose: MouseEventHandler<HTMLButtonElement> | undefined
@@ -46,7 +45,7 @@ export const ToolbarBox = styled(Box)({
     }
 })
 
-export const DialogContainer = ({ title, openDialog, onClose, onClickClose, dialogId, sx, style, fullscreen, children, disableEnforceFocus, dialogContentProps, toolbar, allowDownloadFile }: IDialogContainer) => {
+export const DialogContainer = ({ title, open, onClose, onClickClose, dialogId, sx, style, fullscreen, children, disableEnforceFocus, dialogContentProps, toolbar, allowDownloadFile }: IDialogContainer) => {
     const { style: dialogcontentStyle } = dialogContentProps ?? {}
     const theme = useTheme();
     const responsiveFullscreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -57,7 +56,7 @@ export const DialogContainer = ({ title, openDialog, onClose, onClickClose, dial
             sx={sx ?? undefined}
             style={style ?? undefined}
             disableEnforceFocus={disableEnforceFocus ?? false}
-            open={openDialog}
+            open={open}
             fullScreen={fullscreen ?? responsiveFullscreen} // default true
             onClose={onClose}>
             {toolbar
@@ -65,14 +64,20 @@ export const DialogContainer = ({ title, openDialog, onClose, onClickClose, dial
                 : <ToolbarBox>
                     <AppBar
                         position="static">
-                        <Toolbar variant="dense">
-                            <div>
-                                {(typeof title === 'string' && <Typography variant='h5'>{title}</Typography>)}
-                                {typeof title !== 'string' && title}
+                        <Toolbar variant="dense" sx={{
+                            justifyContent: 'space-between',
+                        }}>
+                            <div style={{width: 'calc(100% - 48px)'}}>
+                                {typeof title === 'string' && 
+                                    <Typography variant='h5' sx={{
+                                        overflow: 'hidden', 
+                                        whiteSpace: 'nowrap', 
+                                        textOverflow: 'ellipsis'}}>{title}
+                                    </Typography>
+                                }
                             </div>
                             {/* <Grow /> */}
                             <ContentIcon>
-                            
                                 <Tooltip title="Close" aria-label="close">
                                     <IconButton
                                         edge="start"
