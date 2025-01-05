@@ -1,5 +1,5 @@
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
-import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
+import {addTime, dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
 import {sr} from "../../S/TLConstants";
 import {SelectField} from "../../S/TLTypes";
@@ -41,6 +41,7 @@ export const useADiaHelpers = () => {
             feasonCs: '',
             
             activeC: sr.active.active.c,
+            // time: addTime(dateToCDate(new Date()), 0, 0, i, 0, 0), TESTING
             time: dateToCDate(new Date()),
 
             fink: '',

@@ -57,18 +57,17 @@ export const usePrAllTabHelpers = () => {
         const updatePromises = rowSelectionModel.map((id) => {
             const numericId = typeof id === "string" ? parseInt(id, 10) : id; // Ensure `id` is a number
             const pr = allPrs.find((pr) => pr.id === numericId) ?? ({} as PetailForm);
-            return iuPr({ ...pr, activeC: "InAct" });
+            return iuPr({ ...pr, activeC: "InAct", pesults: JSON.stringify(pr.pesults) });
         });
         Promise.all(updatePromises)
             .then((results) => {
-                if(results.every((r) => r.options.success)) {
-                    getPrs()
-                    .then((prs:Pr2[]) => {
-                        let proData = prs.filter((pr) => pr.activeC== 'Act')
-                        proData.forEach((pr) => pr.pesults ? JSON.parse(pr.pesults) : [])
-                        setAllPrs(proData);
-                        enqueueSnackbar("Prs deleted successfully", { variant: "success" });
-                    })
+                if (results.every((r) => r.options.success)) {
+                    getPrs().then((prs: Pr2[]) => {
+                        let proData = prs.filter((pr) => pr.activeC == "Act");
+                        const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
+                        setAllPrs(proData2);
+                        enqueueSnackbar("Prs deleted successfully", {variant: "success"});
+                    });
                 }
             })
             .catch((error) => {

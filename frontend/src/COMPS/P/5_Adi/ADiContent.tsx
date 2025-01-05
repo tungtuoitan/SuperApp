@@ -10,7 +10,6 @@ import {useADiStore} from "./ADiStore";
 import {Pesult} from "../3_Petail/3ty";
 import {useSnackbar} from "notistack";
 import {Pr2, PrsResult} from "../PrTypes";
-import {set} from "lodash";
 
 export function ADiContent() {
     const { allPrs, setAllPrs } = usePridContainerStore();
@@ -22,11 +21,11 @@ export function ADiContent() {
     return (
         <div style={{width: '100%', height: '100%', padding: '20px'}}>
             <div style={{display: 'flex', flexDirection: 'column'}}>
-                <AdiPesult pesultId = {0}/>
-                <ADiFeasons pesultId = {0}/>
-                <AdiDesc pesultId = {0}/>
-                <AdiFink pesultId = {0}/>
-                <AdiIds pesultId = {0}/>
+                <AdiPesult/>
+                <ADiFeasons/>
+                <AdiDesc/>
+                <AdiFink/>
+                <AdiIds/>
             </div>
             <div style={{display: 'flex', justifyContent: 'center', width: '100%', marginTop: '40px'}}>
 

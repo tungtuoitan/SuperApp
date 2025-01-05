@@ -1,11 +1,10 @@
 import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {WRow} from "./5ui";
-import {AdiNameProps} from "./5ty";
 import {useADiStore} from "./ADiStore";
 import {useADiaHelpers} from "./ADiaHelpers";
 
-export default function AdiDesc(props: AdiNameProps) {
+export default function AdiDesc() {
     const evDescSelector = helperMUIcss.getTextFieldMultipleLineCSSSelector("evDesc");
     const { aDia, setADia } = useADiStore();
     const { handleChange } = useADiaHelpers();

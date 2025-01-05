@@ -13,7 +13,7 @@ export default function PridContainer() {
     const { allPrs, rowSelectionModel, setRowSelectionModel } = usePridContainerStore(); 
     const { aDia, setADia } = useADiStore(); 
     const { pridColumns } = usePridContainerHelpers(); 
-    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } = usePrAllTabsStore();
+    const { prAllTabIds } = usePrAllTabsStore();
     const _Dselector = helperMUIcss.getDialogCSSSelector();
     const aDiPr = allPrs.find(pr => pr.id === aDia?.pesult.prId);
 
