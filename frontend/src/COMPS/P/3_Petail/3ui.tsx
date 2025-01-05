@@ -14,10 +14,11 @@ export const LeftEtailPaper = styled(Paper)({
         },
     },
 });
-export const MidEtailPaper = styled(Paper)({
+export const RightPetailPaper = styled(Paper)({
     display: "flex",
     flexFlow: "column",
     margin: 0,
+    width: '68%',
     padding: 20,
     flex: 1,
     [`& .card-content`]: {

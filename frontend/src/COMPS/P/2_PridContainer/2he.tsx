@@ -1,5 +1,7 @@
 import { cDate } from "../../S/TLTypes";
 
+
+
 export function displayCDate(date: cDate): string {
     if (!date) return "";
     const date2 = new Date(date);
@@ -8,3 +10,13 @@ export function displayCDate(date: cDate): string {
     const year: number = date2.getFullYear();
     return `${month}/${day}/${year}`;
 }
+
+
+export function truncateText(text:string, length:number): string {
+    if (text.length > length) {
+        return text.slice(0, length) + '...';
+    }
+    return text;
+}
+
+

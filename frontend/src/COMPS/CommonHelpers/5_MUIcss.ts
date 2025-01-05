@@ -104,4 +104,26 @@ export const helperMUIcss = {
             span4: `div fieldset legend span`,
         }
     },
+    getDialogCSSSelector: () => {
+
+        return {
+            // 0. 
+            div0Class: '.MuiDialog-root', 
+            
+            // 1.D-container
+            div1container: `.MuiDialog-container`,
+            
+            // 2. Paper
+            div2paper: `.MuiDialog-container > .MuiPaper-root`,
+
+            // 3. titlePaper
+            div3title: `.MuiDialog-container > .MuiPaper-root > .MuiBox-root`,
+            div3body: `.MuiDialog-container > .MuiPaper-root > .MuiDialogContent-root`,
+
+            divToolbarRoot: `.MuiDialog-container > .MuiPaper-root > .MuiBox-root > header > .MuiToolbar-root`,
+
+            // use custom ID to get lower level elements
+            divCloseBtn: '.MuiDialog-container > .MuiPaper-root > .MuiBox-root > header > .MuiToolbar-root > div > button'
+        }
+    },
 }

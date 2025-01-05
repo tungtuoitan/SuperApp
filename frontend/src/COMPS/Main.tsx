@@ -14,6 +14,7 @@ import {EtailFormsStoreProvider} from "./S/5_Etail/EtailFormsStore";
 import {PRAllTabsProvider} from "./P/1_PrAllTabs/PrAllTabsStore";
 import {PridContainerProvider} from "./P/2_PridContainer/PridContainerStore";
 import {PetailFormsStoreProvider} from "./P/3_Petail/PetailFormsStore";
+import {ADiProvider} from "./P/5_Adi/ADiStore";
 
 export const Main = () => {
     return (
@@ -44,7 +45,9 @@ export const Main = () => {
                                                             <PRAllTabsProvider>
                                                                 <PridContainerProvider>
                                                                     <PetailFormsStoreProvider>
-                                                                        <SideNav />
+                                                                        <ADiProvider>
+                                                                            <SideNav />
+                                                                        </ADiProvider>
                                                                     </PetailFormsStoreProvider>
                                                                 </PridContainerProvider>
                                                             </PRAllTabsProvider>

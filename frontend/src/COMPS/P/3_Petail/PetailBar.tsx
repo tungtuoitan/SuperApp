@@ -6,7 +6,6 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { PetailForm } from "./3ty";
 import { usePetailFormStore } from "./PetailFormsStore";
 import { usePridContainerStore } from "../2_PridContainer/PridContainerStore";
-import { cDateToUTCDate } from "../../S/3_TimeConfig/TimeHelpers";
 import { iuPr } from "../PrAPIs";
 import { toNumber } from "lodash";
 import { PrsResult } from "../PrTypes";
@@ -31,8 +30,8 @@ export const PetailBar = (props: PetailBarProps) => {
             types: petail.types ?? "Doi",
             repeatType: petail.repeatType,
 
-            timeStart: cDateToUTCDate(petail.timeStart),
-            timeEnd: petail.timeEnd ? cDateToUTCDate(petail.timeEnd) : null,
+            timeStart: petail.timeStart, // dont convert to UTC, cuz we dont use time, just use date. so dont care about time/timezone
+            timeEnd: petail.timeEnd ? petail.timeEnd : null,
 
             activeC: petail.activeC,
             statusC: petail.statusC,
@@ -40,6 +39,8 @@ export const PetailBar = (props: PetailBarProps) => {
 
             fink: petail.fink,
             desc: petail.desc,
+
+            pesults: JSON.stringify(petail.pesults),
         };
 
         if(x.id === 0) {
@@ -60,7 +61,7 @@ export const PetailBar = (props: PetailBarProps) => {
                         prioriC: data.prs[0].prioriC,
                         fink: data.prs[0].fink,
                         desc: data.prs[0].desc,
-                        history: "",
+                        pesults: JSON.parse(data.prs[0].pesults),
                     };
                     dispatch({ type: "INSE", payload: newPetail });
                     const newPrAllTabIds = [...prAllTabIds];
@@ -89,7 +90,7 @@ export const PetailBar = (props: PetailBarProps) => {
                         prioriC: data.prs[0].prioriC,
                         fink: data.prs[0].fink,
                         desc: data.prs[0].desc,
-                        history: "",
+                        pesults: JSON.parse(data.prs[0].pesults),
                     };
                     dispatch({ type: "UPDA", payload: newPetail });
                 } 
@@ -113,8 +114,8 @@ export const PetailBar = (props: PetailBarProps) => {
                 types: pr.types,
                 repeatType: pr.repeatType,
 
-                timeStart: cDateToUTCDate(pr.timeStart),
-                timeEnd: pr.timeEnd ? cDateToUTCDate(pr.timeEnd) : null,
+                timeStart: pr.timeStart,
+                timeEnd: pr.timeEnd ? pr.timeEnd : null,
 
                 activeC: pr.activeC,
                 statusC: pr.statusC,
@@ -122,6 +123,8 @@ export const PetailBar = (props: PetailBarProps) => {
 
                 fink: pr.fink,
                 desc: pr.desc,
+
+                pesults: pr.pesults,
             };
         } else {
             x = {
@@ -141,6 +144,8 @@ export const PetailBar = (props: PetailBarProps) => {
 
                 fink: "",
                 desc: "",
+
+                pesults: []
             };
         }
         dispatch({ type: "UPDA", payload: x });

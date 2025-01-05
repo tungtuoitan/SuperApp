@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { EtailContainer, LeftEtailPaper, MidEtailPaper, RightEtailPaper, WBody } from "./3ui";
+import { EtailContainer, LeftEtailPaper, RightPetailPaper, WBody } from "./3ui";
 import {PetailBar} from "./PetailBar";
 import {PetailForm, PetailProps} from "./3ty";
 import LaperIds from "../3L_Laper/LaperIds";
@@ -12,8 +12,7 @@ import LaperTimeStartTimeEnd from "../3L_Laper/LaperTimeStartTimeEnd";
 import LaperTypes from "../3L_Laper/LaperTypes";
 import LaperRepeat from "../3L_Laper/LaperRepeatType";
 import LaperDetail from "../3L_Laper/LaperDesc";
-
-
+import PeridContainer from "../4_PeridContainer/PeridContainer";
 
 export default function Petail(props: PetailProps) {
     const { petailId } = props;
@@ -37,11 +36,12 @@ export default function Petail(props: PetailProps) {
                     <LaperFink id={petailId} />
                     <LaperRepeat id={petailId} />
                     <LaperTypes id={petailId} />
-                </LeftEtailPaper>
-                <MidEtailPaper>
                     <LaperDetail id={petailId} />
-                </MidEtailPaper>
-                <RightEtailPaper></RightEtailPaper>
+                </LeftEtailPaper>
+                <RightPetailPaper>
+                    <PeridContainer petailId={petailId} />
+                </RightPetailPaper>
+                {/* <RightEtailPaper></RightEtailPaper> */}
             </WBody>
         </EtailContainer>
     );
