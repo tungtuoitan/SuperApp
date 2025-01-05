@@ -8,6 +8,7 @@ type PeridContainerProps = {
 export default function PeridContainer(props: PeridContainerProps) {
     const { allPrs } = usePridContainerStore(); 
     const { peridColumns } = usePeridContainerHelpers(); 
+    const pr = allPrs.find(pr => pr.id === props.petailId);
 
     return (
         <div id="PeridContainer" style={{ width: "100%", height: "100%", fontSize: "12px" }}>
@@ -23,9 +24,9 @@ export default function PeridContainer(props: PeridContainerProps) {
                 }}
             >
                 <DataGrid
-                    rows={allPrs}
+                    rows={pr?.pesults ?? []}
                     columns={peridColumns}
-                    // rowHeight={50}
+                    rowHeight={67}
                     // checkboxSelection
                     // disableRowSelectionOnClick
                     // rowSelectionModel={rowSelectionModel}

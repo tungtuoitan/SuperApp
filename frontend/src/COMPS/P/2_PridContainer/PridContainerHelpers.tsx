@@ -1,7 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { Pr } from "../PrTypes";
 import { Line, Nink } from "./2ui";
-import { displayCDate } from "./2he";
+import { displayCDate, getDayIndex, getIndexesOfFirstDayOfAllMonth } from "./2he";
 import { PetailForm } from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {usePridContainerStore} from "./PridContainerStore";
@@ -13,12 +13,9 @@ import AddIcon from '@mui/icons-material/Add';
 import {Cooltip} from "../../CommonHelpers/2_CoolTip";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
+import { dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 
 
-const fakeHistory = 'FPPPP____FP_F_P_________________PPPP_FFPPFPPPP____FP_F_P_________________PPPP_FPP____FP_F_P_________'
-+ 'FPPPP____FP_F_P_________________PPPP_FFPPFPPPP____FP_F_P_________________PPPP_FPP____FP_F_P_________'
-+ 'FPPPP____FP_F_P_________________PPPP_FFPPFPPPP____FP_F_P_________________PPPP_FPP____FP_F_P_________'
-+ 'FPPPP____FP_F_P_________________P_FPP____FP_F_P_________'
 export const usePridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const { allPrs, rowSelectionModel } = usePridContainerStore();
@@ -65,7 +62,7 @@ export const usePridContainerHelpers = () => {
         {
             field: "info",
             headerName: "Info",
-            width: 300,
+            width: 220,
             renderCell: (params) => {
                 const r = params.row as Pr;
                 return (
@@ -81,17 +78,17 @@ export const usePridContainerHelpers = () => {
                         }}
                     >
                         {Nink(r.id, r.name, "")}
-                        {Line("Parent ID", allPrs.filter(pr => pr.id === r.parentId)[0]?.name)}
-                        {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.desc)}
                         {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
+                        {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
+                        {Line("Parent ID", allPrs.filter(pr => pr.id === r.parentId)[0]?.name)}
                     </div>
                 );
             },
         },
         {
-            field: "sub-info",
+            field: "sub-info",  
             headerName: "Sub Info",
-            width: 300,
+            width: 200,
             renderCell: (params) => {
                 const r = params.row as Pr;
                 return (
@@ -106,7 +103,7 @@ export const usePridContainerHelpers = () => {
                             fontSize: "12px",
                         }}
                     >
-                        {Line("Types", r.types?.split(',').map(t => sRs.filter(sr => sr.code === t)[0]?.desc).join(", "))}
+                        {Line("Types", r.types?.split(';').map(typeC => sRs.filter(sr => sr.code === typeC)[0]?.desc).join("; "))}
                         {Line("Repeat Type", sRs.filter(sr => sr.code === r.repeatType)[0]?.desc)}
                         {Line("Time Start", displayCDate(r.timeStart))}
                         {Line("Time End", r.timeEnd ? displayCDate(r.timeEnd) : null)}
@@ -117,33 +114,63 @@ export const usePridContainerHelpers = () => {
         {
             field: "history",
             headerName: "History",
-            width: 800,
+            width: 1150,
             editable: true,
-            renderCell: (params) => <div style={{display:'flex', height: '100%', width: '100%', position:'relative'}}>
-                <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
-                    {fakeHistory.split('').map((c, i) => {
-                        return <div style={{width:'2px', height:'6px', overflow:'hidden',
-                            background: c === his.pass.c ? 'green' : c === his.fail.c ? 'red' : '#00000050',
-                        }}>.</div>
-                    })}
-                </div>
-                {!aDia &&
-                    <Cooltip title='Add Pesult' placement='top' arrow sx={{position:'absolute', right:0}}>
-                        <IconButton onClick={() => openDia(params.row as Pr)}
-                             sx={{ width: '32px', height: '32px', marginTop: '25px'}}
-                            >
-                            <AddIcon></AddIcon>
-                        </IconButton>
-                    </Cooltip>
+            renderCell: (params) => {
+                const pr = params.row as Pr;
+                const year = new Date(pr.timeStart).getFullYear();
+                const indexes1 = getIndexesOfFirstDayOfAllMonth(year);
+                let histories = '';
+                const dayIndexs = pr.pesults.map(p => getDayIndex(p.time));
+                for(let i = 0; i < 365; i++) {
+                    if (dayIndexs.includes(i)) {
+                        const thatPesult = pr.pesults.filter(p => getDayIndex(p.time) === i)[0];
+                        if(thatPesult && thatPesult.pesultC === his.pass.c) histories += 'P';
+                        else if(thatPesult && thatPesult.pesultC === his.fail.c) histories += 'F';
+                        else {
+                            histories += '_';
+                        }
+                    }
+                    else {
+                        histories += '_';
+                    }
                 }
-            </div>
+                const isAlreadyAdd = ():boolean => {
+                    if(pr.pesults.length === 0) return false;
+                    const indexOfLastPesult = getDayIndex(pr.pesults[pr.pesults.length - 1].time)
+                    const indexOfToday = getDayIndex(dateToCDate(new Date()));
+                    return indexOfLastPesult >=indexOfToday
+                }
+
+                return <div style={{display:'flex', height: '100%', width: '100%', position:'relative'}}>
+                    <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
+                        {histories.split('').map((h, i) => {
+                            const color = h === his.pass.c ? '#23F51B' : h === his.fail.c ? 'red' : '#00000010';
+                            return <div style={{width:'3px', height:'10px',
+                                background: indexes1.includes(i) 
+                                ? `linear-gradient(to bottom, transparent 50%, ${color} 50%)`
+                                : color
+                            }}/>
+                        })}
+                    </div>
+                    {(!aDia && !isAlreadyAdd()) &&
+                        <Cooltip title='Add Pesult' placement='top' arrow sx={{position:'absolute', right:0}}>
+                            <IconButton onClick={() => openDia(params.row as Pr)}
+                                sx={{ width: '32px', height: '32px', marginTop: '25px'}}
+                                >
+                                <AddIcon></AddIcon>
+                            </IconButton>
+                        </Cooltip>
+                    }
+                </div>
+            }
         },
     
         {
             field: "desc",
             headerName: "Desc",
-            width: 300,
-            editable: true,
+            width: 250,
+            editable: false,
         },
     ];
 

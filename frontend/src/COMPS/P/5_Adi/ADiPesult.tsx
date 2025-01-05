@@ -1,11 +1,10 @@
 import {WRow} from "./5ui";
-import {AdiNameProps} from "./5ty";
 import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
 import {his} from "../4_PeridContainer/4ty";
 import {useADiStore} from "./ADiStore";
 import {useADiaHelpers} from "./ADiaHelpers";
 
-export default function AdiPesult(props: AdiNameProps) {
+export default function AdiPesult() {
     const { handleChange } = useADiaHelpers();
     const { aDia, setADia } = useADiStore();
     
@@ -20,18 +19,6 @@ export default function AdiPesult(props: AdiNameProps) {
                 height: '30px',
                 width: '100%',
             }}>
-            {/* <FormLabel
-                sx={{
-                    textAlign: 'left', 
-                    fontSize: 10, 
-                    position: 'relative', 
-                    width: 42, 
-                    background: 'white',
-                    // top: '-18px',
-                    left: '10px',
-                    padding: '0 5px 0 5px',
-                }}
-            >Priority</FormLabel> */}
             <RadioGroup
             name="pesultC" 
             value={aDia?.pesult.pesultC} 
@@ -63,7 +50,6 @@ export default function AdiPesult(props: AdiNameProps) {
                         },
                     }}
                 />}/>
-                {/* <FormControlLabel value={his.empty.c} control={<Radio size="small" />} label={his.empty.d} /> */}
             </RadioGroup>
         </FormControl>
     </WRow>

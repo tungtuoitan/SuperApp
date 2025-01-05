@@ -10,13 +10,10 @@ export default function PRContainer() {
 
     useEffect(() => {
         getPrs()
-        .then((data: Pr2[]) => {
-            let proData = data.filter((pr) => pr.activeC== 'Act')
-            proData.map((pr) => {
-                pr.pesults = pr.pesults ? JSON.parse(pr.pesults) : []
-                return pr
-            })
-            setAllPrs(proData);
+        .then((prs: Pr2[]) => {
+            let proData = prs.filter((pr) => pr.activeC == "Act");
+            const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
+            setAllPrs(proData2);
         });
     }, []);
 

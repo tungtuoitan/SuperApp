@@ -6,7 +6,7 @@ import {AdiFinkProps} from "./5ty";
 import {useADiaHelpers} from "./ADiaHelpers";
 import {useADiStore} from "./ADiStore";
 
-export default function AdiFink(props: AdiFinkProps) {
+export default function AdiFink() {
     const selector = helperMUIcss.getTextFieldCSSSelector("fink");
     const { handleChange } = useADiaHelpers();
     const { aDia, setADia } = useADiStore();

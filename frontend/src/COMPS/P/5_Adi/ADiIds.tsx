@@ -2,16 +2,11 @@
 import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {WRow} from "./5ui";
-import {AdiIdsProps} from "./5ty";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {Pesult, PetailForm} from "../3_Petail/3ty";
-import {usePridContainerStore} from "../2_PridContainer/PridContainerStore";
-import {Pr} from "../PrTypes";
 import {useADiStore} from "./ADiStore";
 import {useADiaHelpers} from "./ADiaHelpers";
 
 
-export default function AdiIds(props: AdiIdsProps) {
+export default function AdiIds() {
     const evNameSelector = helperMUIcss.getTextFieldCSSSelector("evName");
     const parentIdSelector = helperMUIcss.getTextFieldCSSSelector("parentId");
     const evIdSelector = helperMUIcss.getTextFieldCSSSelector("evID");

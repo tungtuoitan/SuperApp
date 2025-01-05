@@ -1,7 +1,6 @@
 import {FormControlLabel} from "@mui/material";
 import {Checkbox} from "@mui/material";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
-import {AdiFeasonsProps} from "./5ty";
 import {FCSubType, WRow} from "./5ui";
 import {toggleX} from "./5he";
 import {useADiStore} from "./ADiStore";
@@ -9,7 +8,7 @@ import {useADiaHelpers} from "./ADiaHelpers";
 
 
 
-export default function ADiFeasons(props: AdiFeasonsProps) {
+export default function ADiFeasons() {
     const { handleChange } = useADiaHelpers();
     const { aDia, setADia } = useADiStore();
     const { sRs } = useSRsStore();
