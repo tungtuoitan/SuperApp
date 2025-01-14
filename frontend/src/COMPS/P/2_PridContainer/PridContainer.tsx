@@ -32,7 +32,7 @@ export default function PridContainer() {
             >
                 <DataGrid
                     rows={allPrs}
-                    columns={pridColumns}
+                    columns={pridColumns()}
                     rowHeight={85}
                     checkboxSelection
                     disableRowSelectionOnClick
@@ -51,7 +51,7 @@ export default function PridContainer() {
                 children={<ADiContent />}
                 sx={{
                     [_Dselector.div2paper]: {
-                        width: '800px', height: '500px',
+                        width: '800px', height: '560px',
                     },
                 }}
             ></DialogContainer>

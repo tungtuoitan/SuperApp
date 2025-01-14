@@ -10,6 +10,7 @@ import {useADiStore} from "./ADiStore";
 import {Pesult} from "../3_Petail/3ty";
 import {useSnackbar} from "notistack";
 import {Pr2, PrsResult} from "../PrTypes";
+import ADiTime from "./ADiTime";
 
 export function ADiContent() {
     const { allPrs, setAllPrs } = usePridContainerStore();
@@ -17,11 +18,11 @@ export function ADiContent() {
     const { enqueueSnackbar } = useSnackbar();
 
 
-
     return (
         <div style={{width: '100%', height: '100%', padding: '20px'}}>
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <AdiPesult/>
+                <ADiTime/>
                 <ADiFeasons/>
                 <AdiDesc/>
                 <AdiFink/>

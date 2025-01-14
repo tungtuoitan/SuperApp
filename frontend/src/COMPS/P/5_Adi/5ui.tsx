@@ -187,3 +187,31 @@ export const RGType = styled(RadioGroup)({
     top: "-19px",
     padding: "0 10px 0 10px",
 });
+
+
+export const ADiTimePicker = styled(DatePicker)({
+    height: 30,
+    width: "calc((100% - 10px)/2)", // 10px is gap
+    [`& ${dpSelector.div1}`]: {
+        height: 30,
+    },
+    [`& ${dpSelector.label1Shrink}`]: {
+        fontSize: "12px",
+        top: 3,
+    },
+    [`& ${dpSelector.label1NoShrink}`]: {
+        top: -8,
+    },
+    [`& ${dpSelector.input2}`]: {
+        height: 30,
+        padding: "0px 0px 0 10px",
+        fontSize: "12px",
+    },
+    [`& ${dpSelector.button3}`]: {
+        // height: 30,
+        padding: "0 !important",
+    },
+    [`& ${dpSelector.legend3}`]: {
+        width: "32px",
+    },
+});

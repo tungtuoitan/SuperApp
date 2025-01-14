@@ -11,7 +11,10 @@ import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import SavingsIcon from '@mui/icons-material/Savings';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import MovingIcon from '@mui/icons-material/Moving';import NearMeIcon from '@mui/icons-material/NearMe';
-import {styled} from "@mui/material";
+import {styled} from "@mui/material";import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 export const classes =  
   {
       grow: {
@@ -108,9 +111,16 @@ export const sitemaps = [
     } as SAModule,
     {
         id: (sitemapId++).toString(),
-        name: "Feasons",
-        code: "feasons",
-        link: '/feasons',
+        name: "Self Discipline",
+        code: "self-discipline",
+        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7187-7468&t=VVeIDUNTdR22vWNC-11'),
+        open: true,
+    } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "Health",
+        code: "health",
+        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7228-7274&t=9qoy0iKBEDHQbRwU-11'),
         open: true,
     } as SAModule,
 ] as SAModule[];
@@ -126,20 +136,20 @@ export const getIcon = (code: string) => {
             </Wicon>)}
         case 'schedule': { return (
             <Wicon>
-                <TimelineIcon/>
+                <CalendarMonthIcon/>
             </Wicon>)}
         case 'accounts': { return (
             <Wicon>
-                <FolderSharedIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}/>
+                <SwitchAccountIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}/>
             </Wicon>)}
         case 'finance': { return (
             <Wicon>
                 <SavingsIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}/>
             </Wicon>)}
         
-        case 'feasons': { return (
+        case 'self-discipline': { return (
             <Wicon>
-                <CallMadeIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
+                <SelfImprovementIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
                 />
             </Wicon>)}
         // case 'practice': { return <NearMeIcon />}
@@ -148,5 +158,11 @@ export const getIcon = (code: string) => {
                 <span style={{color: 'white', fontSize:14,position:'relative',left:4, top:0, fontWeight:'bold', textDecoration:'none !important'}}>Pr</span>
                 <NearMeIcon sx={{fontSize:16}} />
             </Wicon>)}
+        case 'health': { return (
+            <Wicon>
+                <LocalHospitalIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
+                />
+            </Wicon>)}
+
     }
 }

@@ -22,6 +22,7 @@ export default function LaperDetail(props: LaperNameProps) {
                 minRows={4}
                 value={etail.desc??''}
                 spellCheck={false}
+                autoComplete="off"
                 onChange={(e) => {
                     if (e.target && e.target.name) {
                         handleChange(etail.id, e.target.name, e.target.value??'');

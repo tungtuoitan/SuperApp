@@ -18,6 +18,7 @@ export default function LaperFink(props: LaperFinkProps) {
                 id={"fink" + etail.id}
                 name="fink"
                 label="FigJam Link"
+                autoComplete="off"
                 value={etail.fink??''}
                 onChange={(e) => {
                     if (e.target && e.target.name) {
