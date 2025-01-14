@@ -50,6 +50,14 @@ export default function AdiPesult() {
                         },
                     }}
                 />}/>
+                 <FormControlLabel value={his.empty.c} label={'__'} control={<Radio size="small" 
+                    sx={{
+                        color: 'gray',
+                        '&.Mui-checked': {
+                        color: 'gray',
+                        },
+                    }}
+                />}/>
             </RadioGroup>
         </FormControl>
     </WRow>

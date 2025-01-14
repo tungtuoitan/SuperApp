@@ -21,6 +21,7 @@ export default function LaperName(props: LaperNameProps) {
                 name="name"
                 label="Event Name"
                 value={etail.name??''}
+                autoComplete="off"
                 onChange={(e) => {
                     // setEtailForm({ name: e.target.value });
                     if (e.target && e.target.name) {

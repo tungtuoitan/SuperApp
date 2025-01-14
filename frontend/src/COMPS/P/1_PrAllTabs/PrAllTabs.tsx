@@ -62,7 +62,7 @@ export const PRAllTabs = () => {
                             onMouseLeave={() => setHoverId(null)}
                             label={
                                 <WBadge color="primary" max={99}>
-                                    {(pr && pr.name.length > 40 ? pr.name.slice(0, 35) + "..." : pr?.name) ?? "New Pr"}
+                                    {(pr && pr.name.length > 35 ? pr.name.slice(0, 32) + "..." : pr?.name) ?? "New Pr"}
                                 </WBadge>}
                             icon={index > 0 ?
                                 <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
