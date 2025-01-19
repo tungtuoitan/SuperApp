@@ -10,7 +10,7 @@ import {truncateText} from "./2he";
 import {useADiStore} from "../5_Adi/ADiStore";
 
 export default function PridContainer() {
-    const { allPrs, rowSelectionModel, setRowSelectionModel } = usePridContainerStore(); 
+    const { allPrs, rowSelectionModel, setRowSelectionModel, refreshPrid } = usePridContainerStore(); 
     const { aDia, setADia } = useADiStore(); 
     const { pridColumns } = usePridContainerHelpers(); 
     const { prAllTabIds } = usePrAllTabsStore();
@@ -34,11 +34,15 @@ export default function PridContainer() {
                     rows={allPrs}
                     columns={pridColumns()}
                     rowHeight={85}
+                    loading={refreshPrid}
                     checkboxSelection
                     disableRowSelectionOnClick
                     rowSelectionModel={rowSelectionModel}
                     isRowSelectable={(params: GridRowParams) => !prAllTabIds.includes(toNumber(params.row.id))}
                     onRowSelectionModelChange={newX => setRowSelectionModel(newX)}
+                    getRowClassName={(params) => {
+                        return prAllTabIds.includes(toNumber(params.id)) ? "opening-pr-row" : "normal-pr-row";
+                    }}
                 />
             </div>
 

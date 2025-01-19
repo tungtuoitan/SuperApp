@@ -29,8 +29,11 @@ export const constants = {
         getEvents: "Ev/GetEvs",
         iuEv: "Ev/IuEv",
         getSRs: "SRs/GetSRs",
-        getPrs: "Pr/GetPrs",
+        getPrs: "Pr/GetPrs", 
         iuPr: "Pr/IuPr",
+        iuUserProfile: "UserProfile/IuUserProfile",
+        getUserProfile: "UserProfile/GetUserProfileJson",
+        getPrParentIds: "PrFilter/GetPrParentIds",
     },
     accessRightsComponents: {
         finShark: "finShark",

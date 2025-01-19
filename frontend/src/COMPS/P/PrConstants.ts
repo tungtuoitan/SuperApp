@@ -21,3 +21,23 @@ export type PrType = 'doit' | 'task'
 //         reminder: 'reminder',
 //     }
 // }
+
+
+export const pr = {
+    applicationCode: 'pr',
+    gradientColor: [
+        'rgb(48 63 70 / 100%)',
+        'rgb(48 63 70 / 80%)',
+        'rgb(48 63 70 / 60%)',
+        'rgb(48 63 70 / 50%)',
+        'rgb(48 63 70 / 35%)'
+    ],
+    filterOption: {
+        parent: 'parent',
+        priority: 'priority',
+        status: 'status',
+        type: 'type',
+        repeatType: 'repeatType',
+        isUpdatedToday: 'isUpdatedToday',
+    },
+}

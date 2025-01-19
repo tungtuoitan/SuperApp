@@ -56,17 +56,17 @@ export const useChildEvHelpers = () => {
                     const h$difference = cDateToGh(newTime) - cDateToGh(ev.timeEnd); 
                     newAllEvs = newAllEvs.map((_ev: Ev) => {
                         if (_ev.id === id) {
-                            if (keyboardState.shift)
-                                return {..._ev,timeStart: GhToCDate(cDateToGh(newTime) - h$start_end),timeEnd: newTime,};
-                            else 
+                            // if (keyboardState.shift)
+                            //     return {..._ev,timeStart: GhToCDate(cDateToGh(newTime) - h$start_end),timeEnd: newTime,};
+                            // else 
                                 return { ..._ev, timeEnd: newTime };
                         }
-                        else if(allDescendants.find(e => e.id===_ev.id)){
-                            if (keyboardState.shift)
-                                return {..._ev,timeStart: GhToCDate(cDateToGh(_ev.timeStart)+ h$difference),timeEnd: GhToCDate(cDateToGh(_ev.timeEnd)+ h$difference)}
-                            else
-                                return _ev;
-                        }
+                        // else if(allDescendants.find(e => e.id===_ev.id)){
+                        //     if (keyboardState.shift)
+                        //         return {..._ev,timeStart: GhToCDate(cDateToGh(_ev.timeStart)+ h$difference),timeEnd: GhToCDate(cDateToGh(_ev.timeEnd)+ h$difference)}
+                        //     else
+                        //         return _ev;
+                        // }
                         return _ev;
                     });
                 }

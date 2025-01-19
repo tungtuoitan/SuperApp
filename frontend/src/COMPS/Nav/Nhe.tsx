@@ -7,13 +7,13 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import WeekendIcon from '@mui/icons-material/Weekend';
-import FolderSharedIcon from '@mui/icons-material/FolderShared';
+import FolderSharedIcon from '@mui/icons-material/FolderShared';import BlockIcon from '@mui/icons-material/Block';
 import SavingsIcon from '@mui/icons-material/Savings';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import MovingIcon from '@mui/icons-material/Moving';import NearMeIcon from '@mui/icons-material/NearMe';
 import {styled} from "@mui/material";import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
+import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 export const classes =  
   {
@@ -123,6 +123,20 @@ export const sitemaps = [
         link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7228-7274&t=9qoy0iKBEDHQbRwU-11'),
         open: true,
     } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "Principle",
+        code: "principle",
+        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7440-2179&t=j7iqDVsFAFmAsQEH-11'),
+        open: true,
+    } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "Grateful List",
+        code: "gratefulList",
+        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7441-2184&t=j7iqDVsFAFmAsQEH-11'),
+        open: true,
+    } as SAModule,
 ] as SAModule[];
 
 const Wicon = styled('div')({
@@ -161,6 +175,16 @@ export const getIcon = (code: string) => {
         case 'health': { return (
             <Wicon>
                 <LocalHospitalIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
+                />
+            </Wicon>)}
+        case 'principle': { return (
+            <Wicon>
+                <BlockIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
+                />
+            </Wicon>)}
+        case 'gratefulList': { return (
+            <Wicon>
+                <VolunteerActivismIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
                 />
             </Wicon>)}
 

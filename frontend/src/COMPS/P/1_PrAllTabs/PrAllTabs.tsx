@@ -12,6 +12,7 @@ import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import AddIcon from "@mui/icons-material/Add";
 import {usePrAllTabHelpers} from "./PrAllTabHelpers";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import {SearchAndFilter} from "../7_Toolbars/SearchAndFilter";
 
 export const PRAllTabs = () => {
     const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } =
@@ -90,6 +91,7 @@ export const PRAllTabs = () => {
                         <RemoveCircleIcon sx={{ fontSize: 16, color: 'red' }} />
                     </IconButton>
                 }
+                {curTabIndex==0 && <SearchAndFilter />}
             </WTabBar>
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
