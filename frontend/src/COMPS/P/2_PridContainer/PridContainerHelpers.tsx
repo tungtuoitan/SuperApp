@@ -54,7 +54,7 @@ export const usePridContainerHelpers = () => {
             desc: ev.desc,
             types: ev.types,
             repeatType: ev.repeatType,
-            pesults: [],
+            pesults: ev.pesults,
         };
         dispatch({ type: "INSE", payload: petail });
     };
@@ -141,7 +141,7 @@ export const usePridContainerHelpers = () => {
                     const indexOfToday = getDayIndex(dateToCDate(new Date()));
                     return indexOfLastPesult >=indexOfToday
                 }
-                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd()
+                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !prAllTabIds.includes(r.id);
                 return (
                     <div
                         style={{
@@ -229,7 +229,7 @@ export const usePridContainerHelpers = () => {
                     <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
                         {histories.split('').map((h, i) => {
                             const color = h === his.pass.c ? '#23F51B' : h === his.fail.c ? 'red' : '#00000010';
-                            return <div style={{width:'3px', height:'10px',
+                            return <div  key={i} style={{width:'3px', height:'10px',
                                 background: indexes1.includes(i) 
                                 ? `linear-gradient(to bottom, transparent 50%, ${color} 50%)`
                                 : color

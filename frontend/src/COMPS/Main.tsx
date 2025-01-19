@@ -15,6 +15,8 @@ import {PRAllTabsProvider} from "./P/1_PrAllTabs/PrAllTabsStore";
 import {PridContainerProvider} from "./P/2_PridContainer/PridContainerStore";
 import {PetailFormsStoreProvider} from "./P/3_Petail/PetailFormsStore";
 import {ADiProvider} from "./P/5_Adi/ADiStore";
+import {MainFilterDrawerProvider} from "./P/6_Filter/Drawer/DrawerStore";
+import {PrFilterStoreProvider} from "./P/6_Filter/PrFilterStore";
 
 export const Main = () => {
     return (
@@ -46,7 +48,11 @@ export const Main = () => {
                                                                 <PridContainerProvider>
                                                                     <PetailFormsStoreProvider>
                                                                         <ADiProvider>
-                                                                            <SideNav />
+                                                                            <MainFilterDrawerProvider>
+                                                                            <PrFilterStoreProvider>
+                                                                                <SideNav />
+                                                                            </PrFilterStoreProvider>
+                                                                            </MainFilterDrawerProvider>
                                                                         </ADiProvider>
                                                                     </PetailFormsStoreProvider>
                                                                 </PridContainerProvider>

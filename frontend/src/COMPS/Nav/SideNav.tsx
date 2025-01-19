@@ -1,6 +1,6 @@
 import { useNavigationStore } from "./NavStore";
 import { Drawer } from "@mui/material";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { SideMenu } from "./SideMenu";
 import LoginContainer from "../Login/LoginContainer";
 import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
@@ -29,6 +29,7 @@ import {PRAllTabs} from "../P/1_PrAllTabs/PrAllTabs";
 import {SR} from "../S/8_SRs/8ty";
 import {useSRsStore} from "../S/8_SRs/SRsStore";
 import {IAutoCompleteOptions} from "../CommonHelpers/4_GenericAutoComplete";
+import {useAllTabsStore} from "../S/6_AllTabs/TLAllTabsStore";
 
 const SideNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -42,7 +43,8 @@ const SideNav: React.FC<
     const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } =useTLBaseBgHelpers();
     const { changeLevel, changeTimeStart } = useTimeHelpers();
     const { sRs, setSRs, setLevelOptions, setRepeatTypeOptions } = useSRsStore();
-
+    const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
+    const location = useLocation()
 
     useEffect(() => {
         getSRs()
@@ -294,7 +296,8 @@ const SideNav: React.FC<
                         break;
                     default:
                 }
-            } else {
+            } 
+            else if(location.pathname === '/schedule' && curTabIndex === 0) {
                 if (e.key === "ArrowUp") changeLevel("down");
                 if (e.key === "ArrowDown") changeLevel("up");
                 if (e.key === "ArrowLeft") changeTimeStart("prev");

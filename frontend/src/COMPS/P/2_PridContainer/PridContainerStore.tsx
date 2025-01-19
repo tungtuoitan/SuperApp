@@ -9,6 +9,19 @@ export interface PridContainerContextData {
     setIsFirstTime: Dispatch<SetStateAction<boolean>>;
     rowSelectionModel: GridRowSelectionModel;
     setRowSelectionModel: Dispatch<SetStateAction<GridRowSelectionModel>>;
+    refreshPrid: boolean;
+    setRefreshPrid: Dispatch<SetStateAction<boolean>>;
+    pageSize: number;
+    setPageSize: Dispatch<SetStateAction<number>>;
+    totalRows: number;
+    setTotalRows: Dispatch<SetStateAction<number>>;
+    currentPage: number;
+    setCurrentPage: Dispatch<SetStateAction<number>>;
+    searchText: string;
+    setSearchText: Dispatch<SetStateAction<string>>;
+    loadingPrid: boolean;
+    setLoadingPrid: Dispatch<SetStateAction<boolean>>;
+
 };
 
 export const PridContainerContextDefaultValue: PridContainerContextData = {
@@ -18,6 +31,18 @@ export const PridContainerContextDefaultValue: PridContainerContextData = {
     setIsFirstTime: () => { },
     rowSelectionModel: [],
     setRowSelectionModel: () => { },
+    refreshPrid: false,
+    setRefreshPrid: () => { },
+    pageSize: 100,
+    setPageSize: () => { },
+    totalRows: 0,
+    setTotalRows: () => { },
+    currentPage: 0,
+    setCurrentPage: () => { },
+    searchText: '',
+    setSearchText: () => { },
+    loadingPrid: true,
+    setLoadingPrid: () => { },
 };
 
 const PridContainerStore = createContext<PridContainerContextData>(PridContainerContextDefaultValue);
@@ -28,6 +53,14 @@ export const PridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
+    const [refreshPrid, setRefreshPrid] = useState<boolean>(false);
+    
+    const [pageSize, setPageSize] = useState<number>(100);
+    const [totalRows, setTotalRows] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [searchText, setSearchText] = useState<string>('');
+    const [loadingPrid, setLoadingPrid] = useState<boolean>(true);
+
     return (
         <PridContainerStore.Provider
             value={{
@@ -37,6 +70,18 @@ export const PridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setIsFirstTime,
                 rowSelectionModel,
                 setRowSelectionModel,
+                refreshPrid,
+                setRefreshPrid,
+                pageSize,
+                setPageSize,
+                totalRows,
+                setTotalRows,
+                currentPage,
+                setCurrentPage,
+                searchText,
+                setSearchText,
+                loadingPrid,
+                setLoadingPrid,
             }}>
             {children}
         </PridContainerStore.Provider>

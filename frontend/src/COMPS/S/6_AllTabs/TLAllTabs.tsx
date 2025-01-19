@@ -10,6 +10,7 @@ import { WBadge, WTabBar, WTabsContainer} from "./6ui";
 import {a11yProps} from "./6he";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import CloseIcon from '@mui/icons-material/Close';
+import {useLocation} from "react-router-dom";
 
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -17,6 +18,7 @@ export const TLAllTabs = () => {
     const { windowWidth, setWindowWidth } = useTLBaseBgStore();
     const [etails, dispatch] = useEtailFormStore();
     const [hoverId, setHoverId] = useState<number | string | null>(null);
+
 
     useEffect(() => {
       const handleResize = () => setWindowWidth(window.innerWidth);

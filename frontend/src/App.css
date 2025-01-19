@@ -82,3 +82,19 @@ display: none ;
     text-decoration: underline;
     color: rgb(0, 80, 184);
 }
+
+
+.opening-pr-row {
+    background-color: lightblue;
+}
+
+.normal-pr-option-row {
+    /* border: 5px solid red !important; */
+}
+
+
+
+.filter-option-grid .MuiDataGrid-root,
+.filter-option-grid .MuiDataGrid-cell {
+    border: 1px solid transparent !important;
+}
