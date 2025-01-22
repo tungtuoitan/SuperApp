@@ -60,7 +60,7 @@ export const Nink = (id: number, title: string, link: string) => {
     return (
         <>
             {(rowSelectionModel.includes(id)||rowSelectionModel.includes(id.toString())) 
-                ? <div style={{fontWeight:'bold'}}>{truncateText(title.toUpperCase(), 38)}</div>
+                ? <div style={{fontWeight:'bold'}}>{truncateText(title, 66)}</div>
                 : 
                 <Link 
                     className="nink" 
@@ -68,7 +68,7 @@ export const Nink = (id: number, title: string, link: string) => {
                     style={{ textDecoration: "none", fontWeight: "bold" }}
                     onClick={(e) => openPetail(id)}
                     >
-                        {truncateText(title.toUpperCase(), 38)}
+                        {truncateText(title, 66)}
                 </Link>
             }
         </>

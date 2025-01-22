@@ -71,12 +71,12 @@ export const PrFilterDrawer = () => {
      } = usePrFilterStore();
 
     useEffect(() => {
-        if (allParents.length === 0) 
-            getPrParentIds().then((data:number[]) => {
-                const allParents = [...new Set(data)]
-                    .map((item) => ({ id: item.toString(), code: item.toString(), description: item.toString() } as DropDownGridOptions));
-                setAllParents(allParents);
-            })
+        // if (allParents.length === 0) 
+        //     getPrParentIds().then((data:number[]) => {
+        //         const allParents = [...new Set(data)]
+        //             .map((item) => ({ id: item?.toString() ?? '0' , code: item?.toString() ??'0', description: item?.toString()??'0' } as DropDownGridOptions));
+        //         setAllParents(allParents);
+        //     })
         if (allPriorities.length === 0) 
             setAllPriorities(sRs
                 .filter(sr => sr.type === srConstants.type.evPriority)

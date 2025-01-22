@@ -15,6 +15,9 @@ import {styled} from "@mui/material";import LocalHospitalIcon from '@mui/icons-m
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SmsIcon from '@mui/icons-material/Sms';
+import CodeIcon from '@mui/icons-material/Code';
+
 export const classes =  
   {
       grow: {
@@ -137,6 +140,20 @@ export const sitemaps = [
         link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7441-2184&t=j7iqDVsFAFmAsQEH-11'),
         open: true,
     } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "Conversation",
+        code: "conversation",
+        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7709-2269&t=r761hHDBBzTxPykI-11'),
+        open: true,
+    } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "IT",
+        code: "it",
+        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7709-2629&t=r761hHDBBzTxPykI-11'),
+        open: true,
+    } as SAModule,
 ] as SAModule[];
 
 const Wicon = styled('div')({
@@ -185,6 +202,16 @@ export const getIcon = (code: string) => {
         case 'gratefulList': { return (
             <Wicon>
                 <VolunteerActivismIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
+                />
+            </Wicon>)}
+        case 'conversation': { return (
+            <Wicon>
+                <SmsIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
+                />
+            </Wicon>)}
+        case 'it': { return (
+            <Wicon>
+                <CodeIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
                 />
             </Wicon>)}
 
