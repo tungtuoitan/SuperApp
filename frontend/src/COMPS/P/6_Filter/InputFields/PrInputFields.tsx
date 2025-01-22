@@ -174,7 +174,7 @@ export const SRFilterInputFields = () => {
                     onClick={() => onClickHandlerTextfieldPr(pr.filterOption.type)}
                 />
             </Badge>
-            <Badge badgeContent={_selectRepeatTypeLength} color="primary" sx={{ marginTop: '12px' }}>
+            {/* <Badge badgeContent={_selectRepeatTypeLength} color="primary" sx={{ marginTop: '12px' }}>
                 <ResetSelectedIdsIcon
                     hide={_selectRepeatType}
                     tooltip="Reset Selected Repeat Type"
@@ -210,7 +210,7 @@ export const SRFilterInputFields = () => {
                     onChange={onChangeHandlerTextfieldPr}
                     onClick={() => onClickHandlerTextfieldPr(pr.filterOption.isUpdatedToday)}
                 />
-            </Badge>
+            </Badge> */}
         </MainFilterInputFields>
     )
 }

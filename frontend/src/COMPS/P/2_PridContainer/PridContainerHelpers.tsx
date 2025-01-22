@@ -22,7 +22,7 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 export const usePridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
-    const { allPrs, setAllPrs, rowSelectionModel } = usePridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, currentHoveringRow, setCurrentHoveringRow } = usePridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
     const { prAllTabIds,setPrAllTabIds,curTabIndex, setCurTabIndex} = usePrAllTabsStore();
@@ -128,7 +128,7 @@ export const usePridContainerHelpers = () => {
 
     const pridColumns = ():GridColDef[] => { 
         return [
-        // { field: "id", headerName: "ID", width: 20 },
+        { field: "id", headerName: "ID", width: 20 },
         {
             field: "info",
             headerName: "Info",
@@ -141,7 +141,7 @@ export const usePridContainerHelpers = () => {
                     const indexOfToday = getDayIndex(dateToCDate(new Date()));
                     return indexOfLastPesult >=indexOfToday
                 }
-                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !prAllTabIds.includes(r.id);
+                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !prAllTabIds.includes(r.id) && currentHoveringRow == r.id;
                 return (
                     <div
                         style={{
@@ -153,23 +153,24 @@ export const usePridContainerHelpers = () => {
                             padding: "10px 10px 10px 0",
                             fontSize: "12px",
                             position: 'relative',
-                            opacity: enabled ? 1 : 0.3
-
+                            // opacity: enabled ? 1 : 0.3
                         }}
+                        onMouseEnter={() => setCurrentHoveringRow(r.id)}
+                        onMouseLeave={() => setCurrentHoveringRow(null)}
                     >
                         <div style={{display:'flex', flexDirection:'row', alignItems:'center', height: '16px'}}>
                             {Nink(r.id, r.name, "")}
-                            {enabled && <>
-                                <EvaluateBtn pr={r} type='Pass'/>
-                                <EvaluateBtn pr={r} type='Fail'/>
-                                <EvaluateBtn pr={r} type='Skip'/>
-                                <EvaluateBtn pr={r} type='Open'/>
-                            </>}
                         </div>
                             
                         {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
                         {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
                         {Line("Parent ID", allPrs.filter(pr => pr.id === r.parentId)[0]?.name)}
+                            {enabled && <div style={{position:'absolute', right:0, top:25}}>
+                                <EvaluateBtn pr={r} type='Pass'/>
+                                <EvaluateBtn pr={r} type='Fail'/>
+                                <EvaluateBtn pr={r} type='Skip'/>
+                                <EvaluateBtn pr={r} type='Open'/>
+                            </div>}
                     </div>
                 );
             },

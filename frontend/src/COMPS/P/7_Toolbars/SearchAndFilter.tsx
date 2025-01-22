@@ -6,7 +6,10 @@ import TuneIcon from '@mui/icons-material/Tune';
 import {Search} from "./Search";
 import {usePridContainerStore} from "../2_PridContainer/PridContainerStore";
 
-export const SearchAndFilter = () => {
+type SearchAndFilterProps = {
+    hide?: boolean;
+}
+export const SearchAndFilter = (props: SearchAndFilterProps) => {
     const { getTotalFilter, onClickHandlerFilter} = useFilterIconEvents();
     const {setSearchText, setCurrentPage, setRefreshPrid, setLoadingPrid} = usePridContainerStore();
 
@@ -26,7 +29,7 @@ export const SearchAndFilter = () => {
         }
     }
   return (
-    <ToolbarContainer>
+    <ToolbarContainer sx={{visibility: props.hide ? 'hidden' : 'visible'}}>
         <Search
             onChangeHandlerSearch={onChangeHandlerSearch}
             onKeyUpHandlerSearch={onKeyUpHandlerSearch} 

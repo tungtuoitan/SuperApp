@@ -21,6 +21,8 @@ export interface PridContainerContextData {
     setSearchText: Dispatch<SetStateAction<string>>;
     loadingPrid: boolean;
     setLoadingPrid: Dispatch<SetStateAction<boolean>>;
+    currentHoveringRow: number | null;
+    setCurrentHoveringRow: Dispatch<SetStateAction<number | null>>;
 
 };
 
@@ -43,6 +45,8 @@ export const PridContainerContextDefaultValue: PridContainerContextData = {
     setSearchText: () => { },
     loadingPrid: true,
     setLoadingPrid: () => { },
+    currentHoveringRow: null,
+    setCurrentHoveringRow: () => { },
 };
 
 const PridContainerStore = createContext<PridContainerContextData>(PridContainerContextDefaultValue);
@@ -60,6 +64,7 @@ export const PridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>('');
     const [loadingPrid, setLoadingPrid] = useState<boolean>(true);
+    const [currentHoveringRow, setCurrentHoveringRow] = useState<number | null>(null);
 
     return (
         <PridContainerStore.Provider
@@ -82,6 +87,8 @@ export const PridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setSearchText,
                 loadingPrid,
                 setLoadingPrid,
+                currentHoveringRow,
+                setCurrentHoveringRow
             }}>
             {children}
         </PridContainerStore.Provider>

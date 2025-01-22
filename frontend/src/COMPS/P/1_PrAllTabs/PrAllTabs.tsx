@@ -91,7 +91,7 @@ export const PRAllTabs = () => {
                         <RemoveCircleIcon sx={{ fontSize: 16, color: 'red' }} />
                     </IconButton>
                 }
-                {curTabIndex==0 && <SearchAndFilter />}
+                <SearchAndFilter hide={curTabIndex!==0} />
             </WTabBar>
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
