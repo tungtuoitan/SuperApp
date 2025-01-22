@@ -26,7 +26,7 @@ export const ParentEv = (props: ParentEvProps) => {
     const { setFevId, fevId } = useChildEvStore();
     const { activeId, FIIDs } = useFloatToolsStore(); 
     const { TLBaseFrameScrollLeft, TLBaseFrameRef } = useTLBaseBgStore();
-    const { isStickEv, hasOutsideChild, getBoParent } = use4he();
+    const { isStickEv, hasOutsideChild, getBoParent, getBgParent } = use4he();
     const fiveLines = getFiveLines(childEvs);
     const hasOutside = hasOutsideChild(childEvs, parentEv)
     if(hasOutside) enqueueSnackbar(`Warning: ParentEv:${parentEv.id} has outside child`, { variant: "warning" })
@@ -61,7 +61,8 @@ export const ParentEv = (props: ParentEvProps) => {
                 height: height,
                 top: isBeggerGang ? undefined : top,
                 bottom: isBeggerGang ? 0 : undefined,
-                background: isOver && activeId===FIIDs.childEv ? _4cs.parentEv.bgIsOver : _4cs.parentEv.bgNormal,
+                // background: isOver && activeId===FIIDs.childEv ? _4cs.parentEv.bgIsOver : _4cs.parentEv.bgNormal,
+                background: getBgParent(parentEv, isOver && activeId===FIIDs.childEv),
                 borderRadius: isBeggerGang ? 0 : 20,
                 border: getBoParent(parentEv.id, hasOutside),
                 display: 'flex',

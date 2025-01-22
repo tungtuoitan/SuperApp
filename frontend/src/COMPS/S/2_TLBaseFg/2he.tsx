@@ -30,7 +30,8 @@ export const use2he = () => {
                 enqueueSnackbar(`Warning: EV:${ev.id} active has problem: ${ev.activeC}`, { variant: "warning" })
                 return
             }
-            if(![sr.priority.low.c, sr.priority.medium.c, sr.priority.normal.c, sr.priority.high.c].includes(ev.prioriC)){
+            if(![sr.priority.low.c, sr.priority.medium.c, sr.priority.normal.c, sr.priority.high.c, sr.priority.top1.c, sr.priority.top2.c, sr.priority.top3.c]
+                    .includes(ev.prioriC)){
                 enqueueSnackbar(`Warning: EV:${ev.id} priority has problem: ${ev.prioriC}`, { variant: "warning" })
                 return
             }

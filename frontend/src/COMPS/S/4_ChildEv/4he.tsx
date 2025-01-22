@@ -34,8 +34,17 @@ export const use4he = () => {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4cs.childEv.bgDrag;
             } 
-            else if (getLevelCOf('childEv') === sr.hour.c) {
-                return _4cs.childEv.bgPresent;
+            // else if (getLevelCOf('childEv') === sr.hour.c) {
+            //     return _4cs.childEv.bgPresent;
+            // }
+            else if (childEv.prioriC === sr.priority.top1.c) {
+                return _4cs.childEv.bgTop1;
+            } 
+            else if (childEv.prioriC === sr.priority.top2.c) {
+                return _4cs.childEv.bgTop2;
+            }
+            else if (childEv.prioriC === sr.priority.top3.c) {
+                return _4cs.childEv.bgTop3;
             }
             else {
                 return _4cs.childEv.bgNormal;
@@ -44,9 +53,17 @@ export const use4he = () => {
         else {
             if (grabEdge.id === childEv.id && grabEdge.mousedownAtGE) {
                 return _4cs.childEv.bgDrag;
-            } else if (childEv.type === "jobtask") {
-                return _4cs.childEv.bgJobtask;
-            } else {
+            } 
+            else if (childEv.prioriC === sr.priority.top1.c) {
+                return _4cs.childEv.bgTop1;
+            } 
+            else if (childEv.prioriC === sr.priority.top2.c) {
+                return _4cs.childEv.bgTop2;
+            }
+            else if (childEv.prioriC === sr.priority.top3.c) {
+                return _4cs.childEv.bgTop3;
+            }
+            else {
                 return _4cs.childEv.bgNormal;
             }
         }
@@ -67,10 +84,28 @@ export const use4he = () => {
         return cDateToGh(childEv.timeStart) < cDateToGh(parentEv.timeStart) || cDateToGh(childEv.timeEnd) > cDateToGh(parentEv.timeEnd)
     }
     const getBoChild = (childEv:Ev,isOutSide: boolean) => {
-            if(isOutSide) return _4cs.childEv.boOutside
-            if(fevId && fevId === childEv.id) return _4cs.childEv.boFocus
-            return _4cs.childEv.boTransparent
+        if(isOutSide) return _4cs.childEv.boOutside
+        if(fevId && fevId === childEv.id) return _4cs.childEv.boFocus
+        if (isPresentEv(childEv.timeStart as cDate, childEv.timeEnd as cDate)) {
+            if (getLevelCOf('childEv') === sr.hour.c) {
+                return _4cs.childEv.boPresent
+            }
         }
+        return _4cs.childEv.boTransparent
+    }
+    const getBgParent = (parentEv: Ev,activeOver: boolean) => {
+        if(activeOver) return _4cs.parentEv.bgIsOver
+        else if (parentEv.prioriC === sr.priority.top1.c) {
+            return _4cs.parentEv.bgTop1;
+        } 
+        else if (parentEv.prioriC === sr.priority.top2.c) {
+            return _4cs.parentEv.bgTop2;
+        }
+        else if (parentEv.prioriC === sr.priority.top3.c) {
+            return _4cs.parentEv.bgTop3;
+        }
+        return _4cs.parentEv.bgNormal
+    }
     const getBoParent = (parentId: number, hasOutsideChild: boolean) => {
         if(hasOutsideChild) return _4cs.parentEv.boOutsideChild
         if(fevId && fevId === parentId) return _4cs.parentEv.boFocus
@@ -94,6 +129,7 @@ export const use4he = () => {
         isStickEv,
         hasOutsideChild,
         isOutSideChild,
+        getBgParent,
         getBoParent,
         getBoChild
      };
