@@ -52,6 +52,18 @@ export const sr = {
         },
     },
     priority: {
+        top1: {
+            c: 'T1',
+            d: 'Top 1',
+        },
+        top2: {
+            c: 'T2',
+            d: 'Top 2',
+        },
+        top3: {
+            c: 'T3',
+            d: 'Top 3',
+        },
         high: {
             c: 'Hig',
             d: 'High',

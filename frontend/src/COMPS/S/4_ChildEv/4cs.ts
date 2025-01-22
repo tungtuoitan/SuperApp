@@ -9,13 +9,16 @@ export const _4cs = {
 
         fs: '12px',
         boFocus: '2px solid #0D99FF',
+        boPresent: '2px solid #9747FF',
 
         bgNormal: '#828282',
         bgOpeningEtail: '#0D99FF50',
         bgPast: '#82828260',
-        bgPresent: '#FFCD29',
+        // bgPresent: '#FFCD29',
         bgDrag: 'black',
-        bgJobtask: '#000000',
+        bgTop1: '#F24822',
+        bgTop2: '#FFA629',
+        bgTop3: '#FFCD29',
         bgOverlap: 'red',
         bgLatenight: '#F24822',
         boOutside: '2px solid #FF0000',
@@ -32,7 +35,12 @@ export const _4cs = {
         boNormal: '2px solid transparent',
         bgIsOver: 'lightblue',
         bgNormal: '#00000010',
+        bgTop1: '#f7020230',
+        bgTop2: '#f7810230',
+        bgTop3: '#f7ca0230',
     },
+
+    // #94060620   #94750630', 
     dot: {
         wi: 5,
         he: 5,
