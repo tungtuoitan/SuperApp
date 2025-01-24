@@ -17,7 +17,7 @@ export const _4cs = {
         // bgPresent: '#FFCD29',
         bgDrag: 'black',
         bgTop1: '#F24822',
-        bgTop2: '#FFA629',
+        bgTop2: '#F98B26',
         bgTop3: '#FFCD29',
         bgOverlap: 'red',
         bgLatenight: '#F24822',
@@ -36,7 +36,7 @@ export const _4cs = {
         bgIsOver: 'lightblue',
         bgNormal: '#00000010',
         bgTop1: '#f7020230',
-        bgTop2: '#f7810230',
+        bgTop2: '#f7660230',
         bgTop3: '#f7ca0230',
     },
 
