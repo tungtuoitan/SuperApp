@@ -1,19 +1,19 @@
 import {FormControl,InputLabel,MenuItem,Select} from "@mui/material";
 import {LaperLevelProps} from "./3Lty";
-import {usePetailHelpers} from "../3_Petail/PetailHelpers";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {PetailForm} from "../3_Petail/3ty";
 import {WRow} from "./3Lui";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
 
 
 export default function LaperRepeatType(props: LaperLevelProps) {
-    const { handleChange } = usePetailHelpers();
+    const { handleChange } = useFotailHelpers();
     const levelSelector = helperMUIcss.getSelectCSSSelector();
     const { repeatTypeOptions } = useSRsStore();
-    const [petails, dispatch] = usePetailFormStore();
-    const petail = petails.find(petail => petail.id === props.id) ?? {} as PetailForm;
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail = fotails.find(fotail => fotail.id === props.id) ?? {} as FotailForm;
 
     return (
         <WRow>
@@ -42,15 +42,15 @@ export default function LaperRepeatType(props: LaperLevelProps) {
                 }}
             >
                 <InputLabel id="repeatType">Repeat Type</InputLabel>
-                <Select
+                {/* <Select
                     labelId="repeatType"
                     name="repeatType"
                     id="repeatTypeSelect"
-                    value={petail.repeatType}
+                    value={fotail.repeatType}
                     label="Current Repeat Type"
                     onChange={(e) => {
                         if (e.target && e.target.name && e.target.value) {
-                            handleChange(petail.id, e.target.name, e.target.value);
+                            handleChange(fotail.id, e.target.name, e.target.value);
                         }
                     }}
                 >
@@ -64,7 +64,7 @@ export default function LaperRepeatType(props: LaperLevelProps) {
                             </MenuItem>
                         );
                     })}
-                </Select>
+                </Select> */}
             </FormControl>
         </WRow>
     );

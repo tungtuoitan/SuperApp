@@ -18,6 +18,7 @@ import {PrFilterStoreProvider} from "./G/6_Filter/PrFilterStore";
 import {FoProvider} from "./G/0_Fo/FoStore";
 import {PopupProvider} from "./G/1_GAllTabs/CreateNewPopup/PopupStore";
 import SideNav from "./SideNav/SideNav";
+import {FotailFormsStoreProvider} from "./G/9_Fotail/FotailFormsStore";
 
 export const Main = () => {
     return (
@@ -51,9 +52,11 @@ export const Main = () => {
                                                                             <MainFilterDrawerProvider>
                                                                             <PrFilterStoreProvider>
                                                                                 <FoProvider>
-                                                                                    <PopupProvider>
-                                                                                        <SideNav />
-                                                                                    </PopupProvider>
+                                                                                    <FotailFormsStoreProvider>
+                                                                                        <PopupProvider>
+                                                                                            <SideNav />
+                                                                                        </PopupProvider>
+                                                                                    </FotailFormsStoreProvider>
                                                                                 </FoProvider>
                                                                             </PrFilterStoreProvider>
                                                                             </MainFilterDrawerProvider>

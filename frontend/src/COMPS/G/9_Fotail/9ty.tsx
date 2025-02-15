@@ -6,7 +6,7 @@ import {Fo} from "../0_Fo/FoTypes";
 
 export type FotailForm = Omit<Fo,''>
 export type FotailProps = {
-    petailId: string;
+    fotailId: string;
 };
 
 export type Fosult = {

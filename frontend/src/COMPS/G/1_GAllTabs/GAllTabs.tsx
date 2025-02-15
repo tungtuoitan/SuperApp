@@ -16,6 +16,10 @@ import {SearchAndFilter} from "../7_Toolbars/SearchAndFilter";
 import {usePopupHelper} from "./CreateNewPopup/PopupHelper";
 import {PopupProvider} from "./CreateNewPopup/PopupStore";
 import Fotail from "../9_Fotail/Fotail";
+import {paSid} from "../GHelpers";
+import {g} from "../GConstants";
+import {useFoStore} from "../0_Fo/FoStore";
+import {get} from "lodash";
 
 
 export const PRAllTabs = () => {
@@ -23,10 +27,10 @@ export const PRAllTabs = () => {
         useGAllTabsStore();
     const [hoverId, setHoverId] = useState<number | string | null>(null);
     const { allPrs, rowSelectionModel } = useGridContainerStore();
+    const { allFos } = useFoStore();
     const [petails, dispatch] = usePetailFormStore();
     const { createNewPetail, deletePrs } = useGAllTabHelpers();
     const { openPopup } = usePopupHelper();
-
 
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
         event?.preventDefault();
@@ -47,6 +51,19 @@ export const PRAllTabs = () => {
     }
     const curTabId = gAllTabIds.filter((id, index) => index === curTabIndex)[0];
 
+    const getTabName = (id: string) => {
+        const pr = allPrs.filter(pr => pr.id === id)[0];
+        const fo = allFos.filter(fo => fo.id === id)[0];
+        
+        if(paSid(id).type === g.type.pr){
+            return (pr && pr.name.length>35 ? pr.name.slice(0, 32) + "..." : pr?.name) ?? "New Pr"
+        }
+        if(paSid(id).type === g.type.fo){
+            return (fo && fo.name.length>35 ? fo.name.slice(0, 32) + "..." : fo?.name) ?? "New Folder"
+        }
+        return '-__-';
+    }
+
     return (
         <WTabsContainer id='PRAllTabs'>
             <WTabBar
@@ -54,11 +71,11 @@ export const PRAllTabs = () => {
                 value={curTabIndex}
                 onChange={(e: any, newTabIndex: SetStateAction<number>) => setCurTabIndex(newTabIndex)}
                 aria-label="tabs">
-                {gAllTabIds.map((id: number | string, index: number) => {
+                {gAllTabIds.map((id: string, index: number) => {
+                    
                     if (id === 'GeneralGrid') 
                         return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{ height: '48px',minHeight: '48px'}} />
-
-                    const pr = allPrs.filter(pr => pr.id === id)[0];
+                   
                     return (
                         <Tab
                             key={index}
@@ -69,10 +86,7 @@ export const PRAllTabs = () => {
                             }}
                             onMouseEnter={() => setHoverId(id)}
                             onMouseLeave={() => setHoverId(null)}
-                            label={
-                                <WBadge color="primary" max={99}>
-                                    {(pr && pr.name.length > 35 ? pr.name.slice(0, 32) + "..." : pr?.name) ?? "New Pr"}
-                                </WBadge>}
+                            label={getTabName(id)}
                             icon={index > 0 ?
                                 <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
                                     <CloseIcon sx={{fontSize:12}} />
@@ -108,7 +122,7 @@ export const PRAllTabs = () => {
                 : curTabId.toString().includes('Pr-') ?
                     <Petail petailId={gAllTabIds[curTabIndex] as string} />
                 : curTabId.toString().includes('Fo-') ?
-                    <Fotail petailId={gAllTabIds[curTabIndex] as string} />
+                    <Fotail fotailId={gAllTabIds[curTabIndex] as string} />
                 : <></>
             }
             </div>

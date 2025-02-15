@@ -1,22 +1,18 @@
 import {
     FormControl,
-    FormControlLabel,
     FormLabel,
-    Radio,
-    RadioGroup,
 } from "@mui/material";
 import {WRow} from "./3Lui";
 import {LaperStatusProps} from "./3Lty";
-import {usePetailHelpers} from "../3_Petail/PetailHelpers";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {PetailForm} from "../3_Petail/3ty";
-import {sr} from "../../S/TLConstants";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
 
 export default function LaperStatus(props: LaperStatusProps) {
-    const { handleChange } = usePetailHelpers();
-    const [petails, dispatch] = usePetailFormStore();
-    const petail =
-        petails.find((petail) => petail.id === props.id) ?? ({} as PetailForm);
+    const { handleChange } = useFotailHelpers();
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail =
+        fotails.find((fotail) => fotail.id === props.id) ?? ({} as FotailForm);
 
     return (
         <WRow>
@@ -44,11 +40,11 @@ export default function LaperStatus(props: LaperStatusProps) {
                 >
                     Status
                 </FormLabel>
-                <RadioGroup
+                {/* <RadioGroup
                     name="statusC"
-                    value={petail.statusC}
+                    value={fotail.statusC}
                     onChange={(e) => {
-                        handleChange(petail.id, e.target.name, e.target.value);
+                        handleChange(fotail.id, e.target.name, e.target.value);
                     }}
                     sx={{
                         display: "flex",
@@ -74,7 +70,7 @@ export default function LaperStatus(props: LaperStatusProps) {
                         control={<Radio size="small" />}
                         label={sr.status.resolved.d}
                     />
-                </RadioGroup>
+                </RadioGroup> */}
             </FormControl>
         </WRow>
     );

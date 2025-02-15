@@ -33,7 +33,7 @@ export const constants = {
         iuPr: "Pr/IuPr",
 
         getFos: "Fo/GetFos", 
-        iuFo: "Fo/IuFo",
+        iuFos: "Fo/IuFos",
         
         iuUserProfile: "UserProfile/IuUserProfile",
         getUserProfile: "UserProfile/GetUserProfileJson",

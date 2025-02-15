@@ -2,27 +2,27 @@ import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {WRow} from "./3Lui";
 import {LaperNameProps} from "./3Lty";
-import {usePetailHelpers} from "../3_Petail/PetailHelpers";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {PetailForm} from "../3_Petail/3ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
 
 export default function LaperName(props: LaperNameProps) {
-    const { handleChange } = usePetailHelpers();
+    const { handleChange } = useFotailHelpers();
     const evNameSelector = helperMUIcss.getTextFieldCSSSelector("evName");
-    const [petails, dispatch] = usePetailFormStore();
-    const petail = petails.find(petail => petail.id === props.id) ?? {} as PetailForm;
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail = fotails.find(fotail => fotail.id === props.id) ?? {} as FotailForm;
 
      return (   
         <WRow>
             <TextField
-                id={"prName" + petail.id}
+                id={"prName" + fotail.id}
                 name="name"
                 label="Pr Name"
-                value={petail.name??''}
+                value={fotail.name??''}
                 onChange={(e) => {
                     // setEtailForm({ name: e.target.value });
                     if (e.target && e.target.name) {
-                        handleChange(petail.id, e.target.name, e.target.value??'');
+                        handleChange(fotail.id, e.target.name, e.target.value??'');
                     }
                 }}
                 sx={{

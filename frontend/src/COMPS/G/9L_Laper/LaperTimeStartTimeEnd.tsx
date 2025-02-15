@@ -1,30 +1,25 @@
-import {
-    LocalizationProvider,
-} from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import {EndDatePicker, StartDatePicker, StartTimePicker, WRow} from "./3Lui";
+import {WRow} from "./3Lui";
 import {LaperTimeStartProps} from "./3Lty";
-import {usePetailHelpers} from "../3_Petail/PetailHelpers";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {PetailForm} from "../3_Petail/3ty";
-import {cDate} from "../../S/TLTypes";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
 
 export default function LaperTimeStartTimeEnd(props: LaperTimeStartProps) {
-    const { handleChange } = usePetailHelpers();
-    const [petails, dispatch] = usePetailFormStore();
-    const petail = petails.find(petail => petail.id === props.id) ?? {} as PetailForm;
+    const { handleChange } = useFotailHelpers();
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail = fotails.find(fotail => fotail.id === props.id) ?? {} as FotailForm;
     
     return (
         <WRow>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <StartDatePicker
                     label="Date Start"
                     name="dateStart"
                     className="dateStartPicker"
-                    value={new Date(petail.timeStart)}
+                    value={new Date(fotail.timeStart)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange(petail.id, "timeStart", newValue);
+                            handleChange(fotail.id, "timeStart", newValue);
                         }
                     }}
                 />
@@ -34,14 +29,14 @@ export default function LaperTimeStartTimeEnd(props: LaperTimeStartProps) {
                 label="Date End"
                 name="timeEnd"
                 className="DateEndPicker"
-                value={petail.timeEnd ? new Date(petail.timeEnd) : null}
+                value={fotail.timeEnd ? new Date(fotail.timeEnd) : null}
                 onChange={(newValue) => {
                     if (newValue) {
-                        handleChange(petail.id, 'timeEnd', newValue);
+                        handleChange(fotail.id, 'timeEnd', newValue);
                     }
                 }}
             />
-        </LocalizationProvider>
+        </LocalizationProvider> */}
         </WRow>
     );
 }

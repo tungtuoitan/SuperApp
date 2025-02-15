@@ -7,12 +7,17 @@ import {useGAllTabsStore} from "./GAllTabsStore";
 import {Pr, Pr2} from "../GTypes";
 import {useSnackbar} from "notistack";
 import {paSid, toSid} from "../GHelpers";
+import {useFoStore} from "../0_Fo/FoStore";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
 
 export const useGAllTabHelpers = () => {
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
     const [petails, dispatch] = usePetailFormStore();
+    const [fotails, dispatchFo] = useFotailFormStore();
     const {rowSelectionModel, setRowSelectionModel, allPrs, setAllPrs} = useGridContainerStore();
     const { enqueueSnackbar } = useSnackbar();
+    const {lastFoId } = useFoStore();
 
     const createNewPetail = (e:any) => {
         e.preventDefault();
@@ -54,6 +59,32 @@ export const useGAllTabHelpers = () => {
     }
 
     const createNewFolder = (e:any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); 
+
+        if (gAllTabIds.includes('Fo-0')) {
+            setCurTabIndex(gAllTabIds.indexOf('Fo-0'));
+        } 
+        else {
+            setGAllTabIds((prev) => {
+                const newFotail: FotailForm = {
+                    id: toSid('Fo', 0),
+                    name: "New Folder",
+                    shortName: "New Folder",
+                    parentId: lastFoId,
+    
+                    activeC: "Act",
+                    prioriC: "Low",
+                    description: '',
+
+                };
+                dispatchFo({ type: "INSE", payload: newFotail });
+                setCurTabIndex(prev.length)
+                return [...prev, 'Fo-0'];
+            })
+        }
 
     }
     const deletePrs = (e:any) => {

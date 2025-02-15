@@ -3,31 +3,32 @@ import { WBar } from "./9ui";
 import { useSnackbar } from "notistack";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { usePetailFormStore } from "./FotailFormsStore";
+import { useFotailFormStore } from "./FotailFormsStore";
 import { useGridContainerStore } from "../2_GridContainer/GridContainerStore";
-import { iuPr } from "../GAPIs";
-import { toNumber } from "lodash";
+import { getFos, iuFos } from "../GAPIs";
 import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
 import {FotailForm} from "./9ty";
 import {FosResult} from "../0_Fo/FoTypes";
 import {toSid} from "../GHelpers";
+import {useFoHelpers} from "../0_Fo/FoHelpers";
 
 type FotailBarProps = {
     id: string;
 };
 export const FotailBar = (props: FotailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
-    const [petails, dispatch] = usePetailFormStore();
+    const [fotails, dispatch] = useFotailFormStore();
     const { allPrs } = useGridContainerStore();
-    const petail = petails.find((petail) => petail.id === props.id) ?? ({} as FotailForm);
+    const petail = fotails.find((petail) => petail.id === props.id) ?? ({} as FotailForm);
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
+    const { loadFos } = useFoHelpers();
 
-    const savePetail = (e: any) => {
-        const x = {
-            id: props.id ?? 0,
+    const saveFotail = (e: any) => {
+        const x: FotailForm = {
+            id: props.id ?? toSid('Fo', 0),
             name: petail.name,
             shortName: petail.shortName,
-            parentId: petail.parentId ?? null,
+            parentId: petail.parentId,
 
             activeC: petail.activeC,
             prioriC: petail.prioriC,
@@ -35,8 +36,8 @@ export const FotailBar = (props: FotailBarProps) => {
             pinIndex: petail.pinIndex
         };
 
-        if(x.id === toSid('Pr', 0)) {
-            iuPr(x).then((data: FosResult) => {
+        if(x.id === toSid('Fo', 0)) {
+            iuFos(x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     dispatch({ type: "REMO", payload: { id: 0 } });
@@ -56,14 +57,16 @@ export const FotailBar = (props: FotailBarProps) => {
                     const newPrAllTabIds = [...gAllTabIds];
                     newPrAllTabIds[curTabIndex] = data.fos[0].id
                     setGAllTabIds(newPrAllTabIds);
+
+                    loadFos();
                 } 
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });
                 }
-            });
+            })
         }
         else {
-            iuPr(x).then((data: FosResult) => {
+            iuFos(x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     const newPetail: FotailForm = {
@@ -83,7 +86,7 @@ export const FotailBar = (props: FotailBarProps) => {
         }
     };
 
-    const cancelPetail = (e: any) => {
+    const cancelFotail = (e: any) => {
         const pr = allPrs.find((pr) => pr.id === props.id);
         let x;
         if (pr) {
@@ -110,7 +113,7 @@ export const FotailBar = (props: FotailBarProps) => {
         } else {
             x = {
                 id: 0,
-                name: "New Pr",
+                name: "New Fo",
                 parentId: null,
 
                 types: "Doi",
@@ -136,14 +139,14 @@ export const FotailBar = (props: FotailBarProps) => {
         <WBar>
             <Tooltip title="Save">
                 <span>
-                    <IconButton onClick={(e) => savePetail(e)}>
+                    <IconButton onClick={(e) => saveFotail(e)}>
                         <CheckOutlinedIcon />
                     </IconButton>
                 </span>
             </Tooltip>
             <Tooltip title="Cancel">
                 <span>
-                    <IconButton onClick={(e) => cancelPetail(e)}>
+                    <IconButton onClick={(e) => cancelFotail(e)}>
                         <CloseOutlinedIcon />
                     </IconButton>
                 </span>

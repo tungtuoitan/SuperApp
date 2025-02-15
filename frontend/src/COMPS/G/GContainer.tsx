@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import PridContainer from "./2_GridContainer/GridContainer";
 import { getPrs} from "./GAPIs";
 import {Pr, Pr2} from "./GTypes";
 import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";

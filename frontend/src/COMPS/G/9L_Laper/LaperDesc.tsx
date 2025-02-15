@@ -2,29 +2,29 @@ import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {WRow} from "./3Lui";
 import {LaperNameProps} from "./3Lty";
-import {usePetailHelpers} from "../3_Petail/PetailHelpers";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {PetailForm} from "../3_Petail/3ty";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
 
 export default function LaperDesc(props: LaperNameProps) {
-    const { handleChange } = usePetailHelpers();
+    const { handleChange } = useFotailHelpers();
     const evDescSelector = helperMUIcss.getTextFieldMultipleLineCSSSelector("evDesc");
-    const [petails, dispatch] = usePetailFormStore();
-    const petail = petails.find(petail => petail.id === props.id) ?? {} as PetailForm;
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail = fotails.find(fotail => fotail.id === props.id) ?? {} as FotailForm;
 
      return (   
         <WRow>
             <TextField
-                id={"evDetail" + petail.id}
+                id={"evDetail" + fotail.id}
                 name="desc"
                 label="Description"
                 multiline
                 minRows={4}
-                value={petail.desc??''}
+                value={fotail.description??''}
                 spellCheck={false}
                 onChange={(e) => {
                     if (e.target && e.target.name) {
-                        handleChange(petail.id, e.target.name, e.target.value??'');
+                        handleChange(fotail.id, e.target.name, e.target.value??'');
                     }
                 }}
                 sx={{

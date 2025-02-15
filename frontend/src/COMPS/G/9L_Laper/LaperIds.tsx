@@ -3,16 +3,16 @@ import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {WRow} from "./3Lui";
 import {LaperIdsProps} from "./3Lty";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {PetailForm} from "../3_Petail/3ty";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
 
 
 export default function LaperIds(props: LaperIdsProps) {
     const evNameSelector = helperMUIcss.getTextFieldCSSSelector("evName");
     const parentIdSelector = helperMUIcss.getTextFieldCSSSelector("parentId");
     const evIdSelector = helperMUIcss.getTextFieldCSSSelector("evID");
-    const [petails, dispatch] = usePetailFormStore();
-    const petail = petails.find(petail => petail.id === props.id) ?? {} as PetailForm;
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail = fotails.find(fotail => fotail.id === props.id) ?? {} as FotailForm;
 
     return (
         <WRow>
@@ -20,7 +20,7 @@ export default function LaperIds(props: LaperIdsProps) {
                 id="evId"
                 name="id"
                 label="ID"
-                value={petail.id}
+                value={fotail.id}
                 disabled
                 sx={{
                     width: "100%", // 50(width of 2 GrabEdges)
@@ -41,7 +41,7 @@ export default function LaperIds(props: LaperIdsProps) {
                 name="parentId"
                 label="Parent ID"
                 disabled
-                value={petail.parentId}
+                value={fotail.parentId}
                 onChange={(e) => {
                     // update name here ....
                 }}

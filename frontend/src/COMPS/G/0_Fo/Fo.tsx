@@ -1,26 +1,18 @@
 import { AppBar, Breadcrumbs, Toolbar } from "@mui/material";
 import { useEffect } from "react";
-import { getFos } from "./FoAPIs";
-import { Fo } from "./FoTypes";
 import { useFoStore } from "./FoStore";
 import { CHIP } from "./Chip";
 import { Popup} from "../1_GAllTabs/CreateNewPopup/Popup";
 import {classes} from "../../SideNav/Nhe";
 import {toSid} from "../GHelpers";
+import {useFoHelpers} from "./FoHelpers";
 
 export const TopNav = () => {
     const { setAllFos, allFos, curFoId, lastFoId } = useFoStore();
+    const { loadFos } = useFoHelpers();
 
     useEffect(() => {
-        getFos().then((fos: Fo[]) => {
-            let proData = fos.filter((pr) => pr.activeC == "Act");
-            fos.forEach((fo) => {
-                fo.id = toSid("Fo", Number(fo.id))
-                if (fo.parentId) 
-                    fo.parentId = toSid("Fo", Number(fo.parentId));
-            });
-            setAllFos(proData);
-        });
+        loadFos();
     }, []);
 
     const handleClick = (event: React.MouseEvent<Element, MouseEvent>) => {

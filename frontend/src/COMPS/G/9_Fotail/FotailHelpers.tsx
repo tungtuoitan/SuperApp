@@ -1,10 +1,10 @@
 import { IAutoCompleteOptions } from "../../CommonHelpers/4_GenericAutoComplete";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
 import {SelectField} from "../../S/TLTypes";
-import {usePetailFormStore} from "./FotailFormsStore";
+import {useFotailFormStore} from "./FotailFormsStore";
 
-export const usePetailHelpers = () => {
-    const [petails, dispatch] = usePetailFormStore();
+export const useFotailHelpers = () => {
+    const [fotails, dispatch] = useFotailFormStore();
     const { levelOptions } = useSRsStore();
 
 
@@ -21,8 +21,8 @@ export const usePetailHelpers = () => {
         return result;
     };
 
-    const handleChange = (id: number, fieldName: string, value: any) => {
-        // console.log('fieldName', fieldName, 'value', value);
+    const handleChange = (id: string, fieldName: string, value: any) => {
+        console.log('fieldName', fieldName, 'value', value);
         dispatch({type: 'UPDA', payload: {id, [fieldName]: value }});
     }
 

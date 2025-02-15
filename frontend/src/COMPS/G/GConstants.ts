@@ -41,3 +41,10 @@ export const pr = {
         isUpdatedToday: 'isUpdatedToday',
     },
 }
+
+export const g = {
+    type: {
+        pr: 'Pr',
+        fo: 'Fo',
+    }
+}

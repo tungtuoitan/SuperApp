@@ -1,27 +1,26 @@
-import {TextField} from "@mui/material";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {FigmaButton, WRow} from "./3Lui";
 import {LaperFinkProps} from "./3Lty";
-import {PetailForm} from "../3_Petail/3ty";
-import {usePetailHelpers} from "../3_Petail/PetailHelpers";
-import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
 
 export default function LaperFink(props: LaperFinkProps) {
-    const { handleChange } = usePetailHelpers();
+    const { handleChange } = useFotailHelpers();
     const selector = helperMUIcss.getTextFieldCSSSelector("fink");
-    const [petails, dispatch] = usePetailFormStore();
-    const petail = petails.find((petail:PetailForm) => petail.id === props.id) ?? {} as PetailForm;
+    const [fotails, dispatchFo] = useFotailFormStore();
+    const fotail = fotails.find((fotail:FotailForm) => fotail.id === props.id) ?? {} as FotailForm;
 
     return (   
         <WRow>
-            <TextField
-                id={"fink" + petail.id}
+            {/* <TextField
+                id={"fink" + fotail.id}
                 name="fink"
                 label="FigJam Link"
-                value={petail.fink??''}
+                value={fotail.fink??''}
                 onChange={(e) => {
                     if (e.target && e.target.name) {
-                        handleChange(petail.id, e.target.name, e.target.value??'');
+                        handleChange(fotail.id, e.target.name, e.target.value??'');
                     }
                 }}
                 sx={{
@@ -46,7 +45,7 @@ export default function LaperFink(props: LaperFinkProps) {
                     },
                 }}
             />
-            <FigmaButton fink={petail.fink??''} />
+            <FigmaButton fink={fotail.fink??''} /> */}
         </WRow>
     )
 }
