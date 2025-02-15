@@ -1,5 +1,5 @@
 import './App.css';
-import {NavProvider} from './COMPS/SideNav/NavStore';
+import {NavProvider} from './COMPS/MainNav/NavStore';
 import { Main } from './COMPS/Main';
 
 function App() {

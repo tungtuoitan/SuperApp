@@ -22,51 +22,77 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useFoStore} from "../0_Fo/FoStore";
 import {paSid, toSid} from "../GHelpers";
+import {g} from "../GConstants";
+import {getIcon} from "../../MainNav/Nhe";
+import {FotailForm} from "../9_Fotail/9ty";
+import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {Fo} from "../0_Fo/FoTypes";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
+    const [fotails, dispatchFo] = useFotailFormStore();
     const { allPrs, setAllPrs, rowSelectionModel, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
     const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
     const { sRs } = useSRsStore();
-    const { allFos } = useFoStore();
+    const {allFos,setLastFoId, lastFoId} = useFoStore();
 
 
     const getAllGitems = () => {
-        return [...allPrs
-            // , ...allFos
+        return [
+            ...allFos.filter(fo => fo.parentId === lastFoId),
+            ...allPrs.filter(pr => pr.parentId === lastFoId)
         ];
     }
-    const openPetail = (prId: string) => {
-        if (rowSelectionModel.includes(prId) || rowSelectionModel.includes(prId.toString())) return;
-        if (gAllTabIds.includes(prId)) {
-            setCurTabIndex(gAllTabIds.indexOf(prId));
+    const openDetail = (rowId: string, type: 'Pr'|'Fo') => {
+        if (rowSelectionModel.includes(rowId) || rowSelectionModel.includes(rowId.toString())) return;
+        if (gAllTabIds.includes(rowId)) {
+            setCurTabIndex(gAllTabIds.indexOf(rowId));
         } 
         else {
             setGAllTabIds((prev) => {
                 setCurTabIndex(prev.length); // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
-                return [...prev, prId];
+                return [...prev, rowId];
             });
         }
 
-        const ev = allPrs.filter((pr) => pr.id === prId)[0];
-        const petail: PetailForm = {
-            id: ev.id,
-            name: ev.name,
-            parentId: ev.parentId ?? null,
-            timeStart: ev.timeStart,
-            timeEnd: ev.timeEnd,
-            activeC: ev.activeC,
-            prioriC: ev.prioriC,
-            statusC: ev.statusC,
-            fink: ev.fink,
-            desc: ev.desc,
-            types: ev.types,
-            repeatType: ev.repeatType,
-            pesults: ev.pesults,
-        };
-        dispatch({ type: "INSE", payload: petail });
+        if(type === 'Pr') {
+            const ev = allPrs.filter((pr) => pr.id === rowId)[0];
+            const petail: PetailForm = {
+                id: ev.id,
+                name: ev.name,
+                parentId: ev.parentId ?? null,
+                timeStart: ev.timeStart,
+                timeEnd: ev.timeEnd,
+                activeC: ev.activeC,
+                prioriC: ev.prioriC,
+                statusC: ev.statusC,
+                fink: ev.fink,
+                desc: ev.desc,
+                types: ev.types,
+                repeatType: ev.repeatType,
+                pesults: ev.pesults,
+            };
+            dispatch({ type: "INSE", payload: petail });
+        }
+        else if (type==='Fo'){
+            const fo = allFos.filter((fo) => fo.id === rowId)[0];
+            const fotail: FotailForm = {
+                id: fo.id,
+                name: fo.name,
+                shortName: fo.shortName,
+                parentId: fo.parentId,
+                iconId: fo.iconId,
+
+                activeC: fo.activeC,
+                prioriC: fo.prioriC,
+                description: fo.description,
+                pinIndex: fo.pinIndex,
+            };
+            dispatchFo({ type: "INSE", payload: fotail });
+        }
     };
 
     const handleClick = (pr: Pr, type:'Pass'|'Fail'|'Skip'|'Open') => {
@@ -113,6 +139,7 @@ export const useGridContainerHelpers = () => {
     }
     const EvaluateBtn = (props: EvaluationProps) => {
         const {pr,type} = props;
+       
         return (
             <Cooltip title={type} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
                 <IconButton 
@@ -132,129 +159,185 @@ export const useGridContainerHelpers = () => {
             </Cooltip>
         )
     }
+
+    type FolderProps = {
+        fo: Fo
+        type: 'GoInside'
+    }
+    const FolderBtn = (props: FolderProps) => {
+        const {fo,type} = props;
+        const handleClick = (fo: Fo, type: 'GoInside') => {
+            switch (type) {
+                case 'GoInside': 
+                    setLastFoId(fo.id);
+                    setCurTabIndex(0);
+            }
+        }
+        return (
+            <Cooltip title={type} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
+                <IconButton 
+                    onClick={_ => handleClick(fo,type)} 
+                    sx={{ 
+                        
+                        width: '32px', 
+                        height: '32px', 
+                        // color: type === 'Open' ? 'black' : type === 'Pass' ? 'green' : type === 'Fail' ? 'red' : 'black'
+                    }}
+                        >
+                    {
+                        type === 'GoInside' ? <ArrowForwardIcon sx={{fontSize:'18px'}}/>
+                        : null
+                    }
+                </IconButton>
+            </Cooltip>
+        )
+    }
    
 
+    const Info = (r: Pr) => {
+        const isAlreadyAdd = ():boolean => {
+            if(r.pesults.length === 0) return false;
+            const indexOfLastPesult = getDayIndex(r.pesults[r.pesults.length - 1].time)
+            const indexOfToday = getDayIndex(dateToCDate(new Date()));
+            return indexOfLastPesult >=indexOfToday
+        }
+        const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !gAllTabIds.includes(r.id) && currentHoveringRow == r.id;
+        
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    lineHeight: "normal",
+                    justifyContent: "center",
+                    alignItems: "left",
+                    padding: "10px 10px 10px 0",
+                    fontSize: "12px",
+                    position: 'relative',
+                    // opacity: enabled ? 1 : 0.3
+                    width: '320px'
+                }}
+                onMouseEnter={() => setCurrentHoveringRow(r.id)}
+                onMouseLeave={() => setCurrentHoveringRow(null)}
+            >
+                <div style={{display:'flex', flexDirection:'row', alignItems:'center', height: '16px'}}>
+                    {Nink(r.id,'Pr', r.name)}
+                </div>
+                    
+                {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
+                {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
+                {Line("ID", r.id)}
+                    {enabled && <div style={{position:'absolute', right:0, top:25}}>
+                        <EvaluateBtn pr={r} type='Pass'/>
+                        <EvaluateBtn pr={r} type='Fail'/>
+                        <EvaluateBtn pr={r} type='Skip'/>
+                        <EvaluateBtn pr={r} type='Open'/>
+                    </div>}
+            </div>
+        );
+
+    }
+
+    const SubInfo = (r: Pr) => {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    lineHeight: "normal",
+                    justifyContent: "center",
+                    alignItems: "left",
+                    padding: "10px 10px 10px 0",
+                    fontSize: "12px",
+                    width: '200px'
+                }}
+            >
+                {Line("Types", r.types?.split(';').map(typeC => sRs.filter(sr => sr.code === typeC)[0]?.desc).join("; "))}
+                {Line("Repeat Type", sRs.filter(sr => sr.code === r.repeatType)[0]?.desc)}
+                {Line("Time Start", displayCDate(r.timeStart))}
+                {Line("Time End", r.timeEnd ? displayCDate(r.timeEnd) : null)}
+            </div>
+        );
+    }
+
+    const History = (r: Pr) => {
+        const year = new Date(r.timeStart).getFullYear();
+        const indexes1 = getIndexesOfFirstDayOfAllMonth(year);
+        let histories = '';
+        const dayIndexs = r.pesults.map(p => getDayIndex(p.time));
+        for(let i = 0; i < 365; i++) {
+            if (dayIndexs.includes(i)) {
+                const thatPesult = r.pesults.filter(p => getDayIndex(p.time) === i)[0];
+                if(thatPesult && thatPesult.pesultC === his.pass.c) histories += 'P';
+                else if(thatPesult && thatPesult.pesultC === his.fail.c) histories += 'F';
+                else {
+                    histories += '_';
+                }
+            }
+            else {
+                histories += '_';
+            }
+        }
+
+        return <div style={{display:'flex', height: '100%', width: '1150px', position:'relative'}}>
+            <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
+                {histories.split('').map((h, i) => {
+                    const color = h === his.pass.c ? '#23F51B' : h === his.fail.c ? 'red' : '#00000010';
+                    return <div  key={i} style={{width:'3px', height:'10px',
+                        background: indexes1.includes(i) 
+                        ? `linear-gradient(to bottom, transparent 50%, ${color} 50%)`
+                        : color
+                    }}/>
+                })}
+            </div>
+        </div>
+    }
 
 
     const gridColumns = ():GridColDef[] => { 
         return [
-        { field: "id", headerName: "ID", width: 80 },
+        // { field: "id", headerName: "ID", width: 80 },
         {
             field: "info",
             headerName: "Info",
-            width: 470,
+            width: 1700,
             renderCell: (params) => {
-                const r = params.row as Pr;
-                const isAlreadyAdd = ():boolean => {
-                    if(r.pesults.length === 0) return false;
-                    const indexOfLastPesult = getDayIndex(r.pesults[r.pesults.length - 1].time)
-                    const indexOfToday = getDayIndex(dateToCDate(new Date()));
-                    return indexOfLastPesult >=indexOfToday
-                }
-                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !gAllTabIds.includes(r.id) && currentHoveringRow == r.id;
-                
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            lineHeight: "normal",
-                            justifyContent: "center",
-                            alignItems: "left",
-                            padding: "10px 10px 10px 0",
-                            fontSize: "12px",
-                            position: 'relative',
-                            // opacity: enabled ? 1 : 0.3
-                        }}
-                        onMouseEnter={() => setCurrentHoveringRow(r.id)}
-                        onMouseLeave={() => setCurrentHoveringRow(null)}
-                    >
-                        <div style={{display:'flex', flexDirection:'row', alignItems:'center', height: '16px'}}>
-                            {Nink(r.id, r.name, "")}
-                        </div>
-                            
-                        {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
-                        {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
-                        {Line("Parent ID", allPrs.filter(pr => pr.id === r.parentId)[0]?.name)}
-                            {enabled && <div style={{position:'absolute', right:0, top:25}}>
-                                <EvaluateBtn pr={r} type='Pass'/>
-                                <EvaluateBtn pr={r} type='Fail'/>
-                                <EvaluateBtn pr={r} type='Skip'/>
-                                <EvaluateBtn pr={r} type='Open'/>
-                            </div>}
-                    </div>
-                );
-            },
-        },
-        {
-            field: "sub-info",  
-            headerName: "Sub Info",
-            width: 200,
-            renderCell: (params) => {
-                const r = params.row as Pr;
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            lineHeight: "normal",
-                            justifyContent: "center",
-                            alignItems: "left",
-                            padding: "10px 10px 10px 0",
-                            fontSize: "12px",
-                        }}
-                    >
-                        {Line("Types", r.types?.split(';').map(typeC => sRs.filter(sr => sr.code === typeC)[0]?.desc).join("; "))}
-                        {Line("Repeat Type", sRs.filter(sr => sr.code === r.repeatType)[0]?.desc)}
-                        {Line("Time Start", displayCDate(r.timeStart))}
-                        {Line("Time End", r.timeEnd ? displayCDate(r.timeEnd) : null)}
-                    </div>
-                );
-            },
-        },
-        {
-            field: "history",
-            headerName: "History",
-            width: 1150,
-            // editable: true,
-            renderCell: (params) => {
-                const pr = params.row as Pr;
-                const year = new Date(pr.timeStart).getFullYear();
-                const indexes1 = getIndexesOfFirstDayOfAllMonth(year);
-                let histories = '';
-                const dayIndexs = pr.pesults.map(p => getDayIndex(p.time));
-                for(let i = 0; i < 365; i++) {
-                    if (dayIndexs.includes(i)) {
-                        const thatPesult = pr.pesults.filter(p => getDayIndex(p.time) === i)[0];
-                        if(thatPesult && thatPesult.pesultC === his.pass.c) histories += 'P';
-                        else if(thatPesult && thatPesult.pesultC === his.fail.c) histories += 'F';
-                        else {
-                            histories += '_';
-                        }
-                    }
-                    else {
-                        histories += '_';
-                    }
-                }
+                const r = params.row
+                const enabled = currentHoveringRow == r.id;
 
-                return <div style={{display:'flex', height: '100%', width: '100%', position:'relative'}}>
-                    <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
-                        {histories.split('').map((h, i) => {
-                            const color = h === his.pass.c ? '#23F51B' : h === his.fail.c ? 'red' : '#00000010';
-                            return <div  key={i} style={{width:'3px', height:'10px',
-                                background: indexes1.includes(i) 
-                                ? `linear-gradient(to bottom, transparent 50%, ${color} 50%)`
-                                : color
-                            }}/>
-                        })}
-                    </div>
+                return <div style={{display:'flex', flexDirection:'row', width: '100%', height: '100%'}}
+                >
+                    {paSid(r.id).type === g.type.pr 
+                    ? 
+                        <>
+                            {Info(r)}
+                            {SubInfo(r)} 
+                            {History(r)}
+                        </>
+                    : paSid(r.id).type === g.type.fo
+                    ?
+                        <div
+                            onMouseEnter={() => {
+                                setCurrentHoveringRow(r.id)
+                            }}
+                            onMouseLeave={() => setCurrentHoveringRow(null)}
+                            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
+                        >
+                            <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
+                                {getIcon('folder', 'folder')}
+                                {Nink(r.id, 'Fo', r.name)}
+                                {enabled && <FolderBtn fo={r} type='GoInside'/>}
+                            </div>  
+                        </div>  
+                    : null  
+                }
                 </div>
-            }
+            },
         },
     ]}
 
     return {
-        openPetail,
+        openDetail,
         gridColumns,
         getAllGitems,
     };

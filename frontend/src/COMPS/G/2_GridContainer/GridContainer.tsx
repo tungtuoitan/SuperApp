@@ -47,6 +47,9 @@ export default function GridContainer() {
                     getRowClassName={(params) => {
                         return gAllTabIds.includes(params.id as string) ? "opening-pr-row" : "normal-pr-row";
                     }}
+                    sx={{
+                        '& .MuiDataGrid-columnHeaders': { display: 'none' } // Ẩn header bằng CSS
+                    }} 
                 />
             </div>
 

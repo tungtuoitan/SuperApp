@@ -4,6 +4,7 @@ import WindowIcon from '@mui/icons-material/Window';
 import LoginIcon from '@mui/icons-material/Login';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
+import FolderIcon from '@mui/icons-material/Folder';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import WeekendIcon from '@mui/icons-material/Weekend';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';import BlockIcon from '@mui/icons-material/Block';
@@ -18,6 +19,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 import CodeIcon from '@mui/icons-material/Code';
 import {Height} from "@mui/icons-material";
 import {FinkToProtocol} from "../S/5_Etail/5he";
+import HomeIcon from '@mui/icons-material/Home';
 
 export const classes =  
   {
@@ -161,61 +163,35 @@ export const sitemaps = [
 const Wicon = styled('div')({
     display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center', position:'relative', 
 });
-export const getIcon = (code: string) => {
-    switch(code){
-        case 'playground': { return (
-            <Wicon>
-                <WeekendIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}/>
-            </Wicon>)}
-        case 'schedule': { return (
-            <Wicon>
-                <CalendarMonthIcon/>
-            </Wicon>)}
-        case 'accounts': { return (
-            <Wicon>
-                <SwitchAccountIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}/>
-            </Wicon>)}
-        case 'finance': { return (
-            <Wicon>
-                <SavingsIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}/>
-            </Wicon>)}
-        
-        case 'self-discipline': { return (
-            <Wicon>
-                <SelfImprovementIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
-                />
-            </Wicon>)}
-        // case 'practice': { return <NearMeIcon />}
-        case 'practice': { return (
-            <Wicon sx={{left:-5}}>
-                <span style={{color: 'white', fontSize:14,position:'relative',left:4, top:0, fontWeight:'bold', textDecoration:'none !important'}}>Pr</span>
-                <NearMeIcon sx={{fontSize:16}} />
-            </Wicon>)}
-        case 'health': { return (
-            <Wicon>
-                <LocalHospitalIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
-                />
-            </Wicon>)}
-        case 'principle': { return (
-            <Wicon>
-                <BlockIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
-                />
-            </Wicon>)}
-        case 'gratefulList': { return (
-            <Wicon>
-                <VolunteerActivismIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
-                />
-            </Wicon>)}
-        case 'conversation': { return (
-            <Wicon>
-                <SmsIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
-                />
-            </Wicon>)}
-        case 'it': { return (
-            <Wicon>
-                <CodeIcon sx={{fontSize:20, color: 'gray', '&:hover': { color: 'white' }}}
-                />
-            </Wicon>)}
 
+
+export const getIcon = (code: string, type: 'sidebar'|'folder') => {
+
+    switch(type){
+        case 'sidebar': return <Wicon>{
+                allIcons({sx: { fontSize:20, color: 'gray', '&:hover': { color: 'white' } }})
+                .find(x => x.code === code)?.icon ?? null}
+            </Wicon>
+        case 'folder': return <Wicon>{
+            allIcons({sx: { fontSize:20, color: 'gray' }})
+            .find(x => x.code === code)?.icon ?? null}
+        </Wicon>
     }
 }
+
+export const allIcons = (props: any) => [
+    { code: 'accounts', icon: <SwitchAccountIcon {...props} /> },
+    { code: 'conversation', icon: <SmsIcon {...props} /> },
+    { code: 'finance', icon: <SavingsIcon {...props} /> },
+    { code: 'folder', icon: <FolderIcon {...props} /> },
+    { code: 'gratefulList', icon: <VolunteerActivismIcon {...props} /> },
+    { code: 'health', icon: <LocalHospitalIcon {...props} /> },
+    { code: 'home', icon: <HomeIcon {...props} /> },
+    { code: 'it', icon: <CodeIcon {...props} /> },
+    { code: 'playground', icon: <WeekendIcon {...props} /> },
+    { code: 'practice', icon: <NearMeIcon {...props} /> },
+    { code: 'principle', icon: <BlockIcon {...props} /> },
+    { code: 'schedule', icon: <CalendarMonthIcon {...props} /> },
+    { code: 'self-discipline', icon: <SelfImprovementIcon {...props} /> },
+];
+

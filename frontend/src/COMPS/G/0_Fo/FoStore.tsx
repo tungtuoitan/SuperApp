@@ -13,6 +13,8 @@ export interface FoContextData {
     setCurFoId: Dispatch<SetStateAction<string>>;
     lastFoId: string;
     setLastFoId: Dispatch<SetStateAction<string>>;
+    openingFoIds: string[];
+    setOpeningFoIds: Dispatch<SetStateAction<string[]>>;
 };
 
 export const FoContextDefaultValue: FoContextData = {
@@ -26,6 +28,8 @@ export const FoContextDefaultValue: FoContextData = {
     setCurFoId: () => { },
     lastFoId: toSid('Fo', 1),
     setLastFoId: () => { },
+    openingFoIds: [],
+    setOpeningFoIds: () => { },
 };
 
 const FoStore = createContext<FoContextData>(FoContextDefaultValue);
@@ -37,6 +41,7 @@ export const FoProvider: React.FC<React.PropsWithChildren<React.PropsWithChildre
     const [loadingFos, setLoadingFos] = useState<boolean>(true);
     const [curFoId, setCurFoId] = useState<string>(toSid('Fo', 1));
     const [lastFoId, setLastFoId] = useState<string>(toSid('Fo', 2));
+    const [openingFoIds, setOpeningFoIds] = useState<string[]>([]);
 
     return (
         <FoStore.Provider
@@ -51,6 +56,8 @@ export const FoProvider: React.FC<React.PropsWithChildren<React.PropsWithChildre
                 setCurFoId,
                 lastFoId,
                 setLastFoId,
+                openingFoIds,
+                setOpeningFoIds,
             }}>
             {children}
         </FoStore.Provider>

@@ -8,7 +8,7 @@ import LaperStatus from "../9L_Laper/LaperStatus";
 import LaperPriority from "../9L_Laper/LaperPriority";
 import LaperFink from "../9L_Laper/LaperFink";
 import LaperTypes from "../9L_Laper/LaperTypes";
-import LaperRepeatType from "../9L_Laper/LaperRepeatType";
+import LaperRepeatType from "../9L_Laper/LaperIcon";
 import {FotailForm, FotailProps} from "./9ty";
 import {useFotailFormStore} from "./FotailFormsStore";
 
@@ -29,11 +29,10 @@ export default function Fotail(props: FotailProps) {
                 <LeftEtailPaper>
                     <LaperIds id={fotailId} />
                     <LaperName id={fotailId} />
-                    {/* <LaperTimeStartTimeEnd id={fotailId} /> */}
                     {/* <LaperStatus id={fotailId} /> */}
                     <LaperPriority id={fotailId} />
                     {/* <LaperFink id={fotailId} /> */}
-                    {/* <LaperRepeatType id={fotailId} /> */}
+                    <LaperRepeatType id={fotailId} />
                     {/* <LaperTypes id={fotailId} /> */}
                     {/* <LaperDetail id={fotailId} /> */}
                 </LeftEtailPaper>

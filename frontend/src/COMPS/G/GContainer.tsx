@@ -4,11 +4,13 @@ import {Pr, Pr2} from "./GTypes";
 import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";
 import {GFilterDrawer} from "./6_Filter/Drawer/GFilterDrawer";
 import GridContainer from "./2_GridContainer/GridContainer";
+import {useFoStore} from "./0_Fo/FoStore";
 
 
 
 export default function GContainer() {
     const { setAllPrs, refreshGrid, setRefreshGrid, searchText } = useGridContainerStore();
+    const { lastFoId } = useFoStore();
 
     // init
     useEffect(() => {

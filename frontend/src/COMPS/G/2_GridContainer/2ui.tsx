@@ -53,8 +53,8 @@ export const Line = (name: string, value: any) => {
     }
 };
 
-export const Nink = (id: string, title: string, link: string) => {
-    const {openPetail} = useGridContainerHelpers();
+export const Nink = (id: string, type: 'Pr'|'Fo', title: string, link?: string) => {
+    const {openDetail} = useGridContainerHelpers();
     const {rowSelectionModel} = useGridContainerStore();
 
     return (
@@ -64,9 +64,9 @@ export const Nink = (id: string, title: string, link: string) => {
                 : 
                 <Link 
                     className="nink" 
-                    to={link} 
+                    to={link ?? ""} 
                     style={{ textDecoration: "none", fontWeight: "bold" }}
-                    onClick={(e) => openPetail(id)}
+                    onClick={(e) => openDetail(id, type)}
                     >
                         {truncateText(title, 66)}
                 </Link>

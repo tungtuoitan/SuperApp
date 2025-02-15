@@ -19,21 +19,22 @@ export const FotailBar = (props: FotailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const [fotails, dispatch] = useFotailFormStore();
     const { allPrs } = useGridContainerStore();
-    const petail = fotails.find((petail) => petail.id === props.id) ?? ({} as FotailForm);
+    const fotail = fotails.find((fotail) => fotail.id === props.id) ?? ({} as FotailForm);
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
     const { loadFos } = useFoHelpers();
 
     const saveFotail = (e: any) => {
         const x: FotailForm = {
             id: props.id ?? toSid('Fo', 0),
-            name: petail.name,
-            shortName: petail.shortName,
-            parentId: petail.parentId,
+            name: fotail.name,
+            shortName: fotail.shortName,
+            parentId: fotail.parentId,
+            iconId: fotail.iconId,
 
-            activeC: petail.activeC,
-            prioriC: petail.prioriC,
-            description: petail.description,
-            pinIndex: petail.pinIndex
+            activeC: fotail.activeC,
+            prioriC: fotail.prioriC,
+            description: fotail.description,
+            pinIndex: fotail.pinIndex
         };
 
         if(x.id === toSid('Fo', 0)) {
@@ -57,12 +58,11 @@ export const FotailBar = (props: FotailBarProps) => {
                     const newPrAllTabIds = [...gAllTabIds];
                     newPrAllTabIds[curTabIndex] = data.fos[0].id
                     setGAllTabIds(newPrAllTabIds);
-
-                    loadFos();
                 } 
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });
                 }
+                loadFos();
             })
         }
         else {
@@ -81,6 +81,7 @@ export const FotailBar = (props: FotailBarProps) => {
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });
                 }
+                loadFos();
             });
 
         }

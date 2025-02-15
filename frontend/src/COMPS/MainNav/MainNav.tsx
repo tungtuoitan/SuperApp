@@ -19,12 +19,12 @@ import {IAutoCompleteOptions} from "../CommonHelpers/4_GenericAutoComplete";
 import {getAllDescendants} from "../S/2_TLBaseFg/2he";
 import {Ev, EvsResult} from "../S/TLTypes";
 import {sr} from "../S/TLConstants";
-import {TopNav} from "../G/0_Fo/Fo";
+import {TopNav} from "../G/0_Fo/TopNav";
 import {CloseNotiBtn} from "../CommonHelpers/1_CloseNotiBtn";
 import {TLAllTabs} from "../S/6_AllTabs/TLAllTabs";
 import {PRAllTabs} from "../G/1_GAllTabs/GAllTabs";
 
-const SideNav: React.FC<
+const MainNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
 > = () => {
     const {sideNavigationRef, bodyWrapperRef } = useNavigationStore();
@@ -290,7 +290,7 @@ const SideNav: React.FC<
                     default:
                 }
             } 
-            else if(location.pathname === '/schedule' && curTabIndex === 0) {
+            else if(location.pathname === '/schedule' && curTabIndex === 0) { 
                 if (e.key === "ArrowUp") changeLevel("down");
                 if (e.key === "ArrowDown") changeLevel("up");
                 if (e.key === "ArrowLeft") changeTimeStart("prev");
@@ -356,4 +356,4 @@ const SideNav: React.FC<
     );
 };
 
-export default SideNav;
+export default MainNav;

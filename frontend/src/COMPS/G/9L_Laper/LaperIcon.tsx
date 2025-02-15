@@ -6,9 +6,11 @@ import {WRow} from "./3Lui";
 import {FotailForm} from "../9_Fotail/9ty";
 import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
 import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
+import {allIcons} from "../../MainNav/Nhe";
+import {GenericAutoComplete} from "../../CommonHelpers/4_GenericAutoComplete";
 
 
-export default function LaperRepeatType(props: LaperLevelProps) {
+export default function LaperIcon(props: LaperLevelProps) {
     const { handleChange } = useFotailHelpers();
     const levelSelector = helperMUIcss.getSelectCSSSelector();
     const { repeatTypeOptions } = useSRsStore();
@@ -25,7 +27,11 @@ export default function LaperRepeatType(props: LaperLevelProps) {
                     margin: 0,
                     [`& ${levelSelector.label1Shrink}`]: {
                         fontSize: "12px",
-                        top: 3,
+                        top: 2,
+                    },
+                    [`& ${levelSelector.label1NoShrink}`]: {
+                        fontSize: "12px",
+                        top: -10,
                     },
                     [`& ${levelSelector.div1}`]: {
                         height: 30,
@@ -37,16 +43,16 @@ export default function LaperRepeatType(props: LaperLevelProps) {
                         lineHeight: "30px",
                     },
                     [`& ${levelSelector.legend2}`]: {
-                        width: 64,
+                        width: 28,
                     },
                 }}
             >
-                <InputLabel id="repeatType">Repeat Type</InputLabel>
-                {/* <Select
-                    labelId="repeatType"
-                    name="repeatType"
-                    id="repeatTypeSelect"
-                    value={fotail.repeatType}
+                <InputLabel id="icon">Icon</InputLabel>
+                <Select
+                    labelId="iconId"
+                    name="iconId"
+                    id="iconId"
+                    value={fotail.iconId}
                     label="Current Repeat Type"
                     onChange={(e) => {
                         if (e.target && e.target.name && e.target.value) {
@@ -54,17 +60,23 @@ export default function LaperRepeatType(props: LaperLevelProps) {
                         }
                     }}
                 >
-                    {repeatTypeOptions.map((option) => {
+                    {allIcons({sx: { fontSize:20, color: 'gray' }}).map((option) => {
                         return (
                             <MenuItem
-                                key={option.id}
+                                key={option.code}
                                 value={option.code.toLowerCase()}
+                                sx={{display: "flex", gap: '8px', justifyContent: 'flex-start'}}
                             >
-                                {option.desc}
+                                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                    {option.icon}
+                                </div>
+                                <div>
+                                    {option.code}
+                                </div>
                             </MenuItem>
                         );
                     })}
-                </Select> */}
+                </Select>
             </FormControl>
         </WRow>
     );
