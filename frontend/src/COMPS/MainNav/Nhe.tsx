@@ -164,18 +164,30 @@ const Wicon = styled('div')({
     display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center', position:'relative', 
 });
 
+type getIconProps = {
+    code: string,
+    type?: 'sidebar'|'folder'|'custom',
+    props?: any
+}
 
-export const getIcon = (code: string, type: 'sidebar'|'folder') => {
+export const getIcon = (_props: getIconProps) => {
 
-    switch(type){
-        case 'sidebar': return <Wicon>{
+    switch(_props.type){
+        case 'sidebar': 
+            return <Wicon>{
                 allIcons({sx: { fontSize:20, color: 'gray', '&:hover': { color: 'white' } }})
-                .find(x => x.code === code)?.icon ?? null}
+                .find(x => x.code === _props.code)?.icon ?? null}
             </Wicon>
-        case 'folder': return <Wicon>{
-            allIcons({sx: { fontSize:20, color: 'gray' }})
-            .find(x => x.code === code)?.icon ?? null}
-        </Wicon>
+        case 'folder': 
+            return <Wicon>{
+                allIcons({sx: { fontSize:20, color: 'gray' }})
+                .find(x => x.code === _props.code)?.icon ?? null}
+            </Wicon>
+        case 'custom':
+            return <Wicon>{
+                allIcons(_props.props)
+                .find(x => x.code === _props.code)?.icon ?? null}
+            </Wicon>
     }
 }
 

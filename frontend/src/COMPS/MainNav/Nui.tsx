@@ -227,7 +227,7 @@ export const SideMenuItem = (props: ISideMenuProps) => {
             <Tooltip title={props.item.name} placement="right">
                 <Wink id={props.item.id} className="single-link" to={props.item.link}>
                     <IconWrapper>
-                        {getIcon(props.item.code, 'sidebar')}
+                        {getIcon({code: props.item.code, type: 'sidebar'})}
                     </IconWrapper>
                 </Wink>
             </Tooltip>

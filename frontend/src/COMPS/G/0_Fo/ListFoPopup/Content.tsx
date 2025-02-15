@@ -85,7 +85,7 @@ export const Content = () => {
                                 closePopup(e);
                             }}>
                                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    {getIcon(fo.iconId ?? 'folder', 'folder')}
+                                    {getIcon({code: fo.iconId ?? 'folder', type: 'folder'})}
                                 </div>
                                 <div>
                                     {fo.name}

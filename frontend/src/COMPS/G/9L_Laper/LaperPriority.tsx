@@ -49,6 +49,9 @@ export default function LaperPriority(props: LaperNameProps) {
                 padding: '0 10px 0 10px',
             }}
             >
+                <FormControlLabel value={sr.priority.top1.c} control={<Radio size="small"/>} label={sr.priority.top1.d} />
+                <FormControlLabel value={sr.priority.top2.c} control={<Radio size="small"/>} label={sr.priority.top2.d} />
+                <FormControlLabel value={sr.priority.top3.c} control={<Radio size="small"/>} label={sr.priority.top3.d} />
                 <FormControlLabel value={sr.priority.high.c} control={<Radio size="small"/>} label={sr.priority.high.d} />
                 <FormControlLabel value={sr.priority.medium.c} control={<Radio size="small" />} label={sr.priority.medium.d} />
                 <FormControlLabel value={sr.priority.normal.c} control={<Radio size="small" />} label={sr.priority.normal.d} />

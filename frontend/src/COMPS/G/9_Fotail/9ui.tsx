@@ -4,7 +4,7 @@ export const LeftEtailPaper = styled(Paper)({
     display: "flex",
     flexFlow: "column",
     margin: 0,
-    maxWidth: '32%',
+    maxWidth: '35%',
     padding: 20,
     flex: 1,
     [`& .card-content`]: {
@@ -18,7 +18,7 @@ export const RightPetailPaper = styled(Paper)({
     display: "flex",
     flexFlow: "column",
     margin: 0,
-    width: '68%',
+    width: '65%',
     padding: 20,
     flex: 1,
     [`& .card-content`]: {

@@ -28,6 +28,7 @@ import {FotailForm} from "../9_Fotail/9ty";
 import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
 import {Fo} from "../0_Fo/FoTypes";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {_2cs} from "./2cs";
 
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
@@ -174,7 +175,7 @@ export const useGridContainerHelpers = () => {
             }
         }
         return (
-            <Cooltip title={type} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
+            <Cooltip title={type=='GoInside' ? 'Go inside' : ''} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
                 <IconButton 
                     onClick={_ => handleClick(fo,type)} 
                     sx={{ 
@@ -317,14 +318,23 @@ export const useGridContainerHelpers = () => {
                     : paSid(r.id).type === g.type.fo
                     ?
                         <div
-                            onMouseEnter={() => {
-                                setCurrentHoveringRow(r.id)
-                            }}
+                            onMouseEnter={() => setCurrentHoveringRow(r.id)}
                             onMouseLeave={() => setCurrentHoveringRow(null)}
                             style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
                         >
                             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                                {getIcon('folder', 'folder')}
+                                {getIcon({   
+                                        code: 'folder', 
+                                        type: 'custom', 
+                                        props: {
+                                            sx: {
+                                                fontSize:20, 
+                                                color: r.prioriC === sr.priority.top1.c ? _2cs.folderIcon.bgTop1
+                                                    : r.prioriC === sr.priority.top2.c ? _2cs.folderIcon.bgTop2
+                                                    : r.prioriC === sr.priority.top3.c ? _2cs.folderIcon.bgTop3
+                                                    : _2cs.folderIcon.bgNormal,
+                                                }}
+                                            })}
                                 {Nink(r.id, 'Fo', r.name)}
                                 {enabled && <FolderBtn fo={r} type='GoInside'/>}
                             </div>  
