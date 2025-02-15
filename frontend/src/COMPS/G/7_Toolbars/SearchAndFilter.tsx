@@ -11,7 +11,7 @@ type SearchAndFilterProps = {
 }
 export const SearchAndFilter = (props: SearchAndFilterProps) => {
     const { getTotalFilter, onClickHandlerFilter} = useFilterIconEvents();
-    const {setSearchText, setCurrentPage, setRefreshPrid, setLoadingGrid} = useGridContainerStore();
+    const {setSearchText, setCurrentPage, setRefreshGrid, setLoadingGrid} = useGridContainerStore();
 
     const onChangeHandlerSearch = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => {
         if (event === undefined) return;
@@ -23,7 +23,7 @@ export const SearchAndFilter = (props: SearchAndFilterProps) => {
         event.stopPropagation();
         if (event.code === "Enter" || event.nativeEvent.code === "Enter" || event.code === "NumpadEnter" || event.nativeEvent.code === "NumpadEnter") {
             setSearchText(event.currentTarget.value);
-            setRefreshPrid(true);
+            setRefreshGrid(true);
             setLoadingGrid(true);
             setCurrentPage(0);
         }

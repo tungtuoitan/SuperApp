@@ -5,7 +5,7 @@ import {updateUserProfilePr} from "../../GAPIs";
 import {pr} from "../../GConstants";
 import {UserProfile} from "../6ty";
 
-export const usePrFilterDrawerEvents = () => {
+export const useGFilterDrawerEvents = () => {
     const { setMainOpenFilterDrawer } = useMainFilterDrawerStore();
     const { 
         parent,
@@ -65,7 +65,7 @@ export const usePrFilterDrawerEvents = () => {
         setFilterIds,
      } = usePrFilterStore();
 
-    const { setPageSize, setCurrentPage, setRefreshPrid, setLoadingGrid } = useGridContainerStore();
+    const { setPageSize, setCurrentPage, setRefreshGrid, setLoadingGrid } = useGridContainerStore();
     const { searchText } = useGridContainerStore();
 
     const onClickHandlerFilterDrawerApplySR = () => {
@@ -97,7 +97,7 @@ export const usePrFilterDrawerEvents = () => {
         .then(() => {
             setPageSize(100);
             setCurrentPage(0);
-            setRefreshPrid(true);
+            setRefreshGrid(true);
         })
         .catch(() => {
             console.log('plm-SampleRequest-apply, error');

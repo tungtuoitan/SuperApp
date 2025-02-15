@@ -10,7 +10,7 @@ export interface GridContainerContextData {
     rowSelectionModel: GridRowSelectionModel;
     setRowSelectionModel: Dispatch<SetStateAction<GridRowSelectionModel>>;
     refreshGrid: boolean;
-    setRefreshPrid: Dispatch<SetStateAction<boolean>>;
+    setRefreshGrid: Dispatch<SetStateAction<boolean>>;
     pageSize: number;
     setPageSize: Dispatch<SetStateAction<number>>;
     totalRows: number;
@@ -34,7 +34,7 @@ export const GridContainerContextDefaultValue: GridContainerContextData = {
     rowSelectionModel: [],
     setRowSelectionModel: () => { },
     refreshGrid: false,
-    setRefreshPrid: () => { },
+    setRefreshGrid: () => { },
     pageSize: 100,
     setPageSize: () => { },
     totalRows: 0,
@@ -57,7 +57,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
-    const [refreshGrid, setRefreshPrid] = useState<boolean>(false);
+    const [refreshGrid, setRefreshGrid] = useState<boolean>(false);
     
     const [pageSize, setPageSize] = useState<number>(100);
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -76,7 +76,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 rowSelectionModel,
                 setRowSelectionModel,
                 refreshGrid,
-                setRefreshPrid,
+                setRefreshGrid,
                 pageSize,
                 setPageSize,
                 totalRows,

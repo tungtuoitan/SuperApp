@@ -2,7 +2,7 @@ import { Button, IconButton, styled, Tab } from "@mui/material";
 import { SetStateAction, useState, MouseEvent, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import PRContainer from "../GContainer";
+import GContainer from "../GContainer";
 import {useGAllTabsStore} from "./GAllTabsStore";
 import {a11yProps} from "../../S/6_AllTabs/6he";
 import {WBadge, WTabBar, WTabsContainer} from "./1ui";
@@ -104,7 +104,7 @@ export const PRAllTabs = () => {
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
                 {curTabId === "GeneralGrid" ? 
-                    <PRContainer />
+                    <GContainer />
                 : curTabId.toString().includes('Pr-') ?
                     <Petail petailId={gAllTabIds[curTabIndex] as string} />
                 : curTabId.toString().includes('Fo-') ?

@@ -3,13 +3,13 @@ import PridContainer from "./2_GridContainer/GridContainer";
 import { getPrs} from "./GAPIs";
 import {Pr, Pr2} from "./GTypes";
 import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";
-import {PrFilterDrawer} from "./6_Filter/Drawer/PrFilterDrawer";
-import {pr} from "./GConstants";
+import {GFilterDrawer} from "./6_Filter/Drawer/GFilterDrawer";
+import GridContainer from "./2_GridContainer/GridContainer";
 
 
 
-export default function PRContainer() {
-    const { setAllPrs, refreshGrid, setRefreshPrid, searchText } = useGridContainerStore();
+export default function GContainer() {
+    const { setAllPrs, refreshGrid, setRefreshGrid, searchText } = useGridContainerStore();
 
     // init
     useEffect(() => {
@@ -30,13 +30,13 @@ export default function PRContainer() {
                 setAllPrs(proData2);
             })
             .finally(() => {
-                setRefreshPrid(false);
+                setRefreshGrid(false);
             });
         }
     }, [refreshGrid]);
 
     return (
-        <div id ='PRContainer' 
+        <div id ='GContainer' 
             style={{ 
                 width: '100%',
                 height: '100%',
@@ -44,8 +44,8 @@ export default function PRContainer() {
                 position: 'relative',
                 outline: 'none',
         }}>
-            <PridContainer/>
-            <PrFilterDrawer/>
+            <GridContainer/>
+            <GFilterDrawer/>
         </div>
     )
 }

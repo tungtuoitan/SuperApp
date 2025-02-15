@@ -64,7 +64,7 @@ export const useFilterItemEvents = (props: FilterItemEventProps) => {
             setAllIsUpdatedTodays,
     
          } = usePrFilterStore();
-    const { setPageSize, setCurrentPage, setRefreshPrid } = useGridContainerStore();
+    const { setPageSize, setCurrentPage, setRefreshGrid } = useGridContainerStore();
     const { filterIds, setFilterIds } = usePrFilterStore();
 
     const deleteId = (id: GridRowId) => {
@@ -116,7 +116,7 @@ export const useFilterItemEvents = (props: FilterItemEventProps) => {
     const runAfterUpdateFilter = () => {
         setPageSize(100);
         setCurrentPage(0);
-        setRefreshPrid(true);
+        setRefreshGrid(true);
     }
     const onDeleteHandlerFilterItem = (id: GridRowId) => {
         deleteId(id);

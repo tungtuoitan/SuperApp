@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react";
 import { SRFilterInputFields } from "../InputFields/PrInputFields";
-import { usePrFilterDrawerEvents } from "./PrFilterDrawerEvents";
+import { useGFilterDrawerEvents } from "./GFilterDrawerEvents";
 import {DropDownGridOptions, UserProfile} from "../6ty";
 import {usePrFilterStore} from "../PrFilterStore";
 import {getPrParentIds, getUserProfileJson} from "../../GAPIs";
@@ -10,8 +10,8 @@ import {PrOptionGrid} from "../OptionGrid/PrOptionGrid";
 import {useSRsStore} from "../../../S/8_SRs/SRsStore";
 import {srConstants} from "../../../S/8_SRs/SRConstants";
 
-export const PrFilterDrawer = () => {
-    const { onClickHandlerFilterDrawerApplySR, onClickHandlerFilterDrawerResetSR } = usePrFilterDrawerEvents();
+export const GFilterDrawer = () => {
+    const { onClickHandlerFilterDrawerApplySR, onClickHandlerFilterDrawerResetSR } = useGFilterDrawerEvents();
     const { sRs } = useSRsStore();
     const { 
         parent,
