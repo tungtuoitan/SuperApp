@@ -20,6 +20,7 @@ import {iuPr} from "../PrAPIs";
 import {enqueueSnackbar} from "notistack";
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+
 export const usePridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const { allPrs, setAllPrs, rowSelectionModel, currentHoveringRow, setCurrentHoveringRow } = usePridContainerStore();
@@ -30,13 +31,13 @@ export const usePridContainerHelpers = () => {
 
     const openPetail = (prId: number) => {
         if (rowSelectionModel.includes(prId) || rowSelectionModel.includes(prId.toString())) return;
-        if (prAllTabIds.includes(prId)) {
-            setCurTabIndex(prAllTabIds.indexOf(prId));
+        if (prAllTabIds.includes('Pr-'+prId)) {
+            setCurTabIndex(prAllTabIds.indexOf('Pr-'+prId));
         } 
         else {
             setPrAllTabIds((prev) => {
                 setCurTabIndex(prev.length); // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
-                return [...prev, prId];
+                return [...prev, 'Pr-'+prId];
             });
         }
 
@@ -141,7 +142,7 @@ export const usePridContainerHelpers = () => {
                     const indexOfToday = getDayIndex(dateToCDate(new Date()));
                     return indexOfLastPesult >=indexOfToday
                 }
-                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !prAllTabIds.includes(r.id) && currentHoveringRow == r.id;
+                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !prAllTabIds.includes('Pr-'+r.id) && currentHoveringRow == r.id;
                 return (
                     <div
                         style={{

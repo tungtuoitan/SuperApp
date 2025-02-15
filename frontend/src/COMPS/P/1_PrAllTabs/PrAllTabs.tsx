@@ -1,4 +1,4 @@
-import { IconButton, Tab } from "@mui/material";
+import { Button, IconButton, styled, Tab } from "@mui/material";
 import { SetStateAction, useState, MouseEvent, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -13,6 +13,10 @@ import AddIcon from "@mui/icons-material/Add";
 import {usePrAllTabHelpers} from "./PrAllTabHelpers";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {SearchAndFilter} from "../7_Toolbars/SearchAndFilter";
+import {usePopupHelper} from "./CreateNewPopup/PopupHelper";
+import {PopupProvider} from "./CreateNewPopup/PopupStore";
+import Fotail from "../9_Fotail/Fotail";
+
 
 export const PRAllTabs = () => {
     const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } =
@@ -21,12 +25,16 @@ export const PRAllTabs = () => {
     const { allPrs, rowSelectionModel } = usePridContainerStore();
     const [petails, dispatch] = usePetailFormStore();
     const { createNewPetail, deletePrs } = usePrAllTabHelpers();
+    const { openPopup } = usePopupHelper();
+
 
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
         event?.preventDefault();
         event?.stopPropagation();
+
+        let nid = Number(id.split("-")[1]);
         setPrAllTabIds(prev => {
-            dispatch({ type: 'REMO', payload: {id} });
+            dispatch({ type: 'REMO', payload: {id:nid} });
             const newAllTabIds = prev.filter(tabId => tabId !== id)
             if (curTabIndex === prAllTabIds.indexOf(id)) {
                 setCurTabIndex(prev => prev-1);
@@ -38,6 +46,7 @@ export const PRAllTabs = () => {
             return newAllTabIds;
         })
     }
+    const curTabId = prAllTabIds.filter((id, index) => index === curTabIndex)[0];
 
     return (
         <WTabsContainer id='PRAllTabs'>
@@ -47,10 +56,11 @@ export const PRAllTabs = () => {
                 onChange={(e: any, newTabIndex: SetStateAction<number>) => setCurTabIndex(newTabIndex)}
                 aria-label="tabs">
                 {prAllTabIds.map((id: number | string, index: number) => {
-                    if (id === 'PridID') 
+                    if (id === 'GeneralGrid') 
                         return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{ height: '48px',minHeight: '48px'}} />
 
-                    const pr = allPrs.filter(pr => pr.id === id)[0];
+                    const nid = Number(id.toString().split("-")[1]);
+                    const pr = allPrs.filter(pr => pr.id === nid)[0];
                     return (
                         <Tab
                             key={index}
@@ -59,14 +69,14 @@ export const PRAllTabs = () => {
                                 e.stopPropagation();
                                 setCurTabIndex(index);
                             }}
-                            onMouseEnter={() => setHoverId(id)}
+                            onMouseEnter={() => setHoverId(nid)}
                             onMouseLeave={() => setHoverId(null)}
                             label={
                                 <WBadge color="primary" max={99}>
                                     {(pr && pr.name.length > 35 ? pr.name.slice(0, 32) + "..." : pr?.name) ?? "New Pr"}
                                 </WBadge>}
                             icon={index > 0 ?
-                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
+                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === nid ? 1 : 0 }}>
                                     <CloseIcon sx={{fontSize:12}} />
                                 </IconButton> : <></>}
                             {...a11yProps(index)}
@@ -81,8 +91,8 @@ export const PRAllTabs = () => {
                         />
                     );
                 })}
-                {!prAllTabIds.includes(0) &&
-                    <IconButton onClick={createNewPetail} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
+                {!prAllTabIds.includes('Pr-0') &&
+                    <IconButton onClick={(event: MouseEvent<HTMLButtonElement>)=> openPopup(event)} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
                         <AddIcon sx={{ fontSize: 16 }} />
                     </IconButton>
                 }
@@ -95,12 +105,14 @@ export const PRAllTabs = () => {
             </WTabBar>
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>
-                {prAllTabIds.filter((id, index) => index === curTabIndex)[0] ===
-                "PridID" ? (
+                {curTabId === "GeneralGrid" ? 
                     <PRContainer />
-                ) : (
-                    <Petail petailId={prAllTabIds[curTabIndex] as number} />
-                )}
+                : curTabId.toString().includes('Pr-') ?
+                    <Petail petailId={Number((prAllTabIds[curTabIndex] as string).replace('Pr-', '') as unknown)} />
+                : curTabId.toString().includes('Fo-') ?
+                    <Fotail petailId={Number((prAllTabIds[curTabIndex] as string).replace('Fo-', '') as unknown)} />
+                : <></>
+            }
             </div>
         </WTabsContainer>
     )

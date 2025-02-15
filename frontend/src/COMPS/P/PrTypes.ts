@@ -11,8 +11,11 @@ export type Pr =
      };
 
 
+
 export type Pr2 = Omit<Pr, 'pesults'> & {pesults: string};     
 export type PrsResult = {
     prs: Pr2[];
     options: ResultOptions;
 }
+
+

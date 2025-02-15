@@ -21,7 +21,7 @@ const PRAllTabsContext = createContext<PRAllTabsContextData>(PRAllTabsContextDef
 export const usePrAllTabsStore = () => useContext(PRAllTabsContext);
 
 export const PRAllTabsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
-    const [prAllTabIds, setPrAllTabIds] = useState<(number|string)[]>(['PridID']);
+    const [prAllTabIds, setPrAllTabIds] = useState<(number|string)[]>(['GeneralGrid']);
     const [curTabIndex, setCurTabIndex] = useState<number>(0);
  
 

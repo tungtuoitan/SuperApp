@@ -19,8 +19,8 @@ export const usePrAllTabHelpers = () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0); 
 
-        if (prAllTabIds.includes(0)) {
-            setCurTabIndex(prAllTabIds.indexOf(0));
+        if (prAllTabIds.includes('Pr-0')) {
+            setCurTabIndex(prAllTabIds.indexOf('Pr-0'));
         } 
         else {
             setPrAllTabIds((prev) => {
@@ -47,9 +47,13 @@ export const usePrAllTabHelpers = () => {
                 };
                 dispatch({ type: "INSE", payload: newPetail });
                 setCurTabIndex(prev.length)
-                return [...prev, 0];
+                return [...prev, 'Pr-0'];
             })
         }
+    }
+
+    const createNewFolder = (e:any) => {
+
     }
     const deletePrs = (e:any) => {
         e.preventDefault();
@@ -76,5 +80,9 @@ export const usePrAllTabHelpers = () => {
             });
     }
 
-    return { createNewPetail, deletePrs }
+    return { 
+        createNewPetail, 
+        deletePrs,
+        createNewFolder
+     }
 }

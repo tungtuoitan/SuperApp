@@ -31,6 +31,10 @@ export const constants = {
         getSRs: "SRs/GetSRs",
         getPrs: "Pr/GetPrs", 
         iuPr: "Pr/IuPr",
+
+        getFos: "Fo/GetFos", 
+        iuFo: "Fo/IuFo",
+        
         iuUserProfile: "UserProfile/IuUserProfile",
         getUserProfile: "UserProfile/GetUserProfileJson",
         getPrParentIds: "PrFilter/GetPrParentIds",

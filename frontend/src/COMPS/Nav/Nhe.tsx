@@ -17,6 +17,7 @@ import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';import Volunte
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SmsIcon from '@mui/icons-material/Sms';
 import CodeIcon from '@mui/icons-material/Code';
+import {Height} from "@mui/icons-material";
 
 export const classes =  
   {
@@ -27,6 +28,7 @@ export const classes =
           flexGrow: 1,
           backgroundColor: '#fff!important',
           zIndex:10000000000,
+        //   height: '44px'
       },
       appBar: {
         backgroundColor: '#fff!important',

@@ -1,0 +1,23 @@
+import {cDate} from "../../S/TLTypes";
+import {Fo} from "../8_Fo/FoTypes";
+
+
+
+
+export type FotailForm = Omit<Fo,''>
+export type FotailProps = {
+    petailId: number;
+};
+
+export type Fosult = {
+    id: number;
+    prId: number;
+    time: cDate;
+
+    feasonCs: string;
+    pesultC: string;
+
+    fink: string;
+    note: string;
+    activeC: string;
+}

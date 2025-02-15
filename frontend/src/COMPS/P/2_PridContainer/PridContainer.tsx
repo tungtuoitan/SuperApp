@@ -41,7 +41,7 @@ export default function PridContainer() {
                     isRowSelectable={(params: GridRowParams) => !prAllTabIds.includes(toNumber(params.row.id))}
                     onRowSelectionModelChange={newX => setRowSelectionModel(newX)}
                     getRowClassName={(params) => {
-                        return prAllTabIds.includes(toNumber(params.id)) ? "opening-pr-row" : "normal-pr-row";
+                        return prAllTabIds.includes('Pr' + toNumber(params.id)) ? "opening-pr-row" : "normal-pr-row";
                     }}
                 />
             </div>

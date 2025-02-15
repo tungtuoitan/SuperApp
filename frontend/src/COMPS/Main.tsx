@@ -17,6 +17,8 @@ import {PetailFormsStoreProvider} from "./P/3_Petail/PetailFormsStore";
 import {ADiProvider} from "./P/5_Adi/ADiStore";
 import {MainFilterDrawerProvider} from "./P/6_Filter/Drawer/DrawerStore";
 import {PrFilterStoreProvider} from "./P/6_Filter/PrFilterStore";
+import {FoProvider} from "./P/8_Fo/FoStore";
+import {PopupProvider} from "./P/1_PrAllTabs/CreateNewPopup/PopupStore";
 
 export const Main = () => {
     return (
@@ -50,7 +52,11 @@ export const Main = () => {
                                                                         <ADiProvider>
                                                                             <MainFilterDrawerProvider>
                                                                             <PrFilterStoreProvider>
-                                                                                <SideNav />
+                                                                                <FoProvider>
+                                                                                    <PopupProvider>
+                                                                                        <SideNav />
+                                                                                    </PopupProvider>
+                                                                                </FoProvider>
                                                                             </PrFilterStoreProvider>
                                                                             </MainFilterDrawerProvider>
                                                                         </ADiProvider>

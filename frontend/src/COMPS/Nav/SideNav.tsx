@@ -24,12 +24,12 @@ import { getAllDescendants } from "../S/2_TLBaseFg/2he";
 import { getSRs, iuEv } from "../S/TLAPIs";
 import {sr} from "../S/TLConstants";
 import {KeyboardEvent, useEffect} from "react";
-import {TopNav} from "./TopNav";
 import {PRAllTabs} from "../P/1_PrAllTabs/PrAllTabs";
 import {SR} from "../S/8_SRs/8ty";
 import {useSRsStore} from "../S/8_SRs/SRsStore";
 import {IAutoCompleteOptions} from "../CommonHelpers/4_GenericAutoComplete";
 import {useAllTabsStore} from "../S/6_AllTabs/TLAllTabsStore";
+import {TopNav} from "../P/8_Fo/Nav";
 
 const SideNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -317,7 +317,6 @@ const SideNav: React.FC<
             <TopNav />
             <SideNavRoot
                 className={`side-tabs`}
-                
             >
                 <Drawer
                     ref={sideNavigationRef}
