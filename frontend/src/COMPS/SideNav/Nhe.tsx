@@ -17,7 +17,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SmsIcon from '@mui/icons-material/Sms';
 import CodeIcon from '@mui/icons-material/Code';
 import {Height} from "@mui/icons-material";
-import {FinkToProtocol} from "../../S/5_Etail/5he";
+import {FinkToProtocol} from "../S/5_Etail/5he";
 
 export const classes =  
   {

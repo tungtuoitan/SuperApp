@@ -8,7 +8,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { get, last } from "lodash";
 import { Popup} from "../1_GAllTabs/CreateNewPopup/Popup";
-import {classes} from "../0_Nav/Nhe";
+import {classes} from "../../SideNav/Nhe";
 
 export const TopNav = () => {
     const { setAllFos, allFos, curFoId, lastFoId } = useFoStore();

@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "src/COMPS/G/8_Fo/Nav.tsx"  ]
+, "src/COMPS/G/0_Nav/Nav.tsx"  ]
 }

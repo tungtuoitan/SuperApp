@@ -15,9 +15,9 @@ import {PetailFormsStoreProvider} from "./G/3_Petail/PetailFormsStore";
 import {ADiProvider} from "./G/5_Adi/ADiStore";
 import {MainFilterDrawerProvider} from "./G/6_Filter/Drawer/DrawerStore";
 import {PrFilterStoreProvider} from "./G/6_Filter/PrFilterStore";
-import {FoProvider} from "./G/8_Fo/FoStore";
+import {FoProvider} from "./G/0_Nav/FoStore";
 import {PopupProvider} from "./G/1_GAllTabs/CreateNewPopup/PopupStore";
-import SideNav from "./G/0_Nav/SideNav";
+import SideNav from "./SideNav/SideNav";
 
 export const Main = () => {
     return (

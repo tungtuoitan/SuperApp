@@ -1,8 +1,5 @@
 
-import { PopoverPosition } from "@mui/material";
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import {SAModule} from "./Nty";
-import {sitemaps} from "./Nhe";
 
 export interface NavigationContextData {
     sideNavigationRef: React.MutableRefObject<HTMLDivElement | null>;

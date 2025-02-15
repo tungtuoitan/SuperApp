@@ -9,7 +9,7 @@ import { iuPr } from "../GAPIs";
 import { toNumber } from "lodash";
 import { usePrAllTabsStore } from "../1_GAllTabs/PrAllTabsStore";
 import {FotailForm} from "./9ty";
-import {FosResult} from "../8_Fo/FoTypes";
+import {FosResult} from "../0_Nav/FoTypes";
 
 type FotailBarProps = {
     id: number;
