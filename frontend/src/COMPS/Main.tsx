@@ -1,8 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
-import SideNav from "./Nav/SideNav";
 import { SnackbarKey, SnackbarProvider } from "notistack";
 import { CloseNotiBtn } from "./CommonHelpers/1_CloseNotiBtn";
-import { LoginProvider } from "./Login/store/loginStore";
 import {SRsProvider} from "./S/8_SRs/SRsStore";
 import { TLAllTabsProvider} from "./S/6_AllTabs/TLAllTabsStore";
 import {TLBaseBgProvider} from "./S/1_TLBaseBg/TLBaseBgStore";
@@ -11,14 +9,15 @@ import {FloatToolsProvider} from "./S/7_FloatTools/FloatToolsStore";
 import {TimeConfigProvider} from "./S/3_TimeConfig/TimeConfigStore";
 import {ChildEvProvider} from "./S/4_ChildEv/ChildEvStore";
 import {EtailFormsStoreProvider} from "./S/5_Etail/EtailFormsStore";
-import {PRAllTabsProvider} from "./P/1_PrAllTabs/PrAllTabsStore";
-import {PridContainerProvider} from "./P/2_PridContainer/PridContainerStore";
-import {PetailFormsStoreProvider} from "./P/3_Petail/PetailFormsStore";
-import {ADiProvider} from "./P/5_Adi/ADiStore";
-import {MainFilterDrawerProvider} from "./P/6_Filter/Drawer/DrawerStore";
-import {PrFilterStoreProvider} from "./P/6_Filter/PrFilterStore";
-import {FoProvider} from "./P/8_Fo/FoStore";
-import {PopupProvider} from "./P/1_PrAllTabs/CreateNewPopup/PopupStore";
+import {PRAllTabsProvider} from "./G/1_GAllTabs/PrAllTabsStore";
+import {PridContainerProvider} from "./G/2_GridContainer/PridContainerStore";
+import {PetailFormsStoreProvider} from "./G/3_Petail/PetailFormsStore";
+import {ADiProvider} from "./G/5_Adi/ADiStore";
+import {MainFilterDrawerProvider} from "./G/6_Filter/Drawer/DrawerStore";
+import {PrFilterStoreProvider} from "./G/6_Filter/PrFilterStore";
+import {FoProvider} from "./G/8_Fo/FoStore";
+import {PopupProvider} from "./G/1_GAllTabs/CreateNewPopup/PopupStore";
+import SideNav from "./G/0_Nav/SideNav";
 
 export const Main = () => {
     return (
@@ -34,7 +33,6 @@ export const Main = () => {
                 }}
             >
                 <SnackbarProvider action={(id: SnackbarKey) => <CloseNotiBtn id={id} />}autoHideDuration={3000}>
-                   <LoginProvider>
                         <SRsProvider>
 
                             <TLAllTabsProvider>
@@ -74,7 +72,6 @@ export const Main = () => {
                             </TLAllTabsProvider>
 
                         </SRsProvider>
-                    </LoginProvider>
                 </SnackbarProvider>
             </div>
         </BrowserRouter>
