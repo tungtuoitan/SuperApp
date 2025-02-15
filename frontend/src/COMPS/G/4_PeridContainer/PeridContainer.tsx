@@ -1,6 +1,6 @@
 import { DataGrid, GridRowParams } from "@mui/x-data-grid";
 import { usePeridContainerHelpers } from "./PeridContainerHelpers";
-import {usePridContainerStore} from "../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {PetailForm} from "../3_Petail/3ty";
 
@@ -9,7 +9,7 @@ type PeridContainerProps = {
 }
 export default function PeridContainer(props: PeridContainerProps) {
     const { petailId } = props;
-    const { allPrs } = usePridContainerStore(); 
+    const { allPrs } = useGridContainerStore(); 
     const { peridColumns } = usePeridContainerHelpers(); 
     const [petails, dispatch] = usePetailFormStore();
     const petail = petails.find((petail:PetailForm) => petail.id === petailId) ?? ({} as PetailForm);
@@ -34,7 +34,7 @@ export default function PeridContainer(props: PeridContainerProps) {
                     // checkboxSelection
                     // disableRowSelectionOnClick
                     // rowSelectionModel={rowSelectionModel}
-                    // isRowSelectable={(params: GridRowParams) => !prAllTabIds.includes(toNumber(params.row.id))}
+                    // isRowSelectable={(params: GridRowParams) => !gAllTabIds.includes(toNumber(params.row.id))}
                     // onRowSelectionModelChange={newX => setRowSelectionModel(newX)}
                 />
             </div>

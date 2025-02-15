@@ -4,12 +4,12 @@ import { useSnackbar } from "notistack";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { usePetailFormStore } from "./FotailFormsStore";
-import { usePridContainerStore } from "../2_GridContainer/PridContainerStore";
+import { useGridContainerStore } from "../2_GridContainer/GridContainerStore";
 import { iuPr } from "../GAPIs";
 import { toNumber } from "lodash";
-import { usePrAllTabsStore } from "../1_GAllTabs/PrAllTabsStore";
+import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
 import {FotailForm} from "./9ty";
-import {FosResult} from "../0_Nav/FoTypes";
+import {FosResult} from "../0_Fo/FoTypes";
 
 type FotailBarProps = {
     id: number;
@@ -17,9 +17,9 @@ type FotailBarProps = {
 export const FotailBar = (props: FotailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const [petails, dispatch] = usePetailFormStore();
-    const { allPrs } = usePridContainerStore();
+    const { allPrs } = useGridContainerStore();
     const petail = petails.find((petail) => petail.id === props.id) ?? ({} as FotailForm);
-    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } = usePrAllTabsStore();
+    const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
 
     const savePetail = (e: any) => {
         const x = {
@@ -52,9 +52,9 @@ export const FotailBar = (props: FotailBarProps) => {
                         pinIndex: data.fos[0].pinIndex,
                     };
                     dispatch({ type: "INSE", payload: newPetail });
-                    const newPrAllTabIds = [...prAllTabIds];
+                    const newPrAllTabIds = [...gAllTabIds];
                     newPrAllTabIds[curTabIndex] = 'Pr-'+toNumber(data.fos[0].id);
-                    setPrAllTabIds(newPrAllTabIds);
+                    setGAllTabIds(newPrAllTabIds);
                 } 
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });

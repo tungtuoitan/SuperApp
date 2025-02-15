@@ -5,7 +5,7 @@ import AdiIds from "./ADiIds";
 import AdiPesult from "./ADiPesult";
 import ADiFeasons from "./ADiFeasons";
 import {iuPr} from "../GAPIs";
-import {usePridContainerStore} from "../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {useADiStore} from "./ADiStore";
 import {Pesult} from "../3_Petail/3ty";
 import {useSnackbar} from "notistack";
@@ -13,7 +13,7 @@ import {Pr2, PrsResult} from "../GTypes";
 import ADiTime from "./ADiTime";
 
 export function ADiContent() {
-    const { allPrs, setAllPrs } = usePridContainerStore();
+    const { allPrs, setAllPrs } = useGridContainerStore();
     const { aDia, setADia } = useADiStore();
     const { enqueueSnackbar } = useSnackbar();
 

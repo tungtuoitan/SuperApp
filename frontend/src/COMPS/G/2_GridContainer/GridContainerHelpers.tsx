@@ -4,8 +4,8 @@ import { Line, Nink } from "./2ui";
 import { displayCDate, getDayIndex, getIndexesOfFirstDayOfAllMonth } from "./2he";
 import { Pesult, PetailForm } from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {usePridContainerStore} from "./PridContainerStore";
-import {usePrAllTabsStore} from "../1_GAllTabs/PrAllTabsStore";
+import {useGridContainerStore} from "./GridContainerStore";
+import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
 import {his} from "../4_PeridContainer/4ty";
 import {IconButton} from "@mui/material";
@@ -20,22 +20,31 @@ import {iuPr} from "../GAPIs";
 import {enqueueSnackbar} from "notistack";
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import {useFoStore} from "../0_Fo/FoStore";
+import {get} from "lodash";
 
-export const usePridContainerHelpers = () => {
+export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
-    const { allPrs, setAllPrs, rowSelectionModel, currentHoveringRow, setCurrentHoveringRow } = usePridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
-    const { prAllTabIds,setPrAllTabIds,curTabIndex, setCurTabIndex} = usePrAllTabsStore();
+    const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
     const { sRs } = useSRsStore();
+    const { allFos } = useFoStore();
 
+
+    const getAllGitems = () => {
+        return [...allPrs
+            // , ...allFos
+        ];
+    }
     const openPetail = (prId: number) => {
         if (rowSelectionModel.includes(prId) || rowSelectionModel.includes(prId.toString())) return;
-        if (prAllTabIds.includes('Pr-'+prId)) {
-            setCurTabIndex(prAllTabIds.indexOf('Pr-'+prId));
+        if (gAllTabIds.includes('Pr-'+prId)) {
+            setCurTabIndex(gAllTabIds.indexOf('Pr-'+prId));
         } 
         else {
-            setPrAllTabIds((prev) => {
+            setGAllTabIds((prev) => {
                 setCurTabIndex(prev.length); // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
                 return [...prev, 'Pr-'+prId];
             });
@@ -127,7 +136,7 @@ export const usePridContainerHelpers = () => {
 
 
 
-    const pridColumns = ():GridColDef[] => { 
+    const gridColumns = ():GridColDef[] => { 
         return [
         { field: "id", headerName: "ID", width: 20 },
         {
@@ -142,7 +151,7 @@ export const usePridContainerHelpers = () => {
                     const indexOfToday = getDayIndex(dateToCDate(new Date()));
                     return indexOfLastPesult >=indexOfToday
                 }
-                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !prAllTabIds.includes('Pr-'+r.id) && currentHoveringRow == r.id;
+                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !gAllTabIds.includes('Pr-'+r.id) && currentHoveringRow == r.id;
                 return (
                     <div
                         style={{
@@ -245,8 +254,8 @@ export const usePridContainerHelpers = () => {
 
     return {
         openPetail,
-        pridColumns,
-
+        gridColumns,
+        getAllGitems,
     };
 };
 

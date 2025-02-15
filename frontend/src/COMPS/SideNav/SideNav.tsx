@@ -19,10 +19,10 @@ import {IAutoCompleteOptions} from "../CommonHelpers/4_GenericAutoComplete";
 import {getAllDescendants} from "../S/2_TLBaseFg/2he";
 import {Ev, EvsResult} from "../S/TLTypes";
 import {sr} from "../S/TLConstants";
-import {TopNav} from "../G/0_Nav/Nav";
+import {TopNav} from "../G/0_Fo/Fo";
 import {CloseNotiBtn} from "../CommonHelpers/1_CloseNotiBtn";
 import {TLAllTabs} from "../S/6_AllTabs/TLAllTabs";
-import {PRAllTabs} from "../G/1_GAllTabs/PrAllTabs";
+import {PRAllTabs} from "../G/1_GAllTabs/GAllTabs";
 
 const SideNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>

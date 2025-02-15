@@ -1,6 +1,6 @@
 import { AppBar, Breadcrumbs, Toolbar } from "@mui/material";
 import { useEffect } from "react";
-import { getFos } from "./NavAPIs";
+import { getFos } from "./FoAPIs";
 import { Fo } from "./FoTypes";
 import { useFoStore } from "./FoStore";
 import { CHIP } from "./Chip";

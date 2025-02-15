@@ -1,4 +1,4 @@
-import {usePridContainerStore} from "../../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../../2_GridContainer/GridContainerStore";
 import {useMainFilterDrawerStore} from "./DrawerStore";
 import {usePrFilterStore} from "../PrFilterStore";
 import {updateUserProfilePr} from "../../GAPIs";
@@ -65,8 +65,8 @@ export const usePrFilterDrawerEvents = () => {
         setFilterIds,
      } = usePrFilterStore();
 
-    const { setPageSize, setCurrentPage, setRefreshPrid, setLoadingPrid } = usePridContainerStore();
-    const { searchText } = usePridContainerStore();
+    const { setPageSize, setCurrentPage, setRefreshPrid, setLoadingGrid } = useGridContainerStore();
+    const { searchText } = useGridContainerStore();
 
     const onClickHandlerFilterDrawerApplySR = () => {
         // close drawer
@@ -101,7 +101,7 @@ export const usePrFilterDrawerEvents = () => {
         })
         .catch(() => {
             console.log('plm-SampleRequest-apply, error');
-            setLoadingPrid(false);
+            setLoadingGrid(false);
         });
     }
 

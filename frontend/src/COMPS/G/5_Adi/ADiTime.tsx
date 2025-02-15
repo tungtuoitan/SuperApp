@@ -5,7 +5,7 @@ import { useADiStore } from "./ADiStore";
 import { useADiaHelpers } from "./ADiaHelpers";
 import { ADiTimePicker, StartDatePicker, WRow } from "./5ui";
 import { dateToCDate } from "../../S/3_TimeConfig/TimeHelpers";
-import { usePridContainerStore } from "../2_GridContainer/PridContainerStore";
+import { useGridContainerStore } from "../2_GridContainer/GridContainerStore";
 import { useSnackbar } from "notistack";
 import {displayCDate} from "../2_GridContainer/2he";
 
@@ -14,7 +14,7 @@ export default function ADiTime() {
     const { handleChange } = useADiaHelpers();
     const { aDia, setADia } = useADiStore();
     const { sRs } = useSRsStore();
-    const { allPrs } = usePridContainerStore();
+    const { allPrs } = useGridContainerStore();
     const allPesults = allPrs.find(
         (pr) => pr.id === aDia?.pesult.prId
     )?.pesults;

@@ -3,14 +3,14 @@ import { SetStateAction, useState, MouseEvent, useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PRContainer from "../GContainer";
-import {usePrAllTabsStore} from "./PrAllTabsStore";
+import {useGAllTabsStore} from "./GAllTabsStore";
 import {a11yProps} from "../../S/6_AllTabs/6he";
 import {WBadge, WTabBar, WTabsContainer} from "./1ui";
 import Petail from "../3_Petail/Petail";
-import {usePridContainerStore} from "../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import AddIcon from "@mui/icons-material/Add";
-import {usePrAllTabHelpers} from "./PrAllTabHelpers";
+import {useGAllTabHelpers} from "./GAllTabHelpers";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {SearchAndFilter} from "../7_Toolbars/SearchAndFilter";
 import {usePopupHelper} from "./CreateNewPopup/PopupHelper";
@@ -19,12 +19,12 @@ import Fotail from "../9_Fotail/Fotail";
 
 
 export const PRAllTabs = () => {
-    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } =
-        usePrAllTabsStore();
+    const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } =
+        useGAllTabsStore();
     const [hoverId, setHoverId] = useState<number | string | null>(null);
-    const { allPrs, rowSelectionModel } = usePridContainerStore();
+    const { allPrs, rowSelectionModel } = useGridContainerStore();
     const [petails, dispatch] = usePetailFormStore();
-    const { createNewPetail, deletePrs } = usePrAllTabHelpers();
+    const { createNewPetail, deletePrs } = useGAllTabHelpers();
     const { openPopup } = usePopupHelper();
 
 
@@ -33,20 +33,20 @@ export const PRAllTabs = () => {
         event?.stopPropagation();
 
         let nid = Number(id.split("-")[1]);
-        setPrAllTabIds(prev => {
+        setGAllTabIds(prev => {
             dispatch({ type: 'REMO', payload: {id:nid} });
             const newAllTabIds = prev.filter(tabId => tabId !== id)
-            if (curTabIndex === prAllTabIds.indexOf(id)) {
+            if (curTabIndex === gAllTabIds.indexOf(id)) {
                 setCurTabIndex(prev => prev-1);
             } else {
-                const newCurTabIndex = newAllTabIds.indexOf(prAllTabIds[curTabIndex]);
+                const newCurTabIndex = newAllTabIds.indexOf(gAllTabIds[curTabIndex]);
                 setCurTabIndex(newCurTabIndex);
             }
 
             return newAllTabIds;
         })
     }
-    const curTabId = prAllTabIds.filter((id, index) => index === curTabIndex)[0];
+    const curTabId = gAllTabIds.filter((id, index) => index === curTabIndex)[0];
 
     return (
         <WTabsContainer id='PRAllTabs'>
@@ -55,7 +55,7 @@ export const PRAllTabs = () => {
                 value={curTabIndex}
                 onChange={(e: any, newTabIndex: SetStateAction<number>) => setCurTabIndex(newTabIndex)}
                 aria-label="tabs">
-                {prAllTabIds.map((id: number | string, index: number) => {
+                {gAllTabIds.map((id: number | string, index: number) => {
                     if (id === 'GeneralGrid') 
                         return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{ height: '48px',minHeight: '48px'}} />
 
@@ -91,7 +91,7 @@ export const PRAllTabs = () => {
                         />
                     );
                 })}
-                {!prAllTabIds.includes('Pr-0') &&
+                {!gAllTabIds.includes('Pr-0') &&
                     <IconButton onClick={(event: MouseEvent<HTMLButtonElement>)=> openPopup(event)} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
                         <AddIcon sx={{ fontSize: 16 }} />
                     </IconButton>
@@ -108,9 +108,9 @@ export const PRAllTabs = () => {
                 {curTabId === "GeneralGrid" ? 
                     <PRContainer />
                 : curTabId.toString().includes('Pr-') ?
-                    <Petail petailId={Number((prAllTabIds[curTabIndex] as string).replace('Pr-', '') as unknown)} />
+                    <Petail petailId={Number((gAllTabIds[curTabIndex] as string).replace('Pr-', '') as unknown)} />
                 : curTabId.toString().includes('Fo-') ?
-                    <Fotail petailId={Number((prAllTabIds[curTabIndex] as string).replace('Fo-', '') as unknown)} />
+                    <Fotail petailId={Number((gAllTabIds[curTabIndex] as string).replace('Fo-', '') as unknown)} />
                 : <></>
             }
             </div>

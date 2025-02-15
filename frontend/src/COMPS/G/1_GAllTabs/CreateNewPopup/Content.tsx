@@ -4,7 +4,7 @@ import { Button, styled } from "@mui/material";
 import {usePopupHelper} from "./PopupHelper";
 import FolderIcon from '@mui/icons-material/Folder';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import {usePrAllTabHelpers} from "../PrAllTabHelpers";
+import {useGAllTabHelpers} from "../GAllTabHelpers";
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -63,7 +63,7 @@ export const Row = styled('div')({
 
 export const Content = () => {
     const { closePopup } = usePopupHelper();
-    const { createNewPetail, deletePrs, createNewFolder } = usePrAllTabHelpers();
+    const { createNewPetail, deletePrs, createNewFolder } = useGAllTabHelpers();
     
     return (
         <AuditHeaderPopupRoot>

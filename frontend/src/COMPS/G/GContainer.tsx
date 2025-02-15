@@ -1,13 +1,13 @@
 import {useEffect} from "react";
-import PridContainer from "./2_GridContainer/PridContainer";
+import PridContainer from "./2_GridContainer/GridContainer";
 import { getPrs} from "./GAPIs";
 import {Pr, Pr2} from "./GTypes";
-import {usePridContainerStore} from "./2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";
 import {PrFilterDrawer} from "./6_Filter/Drawer/PrFilterDrawer";
 
 
 export default function PRContainer() {
-    const { setAllPrs, refreshPrid, setRefreshPrid, searchText } = usePridContainerStore();
+    const { setAllPrs, refreshGrid, setRefreshPrid, searchText } = useGridContainerStore();
 
     // init
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function PRContainer() {
     }, []);
 
     useEffect(() => {
-        if(refreshPrid) {
+        if(refreshGrid) {
             getPrs(searchText??'')
             .then((prs: Pr2[]) => {
                 let proData = prs.filter((pr) => pr.activeC == "Act");
@@ -31,7 +31,7 @@ export default function PRContainer() {
                 setRefreshPrid(false);
             });
         }
-    }, [refreshPrid]);
+    }, [refreshGrid]);
 
     return (
         <div id ='PRContainer' 

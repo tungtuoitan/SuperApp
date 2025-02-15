@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import {usePridContainerHelpers} from "./PridContainerHelpers";
-import {usePridContainerStore} from "./PridContainerStore";
+import {useGridContainerHelpers} from "./GridContainerHelpers";
+import {useGridContainerStore} from "./GridContainerStore";
 import {truncateText} from "./2he";
 import {sr} from "../../S/TLConstants";
 import {_4cs} from "../../S/4_ChildEv/4cs";
@@ -54,8 +54,8 @@ export const Line = (name: string, value: any) => {
 };
 
 export const Nink = (id: number, title: string, link: string) => {
-    const {openPetail} = usePridContainerHelpers();
-    const {rowSelectionModel} = usePridContainerStore();
+    const {openPetail} = useGridContainerHelpers();
+    const {rowSelectionModel} = useGridContainerStore();
 
     return (
         <>

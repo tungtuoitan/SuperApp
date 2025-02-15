@@ -1,7 +1,7 @@
 import {GridRowId} from "@mui/x-data-grid";
 import {usePrFilterStore} from "../PrFilterStore";
 import {pr} from "../../GConstants";
-import {usePridContainerStore} from "../../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../../2_GridContainer/GridContainerStore";
 interface FilterItemEventProps {
     source: string;
 }
@@ -64,7 +64,7 @@ export const useFilterItemEvents = (props: FilterItemEventProps) => {
             setAllIsUpdatedTodays,
     
          } = usePrFilterStore();
-    const { setPageSize, setCurrentPage, setRefreshPrid } = usePridContainerStore();
+    const { setPageSize, setCurrentPage, setRefreshPrid } = useGridContainerStore();
     const { filterIds, setFilterIds } = usePrFilterStore();
 
     const deleteId = (id: GridRowId) => {

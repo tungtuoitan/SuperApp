@@ -5,11 +5,11 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { PetailForm } from "./3ty";
 import { usePetailFormStore } from "./PetailFormsStore";
-import { usePridContainerStore } from "../2_GridContainer/PridContainerStore";
+import { useGridContainerStore } from "../2_GridContainer/GridContainerStore";
 import { iuPr } from "../GAPIs";
 import { toNumber } from "lodash";
 import { PrsResult } from "../GTypes";
-import { usePrAllTabsStore } from "../1_GAllTabs/PrAllTabsStore";
+import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
 
 type PetailBarProps = {
     id: number;
@@ -17,9 +17,9 @@ type PetailBarProps = {
 export const PetailBar = (props: PetailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const [petails, dispatch] = usePetailFormStore();
-    const { allPrs } = usePridContainerStore();
+    const { allPrs } = useGridContainerStore();
     const petail = petails.find((petail) => petail.id === props.id) ?? ({} as PetailForm);
-    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } = usePrAllTabsStore();
+    const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
 
     const savePetail = (e: any) => {
         const x = {
@@ -64,9 +64,9 @@ export const PetailBar = (props: PetailBarProps) => {
                         pesults: JSON.parse(data.prs[0].pesults),
                     };
                     dispatch({ type: "INSE", payload: newPetail });
-                    const newPrAllTabIds = [...prAllTabIds];
+                    const newPrAllTabIds = [...gAllTabIds];
                     newPrAllTabIds[curTabIndex] = 'Pr-' + toNumber(data.prs[0].id);
-                    setPrAllTabIds(newPrAllTabIds);
+                    setGAllTabIds(newPrAllTabIds);
                 } 
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });

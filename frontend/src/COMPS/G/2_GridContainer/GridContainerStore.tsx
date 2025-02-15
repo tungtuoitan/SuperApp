@@ -2,14 +2,14 @@
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import {Pr} from "../GTypes";
 import {GridRowSelectionModel} from "@mui/x-data-grid";
-export interface PridContainerContextData {
+export interface GridContainerContextData {
     allPrs: Pr[];
     setAllPrs: Dispatch<SetStateAction<any[]>>;
     isFirstTime: boolean;
     setIsFirstTime: Dispatch<SetStateAction<boolean>>;
     rowSelectionModel: GridRowSelectionModel;
     setRowSelectionModel: Dispatch<SetStateAction<GridRowSelectionModel>>;
-    refreshPrid: boolean;
+    refreshGrid: boolean;
     setRefreshPrid: Dispatch<SetStateAction<boolean>>;
     pageSize: number;
     setPageSize: Dispatch<SetStateAction<number>>;
@@ -19,21 +19,21 @@ export interface PridContainerContextData {
     setCurrentPage: Dispatch<SetStateAction<number>>;
     searchText: string;
     setSearchText: Dispatch<SetStateAction<string>>;
-    loadingPrid: boolean;
-    setLoadingPrid: Dispatch<SetStateAction<boolean>>;
+    loadingGrid: boolean;
+    setLoadingGrid: Dispatch<SetStateAction<boolean>>;
     currentHoveringRow: number | null;
     setCurrentHoveringRow: Dispatch<SetStateAction<number | null>>;
 
 };
 
-export const PridContainerContextDefaultValue: PridContainerContextData = {
+export const GridContainerContextDefaultValue: GridContainerContextData = {
     allPrs: [],
     setAllPrs: () => { },
     isFirstTime: true,
     setIsFirstTime: () => { },
     rowSelectionModel: [],
     setRowSelectionModel: () => { },
-    refreshPrid: false,
+    refreshGrid: false,
     setRefreshPrid: () => { },
     pageSize: 100,
     setPageSize: () => { },
@@ -42,32 +42,32 @@ export const PridContainerContextDefaultValue: PridContainerContextData = {
     currentPage: 0,
     setCurrentPage: () => { },
     searchText: '',
-    setSearchText: () => { },
-    loadingPrid: true,
-    setLoadingPrid: () => { },
+    setSearchText: () => { }, 
+    loadingGrid: true,
+    setLoadingGrid: () => { },
     currentHoveringRow: null,
     setCurrentHoveringRow: () => { },
 };
 
-const PridContainerStore = createContext<PridContainerContextData>(PridContainerContextDefaultValue);
-export const usePridContainerStore = () => useContext(PridContainerStore);
+const GridContainerStore = createContext<GridContainerContextData>(GridContainerContextDefaultValue);
+export const useGridContainerStore = () => useContext(GridContainerStore);
 
-export const PridContainerProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+export const GridContainerProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [allPrs, setAllPrs] = useState<Pr[]>([]);
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
-    const [refreshPrid, setRefreshPrid] = useState<boolean>(false);
+    const [refreshGrid, setRefreshPrid] = useState<boolean>(false);
     
     const [pageSize, setPageSize] = useState<number>(100);
     const [totalRows, setTotalRows] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>('');
-    const [loadingPrid, setLoadingPrid] = useState<boolean>(true);
+    const [loadingGrid, setLoadingGrid] = useState<boolean>(true);
     const [currentHoveringRow, setCurrentHoveringRow] = useState<number | null>(null);
 
     return (
-        <PridContainerStore.Provider
+        <GridContainerStore.Provider
             value={{
                 allPrs,
                 setAllPrs,
@@ -75,7 +75,7 @@ export const PridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setIsFirstTime,
                 rowSelectionModel,
                 setRowSelectionModel,
-                refreshPrid,
+                refreshGrid,
                 setRefreshPrid,
                 pageSize,
                 setPageSize,
@@ -85,12 +85,12 @@ export const PridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setCurrentPage,
                 searchText,
                 setSearchText,
-                loadingPrid,
-                setLoadingPrid,
+                loadingGrid,
+                setLoadingGrid,
                 currentHoveringRow,
                 setCurrentHoveringRow
             }}>
             {children}
-        </PridContainerStore.Provider>
+        </GridContainerStore.Provider>
     )
 }

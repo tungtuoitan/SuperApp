@@ -1,16 +1,16 @@
 import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
-import {usePridContainerStore} from "../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {PetailForm} from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {getPrs, iuPr} from "../GAPIs";
-import {usePrAllTabsStore} from "./PrAllTabsStore";
+import {useGAllTabsStore} from "./GAllTabsStore";
 import {Pr, Pr2} from "../GTypes";
 import {useSnackbar} from "notistack";
 
-export const usePrAllTabHelpers = () => {
-    const { prAllTabIds, setPrAllTabIds, curTabIndex, setCurTabIndex } = usePrAllTabsStore();
+export const useGAllTabHelpers = () => {
+    const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
     const [petails, dispatch] = usePetailFormStore();
-    const {rowSelectionModel, setRowSelectionModel, allPrs, setAllPrs} = usePridContainerStore();
+    const {rowSelectionModel, setRowSelectionModel, allPrs, setAllPrs} = useGridContainerStore();
     const { enqueueSnackbar } = useSnackbar();
 
     const createNewPetail = (e:any) => {
@@ -19,11 +19,11 @@ export const usePrAllTabHelpers = () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0); 
 
-        if (prAllTabIds.includes('Pr-0')) {
-            setCurTabIndex(prAllTabIds.indexOf('Pr-0'));
+        if (gAllTabIds.includes('Pr-0')) {
+            setCurTabIndex(gAllTabIds.indexOf('Pr-0'));
         } 
         else {
-            setPrAllTabIds((prev) => {
+            setGAllTabIds((prev) => {
                 const newPetail: PetailForm = {
                     id: 0,
                     name: "New Pr",

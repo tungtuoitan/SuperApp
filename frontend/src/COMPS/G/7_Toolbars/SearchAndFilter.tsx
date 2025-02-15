@@ -4,14 +4,14 @@ import { useFilterIconEvents } from "./FilterIconEvents";
 import {ToolbarContainer} from "./7ui";
 import TuneIcon from '@mui/icons-material/Tune';
 import {Search} from "./Search";
-import {usePridContainerStore} from "../2_GridContainer/PridContainerStore";
+import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 
 type SearchAndFilterProps = {
     hide?: boolean;
 }
 export const SearchAndFilter = (props: SearchAndFilterProps) => {
     const { getTotalFilter, onClickHandlerFilter} = useFilterIconEvents();
-    const {setSearchText, setCurrentPage, setRefreshPrid, setLoadingPrid} = usePridContainerStore();
+    const {setSearchText, setCurrentPage, setRefreshPrid, setLoadingGrid} = useGridContainerStore();
 
     const onChangeHandlerSearch = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => {
         if (event === undefined) return;
@@ -24,7 +24,7 @@ export const SearchAndFilter = (props: SearchAndFilterProps) => {
         if (event.code === "Enter" || event.nativeEvent.code === "Enter" || event.code === "NumpadEnter" || event.nativeEvent.code === "NumpadEnter") {
             setSearchText(event.currentTarget.value);
             setRefreshPrid(true);
-            setLoadingPrid(true);
+            setLoadingGrid(true);
             setCurrentPage(0);
         }
     }

@@ -9,13 +9,13 @@ import {FloatToolsProvider} from "./S/7_FloatTools/FloatToolsStore";
 import {TimeConfigProvider} from "./S/3_TimeConfig/TimeConfigStore";
 import {ChildEvProvider} from "./S/4_ChildEv/ChildEvStore";
 import {EtailFormsStoreProvider} from "./S/5_Etail/EtailFormsStore";
-import {PRAllTabsProvider} from "./G/1_GAllTabs/PrAllTabsStore";
-import {PridContainerProvider} from "./G/2_GridContainer/PridContainerStore";
+import {GAllTabsProvider} from "./G/1_GAllTabs/GAllTabsStore";
+import {GridContainerProvider} from "./G/2_GridContainer/GridContainerStore";
 import {PetailFormsStoreProvider} from "./G/3_Petail/PetailFormsStore";
 import {ADiProvider} from "./G/5_Adi/ADiStore";
 import {MainFilterDrawerProvider} from "./G/6_Filter/Drawer/DrawerStore";
 import {PrFilterStoreProvider} from "./G/6_Filter/PrFilterStore";
-import {FoProvider} from "./G/0_Nav/FoStore";
+import {FoProvider} from "./G/0_Fo/FoStore";
 import {PopupProvider} from "./G/1_GAllTabs/CreateNewPopup/PopupStore";
 import SideNav from "./SideNav/SideNav";
 
@@ -44,8 +44,8 @@ export const Main = () => {
                                                     <EtailFormsStoreProvider>
                                                         <EtailFormsStoreProvider>  
 
-                                                            <PRAllTabsProvider>
-                                                                <PridContainerProvider>
+                                                            <GAllTabsProvider>
+                                                                <GridContainerProvider>
                                                                     <PetailFormsStoreProvider>
                                                                         <ADiProvider>
                                                                             <MainFilterDrawerProvider>
@@ -59,8 +59,8 @@ export const Main = () => {
                                                                             </MainFilterDrawerProvider>
                                                                         </ADiProvider>
                                                                     </PetailFormsStoreProvider>
-                                                                </PridContainerProvider>
-                                                            </PRAllTabsProvider>
+                                                                </GridContainerProvider>
+                                                            </GAllTabsProvider>
 
                                                         </EtailFormsStoreProvider>
                                                     </EtailFormsStoreProvider>
