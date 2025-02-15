@@ -15,13 +15,16 @@ export const ListFoPopup = () => {
             id={`content-popover-id-${getNewGUID()}`}
             open={popup?.open ?? false}
             anchorEl={popup?.anchorEl ?? null} 
+
             onClose={() => {                
                 if (popup?.onCloseCallback)
                     popup?.onCloseCallback()
                 setPopup({ ...popup, open: false, anchorEl: null, content: null})
                 setOpeningFoIds([])
             }}
-            anchorOrigin={popup?.anchorOrigin}>
+            anchorOrigin={popup?.anchorOrigin}
+            sx={{ left: '-50px', top: '2px' }}
+            >
                 {popup?.content ?? null}
         </Popover>
     )

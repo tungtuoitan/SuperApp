@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton, setRef, Tooltip } from "@mui/material";
 import { WBar } from "./3ui";
 import { useSnackbar } from "notistack";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
@@ -18,7 +18,7 @@ type PetailBarProps = {
 export const PetailBar = (props: PetailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const [petails, dispatch] = usePetailFormStore();
-    const { allPrs } = useGridContainerStore();
+    const { allPrs, setAllPrs, refreshGrid, setRefreshGrid, searchText } = useGridContainerStore();
     const petail = petails.find((petail) => petail.id === props.id) ?? ({} as PetailForm);
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
 
@@ -72,6 +72,7 @@ export const PetailBar = (props: PetailBarProps) => {
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });
                 }
+                
             });
         }
         else {
@@ -101,6 +102,8 @@ export const PetailBar = (props: PetailBarProps) => {
             });
 
         }
+        setRefreshGrid(true);
+        
     };
 
     const cancelPetail = (e: any) => {

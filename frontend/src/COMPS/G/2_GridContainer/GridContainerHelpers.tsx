@@ -41,6 +41,9 @@ export const useGridContainerHelpers = () => {
     const {allFos,setLastFoId, lastFoId} = useFoStore();
 
 
+    console.log('allPrs', allPrs)
+
+    console.log('lastFoId', lastFoId)
     const getAllGitems = () => {
         return [
             ...allFos.filter(fo => fo.parentId === lastFoId),

@@ -43,7 +43,12 @@ export default function GridContainer() {
                     disableRowSelectionOnClick
                     rowSelectionModel={rowSelectionModel}
                     isRowSelectable={(params: GridRowParams) => !gAllTabIds.includes(params.row.id)}
-                    onRowSelectionModelChange={newX => setRowSelectionModel(newX)}
+                    onRowSelectionModelChange={newX =>  setRowSelectionModel(newX)}
+                    onCellClick={(params) => {
+                        console.log('hi')
+
+                    }}
+                    
                     getRowClassName={(params) => {
                         return gAllTabIds.includes(params.id as string) ? "opening-pr-row" : "normal-pr-row";
                     }}

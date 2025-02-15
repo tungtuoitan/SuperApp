@@ -34,7 +34,7 @@ export const ListFoPopupProvider: React.FC<React.PropsWithChildren<React.PropsWi
         open: false,
         anchorEl: null,
         onCloseCallback: () => {},
-        anchorOrigin: { vertical: 'top', horizontal: 'center' } as PopoverOrigin,
+        anchorOrigin: { vertical: 'bottom', horizontal: 'left'  } as PopoverOrigin,
     });
     
     return (

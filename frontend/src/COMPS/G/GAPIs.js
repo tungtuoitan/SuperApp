@@ -1,5 +1,6 @@
 import { constants } from "../../constants.js";
 import {toSid, paSid} from "./GHelpers.tsx";
+
 export const getPrs = async (searchText) => {
     const headers = new Headers({
         // Authorization: `Bearer ${token}`,
@@ -20,7 +21,11 @@ export const getPrs = async (searchText) => {
     );
     if (res.ok) {
         const ret = await res.json();
-        ret.forEach((pr) => (pr.id = toSid("Pr", Number(pr.id))));
+        ret.forEach((pr) => {
+            pr.id = toSid("Pr", Number(pr.id));
+            pr.parentId = pr.parentId ? toSid("Fo", Number(pr.parentId)) : undefined;
+        });
+        
         return ret;
     } else {
         return Promise.reject(res);
@@ -59,6 +64,7 @@ export const iuPr = async (params, token, skip) => {
     if (res.ok) {
         const ret = await res.json();
         ret.prs[0].id = toSid("Pr", Number(ret.prs[0].id));
+        ret.prs[0].parentId = ret.prs[0].parentId ? toSid("Fo", Number(ret.prs[0].parentId)) : undefined;
         return ret;
     } else {
         return Promise.reject(res);

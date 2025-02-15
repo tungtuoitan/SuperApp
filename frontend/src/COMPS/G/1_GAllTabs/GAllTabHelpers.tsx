@@ -33,7 +33,7 @@ export const useGAllTabHelpers = () => {
                 const newPetail: PetailForm = {
                     id: toSid('Pr', 0),
                     name: "New Pr",
-                    parentId: null,
+                    parentId: lastFoId,
     
                     types: 'Doi',
                     repeatType: "evda",
