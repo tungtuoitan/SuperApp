@@ -4,6 +4,8 @@ import { getPrs} from "./GAPIs";
 import {Pr, Pr2} from "./GTypes";
 import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";
 import {PrFilterDrawer} from "./6_Filter/Drawer/PrFilterDrawer";
+import {pr} from "./GConstants";
+
 
 
 export default function PRContainer() {

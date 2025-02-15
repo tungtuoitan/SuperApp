@@ -2,16 +2,16 @@ import {ResultOptions} from "../../S/TLTypes";
 
 export type Fo = 
 { 
-    id: number;
+    id: string;
     name: string;
     shortName?: string;
-    iconId?: number;
+    iconId?: string;
 
-    parentId?: number;
+    parentId?: string;
     activeC: string;
     prioriC: string;
     description?: string;
-    pinIndex?: number;
+    pinIndex?: string;
 };
 
 export type FosResult = {

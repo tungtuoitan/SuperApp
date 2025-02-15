@@ -1,27 +1,27 @@
 export type LaperIdsProps = {
-    id: number;
+    id: string;
 };
 export type LaperLevelProps = {
-    id: number;
+    id: string;
 };
 export type LaperNameProps = {
-    id: number;
+    id: string;
 };
 export type LaperTypeProps = {
-    id: number;
+    id: string;
 };
 export type LaperFinkProps = {
-    id: number;
+    id: string;
 };
 export type LaperPriorityProps = {
-    id: number;
+    id: string;
 };
 export type LaperStatusProps = {
-    id: number;
+    id: string;
 };
 export type LaperTimeEndProps = {
-    id: number;
+    id: string;
 };
 export type LaperTimeStartProps = {
-    id: number;
+    id: string;
 };

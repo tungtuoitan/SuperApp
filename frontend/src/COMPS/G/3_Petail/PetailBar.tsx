@@ -10,9 +10,10 @@ import { iuPr } from "../GAPIs";
 import { toNumber } from "lodash";
 import { PrsResult } from "../GTypes";
 import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
+import {paSid, toSid} from "../GHelpers";
 
 type PetailBarProps = {
-    id: number;
+    id: string ;
 };
 export const PetailBar = (props: PetailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -23,7 +24,7 @@ export const PetailBar = (props: PetailBarProps) => {
 
     const savePetail = (e: any) => {
         const x = {
-            id: props.id ?? 0,
+            id: props.id ?? toSid('Pr', 0),
             name: petail.name,
             parentId: petail.parentId ?? null,
 
@@ -43,13 +44,13 @@ export const PetailBar = (props: PetailBarProps) => {
             pesults: JSON.stringify(petail.pesults),
         };
 
-        if(x.id === 0) {
+        if(x.id === toSid('Pr', 0)) {
             iuPr(x).then((data: PrsResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
-                    dispatch({ type: "REMO", payload: { id: 0 } });
+                    dispatch({ type: "REMO", payload: { id: toSid('Pr', 0) } });
                     const newPetail: PetailForm = {
-                        id: toNumber(data.prs[0].id),
+                        id: data.prs[0].id,
                         name: data.prs[0].name,
                         parentId: data.prs[0].parentId ?? null,
                         types: data.prs[0].types,
@@ -65,7 +66,7 @@ export const PetailBar = (props: PetailBarProps) => {
                     };
                     dispatch({ type: "INSE", payload: newPetail });
                     const newPrAllTabIds = [...gAllTabIds];
-                    newPrAllTabIds[curTabIndex] = 'Pr-' + toNumber(data.prs[0].id);
+                    newPrAllTabIds[curTabIndex] = data.prs[0].id;
                     setGAllTabIds(newPrAllTabIds);
                 } 
                 else {
@@ -78,7 +79,7 @@ export const PetailBar = (props: PetailBarProps) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     const newPetail: PetailForm = {
-                        id: toNumber(data.prs[0].id),
+                        id: data.prs[0].id,
                         name: data.prs[0].name,
                         parentId: data.prs[0].parentId ?? null,
                         types: data.prs[0].types,

@@ -5,7 +5,7 @@ import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {PetailForm} from "../3_Petail/3ty";
 
 type PeridContainerProps = {
-    petailId: number;
+    petailId: string;
 }
 export default function PeridContainer(props: PeridContainerProps) {
     const { petailId } = props;

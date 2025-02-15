@@ -1,6 +1,7 @@
 
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import {Fo} from "./FoTypes";
+import {toSid} from "../GHelpers";
 export interface FoContextData {
     allFos: Fo[];
     setAllFos: Dispatch<SetStateAction<any[]>>;
@@ -8,10 +9,10 @@ export interface FoContextData {
     setRefreshFo: Dispatch<SetStateAction<boolean>>;
     loadingFos: boolean;
     setLoadingFos: Dispatch<SetStateAction<boolean>>;
-    curFoId: number;
-    setCurFoId: Dispatch<SetStateAction<number>>;
-    lastFoId: number;
-    setLastFoId: Dispatch<SetStateAction<number>>;
+    curFoId: string;
+    setCurFoId: Dispatch<SetStateAction<string>>;
+    lastFoId: string;
+    setLastFoId: Dispatch<SetStateAction<string>>;
 };
 
 export const FoContextDefaultValue: FoContextData = {
@@ -21,9 +22,9 @@ export const FoContextDefaultValue: FoContextData = {
     setRefreshFo: () => { },
     loadingFos: true,
     setLoadingFos: () => { },
-    curFoId: 1,
+    curFoId: toSid('Fo', 1),
     setCurFoId: () => { },
-    lastFoId: 1,
+    lastFoId: toSid('Fo', 1),
     setLastFoId: () => { },
 };
 
@@ -34,8 +35,8 @@ export const FoProvider: React.FC<React.PropsWithChildren<React.PropsWithChildre
     const [allFos, setAllFos] = useState<Fo[]>([]);
     const [refreshFo, setRefreshFo] = useState<boolean>(false);
     const [loadingFos, setLoadingFos] = useState<boolean>(true);
-    const [curFoId, setCurFoId] = useState<number>(1);
-    const [lastFoId, setLastFoId] = useState<number>(2); // 1 is the root
+    const [curFoId, setCurFoId] = useState<string>(toSid('Fo', 1));
+    const [lastFoId, setLastFoId] = useState<string>(toSid('Fo', 2));
 
     return (
         <FoStore.Provider

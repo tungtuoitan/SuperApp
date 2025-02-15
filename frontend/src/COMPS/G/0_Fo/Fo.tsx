@@ -4,11 +4,9 @@ import { getFos } from "./FoAPIs";
 import { Fo } from "./FoTypes";
 import { useFoStore } from "./FoStore";
 import { CHIP } from "./Chip";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { get, last } from "lodash";
 import { Popup} from "../1_GAllTabs/CreateNewPopup/Popup";
 import {classes} from "../../SideNav/Nhe";
+import {toSid} from "../GHelpers";
 
 export const TopNav = () => {
     const { setAllFos, allFos, curFoId, lastFoId } = useFoStore();
@@ -16,7 +14,11 @@ export const TopNav = () => {
     useEffect(() => {
         getFos().then((fos: Fo[]) => {
             let proData = fos.filter((pr) => pr.activeC == "Act");
-            console.log(fos);
+            fos.forEach((fo) => {
+                fo.id = toSid("Fo", Number(fo.id))
+                if (fo.parentId) 
+                    fo.parentId = toSid("Fo", Number(fo.parentId));
+            });
             setAllFos(proData);
         });
     }, []);
@@ -29,16 +31,15 @@ export const TopNav = () => {
         event.preventDefault();
         console.info("You clicked a arrow.");
     };
-    const getFoLine = (): (number | null)[] => {
-        const foLine: number[] = [];
-        if (lastFoId === 1) {
-            return [1];
+    const getFoLine = (): (string | null)[] => {
+        const foLine: string[] = [];
+        if (lastFoId === toSid("Fo", 1)) {
+            return [toSid("Fo", 1)];
         } 
         else {
             foLine.push(lastFoId);
         }
 
-        //! continue here
         while (allFos.find((f) => f.id === foLine[0])?.parentId) {
             const fo = allFos.find((f) => f.id === foLine[0]);
             if (fo && fo.parentId) 
@@ -46,7 +47,6 @@ export const TopNav = () => {
         }
         return foLine;
     };
-    console.log(getFoLine());
 
     return (
         <div className="top-navigation" style={classes.root}>

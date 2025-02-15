@@ -53,7 +53,7 @@ export const Line = (name: string, value: any) => {
     }
 };
 
-export const Nink = (id: number, title: string, link: string) => {
+export const Nink = (id: string, title: string, link: string) => {
     const {openPetail} = useGridContainerHelpers();
     const {rowSelectionModel} = useGridContainerStore();
 

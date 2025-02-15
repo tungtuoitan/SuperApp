@@ -21,7 +21,7 @@ export const usePetailHelpers = () => {
         return result;
     };
 
-    const handleChange = (id: number, fieldName: string, value: any) => {
+    const handleChange = (id: string, fieldName: string, value: any) => {
         // console.log('fieldName', fieldName, 'value', value);
         dispatch({type: 'UPDA', payload: {id, [fieldName]: value }});
     }

@@ -3,12 +3,12 @@ import {Pr} from "../GTypes";
 
 export type PetailForm = Omit<Pr,''>
 export type PetailProps = {
-    petailId: number;
+    petailId: string;
 };
 
 export type Pesult = {
-    id: number;
-    prId: number;
+    id: string;
+    prId: string;
     time: cDate;
 
     feasonCs: string;

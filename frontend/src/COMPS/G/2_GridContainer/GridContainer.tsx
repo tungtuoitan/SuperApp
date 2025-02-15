@@ -42,10 +42,10 @@ export default function GridContainer() {
                     checkboxSelection
                     disableRowSelectionOnClick
                     rowSelectionModel={rowSelectionModel}
-                    isRowSelectable={(params: GridRowParams) => !gAllTabIds.includes(toNumber(params.row.id))}
+                    isRowSelectable={(params: GridRowParams) => !gAllTabIds.includes(params.row.id)}
                     onRowSelectionModelChange={newX => setRowSelectionModel(newX)}
                     getRowClassName={(params) => {
-                        return gAllTabIds.includes('Pr' + toNumber(params.id)) ? "opening-pr-row" : "normal-pr-row";
+                        return gAllTabIds.includes(params.id as string) ? "opening-pr-row" : "normal-pr-row";
                     }}
                 />
             </div>

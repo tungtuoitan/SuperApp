@@ -1,14 +1,25 @@
 import {cDate, Ev, ResultOptions} from "../S/TLTypes";
 import {Pesult} from "./3_Petail/3ty";
 
-export type Pr = 
-    (Omit<Ev, 'isOverlap' | 'isLateNight' | 'lineOrder' | 'subType' | 'evelC' | 'levelC' | 'subType' | 'type' | 'timeEnd'>)
-    & { 
-        types: string;
-        repeatType: string;
-        pesults: Pesult[];
-        timeEnd: cDate|null;
-     };
+export type Pr = {
+        id: string,
+        name: string,
+        
+        timeStart: cDate,
+        parentId: string|null,
+        
+        activeC: string,
+        statusC: string,
+        prioriC: string,
+        
+        fink: string|null,
+        desc: string|null,
+
+        types: string,
+        repeatType: string,
+        pesults: Pesult[],
+        timeEnd: cDate|null,
+     }
 
 
 

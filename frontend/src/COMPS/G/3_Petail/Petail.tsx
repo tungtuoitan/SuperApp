@@ -20,7 +20,7 @@ export default function Petail(props: PetailProps) {
     const petail = petails.find((petail:PetailForm) => petail.id === petailId) ?? ({} as PetailForm);
 
     useEffect(() => {
-        // console.log("petail", petail);
+        // console.log("petail", petail, petailId);
     }, [petail]);
 
     return (

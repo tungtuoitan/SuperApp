@@ -6,12 +6,12 @@ import {Fo} from "../0_Fo/FoTypes";
 
 export type FotailForm = Omit<Fo,''>
 export type FotailProps = {
-    petailId: number;
+    petailId: string;
 };
 
 export type Fosult = {
-    id: number;
-    prId: number;
+    id: string;
+    prId: string;
     time: cDate;
 
     feasonCs: string;

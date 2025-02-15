@@ -11,6 +11,7 @@ import {Pesult} from "../3_Petail/3ty";
 import {useSnackbar} from "notistack";
 import {Pr2, PrsResult} from "../GTypes";
 import ADiTime from "./ADiTime";
+import {toSid} from "../GHelpers";
 
 export function ADiContent() {
     const { allPrs, setAllPrs } = useGridContainerStore();

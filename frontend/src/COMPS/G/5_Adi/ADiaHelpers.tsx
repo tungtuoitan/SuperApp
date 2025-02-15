@@ -5,6 +5,7 @@ import {sr} from "../../S/TLConstants";
 import {SelectField} from "../../S/TLTypes";
 import {Pesult} from "../3_Petail/3ty";
 import {his} from "../4_PeridContainer/4ty";
+import {toSid} from "../GHelpers";
 import {Pr} from "../GTypes";
 import {useADiStore} from "./ADiStore";
 
@@ -34,7 +35,7 @@ export const useADiaHelpers = () => {
 
     const openDia = (pr: Pr) => {
         const newPesult:Pesult = {
-            id: pr?.pesults?.length??0,
+            id: toSid('Pe', pr?.pesults?.length??0),
             prId: pr.id, 
 
             pesultC: his.fail.c,

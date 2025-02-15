@@ -10,9 +10,10 @@ import { toNumber } from "lodash";
 import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
 import {FotailForm} from "./9ty";
 import {FosResult} from "../0_Fo/FoTypes";
+import {toSid} from "../GHelpers";
 
 type FotailBarProps = {
-    id: number;
+    id: string;
 };
 export const FotailBar = (props: FotailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -34,13 +35,13 @@ export const FotailBar = (props: FotailBarProps) => {
             pinIndex: petail.pinIndex
         };
 
-        if(x.id === 0) {
+        if(x.id === toSid('Pr', 0)) {
             iuPr(x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     dispatch({ type: "REMO", payload: { id: 0 } });
                     const newPetail: FotailForm = {
-                        id: toNumber(data.fos[0].id),
+                        id: data.fos[0].id,
                         name: data.fos[0].name,
                         shortName: data.fos[0].shortName,
                         iconId: data.fos[0].iconId,
@@ -53,7 +54,7 @@ export const FotailBar = (props: FotailBarProps) => {
                     };
                     dispatch({ type: "INSE", payload: newPetail });
                     const newPrAllTabIds = [...gAllTabIds];
-                    newPrAllTabIds[curTabIndex] = 'Pr-'+toNumber(data.fos[0].id);
+                    newPrAllTabIds[curTabIndex] = data.fos[0].id
                     setGAllTabIds(newPrAllTabIds);
                 } 
                 else {
@@ -66,7 +67,7 @@ export const FotailBar = (props: FotailBarProps) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     const newPetail: FotailForm = {
-                        id: toNumber(data.fos[0].id),
+                        id: data.fos[0].id,
                         name: data.fos[0].name,
                         parentId: data.fos[0].parentId,
                         activeC: data.fos[0].activeC,

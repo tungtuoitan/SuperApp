@@ -32,9 +32,8 @@ export const PRAllTabs = () => {
         event?.preventDefault();
         event?.stopPropagation();
 
-        let nid = Number(id.split("-")[1]);
         setGAllTabIds(prev => {
-            dispatch({ type: 'REMO', payload: {id:nid} });
+            dispatch({ type: 'REMO', payload: {id} });
             const newAllTabIds = prev.filter(tabId => tabId !== id)
             if (curTabIndex === gAllTabIds.indexOf(id)) {
                 setCurTabIndex(prev => prev-1);
@@ -59,8 +58,7 @@ export const PRAllTabs = () => {
                     if (id === 'GeneralGrid') 
                         return <Tab key={index} icon={<ViewListIcon />} {...a11yProps(index)} sx={{ height: '48px',minHeight: '48px'}} />
 
-                    const nid = Number(id.toString().split("-")[1]);
-                    const pr = allPrs.filter(pr => pr.id === nid)[0];
+                    const pr = allPrs.filter(pr => pr.id === id)[0];
                     return (
                         <Tab
                             key={index}
@@ -69,14 +67,14 @@ export const PRAllTabs = () => {
                                 e.stopPropagation();
                                 setCurTabIndex(index);
                             }}
-                            onMouseEnter={() => setHoverId(nid)}
+                            onMouseEnter={() => setHoverId(id)}
                             onMouseLeave={() => setHoverId(null)}
                             label={
                                 <WBadge color="primary" max={99}>
                                     {(pr && pr.name.length > 35 ? pr.name.slice(0, 32) + "..." : pr?.name) ?? "New Pr"}
                                 </WBadge>}
                             icon={index > 0 ?
-                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === nid ? 1 : 0 }}>
+                                <IconButton id='closeTabBtn' onClick={(e) => closeTab(e, id)} sx={{ margin: '0 !important', opacity: hoverId === id ? 1 : 0 }}>
                                     <CloseIcon sx={{fontSize:12}} />
                                 </IconButton> : <></>}
                             {...a11yProps(index)}
@@ -108,9 +106,9 @@ export const PRAllTabs = () => {
                 {curTabId === "GeneralGrid" ? 
                     <PRContainer />
                 : curTabId.toString().includes('Pr-') ?
-                    <Petail petailId={Number((gAllTabIds[curTabIndex] as string).replace('Pr-', '') as unknown)} />
+                    <Petail petailId={gAllTabIds[curTabIndex] as string} />
                 : curTabId.toString().includes('Fo-') ?
-                    <Fotail petailId={Number((gAllTabIds[curTabIndex] as string).replace('Fo-', '') as unknown)} />
+                    <Fotail petailId={gAllTabIds[curTabIndex] as string} />
                 : <></>
             }
             </div>

@@ -21,8 +21,8 @@ export interface GridContainerContextData {
     setSearchText: Dispatch<SetStateAction<string>>;
     loadingGrid: boolean;
     setLoadingGrid: Dispatch<SetStateAction<boolean>>;
-    currentHoveringRow: number | null;
-    setCurrentHoveringRow: Dispatch<SetStateAction<number | null>>;
+    currentHoveringRow: string | null;
+    setCurrentHoveringRow: Dispatch<SetStateAction<string | null>>;
 
 };
 
@@ -64,7 +64,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [searchText, setSearchText] = useState<string>('');
     const [loadingGrid, setLoadingGrid] = useState<boolean>(true);
-    const [currentHoveringRow, setCurrentHoveringRow] = useState<number | null>(null);
+    const [currentHoveringRow, setCurrentHoveringRow] = useState<string | null>(null);
 
     return (
         <GridContainerStore.Provider

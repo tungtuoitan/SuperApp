@@ -21,7 +21,7 @@ import {enqueueSnackbar} from "notistack";
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useFoStore} from "../0_Fo/FoStore";
-import {get} from "lodash";
+import {paSid, toSid} from "../GHelpers";
 
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
@@ -38,15 +38,15 @@ export const useGridContainerHelpers = () => {
             // , ...allFos
         ];
     }
-    const openPetail = (prId: number) => {
+    const openPetail = (prId: string) => {
         if (rowSelectionModel.includes(prId) || rowSelectionModel.includes(prId.toString())) return;
-        if (gAllTabIds.includes('Pr-'+prId)) {
-            setCurTabIndex(gAllTabIds.indexOf('Pr-'+prId));
+        if (gAllTabIds.includes(prId)) {
+            setCurTabIndex(gAllTabIds.indexOf(prId));
         } 
         else {
             setGAllTabIds((prev) => {
                 setCurTabIndex(prev.length); // tabIndex of that childEv is the last item on allTabIds, so it == prev.length
-                return [...prev, 'Pr-'+prId];
+                return [...prev, prId];
             });
         }
 
@@ -75,7 +75,7 @@ export const useGridContainerHelpers = () => {
             return
         }
         const newPesult: Pesult = {
-            id: pr.pesults.length,
+            id: toSid('Pe', pr.pesults.length),
             prId: pr.id, 
 
             pesultC: type === 'Pass' ? his.pass.c : type === 'Fail' ? his.fail.c : his.empty.c,
@@ -138,7 +138,7 @@ export const useGridContainerHelpers = () => {
 
     const gridColumns = ():GridColDef[] => { 
         return [
-        { field: "id", headerName: "ID", width: 20 },
+        { field: "id", headerName: "ID", width: 80 },
         {
             field: "info",
             headerName: "Info",
@@ -151,7 +151,8 @@ export const useGridContainerHelpers = () => {
                     const indexOfToday = getDayIndex(dateToCDate(new Date()));
                     return indexOfLastPesult >=indexOfToday
                 }
-                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !gAllTabIds.includes('Pr-'+r.id) && currentHoveringRow == r.id;
+                const enabled = !aDia && r.statusC === sr.status.inProgress.c && !isAlreadyAdd() && !gAllTabIds.includes(r.id) && currentHoveringRow == r.id;
+                
                 return (
                     <div
                         style={{

@@ -6,6 +6,7 @@ import {getPrs, iuPr} from "../GAPIs";
 import {useGAllTabsStore} from "./GAllTabsStore";
 import {Pr, Pr2} from "../GTypes";
 import {useSnackbar} from "notistack";
+import {paSid, toSid} from "../GHelpers";
 
 export const useGAllTabHelpers = () => {
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
@@ -25,7 +26,7 @@ export const useGAllTabHelpers = () => {
         else {
             setGAllTabIds((prev) => {
                 const newPetail: PetailForm = {
-                    id: 0,
+                    id: toSid('Pr', 0),
                     name: "New Pr",
                     parentId: null,
     
@@ -59,8 +60,7 @@ export const useGAllTabHelpers = () => {
         e.preventDefault();
         e.stopPropagation();
         const updatePromises = rowSelectionModel.map((id) => {
-            const numericId = typeof id === "string" ? parseInt(id, 10) : id; // Ensure `id` is a number
-            const pr = allPrs.find((pr) => pr.id === numericId) ?? ({} as PetailForm);
+            const pr = allPrs.find((pr) => pr.id === id) ?? ({} as PetailForm);
             return iuPr({ ...pr, activeC: "InAct", pesults: JSON.stringify(pr.pesults) });
         });
         Promise.all(updatePromises)

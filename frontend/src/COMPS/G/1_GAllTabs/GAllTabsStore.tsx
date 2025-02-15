@@ -2,8 +2,8 @@
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
 export interface GAllTabsContextData {
-    gAllTabIds: (number|string)[];
-    setGAllTabIds: Dispatch<SetStateAction<(number|string)[]>>;
+    gAllTabIds: string[];
+    setGAllTabIds: Dispatch<SetStateAction<string[]>>;
     curTabIndex: number;
     setCurTabIndex: Dispatch<SetStateAction<number>>;
     
@@ -21,7 +21,7 @@ const GAllTabsContext = createContext<GAllTabsContextData>(GAllTabsContextDefaul
 export const useGAllTabsStore = () => useContext(GAllTabsContext);
 
 export const GAllTabsProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
-    const [gAllTabIds, setGAllTabIds] = useState<(number|string)[]>(['GeneralGrid']);
+    const [gAllTabIds, setGAllTabIds] = useState<(string)[]>(['GeneralGrid']);
     const [curTabIndex, setCurTabIndex] = useState<number>(0);
  
 
