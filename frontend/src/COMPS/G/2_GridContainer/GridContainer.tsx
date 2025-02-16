@@ -2,16 +2,15 @@ import { DataGrid, GridRowParams } from "@mui/x-data-grid";
 import { useGridContainerStore } from "./GridContainerStore";
 import { useGridContainerHelpers } from "./GridContainerHelpers";
 import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
-import {toNumber} from "lodash";
 import {DialogContainer} from "../../CommonHelpers/3_DialogContainer";
 import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {ADiContent} from "../5_Adi/ADiContent";
 import {truncateText} from "./2he";
 import {useADiStore} from "../5_Adi/ADiStore";
-import {useFoStore} from "../0_Fo/FoStore";
 
 export default function GridContainer() {
-    const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid } = useGridContainerStore(); 
+    const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid,
+     } = useGridContainerStore(); 
     const { aDia, setADia } = useADiStore(); 
     const { gridColumns, getAllGitems } = useGridContainerHelpers(); 
     const { gAllTabIds } = useGAllTabsStore();
@@ -44,10 +43,6 @@ export default function GridContainer() {
                     rowSelectionModel={rowSelectionModel}
                     isRowSelectable={(params: GridRowParams) => !gAllTabIds.includes(params.row.id)}
                     onRowSelectionModelChange={newX =>  setRowSelectionModel(newX)}
-                    onCellClick={(params) => {
-                        console.log('hi')
-
-                    }}
                     
                     getRowClassName={(params) => {
                         return gAllTabIds.includes(params.id as string) ? "opening-pr-row" : "normal-pr-row";

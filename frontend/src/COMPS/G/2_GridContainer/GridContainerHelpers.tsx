@@ -8,7 +8,7 @@ import {useGridContainerStore} from "./GridContainerStore";
 import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
 import {his} from "../4_PeridContainer/4ty";
-import {IconButton} from "@mui/material";
+import {IconButton, styled} from "@mui/material";
 import {Cooltip} from "../../CommonHelpers/2_CoolTip";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
@@ -16,7 +16,7 @@ import { dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {sr} from "../../S/TLConstants";
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import {iuPr} from "../GAPIs";
+import {getPrs, iuPr} from "../GAPIs";
 import {enqueueSnackbar} from "notistack";
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
@@ -30,10 +30,14 @@ import {Fo} from "../0_Fo/FoTypes";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {_2cs} from "./2cs";
 
+const ContainerRow = styled('div')({
+    display:'flex', flexDirection:'row', width: '100%', height: '100%'
+});
+
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const [fotails, dispatchFo] = useFotailFormStore();
-    const { allPrs, setAllPrs, rowSelectionModel, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText} = useGridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
     const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
@@ -41,14 +45,22 @@ export const useGridContainerHelpers = () => {
     const {allFos,setLastFoId, lastFoId} = useFoStore();
 
 
-    console.log('allPrs', allPrs)
-
-    console.log('lastFoId', lastFoId)
     const getAllGitems = () => {
         return [
-            ...allFos.filter(fo => fo.parentId === lastFoId),
+            ...allFos.filter(fo => fo.parentId === lastFoId)
+                .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
             ...allPrs.filter(pr => pr.parentId === lastFoId)
+                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
         ];
+    }
+    const loadPrs = async () => {
+        await getPrs(searchText??'')
+            .then((prs: Pr2[]) => {
+                let proData = prs.filter((pr) => pr.activeC == "Act");
+                const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
+                setAllPrs(proData2);
+                return true;
+            })
     }
     const openDetail = (rowId: string, type: 'Pr'|'Fo') => {
         if (rowSelectionModel.includes(rowId) || rowSelectionModel.includes(rowId.toString())) return;
@@ -297,6 +309,33 @@ export const useGridContainerHelpers = () => {
         </div>
     }
 
+    const FolderRow = (r: Fo) => {
+        const enabled = currentHoveringRow == r.id;
+
+        return (<div
+            onMouseEnter={() => setCurrentHoveringRow(r.id)}
+            onMouseLeave={() => setCurrentHoveringRow(null)}
+            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
+        >
+            <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
+                {getIcon({   
+                        code: 'folder', 
+                        type: 'custom', 
+                        props: {
+                            sx: {
+                                fontSize:20, 
+                                color: r.prioriC === sr.priority.top1.c ? _2cs.folderIcon.bgTop1
+                                    : r.prioriC === sr.priority.top2.c ? _2cs.folderIcon.bgTop2
+                                    : r.prioriC === sr.priority.top3.c ? _2cs.folderIcon.bgTop3
+                                    : _2cs.folderIcon.bgNormal,
+                                }}
+                            })}
+                {Nink(r.id, 'Fo', r.name)}
+                {enabled && <FolderBtn fo={r} type='GoInside'/>}
+            </div>  
+        </div> )
+
+    }
 
     const gridColumns = ():GridColDef[] => { 
         return [
@@ -307,44 +346,25 @@ export const useGridContainerHelpers = () => {
             width: 1700,
             renderCell: (params) => {
                 const r = params.row
-                const enabled = currentHoveringRow == r.id;
 
-                return <div style={{display:'flex', flexDirection:'row', width: '100%', height: '100%'}}
-                >
+                return (
+                <ContainerRow sx={{
+                    opacity: readyCuttingRows.includes(r.id) ? 0.5 : 1,
+                }}>
                     {paSid(r.id).type === g.type.pr 
-                    ? 
-                        <>
-                            {Info(r)}
-                            {SubInfo(r)} 
-                            {History(r)}
-                        </>
+                        ?   <>
+                                {Info(r)}
+                                {SubInfo(r)} 
+                                {History(r)}
+                            </>
                     : paSid(r.id).type === g.type.fo
-                    ?
-                        <div
-                            onMouseEnter={() => setCurrentHoveringRow(r.id)}
-                            onMouseLeave={() => setCurrentHoveringRow(null)}
-                            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
-                        >
-                            <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                                {getIcon({   
-                                        code: 'folder', 
-                                        type: 'custom', 
-                                        props: {
-                                            sx: {
-                                                fontSize:20, 
-                                                color: r.prioriC === sr.priority.top1.c ? _2cs.folderIcon.bgTop1
-                                                    : r.prioriC === sr.priority.top2.c ? _2cs.folderIcon.bgTop2
-                                                    : r.prioriC === sr.priority.top3.c ? _2cs.folderIcon.bgTop3
-                                                    : _2cs.folderIcon.bgNormal,
-                                                }}
-                                            })}
-                                {Nink(r.id, 'Fo', r.name)}
-                                {enabled && <FolderBtn fo={r} type='GoInside'/>}
-                            </div>  
-                        </div>  
+                        ?   <>
+                                {FolderRow(r)}
+                            </>
                     : null  
-                }
-                </div>
+                    }
+                </ContainerRow>
+                )
             },
         },
     ]}
@@ -353,6 +373,7 @@ export const useGridContainerHelpers = () => {
         openDetail,
         gridColumns,
         getAllGitems,
+        loadPrs,
     };
 };
 

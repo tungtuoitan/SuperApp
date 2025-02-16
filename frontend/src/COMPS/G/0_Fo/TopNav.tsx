@@ -1,4 +1,4 @@
-import { AppBar, Breadcrumbs, Toolbar } from "@mui/material";
+import { AppBar, Breadcrumbs, setRef, Toolbar } from "@mui/material";
 import { MouseEvent, useEffect } from "react";
 import { useFoStore } from "./FoStore";
 import { CHIP } from "./Chip";
@@ -11,16 +11,24 @@ import {ListFoPopup} from "./ListFoPopup/Popup";
 import {usePopupHelper} from "./ListFoPopup/PopupHelper";
 import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
 import {_0cs} from "./0cs";
+import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 
 export const TopNav = () => {
     const { setAllFos, allFos, curFoId, lastFoId, setLastFoId, setCurFoId, setOpeningFoIds, openingFoIds } = useFoStore();
     const { loadFos } = useFoHelpers();
     const { openPopup } = usePopupHelper();
     const { setCurTabIndex } = useGAllTabsStore();
+        const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText
+         } = useGridContainerStore(); 
 
     useEffect(() => {
         loadFos();
     }, []);
+
+    useEffect(() => {
+        setRefreshGrid(true);
+        setRowSelectionModel([]);
+    }, [lastFoId]);
 
     const handleClick = (foId: string) => {
         setLastFoId(foId);

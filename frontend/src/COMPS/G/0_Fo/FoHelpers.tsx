@@ -6,10 +6,11 @@ import {Fo} from "./FoTypes";
 export const useFoHelpers = () => {
     const { setAllFos, allFos, curFoId, lastFoId } = useFoStore();
     
-    const loadFos = () => {
+    const loadFos = async () => {
         getFos().then((fos: Fo[]) => {
             let proData = fos.filter((pr) => pr.activeC == "Act");
             setAllFos(proData);
+            return true;
         });
     }
 

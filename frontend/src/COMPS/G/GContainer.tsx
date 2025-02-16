@@ -1,38 +1,29 @@
 import {useEffect} from "react";
-import { getPrs} from "./GAPIs";
-import {Pr, Pr2} from "./GTypes";
 import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";
 import {GFilterDrawer} from "./6_Filter/Drawer/GFilterDrawer";
 import GridContainer from "./2_GridContainer/GridContainer";
 import {useFoStore} from "./0_Fo/FoStore";
+import {useFoHelpers} from "./0_Fo/FoHelpers";
+import {useGridContainerHelpers} from "./2_GridContainer/GridContainerHelpers";
 
 
 
 export default function GContainer() {
-    const { setAllPrs, refreshGrid, setRefreshGrid, searchText } = useGridContainerStore();
+    const { setAllPrs, refreshGrid, setRefreshGrid, searchText} = useGridContainerStore();
+    const { loadPrs } = useGridContainerHelpers();
     const { lastFoId } = useFoStore();
+    const { loadFos } = useFoHelpers();
 
     // init
     useEffect(() => {
-        getPrs(searchText??'')
-        .then((prs: Pr2[]) => {
-            let proData = prs.filter((pr) => pr.activeC == "Act");
-            const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
-            setAllPrs(proData2);
-        })
+        loadPrs();
     }, []);
 
     useEffect(() => {
         if(refreshGrid) {
-            getPrs(searchText??'')
-            .then((prs: Pr2[]) => {
-                let proData = prs.filter((pr) => pr.activeC == "Act");
-                const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
-                setAllPrs(proData2);
-            })
-            .finally(() => {
-                setRefreshGrid(false);
-            });
+            loadPrs()
+            .then(() => loadFos())
+            .finally(() => setRefreshGrid(false));
         }
     }, [refreshGrid]);
 

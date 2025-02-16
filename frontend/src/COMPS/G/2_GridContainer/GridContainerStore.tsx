@@ -23,7 +23,8 @@ export interface GridContainerContextData {
     setLoadingGrid: Dispatch<SetStateAction<boolean>>;
     currentHoveringRow: string | null;
     setCurrentHoveringRow: Dispatch<SetStateAction<string | null>>;
-
+    readyCuttingRows: GridRowSelectionModel;
+    setReadyCuttingRows: Dispatch<SetStateAction<GridRowSelectionModel>>;
 };
 
 export const GridContainerContextDefaultValue: GridContainerContextData = {
@@ -47,6 +48,8 @@ export const GridContainerContextDefaultValue: GridContainerContextData = {
     setLoadingGrid: () => { },
     currentHoveringRow: null,
     setCurrentHoveringRow: () => { },
+    readyCuttingRows: [],
+    setReadyCuttingRows: () => { },
 };
 
 const GridContainerStore = createContext<GridContainerContextData>(GridContainerContextDefaultValue);
@@ -56,6 +59,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [allPrs, setAllPrs] = useState<Pr[]>([]);
     const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+    const [readyCuttingRows, setReadyCuttingRows] = useState<GridRowSelectionModel>([]);
 
     const [refreshGrid, setRefreshGrid] = useState<boolean>(false);
     
@@ -88,7 +92,9 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 loadingGrid,
                 setLoadingGrid,
                 currentHoveringRow,
-                setCurrentHoveringRow
+                setCurrentHoveringRow,
+                readyCuttingRows,
+                setReadyCuttingRows,
             }}>
             {children}
         </GridContainerStore.Provider>
