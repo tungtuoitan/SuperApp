@@ -25,6 +25,8 @@ export interface GridContainerContextData {
     setCurrentHoveringRow: Dispatch<SetStateAction<string | null>>;
     readyCuttingRows: GridRowSelectionModel;
     setReadyCuttingRows: Dispatch<SetStateAction<GridRowSelectionModel>>;
+    displayDeleltedRows: boolean;
+    setDisplayDeletedRows: Dispatch<SetStateAction<boolean>>;
 };
 
 export const GridContainerContextDefaultValue: GridContainerContextData = {
@@ -50,6 +52,8 @@ export const GridContainerContextDefaultValue: GridContainerContextData = {
     setCurrentHoveringRow: () => { },
     readyCuttingRows: [],
     setReadyCuttingRows: () => { },
+    displayDeleltedRows: false,
+    setDisplayDeletedRows: () => { },
 };
 
 const GridContainerStore = createContext<GridContainerContextData>(GridContainerContextDefaultValue);
@@ -69,6 +73,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [searchText, setSearchText] = useState<string>('');
     const [loadingGrid, setLoadingGrid] = useState<boolean>(true);
     const [currentHoveringRow, setCurrentHoveringRow] = useState<string | null>(null);
+    const [displayDeleltedRows, setDisplayDeletedRows] = useState<boolean>(false);
 
     return (
         <GridContainerStore.Provider
@@ -95,6 +100,8 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setCurrentHoveringRow,
                 readyCuttingRows,
                 setReadyCuttingRows,
+                displayDeleltedRows,
+                setDisplayDeletedRows,
             }}>
             {children}
         </GridContainerStore.Provider>

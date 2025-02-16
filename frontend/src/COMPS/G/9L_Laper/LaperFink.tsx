@@ -4,6 +4,7 @@ import {LaperFinkProps} from "./3Lty";
 import {FotailForm} from "../9_Fotail/9ty";
 import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
 import {useFotailHelpers} from "../9_Fotail/FotailHelpers";
+import {TextField} from "@mui/material";
 
 export default function LaperFink(props: LaperFinkProps) {
     const { handleChange } = useFotailHelpers();
@@ -13,7 +14,7 @@ export default function LaperFink(props: LaperFinkProps) {
 
     return (   
         <WRow>
-            {/* <TextField
+            <TextField
                 id={"fink" + fotail.id}
                 name="fink"
                 label="FigJam Link"
@@ -45,7 +46,7 @@ export default function LaperFink(props: LaperFinkProps) {
                     },
                 }}
             />
-            <FigmaButton fink={fotail.fink??''} /> */}
+            <FigmaButton fink={fotail.fink??''} />
         </WRow>
     )
 }

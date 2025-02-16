@@ -1,5 +1,7 @@
 import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import { cDate } from "../../S/TLTypes";
+import {Fo} from "../0_Fo/FoTypes";
+import {Pr} from "../GTypes";
 
 
 
@@ -62,3 +64,28 @@ export function getIndexesOfFirstDayOfAllMonth (year: number): number[] {
     ]
 }
 
+
+export function getAllDescendants2(allItems: (Pr|Fo)[], id: string, includeSelf: boolean = true): (Pr|Fo)[] {
+    const result: (Pr|Fo)[] = [];
+  
+    // Hàm đệ quy để tìm tất cả con cháu
+    function collectChildren(parentId: string) {
+        // Tìm chính nó
+        const currentItem = allItems.find((item) => item.id === parentId);
+        if (currentItem) {
+            result.push(currentItem);
+    
+            // Tìm tất cả các con trực tiếp
+            const children = allItems.filter((item) => item.parentId === parentId);
+            for (const child of children) {
+                collectChildren(child.id); // Đệ quy cho từng con
+            }
+        }
+    }
+  
+    // Bắt đầu đệ quy từ id ban đầu
+    collectChildren(id);
+    if(!includeSelf) result.shift();
+  
+    return result;
+}

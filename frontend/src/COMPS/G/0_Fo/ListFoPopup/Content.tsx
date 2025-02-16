@@ -65,7 +65,7 @@ export const Row = styled('div')({
 
 export const Content = () => {
     const { closePopup } = usePopupHelper();
-    const { createNewPetail, deletePrs, createNewFolder } = useGAllTabHelpers();
+    const { createNewPetail, createNewFolder } = useGAllTabHelpers();
     const { openingFoIds, allFos, setLastFoId } = useFoStore();
 
     const parentId = allFos.find(fo => fo.id == openingFoIds[0])?.parentId;

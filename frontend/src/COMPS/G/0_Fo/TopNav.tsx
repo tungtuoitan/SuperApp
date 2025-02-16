@@ -1,10 +1,9 @@
-import { AppBar, Breadcrumbs, setRef, Toolbar } from "@mui/material";
+import { AppBar, Breadcrumbs, Toolbar } from "@mui/material";
 import { MouseEvent, useEffect } from "react";
 import { useFoStore } from "./FoStore";
 import { CHIP } from "./Chip";
 import { Popup} from "../1_GAllTabs/CreateNewPopup/Popup";
-import {classes, getIcon} from "../../MainNav/Nhe";
-import {toSid} from "../GHelpers";
+import {classes} from "../../MainNav/Nhe";
 import {useFoHelpers} from "./FoHelpers";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {ListFoPopup} from "./ListFoPopup/Popup";
@@ -12,14 +11,17 @@ import {usePopupHelper} from "./ListFoPopup/PopupHelper";
 import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
 import {_0cs} from "./0cs";
 import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
+import {useSnackbar} from "notistack";
+import {Fo} from "./FoTypes";
 
 export const TopNav = () => {
     const { setAllFos, allFos, curFoId, lastFoId, setLastFoId, setCurFoId, setOpeningFoIds, openingFoIds } = useFoStore();
     const { loadFos } = useFoHelpers();
     const { openPopup } = usePopupHelper();
     const { setCurTabIndex } = useGAllTabsStore();
-        const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText
-         } = useGridContainerStore(); 
+    const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText} = useGridContainerStore(); 
+    const { enqueueSnackbar } = useSnackbar();
+
 
     useEffect(() => {
         loadFos();
@@ -35,21 +37,29 @@ export const TopNav = () => {
         setCurTabIndex(0);
     };
 
+    // NOTE: i created a vitural Folder thas has id = 'Fo-0' to represent the root folder
     const getFoLine = (): string[] => {
         const foLine: string[] = [];
-        if (lastFoId === toSid("Fo", 1)) {
-            return [toSid("Fo", 1)];
-        } 
-        else {
-            foLine.push(lastFoId);
-        }
+        foLine.push(lastFoId);
+        let count = 0;
 
         while (allFos.find((f) => f.id === foLine[0])?.parentId) {
+            // prevent infinite loop
+            count++;
+            if (count > 100) {
+                // if it's too many loops, maybe there's a row that has row.parentId === row.id
+                enqueueSnackbar("Error: getFoLine() too many loops", { variant: "error" });
+                break;
+            }
+
             const fo = allFos.find((f) => f.id === foLine[0]);
             if (fo && fo.parentId) 
                 foLine.unshift(fo.parentId);
         }
-        return foLine;
+        if(foLine.includes('Fo-0')) 
+            return foLine;
+        else 
+            return ['Fo-0', ...foLine];
     };
 
     return (
@@ -60,18 +70,22 @@ export const TopNav = () => {
                     <div role="presentation">
                         <Breadcrumbs aria-label="breadcrumb">
                             {getFoLine().map((foId, index) => {
-                                const fo = allFos.find((f) => f.id === foId);
+                                const fo = foId  !== 'Fo-0' 
+                                    ? allFos.find((f) => f.id === foId) 
+                                    : { id: 'Fo-0', name: "Home", iconId: "folder", activeC: 'Act', prioriC: 'Low' } as Fo;
                                 return (<>
                                     <CHIP
                                         key={index}
                                         label={fo?.name ?? "??"}
                                         // icon={getIcon(fo?.iconId ?? '', 'folder')}
                                         onClick={() => handleClick(foId)}
-                                        deleteIcon={<ExpandMoreIcon />}
+                                        deleteIcon={foId !== 'Fo-0' ? <ExpandMoreIcon /> : <></>}
                                         onDelete={(e: MouseEvent<HTMLSpanElement>)=> {
-                                            openPopup(e)
-                                            setOpeningFoIds([...openingFoIds, foId])
-                                            setCurTabIndex(0)
+                                            if(foId !== 'Fo-0') {
+                                                openPopup(e);
+                                                setOpeningFoIds([...openingFoIds, foId])
+                                                setCurTabIndex(0)
+                                            }
                                         }}
                                         sx={{
                                             background: lastFoId !== foId ?  '#f0f0f0'

@@ -23,7 +23,7 @@ export const getPrs = async (searchText) => {
         const ret = await res.json();
         ret.forEach((pr) => {
             pr.id = toSid("Pr", Number(pr.id));
-            pr.parentId = pr.parentId ? toSid("Fo", Number(pr.parentId)) : undefined;
+            pr.parentId = toSid("Fo", Number(pr.parentId))
         });
         
         return ret;
@@ -41,7 +41,7 @@ export const iuPr = async (params, token, skip) => {
     const formData = new FormData();
 
     params.id = paSid(params.id).id;
-    params.parentId = params.parentId ? paSid(params.parentId).id : undefined;
+    params.parentId = paSid(params.parentId).id;
 
     Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
@@ -64,7 +64,7 @@ export const iuPr = async (params, token, skip) => {
     if (res.ok) {
         const ret = await res.json();
         ret.prs[0].id = toSid("Pr", Number(ret.prs[0].id));
-        ret.prs[0].parentId = ret.prs[0].parentId ? toSid("Fo", Number(ret.prs[0].parentId)) : undefined;
+        ret.prs[0].parentId = toSid("Fo", Number(ret.prs[0].parentId))
         return ret;
     } else {
         return Promise.reject(res);
@@ -157,7 +157,7 @@ export const iuFos = async (params, token, skip) => {
     const formData = new FormData();
 
     params.id = paSid(params.id).id;
-    params.parentId = params.parentId ? paSid(params.parentId).id : undefined;
+    params.parentId = paSid(params.parentId).id;
 
     Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
@@ -179,8 +179,10 @@ export const iuFos = async (params, token, skip) => {
     );
     if (res.ok) {
         const ret = await res.json();
-        ret.fos[0].id = toSid("Fo", Number(ret.fos[0].id));
-        ret.fos[0].parentId = toSid("Fo", Number(ret.fos[0].parentId));
+        if(ret.fos && ret.fos.length > 0){
+            ret.fos[0].id = toSid("Fo", Number(ret.fos[0].id));
+            ret.fos[0].parentId = toSid("Fo", Number(ret.fos[0].parentId));
+        }
         return ret;
     } else {
         return Promise.reject(res);
@@ -205,7 +207,7 @@ export const getFos = async () => {
         const ret = await res.json();
         ret.forEach((fo) => {
             fo.id = toSid("Fo", Number(fo.id));
-            fo.parentId = fo.parentId ? toSid("Fo", Number(fo.parentId)) : undefined;
+            fo.parentId = toSid("Fo", Number(fo.parentId));
         });
         return ret;
     } else {

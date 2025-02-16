@@ -13,13 +13,14 @@ import {useGridContainerStore} from "../G/2_GridContainer/GridContainerStore";
 import {useFoStore} from "../G/0_Fo/FoStore";
 import {deepClone} from "@mui/x-data-grid/internals";
 import {g} from "../G/GConstants";
-import {PrsResult} from "../G/GTypes";
+import {Pr, PrsResult} from "../G/GTypes";
 import {Fo} from "../G/0_Fo/FoTypes";
 import {iuFos, iuPr} from "../G/GAPIs";
 import {paSid} from "../G/GHelpers";
 import { IconButton} from "@mui/material";
 import UndoIcon from '@mui/icons-material/Undo';
 import {Cooltip} from "../CommonHelpers/2_CoolTip";
+import {getAllDescendants2} from "../G/2_GridContainer/2he";
 
 export const useHandleShortCut = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -27,7 +28,7 @@ export const useHandleShortCut = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
     const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } = useTLBaseBgHelpers();
-    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, setReadyCuttingRows, setRefreshGrid, setLoadingGrid } = useGridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, setRowSelectionModel, readyCuttingRows, setReadyCuttingRows, setRefreshGrid, setLoadingGrid } = useGridContainerStore();
     const { allFos, setAllFos, lastFoId } = useFoStore();  
 
     const click = () => {
@@ -245,16 +246,16 @@ export const useHandleShortCut = () => {
         }
     };
 
-    type RevertBtnProps = {
+    type RevertBtnMProps = {
         srcFoId: string;
         srcCuttingRows: string[];
     }
-    const RevertBtn = (props: RevertBtnProps) => <Cooltip title="Revert" content="Revert" >
+    const RevertBtnM = (props: RevertBtnMProps) => <Cooltip title="Revert" content="Revert" >
         <IconButton aria-label="Revert" size="small" 
             onClick={
                 async () => {
-                    setLoadingGrid(true);
                     const {srcFoId, srcCuttingRows} = props;
+                    setLoadingGrid(true);
                     const readyPrs = deepClone(allPrs.filter((pr) => srcCuttingRows.includes(pr.id)));
                     const readyFos :Fo[] = deepClone(allFos.filter((fo) => srcCuttingRows.includes(fo.id)));
                     readyPrs.forEach((pr:any) => {
@@ -267,7 +268,7 @@ export const useHandleShortCut = () => {
                             [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
                                 ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
                             ])
-                        enqueueSnackbar(`Revert Success`, {variant: "success",})
+                        enqueueSnackbar(`Revert ${readyPrs.length+readyFos.length} rows Successfully`, {variant: "success"})
                     }
                     catch  {
                         enqueueSnackbar(`Revert Fail`, {variant: "error"})
@@ -325,25 +326,23 @@ export const useHandleShortCut = () => {
                         pr.pesults = JSON.stringify(pr.pesults)});
         
                     try {
-                        const results = await Promise.all(
+                        await Promise.all(
                             [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
                                 ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
                             ]
                         )
                         // if there is any fail, it jump to catch imediately
-                        enqueueSnackbar(`Moved  
-                            ${results.filter(r => r.type === g.type.fo).length} Folder,  
-                            ${results.filter(r => r.type === g.type.pr).length} Pr Successfully`, 
+                        enqueueSnackbar(`Delete ${readyFos.length + readyPrs.length} rows successfully `,
                             {   
                                 variant: "success", autoHideDuration: 5000,
-                                action: (key) => (<RevertBtn srcFoId={srcFoId as string} srcCuttingRows={readyCuttingRows as string[]} />),
+                                action: (key) => (<RevertBtnM srcFoId={srcFoId as string} srcCuttingRows={readyCuttingRows as string[]} />),
                             })
                     }
                     catch (error) {
                         console.log(error)
                         enqueueSnackbar(`Move Fail: ${JSON.stringify(error)}`, {
                             variant: "error", autoHideDuration: 5000,
-                            action: (key) => (<RevertBtn srcFoId={srcFoId as string} srcCuttingRows={readyCuttingRows as string[]} />)
+                            action: (key) => (<RevertBtnM srcFoId={srcFoId as string} srcCuttingRows={readyCuttingRows as string[]} />)
                         })
                     }
                     finally {
@@ -360,6 +359,89 @@ export const useHandleShortCut = () => {
         setReadyCuttingRows(rowSelectionModel);
     }
 
+    type RevertBtnDProps = {
+        srcSelectionModel: string[];
+    }
+    const RevertBtnD = (props: RevertBtnDProps) => <Cooltip title="Revert" content="Revert" >
+        <IconButton aria-label="Revert" size="small" 
+            onClick={
+                async () => {
+                    const {srcSelectionModel} = props;
+                    setLoadingGrid(true);
+                    const prIds = srcSelectionModel.filter((id) => paSid(id as string).type === g.type.pr);
+                    const foIds = srcSelectionModel.filter((id) => paSid(id as string).type === g.type.fo);
+                    const readyPrs: Pr[] = deepClone(allPrs.filter((pr) => prIds.includes(pr.id)))
+                    let readyFos: Fo[] = []
+                    const readyFos0: Fo[] = deepClone(allFos.filter((fo) => foIds.includes(fo.id)))
+                    readyFos0.forEach((fo) => {readyFos = deepClone([...readyFos, ...getAllDescendants2(allFos, fo.id, true) as Fo[]])})
+                    
+                    readyFos.forEach(fo => fo.activeC = "Act");
+                    readyPrs.forEach((pr:any) => {
+                        pr.activeC = "Act";
+                        pr.pesults = JSON.stringify(pr.pesults);
+                    });
+            
+                    try {
+                        await Promise.all(
+                            [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
+                                ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
+                            ])
+                        enqueueSnackbar(`Revert ${readyPrs.length+readyFos.length} rows Successfully`, {variant: "success"})
+                    }
+                    catch  {
+                        enqueueSnackbar(`Revert Fail`, {variant: "error"})
+                    }
+                    finally {
+                        setRowSelectionModel([])
+                        setRefreshGrid(true)
+                    }
+                }}
+        >
+                <UndoIcon />
+            </IconButton>
+    </Cooltip>
+    const deleteRows = async (e:any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const prIds = rowSelectionModel.filter((id) => paSid(id as string).type === g.type.pr);
+        const foIds = rowSelectionModel.filter((id) => paSid(id as string).type === g.type.fo);
+        const readyPrs: Pr[] = deepClone(allPrs.filter((pr) => prIds.includes(pr.id)))
+        let readyFos: Fo[] = []
+        const readyFos0: Fo[] = deepClone(allFos.filter((fo) => foIds.includes(fo.id)))
+        readyFos0.forEach((fo) => {readyFos = deepClone([...readyFos, ...getAllDescendants2(allFos, fo.id, true) as Fo[]])})
+
+        readyFos.forEach(fo => fo.activeC = "InAct");
+        readyPrs.forEach((pr:any) => {
+            pr.activeC = "InAct";
+            pr.pesults = JSON.stringify(pr.pesults);
+        });
+
+        try {
+            await Promise.all(
+                [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
+                    ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
+                ])
+
+            // if there is any fail, it jump to catch imediately
+            enqueueSnackbar(
+                `Delete ${readyFos.length + readyPrs.length} rows successfully `, {   
+                    variant: "success", autoHideDuration: 5000,
+                    action: (key) => (<RevertBtnD srcSelectionModel={rowSelectionModel as string[]} />),
+            })
+        }
+        catch (error) {
+            console.log(error)
+            enqueueSnackbar(`Delete Fail: ${JSON.stringify(error)}`, {
+                variant: "error", autoHideDuration: 5000,
+                action: (key) => (<RevertBtnD srcSelectionModel={rowSelectionModel as string[]} />),
+            })
+        }
+        finally {
+            setRowSelectionModel([])
+            setRefreshGrid(true)
+        }
+    }
+
     return {
         click,
 
@@ -369,6 +451,7 @@ export const useHandleShortCut = () => {
 
         pasteRow,
         cutRow,
+        deleteRows
 
     };
 };

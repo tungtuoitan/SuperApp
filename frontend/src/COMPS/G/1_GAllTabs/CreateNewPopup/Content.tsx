@@ -5,6 +5,8 @@ import {usePopupHelper} from "./PopupHelper";
 import FolderIcon from '@mui/icons-material/Folder';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {useGAllTabHelpers} from "../GAllTabHelpers";
+import LinkIcon from '@mui/icons-material/Link';
+import {Link} from "react-router-dom";
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -63,7 +65,7 @@ export const Row = styled('div')({
 
 export const Content = () => {
     const { closePopup } = usePopupHelper();
-    const { createNewPetail, deletePrs, createNewFolder } = useGAllTabHelpers();
+    const { createNewPetail, createNewFolder, createNewLink } = useGAllTabHelpers();
     
     return (
         <AuditHeaderPopupRoot>
@@ -78,16 +80,24 @@ export const Content = () => {
                             closePopup(e);
                         }}
                     >
-                        <FolderIcon sx={{fontSize:'18px'}} />
-                        Folder</Line>
+                        <FolderIcon sx={{fontSize:'18px'}} />Folder
+                    </Line>
+                    <Line
+                        onClick={(e) => {
+                            createNewLink(e);
+                            closePopup(e)
+                        }}
+                    >
+                        <LinkIcon sx={{fontSize:'18px'}}/>Link
+                    </Line>
                     <Line
                         onClick={(e) => {
                             createNewPetail(e)
                             closePopup(e)
                         }}
                     >
-                        <FiberManualRecordIcon sx={{fontSize:'18px'}}/>
-                        Pr</Line>
+                        <FiberManualRecordIcon sx={{fontSize:'18px'}}/>Pr
+                    </Line>
                 </Row>
             </div>
             {/* <div className="popup-footer">

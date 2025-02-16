@@ -1,6 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { Pr, Pr2, PrsResult } from "../GTypes";
-import { Line, Nink } from "./2ui";
+import { JustLink, Line, Nink } from "./2ui";
 import { displayCDate, getDayIndex, getIndexesOfFirstDayOfAllMonth } from "./2he";
 import { Pesult, PetailForm } from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
@@ -8,7 +8,7 @@ import {useGridContainerStore} from "./GridContainerStore";
 import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
 import {his} from "../4_PeridContainer/4ty";
-import {IconButton, styled} from "@mui/material";
+import {Icon, IconButton, styled} from "@mui/material";
 import {Cooltip} from "../../CommonHelpers/2_CoolTip";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
@@ -23,12 +23,16 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useFoStore} from "../0_Fo/FoStore";
 import {paSid, toSid} from "../GHelpers";
 import {g} from "../GConstants";
-import {getIcon} from "../../MainNav/Nhe";
+import {getIcon, iconType} from "../../MainNav/Nhe";
 import {FotailForm} from "../9_Fotail/9ty";
 import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
 import {Fo} from "../0_Fo/FoTypes";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {_2cs} from "./2cs";
+import LinkIcon from '@mui/icons-material/Link';
+import {FinkToProtocol} from "../../S/5_Etail/5he";
+import {FigmaButton} from "../5_Adi/5ui";
+import {Link} from "react-router-dom";
 
 const ContainerRow = styled('div')({
     display:'flex', flexDirection:'row', width: '100%', height: '100%'
@@ -37,26 +41,35 @@ const ContainerRow = styled('div')({
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const [fotails, dispatchFo] = useFotailFormStore();
-    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText} = useGridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows} = useGridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
     const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
     const { sRs } = useSRsStore();
     const {allFos,setLastFoId, lastFoId} = useFoStore();
 
-
     const getAllGitems = () => {
-        return [
-            ...allFos.filter(fo => fo.parentId === lastFoId)
+        const allRealFos = allFos.filter(fo => fo.iconId !== ('link' as iconType) );
+        const allLinks = allFos.filter(fo => fo.iconId === ('link' as iconType) );
+
+        const allGItems = [
+            ...allRealFos.filter(fo => fo.parentId === lastFoId)
+                .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
+            ...allLinks.filter(fo => fo.parentId === lastFoId)
                 .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
             ...allPrs.filter(pr => pr.parentId === lastFoId)
                 .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
-        ];
+        ]
+        if(displayDeleltedRows) 
+            return allGItems;
+        else
+            return allGItems.filter(r => r.activeC === 'Act')
     }
     const loadPrs = async () => {
         await getPrs(searchText??'')
             .then((prs: Pr2[]) => {
-                let proData = prs.filter((pr) => pr.activeC == "Act");
+                let proData = prs
+                // .filter((pr) => pr.activeC == "Act");
                 const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
                 setAllPrs(proData2);
                 return true;
@@ -79,7 +92,7 @@ export const useGridContainerHelpers = () => {
             const petail: PetailForm = {
                 id: ev.id,
                 name: ev.name,
-                parentId: ev.parentId ?? null,
+                parentId: ev.parentId ?? 0,
                 timeStart: ev.timeStart,
                 timeEnd: ev.timeEnd,
                 activeC: ev.activeC,
@@ -98,13 +111,14 @@ export const useGridContainerHelpers = () => {
             const fotail: FotailForm = {
                 id: fo.id,
                 name: fo.name,
-                shortName: fo.shortName,
                 parentId: fo.parentId,
                 iconId: fo.iconId,
-
+                
                 activeC: fo.activeC,
                 prioriC: fo.prioriC,
-                description: fo.description,
+
+                fink: fo.fink,
+                desc: fo.desc,
                 pinIndex: fo.pinIndex,
             };
             dispatchFo({ type: "INSE", payload: fotail });
@@ -178,19 +192,21 @@ export const useGridContainerHelpers = () => {
 
     type FolderProps = {
         fo: Fo
-        type: 'GoInside'
+        type: 'ComeIn'
     }
     const FolderBtn = (props: FolderProps) => {
         const {fo,type} = props;
-        const handleClick = (fo: Fo, type: 'GoInside') => {
+        const handleClick = (fo: Fo, type: 'ComeIn') => {
             switch (type) {
-                case 'GoInside': 
+                case 'ComeIn': 
                     setLastFoId(fo.id);
                     setCurTabIndex(0);
+                    break;
+            
             }
         }
         return (
-            <Cooltip title={type=='GoInside' ? 'Go inside' : ''} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
+            <Cooltip title={type=='ComeIn' ? 'Go inside' : type=='Link' ? 'Go': ''} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
                 <IconButton 
                     onClick={_ => handleClick(fo,type)} 
                     sx={{ 
@@ -201,13 +217,15 @@ export const useGridContainerHelpers = () => {
                     }}
                         >
                     {
-                        type === 'GoInside' ? <ArrowForwardIcon sx={{fontSize:'18px'}}/>
+                        type === 'ComeIn' ? <ArrowForwardIcon sx={{fontSize:'18px'}}/>
+                        : type === 'Link' ? <LinkIcon sx={{fontSize:'18px'}}/>
                         : null
                     }
                 </IconButton>
             </Cooltip>
         )
     }
+
    
 
     const Info = (r: Pr) => {
@@ -319,7 +337,7 @@ export const useGridContainerHelpers = () => {
         >
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
                 {getIcon({   
-                        code: 'folder', 
+                        code: r.iconId ?? null, 
                         type: 'custom', 
                         props: {
                             sx: {
@@ -331,10 +349,42 @@ export const useGridContainerHelpers = () => {
                                 }}
                             })}
                 {Nink(r.id, 'Fo', r.name)}
-                {enabled && <FolderBtn fo={r} type='GoInside'/>}
+                {enabled && <FolderBtn fo={r} type='ComeIn'/>}
             </div>  
         </div> )
+    }
 
+    
+
+    const JustLinkRow = (r: Fo) => {
+        const enabled = currentHoveringRow == r.id;
+
+        return (<div
+            onMouseEnter={() => setCurrentHoveringRow(r.id)}
+            onMouseLeave={() => setCurrentHoveringRow(null)}
+            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
+        >
+            <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
+                {JustLink(r.id, r.name)}
+                {enabled && <Link
+                    to={FinkToProtocol('')??''} 
+                    target="_self" 
+                    className={true ? 'icon-button':''}
+                    style={{ 
+                        width: '32px', 
+                        height: '24px', 
+                        // border: '1px solid #00000050', 
+                        borderRadius: 4, 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center',
+                        pointerEvents: true ? 'auto' : 'none',
+                        color: '#333',
+                    }}>
+                    <LinkIcon sx={{fontSize:'18px'}}/>
+                </Link>}
+            </div>  
+        </div> )
     }
 
     const gridColumns = ():GridColDef[] => { 
@@ -349,7 +399,7 @@ export const useGridContainerHelpers = () => {
 
                 return (
                 <ContainerRow sx={{
-                    opacity: readyCuttingRows.includes(r.id) ? 0.5 : 1,
+                    opacity: (readyCuttingRows.includes(r.id) || r.activeC =='InAct') ? 0.5 : 1,
                 }}>
                     {paSid(r.id).type === g.type.pr 
                         ?   <>
@@ -357,11 +407,15 @@ export const useGridContainerHelpers = () => {
                                 {SubInfo(r)} 
                                 {History(r)}
                             </>
-                    : paSid(r.id).type === g.type.fo
+                    : paSid(r.id).type === g.type.fo && r.iconId !== 'link'
                         ?   <>
                                 {FolderRow(r)}
                             </>
-                    : null  
+                    : paSid(r.id).type === g.type.fo && r.iconId === 'link'  
+                    ?  <>
+                            {JustLinkRow(r)}
+                        </>
+                    : null
                     }
                 </ContainerRow>
                 )
@@ -369,6 +423,9 @@ export const useGridContainerHelpers = () => {
         },
     ]}
 
+    
+
+   
     return {
         openDetail,
         gridColumns,

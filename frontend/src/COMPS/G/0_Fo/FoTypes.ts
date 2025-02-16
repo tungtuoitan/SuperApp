@@ -4,13 +4,14 @@ export type Fo =
 { 
     id: string;
     name: string;
-    shortName?: string;
-    iconId?: string;
-
-    parentId?: string;
+    iconId: string;
+    parentId: string;
+    
     activeC: string;
     prioriC: string;
-    description?: string;
+
+    desc?: string;
+    fink?: string;
     pinIndex?: string;
 };
 

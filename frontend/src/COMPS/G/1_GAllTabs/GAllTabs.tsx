@@ -12,7 +12,7 @@ import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import AddIcon from "@mui/icons-material/Add";
 import {useGAllTabHelpers} from "./GAllTabHelpers";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import {SearchAndFilter} from "../7_Toolbars/SearchAndFilter";
+import {ToolBars} from "../7_Toolbars/ToolBars";
 import {usePopupHelper} from "./CreateNewPopup/PopupHelper";
 import {PopupProvider} from "./CreateNewPopup/PopupStore";
 import Fotail from "../9_Fotail/Fotail";
@@ -29,7 +29,7 @@ export const PRAllTabs = () => {
     const { allPrs, rowSelectionModel } = useGridContainerStore();
     const { allFos } = useFoStore();
     const [petails, dispatch] = usePetailFormStore();
-    const { createNewPetail, deletePrs } = useGAllTabHelpers();
+    const { createNewPetail } = useGAllTabHelpers();
     const { openPopup } = usePopupHelper();
 
     const closeTab = (event: MouseEvent<HTMLButtonElement> | undefined, id: any) => {
@@ -103,17 +103,17 @@ export const PRAllTabs = () => {
                         />
                     );
                 })}
-                {!gAllTabIds.includes('Pr-0') &&
+                {!(gAllTabIds.includes('Pr-0') || gAllTabIds.includes('Fo-0')) &&
                     <IconButton onClick={(event: MouseEvent<HTMLButtonElement>)=> openPopup(event)} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
                         <AddIcon sx={{ fontSize: 16 }} />
                     </IconButton>
                 }
-                {rowSelectionModel.length > 0 &&
-                    <IconButton onClick={deletePrs} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
+                {/* {rowSelectionModel.length>0 && curTabIndex===0 &&
+                    <IconButton onClick={deleteRows} sx={{width: '40px', height: '40px', marginTop: '4px'}}>
                         <RemoveCircleIcon sx={{ fontSize: 16, color: 'red' }} />
                     </IconButton>
-                }
-                <SearchAndFilter hide={curTabIndex!==0} />
+                } */}
+                <ToolBars hide={curTabIndex!==0} />
             </WTabBar>
 
             <div id='tabContent' style={{ width: '100%', height: 'calc(100% - 50px)'}}>

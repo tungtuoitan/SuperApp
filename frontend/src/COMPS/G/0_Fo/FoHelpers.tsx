@@ -8,7 +8,8 @@ export const useFoHelpers = () => {
     
     const loadFos = async () => {
         getFos().then((fos: Fo[]) => {
-            let proData = fos.filter((pr) => pr.activeC == "Act");
+            let proData = fos
+            // .filter((pr) => pr.activeC == "Act");
             setAllFos(proData);
             return true;
         });

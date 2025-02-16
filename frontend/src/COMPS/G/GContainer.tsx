@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useLayoutEffect} from "react";
 import {useGridContainerStore} from "./2_GridContainer/GridContainerStore";
 import {GFilterDrawer} from "./6_Filter/Drawer/GFilterDrawer";
 import GridContainer from "./2_GridContainer/GridContainer";
@@ -21,9 +21,13 @@ export default function GContainer() {
 
     useEffect(() => {
         if(refreshGrid) {
-            loadPrs()
-            .then(() => loadFos())
-            .finally(() => setRefreshGrid(false));
+            (async _ => {
+                return Promise.all([
+                    loadPrs(),
+                    loadFos(),
+                ])
+                .then(() => setTimeout(() => setRefreshGrid(false), 1000))
+            })();
         }
     }, [refreshGrid]);
 

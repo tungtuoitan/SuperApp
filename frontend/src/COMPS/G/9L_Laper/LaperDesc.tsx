@@ -20,7 +20,7 @@ export default function LaperDesc(props: LaperNameProps) {
                 label="Description"
                 multiline
                 minRows={4}
-                value={fotail.description??''}
+                value={fotail.desc??''}
                 spellCheck={false}
                 onChange={(e) => {
                     if (e.target && e.target.name) {

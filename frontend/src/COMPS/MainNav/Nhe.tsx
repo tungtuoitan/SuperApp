@@ -20,6 +20,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import {Height} from "@mui/icons-material";
 import {FinkToProtocol} from "../S/5_Etail/5he";
 import HomeIcon from '@mui/icons-material/Home';
+import LinkIcon from '@mui/icons-material/Link';
 
 export const classes =  
   {
@@ -165,12 +166,13 @@ const Wicon = styled('div')({
 });
 
 type getIconProps = {
-    code: string,
+    code: string | null,
     type?: 'sidebar'|'folder'|'custom',
     props?: any
 }
 
 export const getIcon = (_props: getIconProps) => {
+    if(!_props.code) return null;
 
     switch(_props.type){
         case 'sidebar': 
@@ -188,6 +190,8 @@ export const getIcon = (_props: getIconProps) => {
                 allIcons(_props.props)
                 .find(x => x.code === _props.code)?.icon ?? null}
             </Wicon>
+        default:
+            return null;
     }
 }
 
@@ -205,5 +209,8 @@ export const allIcons = (props: any) => [
     { code: 'principle', icon: <BlockIcon {...props} /> },
     { code: 'schedule', icon: <CalendarMonthIcon {...props} /> },
     { code: 'self-discipline', icon: <SelfImprovementIcon {...props} /> },
+    { code: 'link', icon: <LinkIcon {...props} /> },
 ];
 
+export type iconType = 'accounts' | 'conversation' | 'finance' | 'folder' | 'gratefulList' | 
+'health' | 'home' | 'it' | 'playground' | 'practice' | 'principle' | 'schedule' | 'self-discipline' | 'link';

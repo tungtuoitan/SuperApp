@@ -17,7 +17,7 @@ export default function LaperName(props: LaperNameProps) {
             <TextField
                 id={"prName" + fotail.id}
                 name="name"
-                label="Pr Name"
+                label="Folder Name"
                 value={fotail.name??''}
                 onChange={(e) => {
                     // setEtailForm({ name: e.target.value });

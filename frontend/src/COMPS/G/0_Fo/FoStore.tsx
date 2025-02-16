@@ -40,7 +40,7 @@ export const FoProvider: React.FC<React.PropsWithChildren<React.PropsWithChildre
     const [refreshFo, setRefreshFo] = useState<boolean>(false);
     const [loadingFos, setLoadingFos] = useState<boolean>(true);
     const [curFoId, setCurFoId] = useState<string>(toSid('Fo', 1));
-    const [lastFoId, setLastFoId] = useState<string>(toSid('Fo', 2));
+    const [lastFoId, setLastFoId] = useState<string>(toSid('Fo', 0));
     const [openingFoIds, setOpeningFoIds] = useState<string[]>([]);
 
     return (

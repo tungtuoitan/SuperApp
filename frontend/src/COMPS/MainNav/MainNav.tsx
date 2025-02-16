@@ -29,7 +29,7 @@ import {useGridContainerStore} from "../G/2_GridContainer/GridContainerStore";
 const MainNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
 > = () => {
-    const { click, deleteEv, cutEv, pasteEv, pasteRow, cutRow } = useHandleShortCut();
+    const { click, deleteEv, cutEv, pasteEv, pasteRow, cutRow, deleteRows} = useHandleShortCut();
     const {sideNavigationRef, bodyWrapperRef } = useNavigationStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
@@ -42,7 +42,6 @@ const MainNav: React.FC<
     const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
     const location = useLocation()
     const { allPrs, setAllPrs, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
-    
 
     useEffect(() => {
         getSRs()
@@ -108,9 +107,9 @@ const MainNav: React.FC<
                     // case "Escape":
                     //     setFevId(null);
                     //     break;
-                    // case "Delete":
-                    //     deleteEv();
-                    //     break;
+                    case "Delete":
+                        deleteRows(e);
+                        break;
                     case "x":
                     case "X":
                         cutRow(e);

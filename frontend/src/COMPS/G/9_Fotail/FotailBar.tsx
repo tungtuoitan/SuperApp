@@ -27,13 +27,14 @@ export const FotailBar = (props: FotailBarProps) => {
         const x: FotailForm = {
             id: props.id ?? toSid('Fo', 0),
             name: fotail.name,
-            shortName: fotail.shortName,
             parentId: fotail.parentId,
             iconId: fotail.iconId,
 
             activeC: fotail.activeC,
             prioriC: fotail.prioriC,
-            description: fotail.description,
+            
+            desc: fotail.desc,
+            fink: fotail.fink,
             pinIndex: fotail.pinIndex
         };
 
@@ -41,20 +42,21 @@ export const FotailBar = (props: FotailBarProps) => {
             iuFos(x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
-                    dispatch({ type: "REMO", payload: { id: 0 } });
-                    const newPetail: FotailForm = {
+                    dispatch({ type: "REMO", payload: { id: 'Fo-0' } });
+                    const newFotail: FotailForm = {
                         id: data.fos[0].id,
                         name: data.fos[0].name,
-                        shortName: data.fos[0].shortName,
                         iconId: data.fos[0].iconId,
-
                         parentId: data.fos[0].parentId,
+                        
                         activeC: data.fos[0].activeC,
                         prioriC: data.fos[0].prioriC,
-                        description: data.fos[0].description,
+                        
+                        desc: data.fos[0].desc,
+                        fink: data.fos[0].fink,
                         pinIndex: data.fos[0].pinIndex,
                     };
-                    dispatch({ type: "INSE", payload: newPetail });
+                    dispatch({ type: "INSE", payload: newFotail });
                     const newPrAllTabIds = [...gAllTabIds];
                     newPrAllTabIds[curTabIndex] = data.fos[0].id
                     setGAllTabIds(newPrAllTabIds);
@@ -69,22 +71,28 @@ export const FotailBar = (props: FotailBarProps) => {
             iuFos(x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
-                    const newPetail: FotailForm = {
+                    const newFotail: FotailForm = {
                         id: data.fos[0].id,
                         name: data.fos[0].name,
+                        iconId: data.fos[0].iconId,
                         parentId: data.fos[0].parentId,
+
                         activeC: data.fos[0].activeC,
                         prioriC: data.fos[0].prioriC,
+
+                        desc: data.fos[0].desc,
+                        fink: data.fos[0].fink,
+                        pinIndex: data.fos[0].pinIndex,
                     };
-                    dispatch({ type: "UPDA", payload: newPetail });
+                    dispatch({ type: "UPDA", payload: newFotail });
                 } 
                 else {
                     enqueueSnackbar(data.options.message, { variant: "error" });
                 }
                 loadFos();
             });
-
         }
+        console.log(fotails)
     };
 
     const cancelFotail = (e: any) => {
@@ -94,7 +102,7 @@ export const FotailBar = (props: FotailBarProps) => {
             x = {
                 id: pr.id,
                 name: pr.name,
-                parentId: pr.parentId ?? null,
+                parentId: pr.parentId ?? 0,
 
                 types: pr.types,
                 repeatType: pr.repeatType,
@@ -115,7 +123,7 @@ export const FotailBar = (props: FotailBarProps) => {
             x = {
                 id: 0,
                 name: "New Fo",
-                parentId: null,
+                parentId: 0,
 
                 types: "Doi",
                 repeatType: "evda",

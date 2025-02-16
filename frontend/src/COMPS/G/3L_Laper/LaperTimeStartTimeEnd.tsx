@@ -8,6 +8,7 @@ import {usePetailHelpers} from "../3_Petail/PetailHelpers";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {PetailForm} from "../3_Petail/3ty";
 import {cDate} from "../../S/TLTypes";
+import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 
 export default function LaperTimeStartTimeEnd(props: LaperTimeStartProps) {
     const { handleChange } = usePetailHelpers();
@@ -24,7 +25,7 @@ export default function LaperTimeStartTimeEnd(props: LaperTimeStartProps) {
                     value={new Date(petail.timeStart)}
                     onChange={(newValue) => {
                         if (newValue) {
-                            handleChange(petail.id, "timeStart", newValue);
+                            handleChange(petail.id, "timeStart", dateToCDate(newValue));
                         }
                     }}
                 />
@@ -37,7 +38,7 @@ export default function LaperTimeStartTimeEnd(props: LaperTimeStartProps) {
                 value={petail.timeEnd ? new Date(petail.timeEnd) : null}
                 onChange={(newValue) => {
                     if (newValue) {
-                        handleChange(petail.id, 'timeEnd', newValue);
+                        handleChange(petail.id, 'timeEnd', dateToCDate(newValue));
                     }
                 }}
             />

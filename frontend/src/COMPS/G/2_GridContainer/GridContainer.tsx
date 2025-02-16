@@ -7,6 +7,7 @@ import {helperMUIcss} from "../../CommonHelpers/5_MUIcss";
 import {ADiContent} from "../5_Adi/ADiContent";
 import {truncateText} from "./2he";
 import {useADiStore} from "../5_Adi/ADiStore";
+import {useEffect} from "react";
 
 export default function GridContainer() {
     const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid,
@@ -17,6 +18,7 @@ export default function GridContainer() {
     const _Dselector = helperMUIcss.getDialogCSSSelector();
 
     const aDiPr = allPrs.find(pr => pr.id === aDia?.pesult.prId);
+
 
 
 
@@ -31,6 +33,7 @@ export default function GridContainer() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    opacity: refreshGrid ? 0.5 : 1,
                 }}
             >
                 <DataGrid

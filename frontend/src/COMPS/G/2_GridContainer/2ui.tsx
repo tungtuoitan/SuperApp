@@ -4,6 +4,7 @@ import {useGridContainerStore} from "./GridContainerStore";
 import {truncateText} from "./2he";
 import {sr} from "../../S/TLConstants";
 import {_4cs} from "../../S/4_ChildEv/4cs";
+import {g} from "../GConstants";
 
 export const Line = (name: string, value: any) => {
     switch(name) {
@@ -67,6 +68,28 @@ export const Nink = (id: string, type: 'Pr'|'Fo', title: string, link?: string) 
                     to={link ?? ""} 
                     style={{ textDecoration: "none", fontWeight: "bold" }}
                     onClick={(e) => openDetail(id, type)}
+                    >
+                        {truncateText(title, 66)}
+                </Link>
+            }
+        </>
+    );
+};
+
+export const JustLink = (id: string, title: string) => {
+    const {openDetail} = useGridContainerHelpers();
+    const {rowSelectionModel} = useGridContainerStore();
+
+    return (
+        <>
+            {(rowSelectionModel.includes(id)||rowSelectionModel.includes(id.toString())) 
+                ? <div style={{fontWeight: 'bold'}}>{truncateText(title, 66)}</div>
+                : 
+                <Link 
+                    className="nink" 
+                    to={""} 
+                    style={{fontWeight: "bold" }}
+                    onClick={(e) => openDetail(id, 'Fo')}
                     >
                         {truncateText(title, 66)}
                 </Link>

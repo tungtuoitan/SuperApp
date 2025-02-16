@@ -26,7 +26,7 @@ export const PetailBar = (props: PetailBarProps) => {
         const x = {
             id: props.id ?? toSid('Pr', 0),
             name: petail.name,
-            parentId: petail.parentId ?? null,
+            parentId: petail.parentId ?? 0,
 
             types: petail.types ?? "Doi",
             repeatType: petail.repeatType,
@@ -52,7 +52,7 @@ export const PetailBar = (props: PetailBarProps) => {
                     const newPetail: PetailForm = {
                         id: data.prs[0].id,
                         name: data.prs[0].name,
-                        parentId: data.prs[0].parentId ?? null,
+                        parentId: data.prs[0].parentId ?? 0,
                         types: data.prs[0].types,
                         repeatType: data.prs[0].repeatType,
                         timeStart: data.prs[0].timeStart,
@@ -76,13 +76,14 @@ export const PetailBar = (props: PetailBarProps) => {
             });
         }
         else {
+
             iuPr(x).then((data: PrsResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     const newPetail: PetailForm = {
                         id: data.prs[0].id,
                         name: data.prs[0].name,
-                        parentId: data.prs[0].parentId ?? null,
+                        parentId: data.prs[0].parentId ?? 0,
                         types: data.prs[0].types,
                         repeatType: data.prs[0].repeatType,
                         timeStart: data.prs[0].timeStart,
@@ -113,7 +114,7 @@ export const PetailBar = (props: PetailBarProps) => {
             x = {
                 id: pr.id,
                 name: pr.name,
-                parentId: pr.parentId ?? null,
+                parentId: pr.parentId ?? 0,
 
                 types: pr.types,
                 repeatType: pr.repeatType,
@@ -134,7 +135,7 @@ export const PetailBar = (props: PetailBarProps) => {
             x = {
                 id: 0,
                 name: "New Pr",
-                parentId: null,
+                parentId: 0,
 
                 types: "Doi",
                 repeatType: "evda",

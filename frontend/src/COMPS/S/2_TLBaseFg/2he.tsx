@@ -122,8 +122,8 @@ export const isLateNight = (ev: Ev): boolean => {
 }
 
 
-export function getAllDescendants(allItems: Ev[], id: number, includeSelf: boolean = true): Ev[] {
-    const result: Ev[] = [];
+export function getAllDescendants(allItems: (Ev)[], id: number, includeSelf: boolean = true): (Ev)[] {
+    const result: (Ev)[] = [];
   
     // Hàm đệ quy để tìm tất cả con cháu
     function collectChildren(parentId: number) {

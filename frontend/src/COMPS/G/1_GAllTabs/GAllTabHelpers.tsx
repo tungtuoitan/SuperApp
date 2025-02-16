@@ -2,20 +2,29 @@ import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {PetailForm} from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
-import {getPrs, iuPr} from "../GAPIs";
+import {getPrs, iuFos, iuPr} from "../GAPIs";
 import {useGAllTabsStore} from "./GAllTabsStore";
-import {Pr, Pr2} from "../GTypes";
+import {Pr, Pr2, PrsResult} from "../GTypes";
 import {useSnackbar} from "notistack";
 import {paSid, toSid} from "../GHelpers";
 import {useFoStore} from "../0_Fo/FoStore";
 import {FotailForm} from "../9_Fotail/9ty";
 import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
+import {iconType} from "../../MainNav/Nhe";
+import {g} from "../GConstants";
+import {deepClone} from "@mui/x-data-grid/internals";
+import {Fo} from "../0_Fo/FoTypes";
+import {set} from "lodash";
+import {Cooltip} from "../../CommonHelpers/2_CoolTip";
+import {IconButton} from "@mui/material";
+import UndoIcon from '@mui/icons-material/Undo';
 
 export const useGAllTabHelpers = () => {
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
     const [petails, dispatch] = usePetailFormStore();
     const [fotails, dispatchFo] = useFotailFormStore();
-    const {rowSelectionModel, setRowSelectionModel, allPrs, setAllPrs} = useGridContainerStore();
+    const {rowSelectionModel, setRowSelectionModel, allPrs, setAllPrs, setRefreshGrid, setLoadingGrid} = useGridContainerStore();
+    const { allFos } = useFoStore();
     const { enqueueSnackbar } = useSnackbar();
     const {lastFoId } = useFoStore();
 
@@ -72,12 +81,14 @@ export const useGAllTabHelpers = () => {
                 const newFotail: FotailForm = {
                     id: toSid('Fo', 0),
                     name: "New Folder",
-                    shortName: "New Folder",
+                    iconId: "folder",
                     parentId: lastFoId,
-    
+                    
                     activeC: "Act",
                     prioriC: "Low",
-                    description: '',
+
+                    fink: "",
+                    desc: '',
 
                 };
                 dispatchFo({ type: "INSE", payload: newFotail });
@@ -85,35 +96,45 @@ export const useGAllTabHelpers = () => {
                 return [...prev, 'Fo-0'];
             })
         }
-
     }
-    const deletePrs = (e:any) => {
+
+    const createNewLink = (e:any) => {
         e.preventDefault();
         e.stopPropagation();
-        const updatePromises = rowSelectionModel.map((id) => {
-            const pr = allPrs.find((pr) => pr.id === id) ?? ({} as PetailForm);
-            return iuPr({ ...pr, activeC: "InAct", pesults: JSON.stringify(pr.pesults) });
-        });
-        Promise.all(updatePromises)
-            .then((results) => {
-                if (results.every((r) => r.options.success)) {
-                    getPrs().then((prs: Pr2[]) => {
-                        let proData = prs.filter((pr) => pr.activeC == "Act");
-                        const proData2: Pr2[] = proData.map((pr) => ({...pr, pesults: pr.pesults ? JSON.parse(pr.pesults) : []}));
-                        setAllPrs(proData2);
-                        enqueueSnackbar("Prs deleted successfully", {variant: "success"});
-                    });
-                }
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); 
+
+        if (gAllTabIds.includes('Fo-0')) {
+            setCurTabIndex(gAllTabIds.indexOf('Fo-0'));
+        } 
+        else {
+            setGAllTabIds((prev) => {
+                const newFotail: FotailForm = {
+                    id: toSid('Fo', 0),
+                    name: "New Link",
+                    parentId: lastFoId,
+                    iconId: "link", // every Fo type:link has a link icon, if not, it's a folder
+                    
+                    activeC: "Act",
+                    prioriC: "Low",
+
+                    fink: "",
+                    desc: '',
+
+                };
+                dispatchFo({ type: "INSE", payload: newFotail });
+                setCurTabIndex(prev.length)
+                return [...prev, 'Fo-0'];
             })
-            .catch((error) => {
-            // Handle error for any update
-                enqueueSnackbar("Error deleting Prs", { variant: "error" });
-            });
+        }
     }
+    
+
+    
 
     return { 
         createNewPetail, 
-        deletePrs,
-        createNewFolder
+        createNewFolder,
+        createNewLink,
      }
 }

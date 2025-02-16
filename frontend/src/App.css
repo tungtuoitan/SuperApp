@@ -78,6 +78,10 @@ display: none ;
     background-color: #1a1a1a;
 }
 
+.icon-button:hover {
+    background-color: rgb(207, 207, 207);
+}
+
 .nink:hover {
     text-decoration: underline;
     color: rgb(0, 80, 184);

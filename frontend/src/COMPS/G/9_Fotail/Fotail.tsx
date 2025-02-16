@@ -19,7 +19,8 @@ export default function Fotail(props: FotailProps) {
     const fotail = fotails.find((fotail:FotailForm) => fotail.id === fotailId) ?? ({} as FotailForm);
 
     useEffect(() => {
-        // console.log("fotail", fotail);
+        console.log("fotails", fotails);
+        console.log("cur fotail",fotailId, fotail);
     }, [fotail]);
 
     return (
@@ -31,7 +32,7 @@ export default function Fotail(props: FotailProps) {
                     <LaperName id={fotailId} />
                     {/* <LaperStatus id={fotailId} /> */}
                     <LaperPriority id={fotailId} />
-                    {/* <LaperFink id={fotailId} /> */}
+                    <LaperFink id={fotailId} />
                     <LaperRepeatType id={fotailId} />
                     {/* <LaperTypes id={fotailId} /> */}
                     {/* <LaperDetail id={fotailId} /> */}

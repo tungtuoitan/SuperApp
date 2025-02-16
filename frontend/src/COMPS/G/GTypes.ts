@@ -6,7 +6,7 @@ export type Pr = {
         name: string,
         
         timeStart: cDate,
-        parentId: string|null,
+        parentId: string,
         
         activeC: string,
         statusC: string,
