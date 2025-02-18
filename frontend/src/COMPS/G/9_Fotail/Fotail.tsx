@@ -11,6 +11,7 @@ import LaperTypes from "../9L_Laper/LaperTypes";
 import LaperRepeatType from "../9L_Laper/LaperIcon";
 import {FotailForm, FotailProps} from "./9ty";
 import {useFotailFormStore} from "./FotailFormsStore";
+import GridContainer from "../2_GridContainer/GridContainer";
 
 
 export default function Fotail(props: FotailProps) {
@@ -19,8 +20,8 @@ export default function Fotail(props: FotailProps) {
     const fotail = fotails.find((fotail:FotailForm) => fotail.id === fotailId) ?? ({} as FotailForm);
 
     useEffect(() => {
-        console.log("fotails", fotails);
-        console.log("cur fotail",fotailId, fotail);
+        // console.log("fotails", fotails);
+        // console.log("cur fotail",fotailId, fotail);
     }, [fotail]);
 
     return (
@@ -39,6 +40,7 @@ export default function Fotail(props: FotailProps) {
                 </LeftEtailPaper>
                 <RightPetailPaper>
                     {/* <PeridContainer fotailId={fotailId} /> */}
+                    <GridContainer/>
                 </RightPetailPaper>
                 {/* <RightEtailPaper></RightEtailPaper> */}
             </WBody>

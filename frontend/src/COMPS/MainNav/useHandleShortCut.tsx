@@ -332,7 +332,7 @@ export const useHandleShortCut = () => {
                             ]
                         )
                         // if there is any fail, it jump to catch imediately
-                        enqueueSnackbar(`Delete ${readyFos.length + readyPrs.length} rows successfully `,
+                        enqueueSnackbar(`Moved ${readyFos.length + readyPrs.length} rows successfully `,
                             {   
                                 variant: "success", autoHideDuration: 5000,
                                 action: (key) => (<RevertBtnM srcFoId={srcFoId as string} srcCuttingRows={readyCuttingRows as string[]} />),
@@ -340,7 +340,7 @@ export const useHandleShortCut = () => {
                     }
                     catch (error) {
                         console.log(error)
-                        enqueueSnackbar(`Move Fail: ${JSON.stringify(error)}`, {
+                        enqueueSnackbar(`Moved Fail: ${JSON.stringify(error)}`, {
                             variant: "error", autoHideDuration: 5000,
                             action: (key) => (<RevertBtnM srcFoId={srcFoId as string} srcCuttingRows={readyCuttingRows as string[]} />)
                         })

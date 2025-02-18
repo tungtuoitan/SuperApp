@@ -249,7 +249,7 @@ export const useGridContainerHelpers = () => {
                     fontSize: "12px",
                     position: 'relative',
                     // opacity: enabled ? 1 : 0.3
-                    width: '320px'
+                    width: '420px'
                 }}
                 onMouseEnter={() => setCurrentHoveringRow(r.id)}
                 onMouseLeave={() => setCurrentHoveringRow(null)}
@@ -354,6 +354,47 @@ export const useGridContainerHelpers = () => {
         </div> )
     }
 
+    const KnowledgeRow = (r: Fo) => {
+        const enabled = currentHoveringRow == r.id;
+
+        return (<div
+            onMouseEnter={() => setCurrentHoveringRow(r.id)}
+            onMouseLeave={() => setCurrentHoveringRow(null)}
+            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
+        >
+            <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
+                {getIcon({   
+                        code: 'knowledge', 
+                        type: 'custom', 
+                        props: {
+                            sx: {
+                                fontSize:20, 
+                                color: 'black',
+                                }}
+                            })}
+                {Nink(r.id, 'Pr', r.name)}
+                {enabled && <Link
+                    to={FinkToProtocol(r.fink??'')??''} 
+                    target="_self" 
+                    className={true ? 'icon-button':''}
+                    style={{ 
+                        width: '32px', 
+                        height: '24px', 
+                        // border: '1px solid #00000050', 
+                        borderRadius: 4, 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center',
+                        pointerEvents: true ? 'auto' : 'none',
+                        color: '#333',
+                    }}>
+                    <LinkIcon sx={{fontSize:'18px'}}/>
+                </Link>}
+            </div>  
+        </div> )
+    }
+
+
     
 
     const JustLinkRow = (r: Fo) => {
@@ -366,8 +407,8 @@ export const useGridContainerHelpers = () => {
         >
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
                 {JustLink(r.id, r.name)}
-                {enabled && <Link
-                    to={FinkToProtocol('')??''} 
+                {<Link
+                    to={FinkToProtocol(r.fink??'')??''} 
                     target="_self" 
                     className={true ? 'icon-button':''}
                     style={{ 
@@ -401,11 +442,15 @@ export const useGridContainerHelpers = () => {
                 <ContainerRow sx={{
                     opacity: (readyCuttingRows.includes(r.id) || r.activeC =='InAct') ? 0.5 : 1,
                 }}>
-                    {paSid(r.id).type === g.type.pr 
+                    {paSid(r.id).type === g.type.pr && !r.types.includes('knowledge')
                         ?   <>
                                 {Info(r)}
                                 {SubInfo(r)} 
                                 {History(r)}
+                            </>
+                        : paSid(r.id).type === g.type.pr && r.types.includes('knowledge')
+                        ?   <>
+                                {KnowledgeRow(r)}
                             </>
                     : paSid(r.id).type === g.type.fo && r.iconId !== 'link'
                         ?   <>

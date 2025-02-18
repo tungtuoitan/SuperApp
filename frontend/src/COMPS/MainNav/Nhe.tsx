@@ -21,7 +21,7 @@ import {Height} from "@mui/icons-material";
 import {FinkToProtocol} from "../S/5_Etail/5he";
 import HomeIcon from '@mui/icons-material/Home';
 import LinkIcon from '@mui/icons-material/Link';
-
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 export const classes =  
   {
       grow: {
@@ -210,7 +210,9 @@ export const allIcons = (props: any) => [
     { code: 'schedule', icon: <CalendarMonthIcon {...props} /> },
     { code: 'self-discipline', icon: <SelfImprovementIcon {...props} /> },
     { code: 'link', icon: <LinkIcon {...props} /> },
+    { code: 'knowledge', icon: <LibraryBooksIcon {...props} /> },
+
 ];
 
 export type iconType = 'accounts' | 'conversation' | 'finance' | 'folder' | 'gratefulList' | 
-'health' | 'home' | 'it' | 'playground' | 'practice' | 'principle' | 'schedule' | 'self-discipline' | 'link';
+'health' | 'home' | 'it' | 'playground' | 'practice' | 'principle' | 'schedule' | 'self-discipline' | 'link' | 'knowledge';

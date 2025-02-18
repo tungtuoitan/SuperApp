@@ -57,7 +57,7 @@ export const TopNav = () => {
                 foLine.unshift(fo.parentId);
         }
         if(foLine.includes('Fo-0')) 
-            return foLine;
+            return foLine
         else 
             return ['Fo-0', ...foLine];
     };
@@ -79,7 +79,13 @@ export const TopNav = () => {
                                         label={fo?.name ?? "??"}
                                         // icon={getIcon(fo?.iconId ?? '', 'folder')}
                                         onClick={() => handleClick(foId)}
-                                        deleteIcon={foId !== 'Fo-0' ? <ExpandMoreIcon /> : <></>}
+                                        deleteIcon={foId !== 'Fo-0' 
+                                            ? <ExpandMoreIcon sx={{
+                                            color: foId == lastFoId ? 'white !important' : 'black',
+                                            '&:hover': {
+                                                color: 'black !important'
+                                            }
+                                        }} /> : <></>}
                                         onDelete={(e: MouseEvent<HTMLSpanElement>)=> {
                                             if(foId !== 'Fo-0') {
                                                 openPopup(e);
@@ -93,6 +99,7 @@ export const TopNav = () => {
                                             : fo?.prioriC == 'T2' ? _0cs.lastchip.bgTop2
                                             : fo?.prioriC == 'T3' ? _0cs.lastchip.bgTop3
                                             : _0cs.lastchip.bgNormal,
+                                            color: lastFoId !== foId ? '#000' : _0cs.lastchip.colorNormal,
                                         }}
                                     />
                                     {openingFoIds.includes(foId) && <ListFoPopup />}

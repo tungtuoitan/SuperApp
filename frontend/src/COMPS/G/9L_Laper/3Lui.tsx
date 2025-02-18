@@ -142,6 +142,8 @@ export const FigmaButton = (props: FigmaButtonProps) => <Link
     <img src={props.fink ? '/figma-icon.png' : '/figma-gray-icon.png'} alt="Figma Icon" style={{ width: 24, height: 24 }} />
 </Link>
 
+
+
 export const FCSubType = styled(FormControl)({
     display: 'block',
     flexDirection: 'column',
