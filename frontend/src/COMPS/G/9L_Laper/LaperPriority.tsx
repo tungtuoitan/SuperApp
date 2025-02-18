@@ -19,7 +19,7 @@ export default function LaperPriority(props: LaperNameProps) {
                 flexDirection: 'column',
                 border: '1px solid rgb(199, 199, 199)',
                 borderRadius: '5px',
-                height: '30px',
+                height: '70px',
                 width: '100%',
             }}>
             <FormLabel
@@ -41,7 +41,7 @@ export default function LaperPriority(props: LaperNameProps) {
                 handleChange(fotail.id, e.target.name, e.target.value)
             }}
             sx={{
-                display: 'flex',
+                // display: 'flex',
                 flexDirection: 'row',
                 fontSize: '12px',
                 position: 'relative',
@@ -49,13 +49,13 @@ export default function LaperPriority(props: LaperNameProps) {
                 padding: '0 10px 0 10px',
             }}
             >
-                <FormControlLabel value={sr.priority.top1.c} control={<Radio size="small"/>} label={sr.priority.top1.d} />
-                <FormControlLabel value={sr.priority.top2.c} control={<Radio size="small"/>} label={sr.priority.top2.d} />
-                <FormControlLabel value={sr.priority.top3.c} control={<Radio size="small"/>} label={sr.priority.top3.d} />
-                <FormControlLabel value={sr.priority.high.c} control={<Radio size="small"/>} label={sr.priority.high.d} />
-                <FormControlLabel value={sr.priority.medium.c} control={<Radio size="small" />} label={sr.priority.medium.d} />
-                <FormControlLabel value={sr.priority.normal.c} control={<Radio size="small" />} label={sr.priority.normal.d} />
-                <FormControlLabel value={sr.priority.low.c} control={<Radio size="small" />} label={sr.priority.low.d} />
+                    <FormControlLabel value={sr.priority.top1.c} control={<Radio size="small"/>} label={sr.priority.top1.d} />
+                    <FormControlLabel value={sr.priority.top2.c} control={<Radio size="small"/>} label={sr.priority.top2.d} />
+                    <FormControlLabel value={sr.priority.top3.c} control={<Radio size="small"/>} label={sr.priority.top3.d} />
+                    <FormControlLabel value={sr.priority.high.c} control={<Radio size="small"/>} label={sr.priority.high.d} />
+                    <FormControlLabel value={sr.priority.medium.c} control={<Radio size="small" />} label={sr.priority.medium.d} />
+                    <FormControlLabel value={sr.priority.normal.c} control={<Radio size="small" />} label={sr.priority.normal.d} />
+                    <FormControlLabel value={sr.priority.low.c} control={<Radio size="small" />} label={sr.priority.low.d} />
             </RadioGroup>
         </FormControl>
     </WRow>

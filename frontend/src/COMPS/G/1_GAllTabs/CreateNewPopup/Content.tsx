@@ -7,6 +7,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {useGAllTabHelpers} from "../GAllTabHelpers";
 import LinkIcon from '@mui/icons-material/Link';
 import {Link} from "react-router-dom";
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -65,7 +66,39 @@ export const Row = styled('div')({
 
 export const Content = () => {
     const { closePopup } = usePopupHelper();
-    const { createNewPetail, createNewFolder, createNewLink } = useGAllTabHelpers();
+    const { createNewPetail, createNewFolder, createNewLink, createNewKnowledge } = useGAllTabHelpers();
+
+    const Option = (type: 'Folder'|'Link'|'Pr'|'Knowledge') => {
+        return (<Line
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                switch (type) {
+                    case 'Folder': 
+                        createNewFolder(e);
+                        break;
+                    case 'Link': 
+                        createNewLink(e);
+                        break;
+                    case 'Pr': 
+                        createNewPetail(e);
+                        break;
+                    case 'Knowledge': 
+                        createNewKnowledge(e);
+                        break;
+                }
+                closePopup(e);
+            }}
+        >
+            {
+                type === 'Folder' ? <FolderIcon sx={{fontSize:'18px'}} /> : 
+                type === 'Link' ? <LinkIcon sx={{fontSize:'18px'}}/> :
+                type === 'Pr' ? <FiberManualRecordIcon sx={{fontSize:'18px'}}/> :
+                type === 'Knowledge' ? <LibraryBooksIcon sx={{fontSize:'18px'}}/>
+                : null
+            }
+            {type}
+        </Line>)
+
+    }
     
     return (
         <AuditHeaderPopupRoot>
@@ -74,30 +107,10 @@ export const Content = () => {
             </div>
             <div className="popup-body">
                 <Row sx={{paddingLeft: '10px'}}>
-                    <Line
-                        onClick={(e) => {
-                            createNewFolder(e);
-                            closePopup(e);
-                        }}
-                    >
-                        <FolderIcon sx={{fontSize:'18px'}} />Folder
-                    </Line>
-                    <Line
-                        onClick={(e) => {
-                            createNewLink(e);
-                            closePopup(e)
-                        }}
-                    >
-                        <LinkIcon sx={{fontSize:'18px'}}/>Link
-                    </Line>
-                    <Line
-                        onClick={(e) => {
-                            createNewPetail(e)
-                            closePopup(e)
-                        }}
-                    >
-                        <FiberManualRecordIcon sx={{fontSize:'18px'}}/>Pr
-                    </Line>
+                    {Option('Folder')}
+                    {Option('Link')}
+                    {Option('Pr')}
+                    {Option('Knowledge')}
                 </Row>
             </div>
             {/* <div className="popup-footer">

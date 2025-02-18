@@ -26,7 +26,7 @@ export default function GContainer() {
                     loadPrs(),
                     loadFos(),
                 ])
-                .then(() => setTimeout(() => setRefreshGrid(false), 1000))
+                .then(() => setTimeout(() => setRefreshGrid(false), 500))
             })();
         }
     }, [refreshGrid]);

@@ -66,6 +66,44 @@ export const useGAllTabHelpers = () => {
             })
         }
     }
+    const createNewKnowledge = (e:any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); 
+
+        if (gAllTabIds.includes('Pr-0')) {
+            setCurTabIndex(gAllTabIds.indexOf('Pr-0'));
+        } 
+        else {
+            setGAllTabIds((prev) => {
+                const newPetail: PetailForm = {
+                    id: toSid('Pr', 0),
+                    name: "New Knowledge",
+                    parentId: lastFoId,
+    
+                    types: 'knowledge',
+                    repeatType: "evda",
+    
+                    timeStart: dateToCDate(today),
+                    timeEnd: null,
+    
+                    activeC: "Act",
+                    statusC: "Ope",
+                    prioriC: "Low",
+    
+                    pesults: [],
+    
+                    fink: null,
+                    desc: null,
+
+                };
+                dispatch({ type: "INSE", payload: newPetail });
+                setCurTabIndex(prev.length)
+                return [...prev, 'Pr-0'];
+            })
+        }
+    }
 
     const createNewFolder = (e:any) => {
         e.preventDefault();
@@ -136,5 +174,6 @@ export const useGAllTabHelpers = () => {
         createNewPetail, 
         createNewFolder,
         createNewLink,
+        createNewKnowledge
      }
 }

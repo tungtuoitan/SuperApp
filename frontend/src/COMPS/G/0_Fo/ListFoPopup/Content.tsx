@@ -2,11 +2,9 @@
 
 import { Button, styled } from "@mui/material";
 import {usePopupHelper} from "./PopupHelper";
-import FolderIcon from '@mui/icons-material/Folder';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {useGAllTabHelpers} from "../../1_GAllTabs/GAllTabHelpers";
 import {useFoStore} from "../FoStore";
-import {getIcon} from "../../../MainNav/Nhe";
+import {getIcon} from "../../../MainNav/Nhe";   
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -69,7 +67,7 @@ export const Content = () => {
     const { openingFoIds, allFos, setLastFoId } = useFoStore();
 
     const parentId = allFos.find(fo => fo.id == openingFoIds[0])?.parentId;
-    const allBrothers = allFos.filter(fo => fo.parentId == parentId);
+    const allBrothers = allFos.filter(fo => fo.parentId == parentId && fo.activeC == 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
     
     return (
         <AuditHeaderPopupRoot>
