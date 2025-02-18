@@ -4,7 +4,6 @@ import {useGridContainerStore} from "./GridContainerStore";
 import {truncateText} from "./2he";
 import {sr} from "../../S/TLConstants";
 import {_4cs} from "../../S/4_ChildEv/4cs";
-import {g} from "../GConstants";
 
 export const Line = (name: string, value: any) => {
     switch(name) {

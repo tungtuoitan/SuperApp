@@ -22,6 +22,13 @@ import {FinkToProtocol} from "../S/5_Etail/5he";
 import HomeIcon from '@mui/icons-material/Home';
 import LinkIcon from '@mui/icons-material/Link';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import HelpIcon from '@mui/icons-material/Help';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 export const classes =  
   {
       grow: {
@@ -212,7 +219,14 @@ export const allIcons = (props: any) => [
     { code: 'link', icon: <LinkIcon {...props} /> },
     { code: 'knowledge', icon: <LibraryBooksIcon {...props} /> },
 
+    { code: 'open-in-new', icon: <OpenInNewIcon {...props} /> },
+    { code: 'skip', icon: <SkipNextIcon {...props} /> },
+    { code: 'pass', icon: <ThumbUpAltIcon {...props} /> },
+    { code: 'fail', icon: <ThumbDownAltIcon {...props} /> },
+    { code: 'unknown-icon', icon: <HelpIcon {...props} /> },
+    { code: 'com-in', icon: <ArrowForwardIcon {...props} /> },
+
 ];
 
 export type iconType = 'accounts' | 'conversation' | 'finance' | 'folder' | 'gratefulList' | 
-'health' | 'home' | 'it' | 'playground' | 'practice' | 'principle' | 'schedule' | 'self-discipline' | 'link' | 'knowledge';
+'health' | 'home' | 'it' | 'playground' | 'practice' | 'principle' | 'schedule' | 'self-discipline' | 'link' | 'knowledge' | 'open-in-new' | 'skip' | 'pass' | 'fail' | 'unknown-icon';
