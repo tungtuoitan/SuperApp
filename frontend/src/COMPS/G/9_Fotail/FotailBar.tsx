@@ -7,14 +7,11 @@ import { useFotailFormStore } from "./FotailFormsStore";
 import { useGridContainerStore } from "../2_GridContainer/GridContainerStore";
 import { getFos, iuFos } from "../GAPIs";
 import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
-import {FotailForm} from "./9ty";
+import {FotailBarProps, FotailForm} from "./9ty";
 import {FosResult} from "../0_Fo/FoTypes";
 import {toSid} from "../GHelpers";
 import {useFoHelpers} from "../0_Fo/FoHelpers";
 
-type FotailBarProps = {
-    id: string;
-};
 export const FotailBar = (props: FotailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const [fotails, dispatch] = useFotailFormStore();

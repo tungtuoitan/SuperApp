@@ -15,11 +15,11 @@ export default function LaperPriority(props: LaperNameProps) {
         <WRow>
         <FormControl
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
+                // display: 'flex',
+                // flexDirection: 'column',
                 border: '1px solid rgb(199, 199, 199)',
                 borderRadius: '5px',
-                height: '30px',
+                height: '60px',
                 width: '100%',
             }}>
             <FormLabel
@@ -41,7 +41,7 @@ export default function LaperPriority(props: LaperNameProps) {
                 handleChange(petail.id, e.target.name, e.target.value)
             }}
             sx={{
-                display: 'flex',
+                // display: 'flex',
                 flexDirection: 'row',
                 fontSize: '12px',
                 position: 'relative',

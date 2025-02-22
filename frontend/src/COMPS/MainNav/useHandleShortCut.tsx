@@ -415,6 +415,7 @@ export const useHandleShortCut = () => {
             pr.activeC = "InAct";
             pr.pesults = JSON.stringify(pr.pesults);
         });
+        console.log(readyPrs)
 
         try {
             await Promise.all(

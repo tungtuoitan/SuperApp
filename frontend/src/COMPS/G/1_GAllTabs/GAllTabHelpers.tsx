@@ -18,6 +18,7 @@ import {set} from "lodash";
 import {Cooltip} from "../../CommonHelpers/2_CoolTip";
 import {IconButton} from "@mui/material";
 import UndoIcon from '@mui/icons-material/Undo';
+import {sr} from "../../S/TLConstants";
 
 export const useGAllTabHelpers = () => {
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
@@ -58,6 +59,7 @@ export const useGAllTabHelpers = () => {
     
                     fink: null,
                     desc: null,
+                    knowC: sr.newKnowledge.c,
 
                 };
                 dispatch({ type: "INSE", payload: newPetail });
@@ -93,9 +95,9 @@ export const useGAllTabHelpers = () => {
                     prioriC: "Low",
     
                     pesults: [],
-    
                     fink: null,
                     desc: null,
+                    knowC: sr.newKnowledge.c,
 
                 };
                 dispatch({ type: "INSE", payload: newPetail });

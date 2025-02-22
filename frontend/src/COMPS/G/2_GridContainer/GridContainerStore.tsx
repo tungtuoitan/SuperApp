@@ -2,6 +2,7 @@
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import {Pr} from "../GTypes";
 import {GridRowSelectionModel} from "@mui/x-data-grid";
+import {GridStatee} from "./2ty";
 export interface GridContainerContextData {
     allPrs: Pr[];
     setAllPrs: Dispatch<SetStateAction<any[]>>;
@@ -27,6 +28,8 @@ export interface GridContainerContextData {
     setReadyCuttingRows: Dispatch<SetStateAction<GridRowSelectionModel>>;
     displayDeleltedRows: boolean;
     setDisplayDeletedRows: Dispatch<SetStateAction<boolean>>;
+    gridState: GridStatee;
+    setGridState: Dispatch<SetStateAction<GridStatee>>;
 };
 
 export const GridContainerContextDefaultValue: GridContainerContextData = {
@@ -54,6 +57,8 @@ export const GridContainerContextDefaultValue: GridContainerContextData = {
     setReadyCuttingRows: () => { },
     displayDeleltedRows: false,
     setDisplayDeletedRows: () => { },
+    gridState: 'default',
+    setGridState: () => { },
 };
 
 const GridContainerStore = createContext<GridContainerContextData>(GridContainerContextDefaultValue);
@@ -74,6 +79,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [loadingGrid, setLoadingGrid] = useState<boolean>(true);
     const [currentHoveringRow, setCurrentHoveringRow] = useState<string | null>(null);
     const [displayDeleltedRows, setDisplayDeletedRows] = useState<boolean>(false);
+    const [gridState, setGridState] = useState<GridStatee>('default');
 
     return (
         <GridContainerStore.Provider
@@ -102,6 +108,8 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setReadyCuttingRows,
                 displayDeleltedRows,
                 setDisplayDeletedRows,
+                gridState,
+                setGridState,
             }}>
             {children}
         </GridContainerStore.Provider>

@@ -92,9 +92,9 @@ export const DialogContainer = ({ title, open, onClose, onClickClose, dialogId, 
                     </AppBar>
                 </ToolbarBox>}
             <DialogContent style={dialogcontentStyle ?? { backgroundColor: '#fff', padding: 0, height: '100%', marginTop: '10px' }}>
-                <ContentWrapper>
+                {/* <ContentWrapper> */}
                     {children}
-                </ContentWrapper>
+                {/* </ContentWrapper> */}
             </DialogContent>
         </Dialog>
     )

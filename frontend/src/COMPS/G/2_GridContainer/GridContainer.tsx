@@ -8,15 +8,19 @@ import {ADiContent} from "../5_Adi/ADiContent";
 import {truncateText} from "./2he";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useEffect} from "react";
+import {RialogContent} from "../10_Rialog/RialogContent";
+import {useRialogHelpers} from "../10_Rialog/RialogHelpers";
+import {useRialogStore} from "../10_Rialog/RialogStore";
+import {sr} from "../../S/TLConstants";
 
 export default function GridContainer() {
     const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid,
      } = useGridContainerStore(); 
     const { aDia, setADia } = useADiStore(); 
+    const { rialog, setRialog, reviewType } = useRialogStore(); 
     const { gridColumns, getAllGitems } = useGridContainerHelpers(); 
     const { gAllTabIds } = useGAllTabsStore();
     const _Dselector = helperMUIcss.getDialogCSSSelector();
-
     const aDiPr = allPrs.find(pr => pr.id === aDia?.pesult.prId);
 
 
@@ -63,6 +67,26 @@ export default function GridContainer() {
                 onClickClose={() => setADia(null)}
 
                 children={<ADiContent />}
+                sx={{
+                    [_Dselector.div2paper]: {
+                        width: '800px', height: '560px',
+                    },
+                }}
+            ></DialogContainer>
+            <DialogContainer
+                title={truncateText(`Review: ${
+                    `${
+                        reviewType === sr.allPr.c ? sr.allPr.d :
+                        reviewType === sr.folderPr.c ? sr.folderPr.d :
+                        reviewType === sr.allKnowledge.c ? sr.allKnowledge.d :
+                        reviewType === sr.folderKnowledge.c ? sr.folderKnowledge.d : ''
+                    }`
+                }`,50)}
+                open={rialog?.open ?? false}
+                onClose={() => setRialog(null)}
+                onClickClose={() => setRialog(null)}
+
+                children={<RialogContent />}
                 sx={{
                     [_Dselector.div2paper]: {
                         width: '800px', height: '560px',

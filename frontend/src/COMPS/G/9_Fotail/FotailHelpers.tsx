@@ -22,7 +22,6 @@ export const useFotailHelpers = () => {
     };
 
     const handleChange = (id: string, fieldName: string, value: any) => {
-        console.log('fieldName', fieldName, 'value', value);
         dispatch({type: 'UPDA', payload: {id, [fieldName]: value }});
     }
 
