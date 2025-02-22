@@ -31,6 +31,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import SpaIcon from '@mui/icons-material/Spa';
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import FestivalIcon from '@mui/icons-material/Festival';
 export const classes =  
   {
       grow: {
@@ -230,6 +232,7 @@ export const allIcons = (props: any) => [
     { code: 'review', icon: <ThumbsUpDownIcon {...props} /> },
     { code: 'learn-today', icon: <LocalLibraryIcon {...props} /> },
     { code: 'open-knowledge', icon: <SpaIcon {...props} /> },
+    { code: 'all-knowledge', icon: <FestivalIcon {...props} /> },
 
 ];
 

@@ -21,6 +21,7 @@ export const TopNav = () => {
     const { setCurTabIndex } = useGAllTabsStore();
     const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText, setGridState} = useGridContainerStore(); 
     const { enqueueSnackbar } = useSnackbar();
+    const { gridState } = useGridContainerStore();
 
 
     useEffect(() => {
@@ -68,8 +69,8 @@ export const TopNav = () => {
             <Popup />
             <AppBar sx={classes.appBar} position="sticky">
                 <Toolbar sx={{ marginLeft: -2, height: "60px" }}>
-                    <div role="presentation">
-                        <Breadcrumbs aria-label="breadcrumb">
+                    <div role="presentation" style={{ display: gridState === 'default' ? 'block' : 'none' }}>
+                        <Breadcrumbs aria-label="breadcrumb" >
                             {getFoLine().map((foId, index) => {
                                 const fo = foId  !== 'Fo-0' 
                                     ? allFos.find((f) => f.id === foId) 

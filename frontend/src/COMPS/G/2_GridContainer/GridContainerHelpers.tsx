@@ -62,7 +62,7 @@ export const useGridContainerHelpers = () => {
                
 
             case 'relearn':
-                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && (pr.knowC === sr.newKnowledge.c || pr.knowC === sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c))
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && (pr.knowC === sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c))
                                 .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
                 return allGItems.filter(r => r.activeC === 'Act')
 
@@ -73,6 +73,10 @@ export const useGridContainerHelpers = () => {
 
             case 'open-knowledge':
                 allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.open.c)
+                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                return allGItems.filter(r => r.activeC === 'Act')
+            case 'all-knowledge':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c))
                                 .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
                 return allGItems.filter(r => r.activeC === 'Act')
         }

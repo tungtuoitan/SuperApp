@@ -240,6 +240,27 @@ export const useRowHelpers = () => {
         </div> )
     }
 
+    const SubInfoKnowledge = (r: Pr) => {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    lineHeight: "normal",
+                    justifyContent: "center",
+                    alignItems: "left",
+                    padding: "10px 10px 10px 0",
+                    fontSize: "12px",
+                    width: _2cs.gridDetail.col2.w
+                }}
+            >
+                   {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
+                   {Line("Has Desc", r.desc ? 'Yes': <span style={{color:'red'}}>No</span>)}
+                   {Line("Has Link", r.fink ? 'Yes': <span style={{color:'red'}}>No</span>)}
+            </div>
+        );
+    }
+
     const KnowledgeRow = (r: Pr) => {
         const enabled = currentHoveringRow == r.id;
 
@@ -248,9 +269,7 @@ export const useRowHelpers = () => {
                 onMouseEnter={() => setCurrentHoveringRow(r.id)}
                 onMouseLeave={() => setCurrentHoveringRow(null)}
             >
-                <div
-                    style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}
-                >
+                <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}>
                     <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
                         {<ICON
                             type='just-icon'
@@ -260,6 +279,7 @@ export const useRowHelpers = () => {
                         {Nink(r.id, 'Pr', r.name)}
                     </div>  
                 </div> 
+                {SubInfoKnowledge(r)}
                 <div style={{width: _2cs.gridDetail.col3.w}}>
                     {enabled && r.pesults.length>0 ? <KnowledgeChart kesults={r.pesults as Kesult[]}/> : null}  
                 </div>
