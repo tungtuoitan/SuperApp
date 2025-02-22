@@ -81,7 +81,16 @@ export const ToolBars = (props: ToolBarsProps) => {
 
   return (
     <ToolbarContainer sx={{visibility: props.hide ? 'hidden' : 'visible'}}>
-          <NewKnowledgeBadge badgeContent={getAllGitems('open-knowledge').length ? getAllGitems('open-knowledge').length : '0'} color="secondary" sx={{fontSize:'10px'}}>
+        <NewKnowledgeBadge badgeContent={getAllGitems('all-knowledge').length ? getAllGitems('all-knowledge').length : '0'} color="secondary" sx={{fontSize:'10px'}}>
+            <ICON iconCode='all-knowledge' title='Opening' btnSize={40} btnSx={{margin: '4px'}} color={gridState === 'all-knowledge' ? '#1976D2' : '#444'} 
+            handle={()=> {
+                if(gridState !== 'all-knowledge')
+                    setGridState('all-knowledge' as GridStatee);
+                else 
+                    setGridState('default' as GridStatee);
+            }} />
+        </NewKnowledgeBadge>
+        <NewKnowledgeBadge badgeContent={getAllGitems('open-knowledge').length ? getAllGitems('open-knowledge').length : '0'} color="secondary" sx={{fontSize:'10px'}}>
             <ICON iconCode='open-knowledge' title='Opening' btnSize={40} btnSx={{margin: '4px'}} color={gridState === 'open-knowledge' ? 'green' : '#444'} 
             handle={()=> {
                 if(gridState !== 'open-knowledge')
