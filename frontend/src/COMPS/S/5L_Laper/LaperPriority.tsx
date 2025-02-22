@@ -19,7 +19,7 @@ export default function LaperPriority(props: LaperNameProps) {
                 flexDirection: 'column',
                 border: '1px solid rgb(199, 199, 199)',
                 borderRadius: '5px',
-                height: '30px',
+                height: '70px',
                 width: '100%',
             }}>
             <FormLabel

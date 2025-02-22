@@ -21,3 +21,7 @@ export type Fosult = {
     note: string;
     activeC: string;
 }
+
+export type FotailBarProps = {
+    id: string;
+};

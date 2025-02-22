@@ -1,4 +1,5 @@
 import {cDate, Ev, ResultOptions} from "../S/TLTypes";
+import {Kesult} from "./10_Rialog/10ty";
 import {Pesult} from "./3_Petail/3ty";
 
 export type Pr = {
@@ -6,6 +7,7 @@ export type Pr = {
         name: string,
         
         timeStart: cDate,
+        timeEnd: cDate|null,
         parentId: string,
         
         activeC: string,
@@ -17,8 +19,8 @@ export type Pr = {
 
         types: string,
         repeatType: string,
-        pesults: Pesult[],
-        timeEnd: cDate|null,
+        pesults: (Pesult|Kesult)[],
+        knowC: string,
      }
 
 

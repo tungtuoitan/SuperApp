@@ -1,5 +1,5 @@
 import { Pr, Pr2, PrsResult } from "../GTypes";
-import { JustLink, Line, Nink } from "./2ui";
+import { ICON, Line, Nink } from "./2ui";
 import { displayCDate, getDayIndex, getIndexesOfFirstDayOfAllMonth } from "./2he";
 import { Pesult, PetailForm } from "../3_Petail/3ty";
 import {useGridContainerStore} from "./GridContainerStore";
@@ -12,21 +12,18 @@ import {useADiStore} from "../5_Adi/ADiStore";
 import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
 import { dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {sr} from "../../S/TLConstants";
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {getPrs, iuPr} from "../GAPIs";
 import {enqueueSnackbar} from "notistack";
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useFoStore} from "../0_Fo/FoStore";
 import {paSid, toSid} from "../GHelpers";
 import {getIcon, iconType} from "../../MainNav/Nhe";
 import {Fo} from "../0_Fo/FoTypes";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {_2cs} from "./2cs";
-import LinkIcon from '@mui/icons-material/Link';
 import {FinkToProtocol} from "../../S/5_Etail/5he";
 import {Link} from "react-router-dom";
+import {SiconProps} from "./2ty";
+import KnowledgeChart from "./KnowledgeChart";
+import {Kesult} from "../10_Rialog/10ty";
 
 export const useRowHelpers = () => {
     const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows} = useGridContainerStore();
@@ -36,94 +33,8 @@ export const useRowHelpers = () => {
     const { sRs } = useSRsStore();
     const {allFos,setLastFoId, lastFoId} = useFoStore();
 
-    type SiconProps = {
-        type?: 'icon-link' | 'icon-btn' | 'just-icon'
 
-        link?: string
 
-        iconCode?: string
-        handle?: (e: React.MouseEvent<HTMLButtonElement>) => void
-        title?: string
-
-        iconSize?: number
-        iconSx?: any
-        btnSize?: 'sm'|'md'|'lg'
-        btnSx?: any
-        color?: string
-    }
-    const Sicon = (props: SiconProps) => {
-        const {
-            type='icon-btn',
-
-            link='',
-
-            iconCode='unknown-icon', 
-            iconSize=20, 
-            iconSx, 
-            btnSize='md', 
-            btnSx, 
-            color='#444', 
-            handle=() => {}, 
-            title='Unknown Icon'
-        } = props;
-
-        const sizePx = btnSize === 'sm' ? '24px' : btnSize === 'md' ? '32px' : '40px';
-
-        switch (type) {
-            case 'icon-link':
-                return (
-                    <Cooltip title={title} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
-                        <Link
-                        to={FinkToProtocol(link)??''} 
-                        target="_self" 
-                        className={'icon-button'}
-                        style={{ 
-                            width: sizePx, 
-                            height: sizePx,
-                            borderRadius: 4, 
-                            display: 'flex', 
-                            justifyContent: 'center', 
-                            alignItems: 'center',
-                            pointerEvents: true ? 'auto' : 'none',
-                            color: color,
-                            ...btnSx
-                        }}>
-                            {getIcon({code: iconCode, type: 'custom', props: {sx: {...iconSx, fontSize: iconSize+'px', ...iconSx}}})}
-                    </Link>
-                    </Cooltip>
-                )
-            case 'just-icon':
-                return (
-                    getIcon({   
-                        code: iconCode,
-                        type: 'custom', 
-                        props: {
-                            sx: {
-                                fontSize: iconSize+'px',
-                                color: color,
-                                ...iconSx
-                                }}
-                            })
-                )
-
-            case 'icon-btn':
-                return (
-                    <Cooltip title={title} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
-                        <IconButton 
-                            onClick={e => handle(e)} 
-                            sx={{ 
-                                width: sizePx,
-                                height: sizePx,
-                                color: color,
-                                ...btnSx
-                            }}
-                            >
-                            {getIcon({code: iconCode, type: 'custom', props: {sx: {...iconSx, fontSize: iconSize+'px'}}})}
-                        </IconButton>
-                    </Cooltip>
-                )
-        }
-    }
 
     const evaluatePr = (pr: Pr, type:'Pass'|'Fail'|'Skip'|'Open') => {
         if(type === 'Open') {
@@ -163,27 +74,6 @@ export const useRowHelpers = () => {
         });
     }
 
-    type FolderProps = {
-        fo: Fo
-        }
-    const FolderBtn = (props: FolderProps) => {
-        const {fo} = props;
-        const handleClick = (fo: Fo) => {
-                setLastFoId(fo.id);
-                setCurTabIndex(0);
-            }
-        return (
-            <Sicon
-                title={'Go inside'}
-                iconCode='come-in'
-                handle={_ => handleClick(fo)}
-                color='black'
-            />
-        )
-    }
-
-   
-
     const Info = (r: Pr) => {
         const isAlreadyAdd = ():boolean => {
             if(r.pesults.length === 0) return false;
@@ -205,7 +95,7 @@ export const useRowHelpers = () => {
                     fontSize: "12px",
                     position: 'relative',
                     // opacity: enabled ? 1 : 0.3
-                    width: '420px'
+                    width: _2cs.gridDetail.col1.w
                 }}
                 onMouseEnter={() => setCurrentHoveringRow(r.id)}
                 onMouseLeave={() => setCurrentHoveringRow(null)}
@@ -218,29 +108,29 @@ export const useRowHelpers = () => {
                 {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
                 {Line("ID", r.id)}
                     {enabled && <div style={{position:'absolute', right:0, top:25}}>
-                        <Sicon 
+                        <ICON 
                             title='Pass' 
                             iconCode='pass' 
-                            handle={_ => evaluatePr(r,'Pass')} 
+                            handle={() => evaluatePr(r,'Pass')} 
                             color='green' 
                         />
-                        <Sicon 
+                        <ICON 
                             title='Fail' 
                             iconCode='fail' 
-                            handle={_ => evaluatePr(r,'Fail')} 
+                            handle={() => evaluatePr(r,'Fail')} 
                             color='red'
                         />
-                        <Sicon 
+                        <ICON 
                             title='Skip' 
                             iconCode='skip' 
-                            handle={_ => evaluatePr(r,'Skip')} 
+                            handle={() => evaluatePr(r,'Skip')} 
                             iconSize={26}
                             color='black' 
                         />
-                        <Sicon 
+                        <ICON 
                             title='Open' 
                             iconCode='open-in-new' 
-                            handle={_ => evaluatePr(r,'Open')} 
+                            handle={() => evaluatePr(r,'Open')} 
                             iconSize={18}
                             btnSx={{marginRight: '10px'}}
                             color='black'
@@ -263,7 +153,7 @@ export const useRowHelpers = () => {
                     alignItems: "left",
                     padding: "10px 10px 10px 0",
                     fontSize: "12px",
-                    width: '200px'
+                    width: _2cs.gridDetail.col2.w
                 }}
             >
                 {Line("Types", r.types?.split(';').map(typeC => sRs.filter(sr => sr.code === typeC)[0]?.desc).join("; "))}
@@ -278,10 +168,10 @@ export const useRowHelpers = () => {
         const year = new Date(r.timeStart).getFullYear();
         const indexes1 = getIndexesOfFirstDayOfAllMonth(year);
         let histories = '';
-        const dayIndexs = r.pesults.map(p => getDayIndex(p.time));
+        const dayIndexs = (r.pesults as Pesult[]).map(p => getDayIndex(p.time));
         for(let i = 0; i < 365; i++) {
             if (dayIndexs.includes(i)) {
-                const thatPesult = r.pesults.filter(p => getDayIndex(p.time) === i)[0];
+                const thatPesult = r.pesults.filter(p => getDayIndex(p.time) === i)[0] as Pesult;
                 if(thatPesult && thatPesult.pesultC === his.pass.c) histories += 'P';
                 else if(thatPesult && thatPesult.pesultC === his.fail.c) histories += 'F';
                 else {
@@ -293,7 +183,7 @@ export const useRowHelpers = () => {
             }
         }
 
-        return <div style={{display:'flex', height: '100%', width: '1150px', position:'relative'}}>
+        return <div style={{display:'flex', height: '100%', width: _2cs.gridDetail.col3.w, position:'relative'}}>
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', width: '100%'}}>
                 {histories.split('').map((h, i) => {
                     const color = h === his.pass.c ? '#23F51B' : h === his.fail.c ? 'red' : '#00000010';
@@ -309,11 +199,11 @@ export const useRowHelpers = () => {
 
     const PrRow = (r: Pr) => {
         return (
-            <>
+            <div style={{display:'flex', flexDirection:'row', gap: '8px'}}>
                 {Info(r)}
                 {SubInfo(r)}
                 {History(r)}
-            </>
+            </div>
         )
     }
 
@@ -327,43 +217,54 @@ export const useRowHelpers = () => {
         return (<div
             onMouseEnter={() => setCurrentHoveringRow(r.id)}
             onMouseLeave={() => setCurrentHoveringRow(null)}
-            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
+            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}
         >
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                {<Sicon
+                {<ICON
                     type='just-icon'
                     iconCode='folder'
-                    iconSize={20}
+                    iconSize={32}
+                    // btnSize=""
                     color= {color}
                     />}
                 {Nink(r.id, 'Fo', r.name)}
-                {enabled && <FolderBtn fo={r}/>}
+                {enabled && <ICON
+                    title={'Go inside'}
+                    iconCode='come-in'
+                    handle={() => {
+                        setLastFoId(r.id);
+                        setCurTabIndex(0);
+                    }}
+            />}
             </div>  
         </div> )
     }
 
-    const KnowledgeRow = (r: Fo) => {
+    const KnowledgeRow = (r: Pr) => {
         const enabled = currentHoveringRow == r.id;
 
-        return (<div
-            onMouseEnter={() => setCurrentHoveringRow(r.id)}
-            onMouseLeave={() => setCurrentHoveringRow(null)}
-            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
-        >
-            <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                {<Sicon
-                    type='just-icon'
-                    iconCode='knowledge'
-                    />}
-                {Nink(r.id, 'Pr', r.name)}
-                
-                {enabled && <Sicon 
-                    type='icon-link'
-                    link={(r.fink??'')??''}
-                    iconCode='link'
-                />}
-            </div>  
-        </div> )
+        return (
+            <div style={{width: '100%', display:'flex', flexDirection:'row', gap: '8px'}}
+                onMouseEnter={() => setCurrentHoveringRow(r.id)}
+                onMouseLeave={() => setCurrentHoveringRow(null)}
+            >
+                <div
+                    style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}
+                >
+                    <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
+                        {<ICON
+                            type='just-icon'
+                            iconCode='knowledge'
+                            btnSize= {20}
+                            />}
+                        {Nink(r.id, 'Pr', r.name)}
+                    </div>  
+                </div> 
+                <div style={{width: _2cs.gridDetail.col3.w}}>
+                    {enabled && r.pesults.length>0 ? <KnowledgeChart kesults={r.pesults as Kesult[]}/> : null}  
+                </div>
+            </div>
+        )
     }
     const JustLinkRow = (r: Fo) => {
         const enabled = currentHoveringRow == r.id;
@@ -371,18 +272,28 @@ export const useRowHelpers = () => {
         return (<div
             onMouseEnter={() => setCurrentHoveringRow(r.id)}
             onMouseLeave={() => setCurrentHoveringRow(null)}
-            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: '400px'}}
+            style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}
         >
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                {JustLink(r.id, r.name)}
-                {enabled && <Sicon
+                
+                <ICON
+                    type='just-icon'
+                    iconCode='link'
+                    btnSize= {22}
+                    link={r.fink??''}
+                    // title="See it"
+                    />
+                {Nink(r.id,'Link', r.name)}
+                {enabled && <ICON
                     type='icon-link'
                     iconCode='link'
-                    link={(r.fink??'')??''}
+                    link={r.fink??''}
+                    title="See it"
                     />}
             </div>  
         </div> )
     }
+
    
     return {
         PrRow,

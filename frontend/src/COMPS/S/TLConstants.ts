@@ -50,6 +50,10 @@ export const sr = {
             c: 'Res',
             d: 'Resolved',
         },
+        onHold: {
+            c: 'OnH',
+            d: 'On Hold',
+        }
     },
     priority: {
         top1: {
@@ -126,7 +130,52 @@ export const sr = {
         c: 'cen' as CevelC,
         d: 'century' as CevelD,
     },
+
+    knowledge: {
+        c: 'knowledge',
+        d: 'Knowledge',
+    },
+    allPr: {
+        c: 'allPr',
+        d: 'All Prs',
+    },
+    folderPr: {
+        c: 'folderPr',
+        d: 'Folder Prs'
+    },
+    allKnowledge: {
+        c: 'allKnowledge',
+        d: 'All Knowledges',
+    },
+    folderKnowledge: {
+        c: 'folderKnowledge',
+        d: 'Folder Knowledges'
+    },
+
+    newKnowledge: {
+        c: 'newK',
+        d: 'New Knowledge',
+    },
+    knowledgeOnRelearn: {
+        c: 'kOnRelearn',
+        d: 'Knowledge On Relearn',
+    },
+    knowledgeOnReview: {
+        c: 'kOnReview',
+        d: 'Knowledge On Review',
+    },
+    doneKnowledge: {
+        c: 'doneK',
+        d: 'Done Knowledge',
+    },
+
+    //
+    
+
+
 }
+
+export type KnowCType =  'newK' | 'kOnRelearn' | 'kOnReview' | 'doneK'
 
 export const subType = {
     task: {

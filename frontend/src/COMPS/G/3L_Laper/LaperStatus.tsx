@@ -74,6 +74,11 @@ export default function LaperStatus(props: LaperStatusProps) {
                         control={<Radio size="small" />}
                         label={sr.status.resolved.d}
                     />
+                       <FormControlLabel
+                        value={sr.status.onHold.c}
+                        control={<Radio size="small" />}
+                        label={sr.status.onHold.d}
+                    />
                 </RadioGroup>
             </FormControl>
         </WRow>

@@ -29,7 +29,7 @@ export default function LaperDesc(props: LaperNameProps) {
                 }}
                 sx={{
                     width: "100%",
-                    height: 30,
+                    height: '114px',
                     textAlign: "center",
                     [`& ${evDescSelector.div1}`]: {
                         padding: '10px',

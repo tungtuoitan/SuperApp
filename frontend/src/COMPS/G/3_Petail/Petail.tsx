@@ -36,9 +36,10 @@ export default function Petail(props: PetailProps) {
                     <LaperFink id={petailId} />
                     <LaperRepeat id={petailId} />
                     <LaperTypes id={petailId} />
-                    <LaperDetail id={petailId} />
                 </LeftEtailPaper>
                 <RightPetailPaper>
+                    <LaperDetail id={petailId} />
+
                     <PeridContainer petailId={petailId} />
                 </RightPetailPaper>
                 {/* <RightEtailPaper></RightEtailPaper> */}

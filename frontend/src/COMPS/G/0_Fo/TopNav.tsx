@@ -19,7 +19,7 @@ export const TopNav = () => {
     const { loadFos } = useFoHelpers();
     const { openPopup } = usePopupHelper();
     const { setCurTabIndex } = useGAllTabsStore();
-    const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText} = useGridContainerStore(); 
+    const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText, setGridState} = useGridContainerStore(); 
     const { enqueueSnackbar } = useSnackbar();
 
 
@@ -35,6 +35,7 @@ export const TopNav = () => {
     const handleClick = (foId: string) => {
         setLastFoId(foId);
         setCurTabIndex(0);
+        setGridState('default');
     };
 
     // NOTE: i created a vitural Folder thas has id = 'Fo-0' to represent the root folder

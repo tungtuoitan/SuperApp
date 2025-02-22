@@ -11,6 +11,7 @@ import { toNumber } from "lodash";
 import { PrsResult } from "../GTypes";
 import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
 import {paSid, toSid} from "../GHelpers";
+import {sr} from "../../S/TLConstants";
 
 type PetailBarProps = {
     id: string ;
@@ -42,7 +43,9 @@ export const PetailBar = (props: PetailBarProps) => {
             desc: petail.desc,
 
             pesults: JSON.stringify(petail.pesults),
+            knowC: petail.knowC,
         };
+        console.log(x);
 
         if(x.id === toSid('Pr', 0)) {
             iuPr(x).then((data: PrsResult) => {
@@ -63,6 +66,7 @@ export const PetailBar = (props: PetailBarProps) => {
                         fink: data.prs[0].fink,
                         desc: data.prs[0].desc,
                         pesults: JSON.parse(data.prs[0].pesults),
+                        knowC: data.prs[0].knowC,
                     };
                     dispatch({ type: "INSE", payload: newPetail });
                     const newPrAllTabIds = [...gAllTabIds];
@@ -94,6 +98,7 @@ export const PetailBar = (props: PetailBarProps) => {
                         fink: data.prs[0].fink,
                         desc: data.prs[0].desc,
                         pesults: JSON.parse(data.prs[0].pesults),
+                        knowC: data.prs[0].knowC,
                     };
                     dispatch({ type: "UPDA", payload: newPetail });
                 } 
@@ -130,6 +135,7 @@ export const PetailBar = (props: PetailBarProps) => {
                 desc: pr.desc,
 
                 pesults: pr.pesults,
+                knowC: pr.knowC,
             };
         } else {
             x = {
@@ -150,7 +156,8 @@ export const PetailBar = (props: PetailBarProps) => {
                 fink: "",
                 desc: "",
 
-                pesults: []
+                pesults: [],
+                knowC: sr.newKnowledge.c,
             };
         }
         dispatch({ type: "UPDA", payload: x });

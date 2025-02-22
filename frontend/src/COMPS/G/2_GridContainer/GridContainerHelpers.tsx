@@ -1,39 +1,26 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { Pr, Pr2, PrsResult } from "../GTypes";
-import { JustLink, Line, Nink } from "./2ui";
-import { displayCDate, getDayIndex, getIndexesOfFirstDayOfAllMonth } from "./2he";
 import { Pesult, PetailForm } from "../3_Petail/3ty";
 import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {useGridContainerStore} from "./GridContainerStore";
 import {useGAllTabsStore} from "../1_GAllTabs/GAllTabsStore";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
-import {his} from "../4_PeridContainer/4ty";
 import {Icon, IconButton, styled} from "@mui/material";
-import {Cooltip} from "../../CommonHelpers/2_CoolTip";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
-import { dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
-import {sr} from "../../S/TLConstants";
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {getPrs, iuPr} from "../GAPIs";
-import {enqueueSnackbar} from "notistack";
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useFoStore} from "../0_Fo/FoStore";
 import {paSid, toSid} from "../GHelpers";
 import {g} from "../GConstants";
 import {getIcon, iconType} from "../../MainNav/Nhe";
 import {FotailForm} from "../9_Fotail/9ty";
 import {useFotailFormStore} from "../9_Fotail/FotailFormsStore";
-import {Fo} from "../0_Fo/FoTypes";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {_2cs} from "./2cs";
-import LinkIcon from '@mui/icons-material/Link';
-import {FinkToProtocol} from "../../S/5_Etail/5he";
-import {FigmaButton} from "../5_Adi/5ui";
-import {Link} from "react-router-dom";
 import {useRowHelpers} from "./RowHelpers";
+import {Fo} from "../0_Fo/FoTypes";
+import {sr} from "../../S/TLConstants";
+import {GridStatee} from "./2ty";
+import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 
 const ContainerRow = styled('div')({
     display:'flex', flexDirection:'row', width: '100%', height: '100%'
@@ -42,7 +29,7 @@ const ContainerRow = styled('div')({
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const [fotails, dispatchFo] = useFotailFormStore();
-    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows} = useGridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows, gridState} = useGridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
     const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
@@ -53,22 +40,42 @@ export const useGridContainerHelpers = () => {
         KnowledgeRow,
         JustLinkRow} = useRowHelpers();
 
-    const getAllGitems = () => {
-        const allRealFos = allFos.filter(fo => fo.iconId !== ('link' as iconType) );
-        const allLinks = allFos.filter(fo => fo.iconId === ('link' as iconType) );
+    const getAllGitems = (type:GridStatee = gridState) => {
+        let allGItems: (Pr|Fo)[] = [];
+        switch (type) {
+            case 'default':
+                const allRealFos = allFos.filter(fo => fo.iconId !== ('link' as iconType) );
+                const allLinks = allFos.filter(fo => fo.iconId === ('link' as iconType) );
+        
+                allGItems = [
+                    ...allRealFos.filter(fo => fo.parentId === lastFoId)
+                        .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
+                    ...allLinks.filter(fo => fo.parentId === lastFoId)
+                        .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
+                    ...allPrs.filter(pr => pr.parentId === lastFoId)
+                        .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                ]
+                if(displayDeleltedRows) 
+                    return allGItems;
+                else
+                    return allGItems.filter(r => r.activeC === 'Act')
+               
 
-        const allGItems = [
-            ...allRealFos.filter(fo => fo.parentId === lastFoId)
-                .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
-            ...allLinks.filter(fo => fo.parentId === lastFoId)
-                .sort((a, b) => a.name.localeCompare(b.name, 'vi')),
-            ...allPrs.filter(pr => pr.parentId === lastFoId)
-                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
-        ]
-        if(displayDeleltedRows) 
-            return allGItems;
-        else
-            return allGItems.filter(r => r.activeC === 'Act')
+            case 'relearn':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && (pr.knowC === sr.newKnowledge.c || pr.knowC === sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c))
+                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                return allGItems.filter(r => r.activeC === 'Act')
+
+            case 'review-today':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && pr.knowC === sr.knowledgeOnReview.c && pr.pesults[pr.pesults.length - 1].time === dateToCDate(new Date()))
+                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                return allGItems.filter(r => r.activeC === 'Act')
+
+            case 'open-knowledge':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.open.c)
+                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                return allGItems.filter(r => r.activeC === 'Act')
+        }
     }
     const loadPrs = async () => {
         await getPrs(searchText??'')
@@ -80,7 +87,7 @@ export const useGridContainerHelpers = () => {
                 return true;
             })
     }
-    const openDetail = (rowId: string, type: 'Pr'|'Fo') => {
+    const openDetail = (rowId: string, type: 'Pr'|'Fo'|'Link') => {
         if (rowSelectionModel.includes(rowId) || rowSelectionModel.includes(rowId.toString())) return;
         if (gAllTabIds.includes(rowId)) {
             setCurTabIndex(gAllTabIds.indexOf(rowId));
@@ -92,8 +99,9 @@ export const useGridContainerHelpers = () => {
             });
         }
 
-        if(type === 'Pr') {
+        if(type === 'Pr' ) {
             const ev = allPrs.filter((pr) => pr.id === rowId)[0];
+            console.log(ev)
             const petail: PetailForm = {
                 id: ev.id,
                 name: ev.name,
@@ -108,10 +116,11 @@ export const useGridContainerHelpers = () => {
                 types: ev.types,
                 repeatType: ev.repeatType,
                 pesults: ev.pesults,
+                knowC: ev.knowC,
             };
             dispatch({ type: "INSE", payload: petail });
         }
-        else if (type==='Fo'){
+        else if (type==='Fo'||type==='Link') {
             const fo = allFos.filter((fo) => fo.id === rowId)[0];
             const fotail: FotailForm = {
                 id: fo.id,

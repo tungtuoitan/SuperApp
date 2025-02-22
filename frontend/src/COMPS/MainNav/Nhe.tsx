@@ -28,7 +28,9 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import HelpIcon from '@mui/icons-material/Help';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import SpaIcon from '@mui/icons-material/Spa';
 export const classes =  
   {
       grow: {
@@ -224,7 +226,10 @@ export const allIcons = (props: any) => [
     { code: 'pass', icon: <ThumbUpAltIcon {...props} /> },
     { code: 'fail', icon: <ThumbDownAltIcon {...props} /> },
     { code: 'unknown-icon', icon: <HelpIcon {...props} /> },
-    { code: 'com-in', icon: <ArrowForwardIcon {...props} /> },
+    { code: 'come-in', icon: <ArrowForwardIcon {...props} /> },
+    { code: 'review', icon: <ThumbsUpDownIcon {...props} /> },
+    { code: 'learn-today', icon: <LocalLibraryIcon {...props} /> },
+    { code: 'open-knowledge', icon: <SpaIcon {...props} /> },
 
 ];
 

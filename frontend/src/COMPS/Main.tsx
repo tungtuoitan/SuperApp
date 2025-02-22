@@ -20,6 +20,8 @@ import {PopupProvider} from "./G/1_GAllTabs/CreateNewPopup/PopupStore";
 import {FotailFormsStoreProvider} from "./G/9_Fotail/FotailFormsStore";
 import {ListFoPopupProvider} from "./G/0_Fo/ListFoPopup/PopupStore";
 import MainNav from "./MainNav/MainNav";
+import { RialogProvider} from "./G/10_Rialog/RialogStore";
+import {SourceReviewPopupProvider} from "./G/10_Rialog/ReviewOptionPopup/PopupStore";
 
 export const Main = () => {
     return (
@@ -56,7 +58,11 @@ export const Main = () => {
                                                                                     <FotailFormsStoreProvider>
                                                                                         <PopupProvider>
                                                                                             <ListFoPopupProvider>
-                                                                                                <MainNav />
+                                                                                                <RialogProvider>
+                                                                                                    <SourceReviewPopupProvider>
+                                                                                                            <MainNav />
+                                                                                                    </SourceReviewPopupProvider>
+                                                                                                </RialogProvider>
                                                                                             </ListFoPopupProvider>
                                                                                         </PopupProvider>
                                                                                     </FotailFormsStoreProvider>

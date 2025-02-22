@@ -4,6 +4,11 @@ import {useGridContainerStore} from "./GridContainerStore";
 import {truncateText} from "./2he";
 import {sr} from "../../S/TLConstants";
 import {_4cs} from "../../S/4_ChildEv/4cs";
+import {Cooltip} from "../../CommonHelpers/2_CoolTip";
+import {FinkToProtocol} from "../../S/5_Etail/5he";
+import {getIcon} from "../../MainNav/Nhe";
+import {IconButton} from "@mui/material";
+import {SiconProps} from "./2ty";
 
 export const Line = (name: string, value: any) => {
     switch(name) {
@@ -53,14 +58,14 @@ export const Line = (name: string, value: any) => {
     }
 };
 
-export const Nink = (id: string, type: 'Pr'|'Fo', title: string, link?: string) => {
+export const Nink = (id: string, type: 'Pr'|'Fo'|'Link', title: string, link?: string) => {
     const {openDetail} = useGridContainerHelpers();
     const {rowSelectionModel} = useGridContainerStore();
 
     return (
         <>
             {(rowSelectionModel.includes(id)||rowSelectionModel.includes(id.toString())) 
-                ? <div style={{fontWeight:'bold'}}>{truncateText(title, 66)}</div>
+                ? <div style={{fontWeight: 'bold'}}>{truncateText(title, 66)}</div>
                 : 
                 <Link 
                     className="nink" 
@@ -75,24 +80,83 @@ export const Nink = (id: string, type: 'Pr'|'Fo', title: string, link?: string) 
     );
 };
 
-export const JustLink = (id: string, title: string) => {
-    const {openDetail} = useGridContainerHelpers();
-    const {rowSelectionModel} = useGridContainerStore();
 
-    return (
-        <>
-            {(rowSelectionModel.includes(id)||rowSelectionModel.includes(id.toString())) 
-                ? <div style={{fontWeight: 'bold'}}>{truncateText(title, 66)}</div>
-                : 
-                <Link 
-                    className="nink" 
-                    to={""} 
-                    style={{fontWeight: "bold" }}
-                    onClick={(e) => openDetail(id, 'Fo')}
-                    >
-                        {truncateText(title, 66)}
+export const ICON = (props: SiconProps) => {
+    const {
+        type='icon-btn',
+
+        link='',
+
+        iconCode='unknown-icon', 
+        iconSize=20, 
+        iconSx, 
+        btnSize=32, 
+        btnSx, 
+        color='#444', 
+        handle=() => {}, 
+        dbHandle=() => {},
+        title='Unknown Icon'
+    } = props;
+
+    const sizePx = btnSize + 'px';
+
+    switch (type) {
+        case 'icon-link':
+            return (
+                <Cooltip title={title} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
+                    <Link
+                    to={FinkToProtocol(link)??''} 
+                    target="_self" 
+                    className={'icon-button'}
+                    style={{ 
+                        width: sizePx, 
+                        height: sizePx,
+                        borderRadius: 4, 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center',
+                        pointerEvents: true ? 'auto' : 'none',
+                        color: color,
+                        ...btnSx
+                    }}>
+                        {getIcon({code: iconCode, type: 'custom', props: {sx: {...iconSx, fontSize: iconSize+'px', ...iconSx}}})}
                 </Link>
-            }
-        </>
-    );
-};
+                </Cooltip>
+            )
+        case 'just-icon':
+            return (
+                getIcon({   
+                    code: iconCode,
+                    type: 'custom', 
+                    props: {
+                        sx: {
+                            fontSize: iconSize+'px',
+                            color: color,
+                            height: sizePx,
+                            width: sizePx,
+                            ...iconSx
+                            }}
+                        })
+            )
+
+        case 'icon-btn':
+            return (
+                <Cooltip title={title} placement='top' arrow sx={{position:'absolute', right:0, top:0}}>
+                    <IconButton 
+                        onClick={e => handle(e)} 
+                        onDoubleClick={e => dbHandle(e)}
+                        sx={{ 
+                            width: sizePx,
+                            height: sizePx,
+                            color: color,
+                            ...btnSx
+                        }}
+                        >
+                        {getIcon({code: iconCode, type: 'custom', props: {sx: {...iconSx, fontSize: iconSize+'px'}}})}
+                    </IconButton>
+                </Cooltip>
+            )
+        default:
+            return <></>;
+    }
+}
