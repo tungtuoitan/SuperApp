@@ -33,6 +33,11 @@ export const useRowHelpers = () => {
     const { sRs } = useSRsStore();
     const {allFos,setLastFoId, lastFoId} = useFoStore();
 
+    const wCol1 = '420px';
+    const wCol2 = '200px';
+    const wCol3 = '200px';
+    const wCol4 = '950px';
+
 
 
 
@@ -85,7 +90,8 @@ export const useRowHelpers = () => {
         
         return (
             <div
-                style={{
+            style={{
+                    width: wCol1,
                     display: "flex",
                     flexDirection: "column",
                     lineHeight: "normal",
@@ -94,8 +100,8 @@ export const useRowHelpers = () => {
                     padding: "10px 10px 10px 0",
                     fontSize: "12px",
                     position: 'relative',
+                    flex:'none',
                     // opacity: enabled ? 1 : 0.3
-                    width: _2cs.gridDetail.col1.w
                 }}
                 onMouseEnter={() => setCurrentHoveringRow(r.id)}
                 onMouseLeave={() => setCurrentHoveringRow(null)}
@@ -241,7 +247,6 @@ export const useRowHelpers = () => {
     }
 
     const SubInfoKnowledge = (r: Pr) => {
-        let time = r.pesults[r.pesults.length - 1]?.time;
         return (
             <div
                 style={{
@@ -258,7 +263,29 @@ export const useRowHelpers = () => {
                    {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
                    {Line("Has Desc", r.desc ? 'Yes': <span style={{color:'red'}}>No</span>)}
                    {Line("Has Link", r.fink ? 'Yes': <span style={{color:'red'}}>No</span>)}
-                   {time ? Line("Next Review", displayCDate(dateToCDate(new Date(time)))): <span></span>}
+            </div>
+        );
+    }
+    const SubInfoKnowledge2 = (r: Pr) => {
+        const pesults = r.pesults as Kesult[];
+        let lastReview = pesults[pesults.length - 1]?.time;
+        let nextReview = pesults[pesults.length - 1]?.nextReview;
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    lineHeight: "normal",
+                    justifyContent: "center",
+                    alignItems: "left",
+                    padding: "10px 10px 10px 0",
+                    fontSize: "12px",
+                    width: _2cs.gridDetail.col2.w
+                }}
+            >
+                   {Line("Last Review", lastReview ? displayCDate(dateToCDate(new Date(lastReview))) : '')}
+                   {Line("Next Review", nextReview ? displayCDate(dateToCDate(new Date(nextReview))) : '')}
+                   <span style={{opacity:0}}>.</span>
             </div>
         );
     }
@@ -271,7 +298,19 @@ export const useRowHelpers = () => {
                 onMouseEnter={() => setCurrentHoveringRow(r.id)}
                 onMouseLeave={() => setCurrentHoveringRow(null)}
             >
-                <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}>
+                <div style={{
+                    // display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w,
+                    width: wCol1,
+                    flex: 'none',
+                  display: "flex",
+                  flexDirection: "column",
+                  lineHeight: "normal",
+                  justifyContent: "center",
+                  alignItems: "left",
+                  padding: "10px 10px 10px 0",
+                  fontSize: "12px",
+                  position: 'relative',
+                }}>
                     <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
                         {<ICON
                             type='just-icon'
@@ -282,6 +321,7 @@ export const useRowHelpers = () => {
                     </div>  
                 </div> 
                 {SubInfoKnowledge(r)}
+                {SubInfoKnowledge2(r)}
                 <div style={{width: _2cs.gridDetail.col3.w}}>
                     {enabled && r.pesults.length>0 ? <KnowledgeChart kesults={r.pesults as Kesult[]}/> : null}  
                 </div>

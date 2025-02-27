@@ -96,7 +96,7 @@ export const Content = () => {
             }
         
         list = list.filter(pr => pr.activeC === sr.active.active.c && pr.desc && 
-            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && isSameDate(new Date(pr.pesults[pr.pesults.length - 1].time), new Date()))
+            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && (new Date(pr.pesults[pr.pesults.length-1].time)).getTime() < (new Date()).getTime())
             || pr.knowC == sr.newKnowledge.c))
         return list;
     }

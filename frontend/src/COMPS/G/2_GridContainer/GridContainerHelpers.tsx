@@ -67,7 +67,7 @@ export const useGridContainerHelpers = () => {
                 return allGItems.filter(r => r.activeC === 'Act')
 
             case 'review-today':
-                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && pr.knowC === sr.knowledgeOnReview.c &&  isSameDate(new Date(pr.pesults[pr.pesults.length - 1].time), new Date()))
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && pr.knowC === sr.knowledgeOnReview.c &&  (new Date(pr.pesults[pr.pesults.length-1].time)).getTime() < (new Date()).getTime())
                                 .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
                 return allGItems.filter(r => r.activeC === 'Act')
 
@@ -105,8 +105,7 @@ export const useGridContainerHelpers = () => {
 
         if(type === 'Pr' ) {
             const ev = allPrs.filter((pr) => pr.id === rowId)[0];
-            console.log(ev)
-            const petail: PetailForm = {
+                const petail: PetailForm = {
                 id: ev.id,
                 name: ev.name,
                 parentId: ev.parentId ?? 0,

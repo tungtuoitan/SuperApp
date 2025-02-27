@@ -8,7 +8,7 @@ export const ToolbarContainer = styled('div')({
     // border: '1px solid red',
     position: 'absolute',
     right: '0',
-    width: '500px',
+    width: '600px',
     display: 'flex',
     gap: '10px',
     justifyContent: 'space-between',

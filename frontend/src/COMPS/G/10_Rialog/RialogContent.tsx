@@ -40,8 +40,8 @@ export function RialogContent() {
                 <div style={{paddingBottom: '60px', display: 'flex', justifyContent: 'center'}}>
                     {reviewStart ?
                     <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
-                        <Button variant="contained" color="primary" sx={{width: '180px'}} onClick={()=> imDone(curPr)} disabled={usedTime>=getAnswerTime(curPr)}>I'm done</Button>
-                        <Button variant="contained" color='error' sx={{width: '180px'   }} onClick={()=> imDone(curPr)}>Fail & go next</Button>
+                        <Button variant="contained" color="primary" sx={{width: '180px'}} onClick={()=> imDone(curPr)} >Done, next quesion</Button>
+                        {/* <Button variant="contained" color='error' sx={{width: '180px'   }} onClick={()=> imDone(curPr)}>Fail & go next</Button> */}
                     </div>
                         : 
                         <Button variant="contained" color="primary" sx={{width: '160px'}} 
