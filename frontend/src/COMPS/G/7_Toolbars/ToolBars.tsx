@@ -108,7 +108,7 @@ export const ToolBars = (props: ToolBarsProps) => {
                     setGridState('default' as GridStatee);
             }} />
         </LearnBadge>
-        <ReviewBadge badgeContent={getList(sr.allKnowledge.c).length ? getList(sr.allKnowledge.c).length : '0' } color="error" sx={{fontSize:'10px'}}  >
+        <ReviewBadge badgeContent={getAllGitems('review-today').length ? getAllGitems('review-today').length : '0' } color="error" sx={{fontSize:'10px'}}  >
             <ICON iconCode='review' title='Review today' btnSize={40} btnSx={{margin: '4px'}} color={gridState === 'review-today' ? 'red' : '#444'}
             dbHandle={openPopup}
             handle={()=> {

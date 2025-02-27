@@ -241,6 +241,7 @@ export const useRowHelpers = () => {
     }
 
     const SubInfoKnowledge = (r: Pr) => {
+        let time = r.pesults[r.pesults.length - 1]?.time;
         return (
             <div
                 style={{
@@ -257,6 +258,7 @@ export const useRowHelpers = () => {
                    {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
                    {Line("Has Desc", r.desc ? 'Yes': <span style={{color:'red'}}>No</span>)}
                    {Line("Has Link", r.fink ? 'Yes': <span style={{color:'red'}}>No</span>)}
+                   {time ? Line("Next Review", displayCDate(dateToCDate(new Date(time)))): <span></span>}
             </div>
         );
     }

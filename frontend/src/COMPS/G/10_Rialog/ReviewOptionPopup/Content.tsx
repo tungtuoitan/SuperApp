@@ -11,7 +11,7 @@ import {Pr} from "../../GTypes";
 import {get, set} from "lodash";
 import {srConstants} from "../../../S/8_SRs/SRConstants";
 import {useSnackbar} from "notistack";
-import {dateToCDate} from "../../../S/3_TimeConfig/TimeHelpers";
+import {dateToCDate, isSameDate} from "../../../S/3_TimeConfig/TimeHelpers";
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -96,7 +96,7 @@ export const Content = () => {
             }
         
         list = list.filter(pr => pr.activeC === sr.active.active.c && pr.desc && 
-            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && pr.pesults[pr.pesults.length - 1].time === dateToCDate(new Date()))
+            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && isSameDate(new Date(pr.pesults[pr.pesults.length - 1].time), new Date()))
             || pr.knowC == sr.newKnowledge.c))
         return list;
     }

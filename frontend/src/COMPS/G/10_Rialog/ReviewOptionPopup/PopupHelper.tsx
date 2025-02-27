@@ -8,7 +8,7 @@ import {useGridContainerStore} from '../../2_GridContainer/GridContainerStore';
 import {useFoStore} from '../../0_Fo/FoStore';
 import {useRialogHelpers} from '../RialogHelpers';
 import {useSnackbar} from 'notistack';
-import {dateToCDate} from '../../../S/3_TimeConfig/TimeHelpers';
+import {dateToCDate, isSameDate} from '../../../S/3_TimeConfig/TimeHelpers';
 
 export const useSourceReviewPopupHelper = () => {
     const { setPopup } = usePopupStore();
@@ -48,7 +48,7 @@ export const useSourceReviewPopupHelper = () => {
             }
         
         list = list.filter(pr => pr.activeC === sr.active.active.c && pr.statusC === sr.status.inProgress.c && pr.desc && 
-            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && pr.pesults[pr.pesults.length - 1].time === dateToCDate(new Date()))
+            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && isSameDate(new Date(pr.pesults[pr.pesults.length - 1].time), new Date()))
             || pr.knowC == sr.newKnowledge.c))
         return list;
     }
