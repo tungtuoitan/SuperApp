@@ -101,8 +101,8 @@ export const useRialogHelpers = () => {
         const newKesult:Kesult = {
             id: (curPr.pesults.length?? 0).toString(),
             prId: curPr.id,
-            // time: dateToCDate(new Date()),
-            time: curPr.pesults.length>0 ? addTime(dateToCDate(new Date(curPr.pesults[curPr.pesults.length-1].time)),0,0,1,0,0) : dateToCDate(new Date()),  
+            time: dateToCDate(new Date()),
+            nextReview: curPr.pesults.length>0 ? addTime(dateToCDate(new Date()),0,0,interval,0,0) : dateToCDate(new Date()),  
             grade: getReviewGrade(curPr),
             interval,
             easeFactor,

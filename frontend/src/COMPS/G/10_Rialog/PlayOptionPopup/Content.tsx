@@ -11,7 +11,8 @@ import {Pr} from "../../GTypes";
 import {get, set} from "lodash";
 import {srConstants} from "../../../S/8_SRs/SRConstants";
 import {useSnackbar} from "notistack";
-import {dateToCDate} from "../../../S/3_TimeConfig/TimeHelpers";
+import {dateToCDate, isSameDate} from "../../../S/3_TimeConfig/TimeHelpers";
+import {useGridContainerHelpers} from "../../2_GridContainer/GridContainerHelpers";
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -76,33 +77,35 @@ export const Content = () => {
     const { lastFoId } = useFoStore();
     const { openRialog } = useRialogHelpers();
     const { enqueueSnackbar } = useSnackbar();
+    const { getAllGitems } = useGridContainerHelpers();
+    
 
 
-    const getList = (type: string) => {
-        let list: Pr[] = [];
-        switch (type) {
-            case sr.allPr.c: 
-                list = allPrs.filter(pr => !pr.types.includes(sr.knowledge.c));
-                break;
-            case sr.folderPr.c:
-                list = allPrs.filter(pr => pr.parentId === lastFoId && !pr.types.includes(sr.knowledge.c));
-                break;
-            case sr.allKnowledge.c:
-                list = allPrs.filter(pr => pr.types.includes(sr.knowledge.c));
-                break;
-            case sr.folderKnowledge.c:
-                list = allPrs.filter(pr => pr.parentId === lastFoId && pr.types.includes(sr.knowledge.c));
-                break;
-            }
+    // const getList = (type: string) => {
+    //     let list: Pr[] = [];
+    //     switch (type) {
+    //         case sr.allPr.c: 
+    //             list = allPrs.filter(pr => !pr.types.includes(sr.knowledge.c));
+    //             break;
+    //         case sr.folderPr.c:
+    //             list = allPrs.filter(pr => pr.parentId === lastFoId && !pr.types.includes(sr.knowledge.c));
+    //             break;
+    //         case sr.allKnowledge.c:
+    //             list = allPrs.filter(pr => pr.types.includes(sr.knowledge.c));
+    //             break;
+    //         case sr.folderKnowledge.c:
+    //             list = allPrs.filter(pr => pr.parentId === lastFoId && pr.types.includes(sr.knowledge.c));
+    //             break;
+    //         }
         
-        list = list.filter(pr => pr.activeC === sr.active.active.c && pr.desc && 
-            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && pr.pesults[pr.pesults.length - 1].time === dateToCDate(new Date()))
-            || pr.knowC == sr.newKnowledge.c))
-        return list;
-    }
+    //     list = list.filter(pr => pr.activeC === sr.active.active.c && pr.desc && 
+    //         (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && (new Date(pr.pesults[pr.pesults.length-1].time)).getTime() < (new Date()).getTime())
+    //         || pr.knowC == sr.newKnowledge.c))
+    //     return list;
+    // }
 
     const Option = (type: string) => {
-        let list:Pr[] = getList(type);
+        let list:Pr[] = getAllGitems('review-today') as Pr[]
         return (<Line
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 switch (type) {
@@ -146,14 +149,14 @@ export const Content = () => {
     return (
         <AuditHeaderPopupRoot>
             <div className="popup-header">
-                <div>Review:</div>
+                <div>Play:</div>
             </div>
             <div className="popup-body">
                 <Row sx={{paddingLeft: '10px'}}>
                     {/* {Option('allPr')}
                     {Option('folderPr')} */}
                     {Option(sr.allKnowledge.c)}
-                    {Option(sr.folderKnowledge.c)}
+                    {/* {Option(sr.folderKnowledge.c)} */}
                 </Row>
             </div>
         </AuditHeaderPopupRoot>

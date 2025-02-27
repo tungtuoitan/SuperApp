@@ -12,6 +12,7 @@ import {RialogContent} from "../10_Rialog/RialogContent";
 import {useRialogHelpers} from "../10_Rialog/RialogHelpers";
 import {useRialogStore} from "../10_Rialog/RialogStore";
 import {sr} from "../../S/TLConstants";
+import {useSnackbar} from "notistack";
 
 export default function GridContainer() {
     const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid,
@@ -22,6 +23,19 @@ export default function GridContainer() {
     const { gAllTabIds } = useGAllTabsStore();
     const _Dselector = helperMUIcss.getDialogCSSSelector();
     const aDiPr = allPrs.find(pr => pr.id === aDia?.pesult.prId);
+
+
+    // Check and notify
+     const {enqueueSnackbar} = useSnackbar();
+    
+        useEffect(() => {
+            if(getAllGitems('review-today').length>0)
+                enqueueSnackbar(`There are ${getAllGitems('review-today').length} Prs you need to review today`, {
+                    variant: 'error', autoHideDuration:1000000,
+            })
+            if(getAllGitems('review-today').length>10)
+                enqueueSnackbar(`Review List is too long!`, {variant: 'warning', autoHideDuration:10000})
+        }, [allPrs]);
 
 
 

@@ -34,6 +34,7 @@ export type Kesult = {
     id: string;
     prId: string;
     time: cDate;
+    nextReview?: cDate;
     grade?: number;
     interval: number; // Khoảng cách ôn tập hiện tại (ngày)
     easeFactor: number; // Hệ số dễ nhớ (EF)
@@ -67,11 +68,6 @@ export function calculateNextReview(data: Kesult, grade: GradeNumb) {
 
     return { interval, easeFactor, repetitions };
 }
-
-// Ví dụ sử dụng
-let reviewData: Kesult = { id:'5', prId: '3', time: dateToCDate(new Date()),  interval: 1, easeFactor: 2.5, repetitions: 0 };
-// console.log(calculateNextReview(reviewData, 5)); // Ôn tập với điểm 5 (nhớ tốt)
-
 
 // export type ReviewType = 'AllPr' | 'curPr' | 'allKnowledge'| 'curKnowledge';
 export type Rialog = {open: boolean, pesult: Kesult, reviewType: string};

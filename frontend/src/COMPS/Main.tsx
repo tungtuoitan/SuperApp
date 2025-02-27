@@ -21,7 +21,7 @@ import {FotailFormsStoreProvider} from "./G/9_Fotail/FotailFormsStore";
 import {ListFoPopupProvider} from "./G/0_Fo/ListFoPopup/PopupStore";
 import MainNav from "./MainNav/MainNav";
 import { RialogProvider} from "./G/10_Rialog/RialogStore";
-import {SourceReviewPopupProvider} from "./G/10_Rialog/ReviewOptionPopup/PopupStore";
+import {SourceReviewPopupProvider} from "./G/10_Rialog/PlayOptionPopup/PopupStore";
 
 export const Main = () => {
     return (
