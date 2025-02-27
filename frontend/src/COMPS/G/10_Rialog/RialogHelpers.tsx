@@ -55,7 +55,7 @@ export const useRialogHelpers = () => {
     }
 
     const getAnswerTime = (curPr: Pr): number => {
-        const wordCountPerSecond = 2
+        const wordCountPerSecond = 3
         const totalWords = countWords(curPr.desc??'')
         const bonusPercent = 10/100
         return totalWords/wordCountPerSecond * (1 + bonusPercent)
