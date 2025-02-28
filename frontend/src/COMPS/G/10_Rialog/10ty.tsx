@@ -1,5 +1,6 @@
 import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {cDate} from "../../S/TLTypes";
+import {Pr} from "../GTypes";
 
 export type AdiIdsProps = {
     pesultId: number;
@@ -49,6 +50,7 @@ export function calculateNextReview(data: Kesult, grade: GradeNumb) {
     let { interval, easeFactor, repetitions } = data;
 
     // Nếu user quên (grade < 3), reset interval và repetitions
+    // khi user quên, ngày hôm sau chắc chắn sẽ ôn lại
     if (grade < 3) {
         return { ...data, interval: 1, easeFactor: Math.max(1.3, easeFactor - 0.2), repetitions: 0 };
     } else {
@@ -71,3 +73,9 @@ export function calculateNextReview(data: Kesult, grade: GradeNumb) {
 
 // export type ReviewType = 'AllPr' | 'curPr' | 'allKnowledge'| 'curKnowledge';
 export type Rialog = {open: boolean, pesult: Kesult, reviewType: string};
+
+
+
+export type ReviewItem = Pr & {
+    done: boolean;
+}

@@ -16,5 +16,8 @@ export type SiconProps = {
 }
 
 
-export type GridStatee = 'default'|'relearn' | 'review-today' | 'open-knowledge' | 'all-knowledge'
-// | 'preview-future' | 'done'
+export type GridStatee = 'default'|'relearn' |
+ 'inprogress-review-today' | 
+ 'inprogress-review-later' |
+ 'open-knowledge' |
+  'all-knowledge' 

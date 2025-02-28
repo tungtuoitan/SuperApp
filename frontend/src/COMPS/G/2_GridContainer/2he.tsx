@@ -5,13 +5,19 @@ import {Pr} from "../GTypes";
 
 
 
-export function displayCDate(date: cDate): string {
+export function displayCDate(date: cDate, format:string = 'mm/dd/yyyy'): string {
     if (!date) return "";
     const date2 = new Date(date);
     const month: string = String(date2.getMonth() + 1).padStart(2, "0"); // Months are 0-based
     const day: string = String(date2.getDate()).padStart(2, "0");
     const year: number = date2.getFullYear();
-    return `${month}/${day}/${year}`;
+    if(format === 'dd/mm') return `${day}/${month}`;
+    if(format === 'dd/mm/yyyy') return `${day}/${month}/${year}`; // default
+    if(format === 'mm/dd/yyyy') return `${month}/${day}/${year}`; 
+    if(format === 'yyyy/mm/dd') return `${year}/${month}/${day}`;
+    if(format === 'yyyy/dd/mm') return `${year}/${day}/${month}`;
+    return `${day}/${month}/${year}`;
+
 }
 
 

@@ -16,23 +16,28 @@ import {useRialogHelpers} from "./RialogHelpers";
 export function RialogContent() {
     const { allPrs, setAllPrs } = useGridContainerStore();
     const { rialog, setRialog,reviewList, setReviewList, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime } = useRialogStore();
-    const {getAnswerTime, imDone} = useRialogHelpers();
-    const curPr = reviewList[0]
+    const {getAnswerTime, imDone, getReviewGrade} = useRialogHelpers();
+    const curReviewItem = reviewList.find(item => !item.done)
 
     useEffect(() => {
         setUsedTime(0)
     }, [])
 
     return (
+        curReviewItem ? 
         <div style={{width: '100%', height: '100%', padding: '20px'}}>
             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                 <div>
                     {/* <div style={{display: 'flex', flexDirection: 'column'}}>Remain question: {reviewList.length}</div> */}
                     <div >
                         Question: {reviewList.length}
-                        <div style={{fontSize:'32px',filter: reviewStart ? undefined : "blur(10px)"}}>{curPr.name}</div>
+                        <div style={{fontSize:'32px',filter: reviewStart ? undefined : "blur(10px)"}}>{curReviewItem.name}</div>
                         <div style={{display: 'flex', flexDirection: 'column'}}>
-                            {reviewStart && <CountdownTimer answerTime={getAnswerTime(curPr)}/>}
+                            {reviewStart && <CountdownTimer answerTime={getAnswerTime(curReviewItem)}/>}
+                            {
+                                reviewStart &&
+                            <div style={{textAlign: 'center', fontSize:'bold', fontStyle:'italic'}}>{getReviewGrade(curReviewItem)}, {usedTime}/{getAnswerTime(curReviewItem)}</div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -40,8 +45,8 @@ export function RialogContent() {
                 <div style={{paddingBottom: '60px', display: 'flex', justifyContent: 'center'}}>
                     {reviewStart ?
                     <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
-                        <Button variant="contained" color="primary" sx={{width: '180px'}} onClick={()=> imDone(curPr)} >Done, next quesion</Button>
-                        {/* <Button variant="contained" color='error' sx={{width: '180px'   }} onClick={()=> imDone(curPr)}>Fail & go next</Button> */}
+                        <Button variant="contained" color="primary" sx={{width: '180px'}} onClick={()=> imDone(curReviewItem)} >Done, next quesion</Button>
+                        {/* <Button variant="contained" color='error' sx={{width: '180px'   }} onClick={()=> imDone(curReviewItem)}>Fail & go next</Button> */}
                     </div>
                         : 
                         <Button variant="contained" color="primary" sx={{width: '160px'}} 
@@ -56,5 +61,13 @@ export function RialogContent() {
                 </div>
             </div>
         </div>
+        : <div style={{width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: '24px',
+            marginTop: '-20px'
+        }}>Congratulations, you reviewed {reviewList.length} Knowledges today!</div>
     )
 }
