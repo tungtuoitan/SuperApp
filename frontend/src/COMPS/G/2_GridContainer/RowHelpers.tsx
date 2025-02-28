@@ -10,7 +10,7 @@ import {Icon, IconButton, styled} from "@mui/material";
 import {Cooltip} from "../../CommonHelpers/2_CoolTip";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useADiaHelpers} from "../5_Adi/ADiaHelpers";
-import { dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
+import { dateToCDate, diffIn2CDates} from "../../S/3_TimeConfig/TimeHelpers";
 import {sr} from "../../S/TLConstants";
 import {getPrs, iuPr} from "../GAPIs";
 import {enqueueSnackbar} from "notistack";
@@ -283,8 +283,8 @@ export const useRowHelpers = () => {
                     width: _2cs.gridDetail.col2.w
                 }}
             >
-                   {Line("Last Review", lastReview ? displayCDate(dateToCDate(new Date(lastReview))) : '')}
-                   {Line("Next Review", nextReview ? displayCDate(dateToCDate(new Date(nextReview))) : '')}
+                   {Line("Last Review", lastReview ? displayCDate(dateToCDate(new Date(lastReview)), 'dd/mm/yyyy') : '')}
+                   {Line("Next Review", nextReview ? displayCDate(dateToCDate(new Date(nextReview)), 'dd/mm/yyyy') +` (+${diffIn2CDates(dateToCDate(new Date()), nextReview)} days more)` : '') }
                    <span style={{opacity:0}}>.</span>
             </div>
         );

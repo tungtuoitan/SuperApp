@@ -13,6 +13,7 @@ import LaperTypes from "../3L_Laper/LaperTypes";
 import LaperRepeat from "../3L_Laper/LaperRepeatType";
 import LaperDetail from "../3L_Laper/LaperDesc";
 import PeridContainer from "../4_PeridContainer/PeridContainer";
+import {sr} from "../../S/TLConstants";
 
 export default function Petail(props: PetailProps) {
     const { petailId } = props;
@@ -39,8 +40,8 @@ export default function Petail(props: PetailProps) {
                 </LeftEtailPaper>
                 <RightPetailPaper>
                     <LaperDetail id={petailId} />
-
-                    <PeridContainer petailId={petailId} />
+                    {!petail.types.includes(sr.knowledge.c) && 
+                        <PeridContainer petailId={petailId} />}
                 </RightPetailPaper>
                 {/* <RightEtailPaper></RightEtailPaper> */}
             </WBody>

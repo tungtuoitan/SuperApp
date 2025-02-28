@@ -21,6 +21,7 @@ import {Fo} from "../0_Fo/FoTypes";
 import {sr} from "../../S/TLConstants";
 import {GridStatee} from "./2ty";
 import {dateToCDate, isSameDate} from "../../S/3_TimeConfig/TimeHelpers";
+import {Kesult} from "../10_Rialog/10ty";
 
 const ContainerRow = styled('div')({
     display:'flex', flexDirection:'row', width: '100%', height: '100%'
@@ -40,7 +41,7 @@ export const useGridContainerHelpers = () => {
         KnowledgeRow,
         JustLinkRow} = useRowHelpers();
 
-    const getAllGitems = (type:GridStatee = gridState) => {
+    const getAllGitems = (type:GridStatee = gridState):  (Pr|Fo)[]   => {
         let allGItems: (Pr|Fo)[] = [];
         switch (type) {
             case 'default':
@@ -61,24 +62,43 @@ export const useGridContainerHelpers = () => {
                     return allGItems.filter(r => r.activeC === 'Act')
                
 
-            case 'relearn':
-                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && pr.statusC === sr.knowledgeOnRelearn.c)
-                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
-                return allGItems.filter(r => r.activeC === 'Act')
-
-            case 'review-today':
-                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c && pr.knowC === sr.knowledgeOnReview.c &&  (new Date(pr.pesults[pr.pesults.length-1].time)).getTime() < (new Date()).getTime())
-                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
-                return allGItems.filter(r => r.activeC === 'Act')
-
+            
             case 'open-knowledge':
                 allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.open.c)
-                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
-                return allGItems.filter(r => r.activeC === 'Act')
+                return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+
+                
+            case 'inprogress-review-today':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c)
+                allGItems = allGItems.filter(pr => {
+                    const pesults = (pr as Pr).pesults as Kesult[];
+                    const nextReview = pesults[pesults.length - 1]?.nextReview;
+                    return nextReview ? new Date(nextReview).getTime() <= new Date().getTime() : true;
+                });
+                                
+                return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+
+            case 'inprogress-review-later':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c)
+                allGItems = allGItems.filter(pr => {
+                    const pesults = (pr as Pr).pesults as Kesult[];
+                    const nextReview = pesults[pesults.length - 1]?.nextReview;
+                    return nextReview ? new Date(nextReview).getTime() > new Date().getTime() : false;
+                });
+                return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+            
+            
+            
+            
+                case 'relearn':
+                allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c 
+                                // && pr.statusC === sr.knowledgeOnRelearn.c
+                                )
+                return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+         
             case 'all-knowledge':
                 allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c))
-                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
-                return allGItems.filter(r => r.activeC === 'Act')
+                return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
         }
     }
     const loadPrs = async () => {

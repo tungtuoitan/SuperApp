@@ -21,6 +21,8 @@ import { IconButton} from "@mui/material";
 import UndoIcon from '@mui/icons-material/Undo';
 import {Cooltip} from "../CommonHelpers/2_CoolTip";
 import {getAllDescendants2} from "../G/2_GridContainer/2he";
+import {useRialogHelpers} from "../G/10_Rialog/RialogHelpers";
+import {useRialogStore} from "../G/10_Rialog/RialogStore";
 
 export const useHandleShortCut = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -29,7 +31,10 @@ export const useHandleShortCut = () => {
     const { filterEvs, markEvs } = useTLBaseFgHelpers();
     const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } = useTLBaseBgHelpers();
     const { allPrs, setAllPrs, rowSelectionModel, setRowSelectionModel, readyCuttingRows, setReadyCuttingRows, setRefreshGrid, setLoadingGrid } = useGridContainerStore();
-    const { allFos, setAllFos, lastFoId } = useFoStore();  
+    const { allFos, setAllFos, lastFoId } = useFoStore();
+    const { rialog, setRialog,reviewList, setReviewList, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime } = useRialogStore();
+    const {getAnswerTime, imDone, getReviewGrade} = useRialogHelpers();
+
 
     const click = () => {
         if (fevId) {
@@ -443,6 +448,25 @@ export const useHandleShortCut = () => {
         }
     }
 
+    const toNextKnowledge = () => {
+        if(reviewStart) {
+            console.log(1)
+            const curPr = reviewList[0]  
+            imDone(curPr) 
+        } else {
+            console.log(2)
+            setReviewStart(true)
+            setFirstTime(false)
+            setUsedTime(0)            
+        }
+    }
+    const closeRialog = () => {
+        setReviewStart(false)
+        setFirstTime(false)
+        setUsedTime(0)
+        setRialog(null)
+    }
+
     return {
         click,
 
@@ -452,7 +476,9 @@ export const useHandleShortCut = () => {
 
         pasteRow,
         cutRow,
-        deleteRows
+        deleteRows,
+        toNextKnowledge,
+        closeRialog
 
     };
 };

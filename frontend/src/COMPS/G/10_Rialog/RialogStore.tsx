@@ -1,15 +1,15 @@
 
 import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
 import {Pr} from "../GTypes";
-import {Kesult, Rialog} from "./10ty";
+import {Kesult, ReviewItem, Rialog} from "./10ty";
 
 
 
 export interface RialogContextData {
     rialog: Rialog|null;
     setRialog: Dispatch<SetStateAction<Rialog|null>>;
-    reviewList: Pr[];
-    setReviewList: Dispatch<SetStateAction<Pr[]>>;
+    reviewList: ReviewItem[];
+    setReviewList: Dispatch<SetStateAction<ReviewItem[]>>;
     feymanList: Pr[];
     setFeymanList: Dispatch<SetStateAction<Pr[]>>;
     reviewStart: boolean;   
@@ -45,7 +45,7 @@ export const useRialogStore = () => useContext(RialogStore);
 
 export const RialogProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
     const [rialog, setRialog] = useState<Rialog|null>(null);
-    const [reviewList, setReviewList] = useState<Pr[]>([]);
+    const [reviewList, setReviewList] = useState<ReviewItem[]>([]);
     const [feymanList, setFeymanList] = useState<Pr[]>([]);
     const [reviewStart, setReviewStart] = useState<boolean>(false);
     const [firstTime, setFirstTime] = useState<boolean>(true);

@@ -13,6 +13,8 @@ import {srConstants} from "../../../S/8_SRs/SRConstants";
 import {useSnackbar} from "notistack";
 import {dateToCDate, isSameDate} from "../../../S/3_TimeConfig/TimeHelpers";
 import {useGridContainerHelpers} from "../../2_GridContainer/GridContainerHelpers";
+import {ReviewItem} from "../10ty";
+import {shuffleArray} from "../10he";
 
 export const AuditHeaderPopupRoot = styled('div')({
     display: 'flex',
@@ -105,7 +107,7 @@ export const Content = () => {
     // }
 
     const Option = (type: string) => {
-        let list:Pr[] = getAllGitems('review-today') as Pr[]
+        let list:Pr[] = getAllGitems('inprogress-review-today') as Pr[]
         return (<Line
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 switch (type) {
@@ -122,7 +124,7 @@ export const Content = () => {
                         setReviewType(sr.folderKnowledge.c);
                         break;
                     }
-                setReviewList(list);
+                setReviewList(shuffleArray(list.map(pr => ({...pr, done: false} as ReviewItem))));
                 openRialog(list[0], type);
                 closePopup(e);
             }}

@@ -542,3 +542,12 @@ export function isSameDate(date1: Date, date2: Date): boolean {
         date1.getDate() === date2.getDate()
     );
 }
+
+export function diffIn2CDates(date1: cDate, date2: cDate): number {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    d1.setHours(0, 0, 0, 0);
+    d2.setHours(0, 0, 0, 0);
+    const diffTime = Math.abs(d2.getTime() - d1.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}

@@ -29,11 +29,11 @@ export default function GridContainer() {
      const {enqueueSnackbar} = useSnackbar();
     
         useEffect(() => {
-            if(getAllGitems('review-today').length>0)
-                enqueueSnackbar(`There are ${getAllGitems('review-today').length} Prs you need to review today`, {
+            if(getAllGitems('inprogress-review-today').length>0)
+                enqueueSnackbar(`There are ${getAllGitems('inprogress-review-today').length} Prs you need to review today`, {
                     variant: 'error', autoHideDuration:1000000,
             })
-            if(getAllGitems('review-today').length>10)
+            if(getAllGitems('inprogress-review-today').length>10)
                 enqueueSnackbar(`Review List is too long!`, {variant: 'warning', autoHideDuration:10000})
         }, [allPrs]);
 

@@ -25,11 +25,12 @@ import {TLAllTabs} from "../S/6_AllTabs/TLAllTabs";
 import {PRAllTabs} from "../G/1_GAllTabs/GAllTabs";
 import {useHandleShortCut} from "./useHandleShortCut";
 import {useGridContainerStore} from "../G/2_GridContainer/GridContainerStore";
+import {useRialogStore} from "../G/10_Rialog/RialogStore";
 
 const MainNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
 > = () => {
-    const { click, deleteEv, cutEv, pasteEv, pasteRow, cutRow, deleteRows} = useHandleShortCut();
+    const { click, deleteEv, cutEv, pasteEv, pasteRow, cutRow, deleteRows, toNextKnowledge, closeRialog} = useHandleShortCut();
     const {sideNavigationRef, bodyWrapperRef } = useNavigationStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
@@ -42,6 +43,7 @@ const MainNav: React.FC<
     const { allTabIds, setAllTabIds, curTabIndex, setCurTabIndex } = useAllTabsStore();
     const location = useLocation()
     const { allPrs, setAllPrs, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
+    const {rialog } = useRialogStore();
 
     useEffect(() => {
         getSRs()
@@ -118,6 +120,14 @@ const MainNav: React.FC<
                     case "V":
                         if(readyCuttingRows.length > 0)
                             pasteRow(e)
+                        break;
+                    case " ": // space
+                        if(rialog)
+                            toNextKnowledge();
+                        break;
+                    case 'Escape':
+                        if(rialog)
+                            closeRialog();
                         break;
                     default:
                 }

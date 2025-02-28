@@ -129,7 +129,7 @@ export const ToolBars = (props: ToolBarsProps) => {
             >
                 <ICON
                     iconCode="all-knowledge"
-                    title="Opening"
+                    title="All knowledge"
                     btnSize={40}
                     btnSx={{ margin: "4px" }}
                     color={
@@ -144,7 +144,7 @@ export const ToolBars = (props: ToolBarsProps) => {
             >
                 <ICON
                     iconCode="open-knowledge"
-                    title="Opening"
+                    title="Opening Knowledge"
                     btnSize={40}
                     btnSx={{ margin: "4px" }}
                     color={
@@ -153,7 +153,7 @@ export const ToolBars = (props: ToolBarsProps) => {
                     handle={() => toggleBtn("open-knowledge")}
                 />
             </NewKnowledgeBadge>
-            <LearnBadge
+            {/* <LearnBadge
                 badgeContent={getTotalItem("relearn")}
                 color="primary"
             >
@@ -165,28 +165,50 @@ export const ToolBars = (props: ToolBarsProps) => {
                     color={gridState === "relearn" ? "#1976D2" : "#d3d3d3"}
                     handle={() => toggleBtn("relearn")}
                 />
-            </LearnBadge>
+            </LearnBadge> */}
             <ReviewBadge
-                badgeContent={getTotalItem("review-today")}
+                badgeContent={getTotalItem("inprogress-review-today")}
                 color="error"
             >
                 <ICON
                     iconCode="review"
                     title="Review today"
                     btnSize={40}
-                    color={gridState === "review-today"
+                    color={gridState === "inprogress-review-today"
                             ? "#1976D2"
                             : "#d3d3d3"
                     }
-                    handle={() => toggleBtn("review-today")}
+                    handle={() => toggleBtn("inprogress-review-today")}
                     btnSx={{ margin: "4px"}}
                 />
             </ReviewBadge>
+            <ReviewBadge
+                badgeContent={getTotalItem("inprogress-review-later")}
+                color="error"
+            >
+                <ICON
+                    iconCode="inprogress-review-later"
+                    title="Review later"
+                    btnSize={40}
+                    color={gridState === "inprogress-review-later"
+                            ? "#1976D2"
+                            : "#d3d3d3"
+                    }
+                    handle={() => toggleBtn("inprogress-review-later")}
+                    btnSx={{ margin: "4px"}}
+                />
+            </ReviewBadge>
+         
+         
+         
+         
+         
+         
             <ICON
                     iconCode="play-review"
                     title="Play Review"
                     btnSize={40}
-                    color={gridState === "review-today"
+                    color={gridState === "inprogress-review-today"
                             ? "red"
                             : "#d3d3d3"
                     }

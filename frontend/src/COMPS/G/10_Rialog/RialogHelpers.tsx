@@ -10,14 +10,14 @@ import {getPrs, iuPr} from "../GAPIs";
 import {toSid} from "../GHelpers";
 import {Pr, Pr2, PrsResult} from "../GTypes";
 import {countWords} from "./10he";
-import {calculateNextReview, GradeNumb, Kesult} from "./10ty";
+import {calculateNextReview, GradeNumb, Kesult, ReviewItem} from "./10ty";
 import {useRialogStore} from "./RialogStore";
 import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {useGridContainerHelpers} from "../2_GridContainer/GridContainerHelpers";
 
 export const useRialogHelpers = () => {
     const { levelOptions } = useSRsStore();
-    const {rialog, setRialog, reviewStart, setReviewStart, firstTime, setFirstTime, usedTime } = useRialogStore();
+    const {rialog, setRialog, reviewStart, setReviewStart, firstTime, setFirstTime, usedTime, reviewList, setReviewList } = useRialogStore();
     const { enqueueSnackbar } = useSnackbar();
     const { allPrs, setAllPrs } = useGridContainerStore();
     const { loadPrs } = useGridContainerHelpers();
@@ -63,10 +63,10 @@ export const useRialogHelpers = () => {
 
     const getReviewGrade = (curPr:Pr): GradeNumb => {
         const answerTime = getAnswerTime(curPr)
-        if (usedTime < answerTime * 0.5) return 5;
+        if (usedTime <= answerTime * 0.5) return 5;
         if (usedTime < answerTime * 0.6) return 4;
         if (usedTime < answerTime) return 3;
-        if (usedTime > answerTime && usedTime < answerTime * 2) return 2;
+        if (usedTime >= answerTime && usedTime <= answerTime * 2) return 2;
         return 1;
     };
 
@@ -88,28 +88,30 @@ export const useRialogHelpers = () => {
         }
     }
 
-    const imDone = (curPr: Pr) => {
+    const imDone = (curReviewItem: ReviewItem) => {
         setReviewStart(false)
         setFirstTime(false)
 
         
-        const lastKesult = curPr.pesults.length>0 
-            ? curPr.pesults[curPr.pesults.length - 1] as Kesult 
+        const lastKesult = curReviewItem.pesults.length>0 
+            ? curReviewItem.pesults[curReviewItem.pesults.length - 1] as Kesult 
             : {interval: 1, easeFactor: 2.5, repetitions: 0} as Kesult // init value
-        const { interval, easeFactor, repetitions } = calculateNextReview(lastKesult, getReviewGrade(curPr));
+        const { interval, easeFactor, repetitions } = calculateNextReview(lastKesult, getReviewGrade(curReviewItem));
        
         const newKesult:Kesult = {
-            id: (curPr.pesults.length?? 0).toString(),
-            prId: curPr.id,
+            id: (curReviewItem.pesults.length?? 0).toString(),
+            prId: curReviewItem.id,
             time: dateToCDate(new Date()),
-            nextReview: curPr.pesults.length>0 ? addTime(dateToCDate(new Date()),0,0,interval,0,0) : dateToCDate(new Date()),  
-            grade: getReviewGrade(curPr),
+            nextReview: curReviewItem.pesults.length>0 ? addTime(dateToCDate(new Date()),0,0,interval,0,0) : addTime(dateToCDate(new Date()),0,0,1,0,0),
+            grade: getReviewGrade(curReviewItem),
             interval,
             easeFactor,
             repetitions
         }
 
-        const newPr:Pr2 = {...curPr, knowC: getKnowC(getReviewGrade(curPr)), pesults: JSON.stringify([...curPr.pesults, newKesult])}
+        const newPr:Pr2 = {...curReviewItem, knowC: getKnowC(getReviewGrade(curReviewItem)), pesults: JSON.stringify([...curReviewItem.pesults, newKesult])} as Pr2;
+        setReviewList(reviewList.map(r => r.id === newPr.id ? ({...newPr, pesults: JSON.parse(newPr.pesults), done: true} as ReviewItem) : r))
+        
         iuPr(newPr)
         .then((data: PrsResult) => {
             if (data.options.success) {

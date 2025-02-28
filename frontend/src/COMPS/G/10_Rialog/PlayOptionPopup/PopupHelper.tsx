@@ -48,7 +48,7 @@ export const useSourceReviewPopupHelper = () => {
             }
         
         list = list.filter(pr => pr.activeC === sr.active.active.c && pr.statusC === sr.status.inProgress.c && pr.desc && 
-            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && (new Date(pr.pesults[pr.pesults.length-1].time)).getTime() < (new Date()).getTime())
+            (((pr.knowC == sr.knowledgeOnReview.c || pr.statusC === sr.knowledgeOnRelearn.c) && (new Date(pr.pesults[pr.pesults.length-1].time)).getTime() <= (new Date()).getTime())
             || pr.knowC == sr.newKnowledge.c))
         return list;
     }
