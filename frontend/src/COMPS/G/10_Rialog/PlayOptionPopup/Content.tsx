@@ -74,7 +74,7 @@ export const Row = styled('div')({
 
 export const Content = () => {
     const { closePopup } = useSourceReviewPopupHelper();
-    const { setReviewList, setReviewType, reviewType } = useRialogStore();
+    const { setReviewList, setReviewType, reviewType, setCurReviewIndex } = useRialogStore();
     const { allPrs } = useGridContainerStore();
     const { lastFoId } = useFoStore();
     const { openRialog } = useRialogHelpers();
@@ -124,7 +124,8 @@ export const Content = () => {
                         setReviewType(sr.folderKnowledge.c);
                         break;
                     }
-                setReviewList(shuffleArray(list.map(pr => ({...pr, done: false} as ReviewItem))));
+                const newReviewList = shuffleArray(list.map(pr => ({...pr, done: false} as ReviewItem)))
+                setReviewList(newReviewList);
                 openRialog(list[0], type);
                 closePopup(e);
             }}

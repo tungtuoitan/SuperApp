@@ -20,6 +20,8 @@ export interface RialogContextData {
     setReviewType: Dispatch<SetStateAction<string>>;
     usedTime: number;
     setUsedTime: Dispatch<SetStateAction<number>>;
+    curReviewIndex: number;
+    setCurReviewIndex: Dispatch<SetStateAction<number>>;
 
 };
 
@@ -38,6 +40,8 @@ export const ADiContextDefaultValue: RialogContextData = {
     setReviewType: () => { },
     usedTime: 0,
     setUsedTime: () => { },
+    curReviewIndex: 0,
+    setCurReviewIndex: () => { },
 };
 
 const RialogStore = createContext<RialogContextData>(ADiContextDefaultValue);
@@ -51,6 +55,7 @@ export const RialogProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
     const [firstTime, setFirstTime] = useState<boolean>(true);
     const [reviewType, setReviewType] = useState<string>('');
     const [usedTime, setUsedTime] = useState(0);
+    const [curReviewIndex, setCurReviewIndex] = useState<number>(0);
 
     return (
         <RialogStore.Provider
@@ -68,7 +73,9 @@ export const RialogProvider: React.FC<React.PropsWithChildren<React.PropsWithChi
                 reviewType,
                 setReviewType,
                 usedTime,
-                setUsedTime
+                setUsedTime,
+                curReviewIndex,
+                setCurReviewIndex,
             }}>
             {children}
         </RialogStore.Provider>

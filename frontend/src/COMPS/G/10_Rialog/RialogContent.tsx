@@ -1,42 +1,35 @@
 import {Button} from "@mui/material";
-import {iuPr} from "../GAPIs";
 import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
-import {Pesult} from "../3_Petail/3ty";
-import {useSnackbar} from "notistack";
-import {Pr, Pr2, PrsResult} from "../GTypes";
-import {toSid} from "../GHelpers";
 import {useRialogStore} from "./RialogStore";
 import CountdownTimer from "./Timer";
 import {useEffect, useState} from "react";
-import {countWords} from "./10he";
-import {Kesult} from "./10ty";
-import {dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
+import {Kesult, ReviewItem} from "./10ty";
 import {useRialogHelpers} from "./RialogHelpers";
 
 export function RialogContent() {
     const { allPrs, setAllPrs } = useGridContainerStore();
-    const { rialog, setRialog,reviewList, setReviewList, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime } = useRialogStore();
+    const { rialog, setRialog,reviewList, setReviewList, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime, curReviewIndex, setCurReviewIndex } = useRialogStore();
     const {getAnswerTime, imDone, getReviewGrade} = useRialogHelpers();
-    const curReviewItem = reviewList.find(item => !item.done)
+    const curReviewItem = reviewList[curReviewIndex] as ReviewItem
 
     useEffect(() => {
         setUsedTime(0)
     }, [])
 
     return (
-        curReviewItem ? 
+        (curReviewItem || curReviewIndex <= reviewList.length-1) ? 
         <div style={{width: '100%', height: '100%', padding: '20px'}}>
             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                 <div>
                     {/* <div style={{display: 'flex', flexDirection: 'column'}}>Remain question: {reviewList.length}</div> */}
                     <div >
-                        Question: {reviewList.length}
+                        Question: {reviewList.filter(r => r.done).length+1}/{reviewList.length}
                         <div style={{fontSize:'32px',filter: reviewStart ? undefined : "blur(10px)"}}>{curReviewItem.name}</div>
                         <div style={{display: 'flex', flexDirection: 'column'}}>
                             {reviewStart && <CountdownTimer answerTime={getAnswerTime(curReviewItem)}/>}
                             {
                                 reviewStart &&
-                            <div style={{textAlign: 'center', fontSize:'bold', fontStyle:'italic'}}>{getReviewGrade(curReviewItem)}, {usedTime}/{getAnswerTime(curReviewItem)}</div>
+                                <div style={{textAlign: 'center', fontSize:'bold', fontStyle:'italic'}}>{getReviewGrade(curReviewItem)}, {usedTime}/{getAnswerTime(curReviewItem)}</div>
                             }
                         </div>
                     </div>
@@ -45,7 +38,7 @@ export function RialogContent() {
                 <div style={{paddingBottom: '60px', display: 'flex', justifyContent: 'center'}}>
                     {reviewStart ?
                     <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
-                        <Button variant="contained" color="primary" sx={{width: '180px'}} onClick={()=> imDone(curReviewItem)} >Done, next quesion</Button>
+                        <Button variant="contained" color="primary" sx={{width: '180px'}} onClick={()=> imDone()} >Done, next quesion</Button>
                         {/* <Button variant="contained" color='error' sx={{width: '180px'   }} onClick={()=> imDone(curReviewItem)}>Fail & go next</Button> */}
                     </div>
                         : 

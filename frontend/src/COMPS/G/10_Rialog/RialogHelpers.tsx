@@ -4,8 +4,6 @@ import {addTime, dateToCDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {useSRsStore} from "../../S/8_SRs/SRsStore";
 import {KnowCType, sr} from "../../S/TLConstants";
 import {SelectField} from "../../S/TLTypes";
-import {Pesult} from "../3_Petail/3ty";
-import {his} from "../4_PeridContainer/4ty";
 import {getPrs, iuPr} from "../GAPIs";
 import {toSid} from "../GHelpers";
 import {Pr, Pr2, PrsResult} from "../GTypes";
@@ -17,10 +15,11 @@ import {useGridContainerHelpers} from "../2_GridContainer/GridContainerHelpers";
 
 export const useRialogHelpers = () => {
     const { levelOptions } = useSRsStore();
-    const {rialog, setRialog, reviewStart, setReviewStart, firstTime, setFirstTime, usedTime, reviewList, setReviewList } = useRialogStore();
+    const {rialog, setRialog, reviewStart, setReviewStart, firstTime, setFirstTime, usedTime, reviewList, setReviewList, curReviewIndex, setCurReviewIndex } = useRialogStore();
     const { enqueueSnackbar } = useSnackbar();
     const { allPrs, setAllPrs } = useGridContainerStore();
     const { loadPrs } = useGridContainerHelpers();
+    const curReviewItem = reviewList[curReviewIndex]
 
 
     const getSelectedOption = (option: SelectField, id: number): IAutoCompleteOptions | null => {
@@ -87,8 +86,8 @@ export const useRialogHelpers = () => {
                 return 'kOnReview'
         }
     }
-
-    const imDone = (curReviewItem: ReviewItem) => {
+    const imDone = () => {
+        if(!curReviewItem) return;
         setReviewStart(false)
         setFirstTime(false)
 
@@ -110,8 +109,16 @@ export const useRialogHelpers = () => {
         }
 
         const newPr:Pr2 = {...curReviewItem, knowC: getKnowC(getReviewGrade(curReviewItem)), pesults: JSON.stringify([...curReviewItem.pesults, newKesult])} as Pr2;
-        setReviewList(reviewList.map(r => r.id === newPr.id ? ({...newPr, pesults: JSON.parse(newPr.pesults), done: true} as ReviewItem) : r))
-        
+        const newReviewList = reviewList.map(r => {
+                if(r.id === newPr.id) {
+                    const newItem = {...newPr, pesults: JSON.parse(newPr.pesults), done: true} as ReviewItem;
+                    return newItem;
+                }
+                return r;
+            })
+        setReviewList(newReviewList);
+        setCurReviewIndex(prev =>  prev + 1);
+
         iuPr(newPr)
         .then((data: PrsResult) => {
             if (data.options.success) {
