@@ -6,7 +6,7 @@ import {usePetailFormStore} from "../3_Petail/PetailFormsStore";
 import {PetailForm} from "../3_Petail/3ty";
 import {sr} from "../../S/TLConstants";
 
-export default function LaperPriority(props: LaperNameProps) {
+export default function LaperKnowLevel(props: LaperNameProps) {
     const { handleChange } = usePetailHelpers();
     const [petails, dispatch] = usePetailFormStore();
     const petail = petails.find(petail => petail.id === props.id) ?? {} as PetailForm;
@@ -19,24 +19,25 @@ export default function LaperPriority(props: LaperNameProps) {
                 // flexDirection: 'column',
                 border: '1px solid rgb(199, 199, 199)',
                 borderRadius: '5px',
-                height: '60px',
+                height: '30px',
                 width: '100%',
+                // paddingTop
             }}>
             <FormLabel
                 sx={{
                     textAlign: 'left', 
                     fontSize: 10, 
                     position: 'relative', 
-                    width: 42, 
+                    width: 84, 
                     background: 'white',
                     top: '-8px',
                     left: '10px',
                     padding: '0 5px 0 5px',
                 }}
-            >Priority</FormLabel>
+            >Knowledge level</FormLabel>
             <RadioGroup
-            name="prioriC" 
-            value={petail.prioriC} 
+            name="knowLevelC" 
+            value={petail.knowLevelC} 
             onChange={(e)=>{
                 handleChange(petail.id, e.target.name, e.target.value)
             }}
@@ -47,15 +48,15 @@ export default function LaperPriority(props: LaperNameProps) {
                 position: 'relative',
                 top: '-19px',
                 padding: '0 10px 0 10px',
+                display: 'flex',
+                justifyContent: 'center',
             }}
             >
-                <FormControlLabel value={sr.priority.top1.c} control={<Radio size="small"/>} label={sr.priority.top1.d} />
-                <FormControlLabel value={sr.priority.top2.c} control={<Radio size="small"/>} label={sr.priority.top2.d} />
-                <FormControlLabel value={sr.priority.top3.c} control={<Radio size="small"/>} label={sr.priority.top3.d} />
-                <FormControlLabel value={sr.priority.high.c} control={<Radio size="small"/>} label={sr.priority.high.d} />
-                <FormControlLabel value={sr.priority.medium.c} control={<Radio size="small" />} label={sr.priority.medium.d} />
-                <FormControlLabel value={sr.priority.normal.c} control={<Radio size="small" />} label={sr.priority.normal.d} />
-                <FormControlLabel value={sr.priority.low.c} control={<Radio size="small" />} label={sr.priority.low.d} />
+                <FormControlLabel value={sr.knowLevel.b1.c} control={<Radio size="small" style={{color: '#333'}} />} label=''/>
+                <FormControlLabel value={sr.knowLevel.b2.c} control={<Radio size="small" style={{color: '#333'}} />} label=''/>
+                <FormControlLabel value={sr.knowLevel.b3.c} control={<Radio size="small" style={{color: '#333'}} />} label=''/>
+                <FormControlLabel value={sr.knowLevel.b4.c} control={<Radio size="small" style={{color: '#333'}} />} label=''/>
+                <FormControlLabel value={sr.knowLevel.b5.c} control={<Radio size="small" style={{color: '#333'}} />} label=''/>
             </RadioGroup>
         </FormControl>
     </WRow>

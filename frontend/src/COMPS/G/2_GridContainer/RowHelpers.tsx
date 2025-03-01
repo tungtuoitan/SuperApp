@@ -1,5 +1,5 @@
 import { Pr, Pr2, PrsResult } from "../GTypes";
-import { ICON, Line, Nink } from "./2ui";
+import { ICON, KnowLevel, Line, Nink } from "./2ui";
 import { displayCDate, getDayIndex, getIndexesOfFirstDayOfAllMonth } from "./2he";
 import { Pesult, PetailForm } from "../3_Petail/3ty";
 import {useGridContainerStore} from "./GridContainerStore";
@@ -261,8 +261,9 @@ export const useRowHelpers = () => {
                 }}
             >
                    {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
+                   {Line("Level", <div style={{display:'inline-flex'}}><KnowLevel knowLevelC={r.knowLevelC} sRs={sRs}/></div>)}
                    {Line("Has Desc", r.desc ? 'Yes': <span style={{color:'red'}}>No</span>)}
-                   {Line("Has Link", r.fink ? 'Yes': <span style={{color:'red'}}>No</span>)}
+                   {/* {Line("Has Link", r.fink ? 'Yes': <span style={{color:'red'}}>No</span>)} */}
             </div>
         );
     }

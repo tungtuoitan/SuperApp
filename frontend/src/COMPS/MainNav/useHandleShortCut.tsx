@@ -420,7 +420,6 @@ export const useHandleShortCut = () => {
             pr.activeC = "InAct";
             pr.pesults = JSON.stringify(pr.pesults);
         });
-        console.log(readyPrs)
 
         try {
             await Promise.all(
@@ -450,11 +449,9 @@ export const useHandleShortCut = () => {
 
     const toNextKnowledge = () => {
         if(reviewStart) {
-            console.log(1)
             const curPr = reviewList[0]  
             imDone(curPr) 
         } else {
-            console.log(2)
             setReviewStart(true)
             setFirstTime(false)
             setUsedTime(0)            
