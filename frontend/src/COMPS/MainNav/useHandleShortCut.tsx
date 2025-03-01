@@ -32,7 +32,7 @@ export const useHandleShortCut = () => {
     const { RpxToRh, h$G_BgStart, w$BgStart_spot, getLevelCOf } = useTLBaseBgHelpers();
     const { allPrs, setAllPrs, rowSelectionModel, setRowSelectionModel, readyCuttingRows, setReadyCuttingRows, setRefreshGrid, setLoadingGrid } = useGridContainerStore();
     const { allFos, setAllFos, lastFoId } = useFoStore();
-    const { rialog, setRialog,reviewList, setReviewList, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime } = useRialogStore();
+    const { rialog, setRialog,reviewList, setReviewList,curReviewIndex, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime } = useRialogStore();
     const {getAnswerTime, imDone, getReviewGrade} = useRialogHelpers();
 
 
@@ -448,9 +448,9 @@ export const useHandleShortCut = () => {
     }
 
     const toNextKnowledge = () => {
+        if(curReviewIndex > reviewList.length-1) return;
         if(reviewStart) {
-            const curPr = reviewList[0]  
-            imDone(curPr) 
+            imDone() 
         } else {
             setReviewStart(true)
             setFirstTime(false)
