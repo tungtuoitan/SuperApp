@@ -60,6 +60,7 @@ export const useGAllTabHelpers = () => {
                     fink: null,
                     desc: null,
                     knowC: sr.newKnowledge.c,
+                    knowLevelC: sr.knowLevel.b1.c,
 
                 };
                 dispatch({ type: "INSE", payload: newPetail });
@@ -98,6 +99,7 @@ export const useGAllTabHelpers = () => {
                     fink: null,
                     desc: null,
                     knowC: sr.newKnowledge.c,
+                    knowLevelC: sr.knowLevel.b1.c,
 
                 };
                 dispatch({ type: "INSE", payload: newPetail });

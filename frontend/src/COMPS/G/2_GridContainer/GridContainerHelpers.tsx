@@ -72,8 +72,16 @@ export const useGridContainerHelpers = () => {
                 allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c) && pr.statusC === sr.status.inProgress.c)
                 allGItems = allGItems.filter(pr => {
                     const pesults = (pr as Pr).pesults as Kesult[];
-                    const nextReview = pesults[pesults.length - 1]?.nextReview;
-                    return nextReview ? new Date(nextReview).getTime() <= new Date().getTime() : true;
+                    let nextReview = pesults[pesults.length - 1]?.nextReview;
+                    if(nextReview) {
+                        const nextReviewDate = new Date(nextReview) as Date;
+                        nextReviewDate.setHours(0, 0, 0, 0)
+                        const today = new Date() as Date;
+                        today.setHours(0, 0, 0, 0)
+                        
+                        return  nextReviewDate.getTime() <= today.getTime();
+                    }
+                    return true; // case: nextReview is null
                 });
                                 
                 return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
@@ -83,7 +91,15 @@ export const useGridContainerHelpers = () => {
                 allGItems = allGItems.filter(pr => {
                     const pesults = (pr as Pr).pesults as Kesult[];
                     const nextReview = pesults[pesults.length - 1]?.nextReview;
-                    return nextReview ? new Date(nextReview).getTime() > new Date().getTime() : false;
+                    if(nextReview) {
+                        const nextReviewDate = new Date(nextReview) as Date;
+                        nextReviewDate.setHours(0, 0, 0, 0)
+                        const today = new Date() as Date;
+                        today.setHours(0, 0, 0, 0)
+                        
+                        return  nextReviewDate.getTime() > today.getTime();
+                    }
+                    return false; // case: nextReview is null
                 });
                 return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
             
@@ -140,6 +156,7 @@ export const useGridContainerHelpers = () => {
                 repeatType: ev.repeatType,
                 pesults: ev.pesults,
                 knowC: ev.knowC,
+                knowLevelC: ev.knowLevelC,
             };
             dispatch({ type: "INSE", payload: petail });
         }

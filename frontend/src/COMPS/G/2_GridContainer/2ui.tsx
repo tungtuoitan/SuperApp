@@ -9,6 +9,8 @@ import {FinkToProtocol} from "../../S/5_Etail/5he";
 import {getIcon} from "../../MainNav/Nhe";
 import {IconButton} from "@mui/material";
 import {SiconProps} from "./2ty";
+import {SR} from "../../S/8_SRs/8ty";
+import {_2cs} from "./2cs";
 
 export const Line = (name: string, value: any) => {
     switch(name) {
@@ -160,3 +162,22 @@ export const ICON = (props: SiconProps) => {
             return <></>;
     }
 }
+
+type KnowLevelProps = {
+    knowLevelC: string,
+    sRs: SR[]
+}
+export const KnowLevel = (props:KnowLevelProps) => {
+        const {knowLevelC, sRs} = props;
+        const levels = sRs.filter((sr:SR) => sr.type === 'KnowLevel');
+        const knowLevelIndex = levels.findIndex(l => l.code === knowLevelC);
+
+        return <div style={{display:'flex', flexDirection:'row', gap: '1px'}}>
+            {levels.map((level, i) => {
+                const bg = i > knowLevelIndex ? '#00000020' 
+                : 'black'
+                return <div key={i} style={{width: '4px', height: '4px', background: bg }}>
+                </div>
+            })}
+        </div>
+    }

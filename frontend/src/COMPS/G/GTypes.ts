@@ -21,6 +21,7 @@ export type Pr = {
         repeatType: string,
         pesults: (Pesult|Kesult)[],
         knowC: string,
+        knowLevelC: string,
      }
 
 

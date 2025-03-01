@@ -15,5 +15,10 @@ export const _2cs = {
         col3: {
             w: '1150px',
         },
+    },
+    knowLevelDot: {
+        basic: '#66D575',
+        intermidiate: '#F9C22E',
+        advanced: '#F24822',
     }
 }

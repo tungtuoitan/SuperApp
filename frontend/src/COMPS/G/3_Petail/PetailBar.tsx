@@ -44,8 +44,8 @@ export const PetailBar = (props: PetailBarProps) => {
 
             pesults: JSON.stringify(petail.pesults),
             knowC: petail.knowC,
+            knowLevelC: petail.knowLevelC,
         };
-        console.log(x);
 
         if(x.id === toSid('Pr', 0)) {
             iuPr(x).then((data: PrsResult) => {
@@ -67,6 +67,7 @@ export const PetailBar = (props: PetailBarProps) => {
                         desc: data.prs[0].desc,
                         pesults: JSON.parse(data.prs[0].pesults),
                         knowC: data.prs[0].knowC,
+                        knowLevelC: data.prs[0].knowLevelC,
                     };
                     dispatch({ type: "INSE", payload: newPetail });
                     const newPrAllTabIds = [...gAllTabIds];
@@ -99,6 +100,7 @@ export const PetailBar = (props: PetailBarProps) => {
                         desc: data.prs[0].desc,
                         pesults: JSON.parse(data.prs[0].pesults),
                         knowC: data.prs[0].knowC,
+                        knowLevelC: data.prs[0].knowLevelC,
                     };
                     dispatch({ type: "UPDA", payload: newPetail });
                 } 
@@ -136,6 +138,7 @@ export const PetailBar = (props: PetailBarProps) => {
 
                 pesults: pr.pesults,
                 knowC: pr.knowC,
+                knowLevelC: pr.knowLevelC,
             };
         } else {
             x = {
@@ -158,6 +161,7 @@ export const PetailBar = (props: PetailBarProps) => {
 
                 pesults: [],
                 knowC: sr.newKnowledge.c,
+                knowLevelC: sr.knowLevel.b1.c,
             };
         }
         dispatch({ type: "UPDA", payload: x });

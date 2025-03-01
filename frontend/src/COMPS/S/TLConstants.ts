@@ -168,6 +168,29 @@ export const sr = {
         c: 'doneK',
         d: 'Done Knowledge',
     },
+    knowLevel: {
+        b1: {
+            c: 'B1',
+            d: 'B1',
+        },
+        b2: {
+            c: 'B2',
+            d: 'B2',
+        },
+        b3: {
+            c: 'B3',
+            d: 'B3',
+        },
+        b4: {
+            c: 'B4',
+            d: 'B4',
+        },
+        b5: {
+            c: 'B5',
+            d: 'B5',
+        },
+       
+    },
 
     //
     
