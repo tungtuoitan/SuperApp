@@ -20,7 +20,6 @@ import {useRowHelpers} from "./RowHelpers";
 import {Fo} from "../0_Fo/FoTypes";
 import {sr} from "../../S/TLConstants";
 import {GridStatee} from "./2ty";
-import {dateToCDate, isSameDate} from "../../S/3_TimeConfig/TimeHelpers";
 import {Kesult} from "../10_Rialog/10ty";
 
 const ContainerRow = styled('div')({
@@ -30,7 +29,7 @@ const ContainerRow = styled('div')({
 export const useGridContainerHelpers = () => {
     const [petails, dispatch] = usePetailFormStore();
     const [fotails, dispatchFo] = useFotailFormStore();
-    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows, gridState} = useGridContainerStore();
+    const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, activeId, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows, gridState} = useGridContainerStore();
     const { setADia, aDia } = useADiStore();
     const { openDia } = useADiaHelpers();
     const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
@@ -41,7 +40,45 @@ export const useGridContainerHelpers = () => {
         KnowledgeRow,
         JustLinkRow} = useRowHelpers();
 
-    const getAllGitems = (type:GridStatee = gridState):  (Pr|Fo)[]   => {
+const sortFolders = (folders: Fo[]): Fo[] => {
+    // Tạo một map để tra cứu folder theo id
+    const folderMap: Record<string, Fo> = {};
+    folders.forEach((folder) => {
+        folderMap[folder.id] = { ...folder, children: [], level: 0 };
+    });
+
+    // Xây dựng cấu trúc cây
+    const rootFolders: Fo[] = [];
+    folders.forEach((folder) => {
+        if (folder.parentId && folderMap[folder.parentId]) {
+            folder.level = (folderMap[folder.parentId]?.level ?? 0) + 1; // Gán level dựa vào cha
+            if (folderMap[folder.parentId] && Array.isArray(folderMap[folder.parentId].children)) {
+                (folderMap[folder.parentId].children as Fo[]).push(folderMap[folder.id]);
+            }
+        } else {
+            rootFolders.push(folderMap[folder.id]); // Nếu không có parentId => là root
+        }
+    });
+
+    // Hàm để flatten cây ra thành mảng theo thứ tự cha trước con sau
+    const result: Fo[] = [];
+    const flatten = (nodes: Fo[], depth = 0) => {
+        nodes.sort((a, b) => a.name.localeCompare(b.name, "vi")); // Sắp xếp theo A-Z (có dấu)
+        nodes.forEach((node) => {
+            node.level = depth; // Cập nhật level
+            result.push({ ...node, name: " ".repeat(depth * 4) + node.name });
+            if (node.children && node.children.length > 0) {
+                flatten(node.children, depth + 1);
+            }
+        });
+    };
+
+    flatten(rootFolders);
+    return result;
+};
+        
+
+    const getAllGitems = (type:GridStatee = gridState) => {
         let allGItems: (Pr|Fo)[] = [];
         switch (type) {
             case 'default':
@@ -114,7 +151,12 @@ export const useGridContainerHelpers = () => {
          
             case 'all-knowledge':
                 allGItems = allPrs.filter(pr => pr.types.includes(sr.knowledge.c))
-                return allGItems.filter(r => r.activeC === 'Act').sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                                .sort((a, b) => a.name.localeCompare(b.name, 'vi'))
+                return allGItems.filter(r => r.activeC === 'Act')
+                
+            case 'all-folder':
+                allGItems = sortFolders(allFos.filter(fo => fo.iconId !== ('link' as iconType)))    
+                return allGItems.filter(r => r.activeC === 'Act')     
         }
     }
     const loadPrs = async () => {

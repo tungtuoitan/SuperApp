@@ -20,4 +20,4 @@ export type GridStatee = 'default'|'relearn' |
  'inprogress-review-today' | 
  'inprogress-review-later' |
  'open-knowledge' |
-  'all-knowledge' 
+  'all-knowledge' | 'all-folder'

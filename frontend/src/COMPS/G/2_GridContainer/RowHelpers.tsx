@@ -24,6 +24,7 @@ import {Link} from "react-router-dom";
 import {SiconProps} from "./2ty";
 import KnowledgeChart from "./KnowledgeChart";
 import {Kesult} from "../10_Rialog/10ty";
+import DraggableRow from "./DraggableRow";
 
 export const useRowHelpers = () => {
     const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows} = useGridContainerStore();
@@ -79,6 +80,17 @@ export const useRowHelpers = () => {
         });
     }
 
+    type DraggableIconProps = {
+        id: string;
+        children?: any;
+    }
+    const DraggableIcon = (props:DraggableIconProps)=>{
+        const {id} = props;
+        return <DraggableRow id={id}>
+            {props.children}
+            </DraggableRow>
+    }
+
     const Info = (r: Pr) => {
         const isAlreadyAdd = ():boolean => {
             if(r.pesults.length === 0) return false;
@@ -106,43 +118,49 @@ export const useRowHelpers = () => {
                 onMouseEnter={() => setCurrentHoveringRow(r.id)}
                 onMouseLeave={() => setCurrentHoveringRow(null)}
             >
-                <div style={{display:'flex', flexDirection:'row', alignItems:'center', height: '16px'}}>
+                <div style={{display:'flex', flexDirection:'row', alignItems:'center', height: '16px', gap: '8px'}}>
+                    <DraggableIcon id={r.id}>
+                        <ICON
+                            type='just-icon'
+                            iconCode='practice'
+                            iconSize={16}
+                            btnSize={20}
+                            // color= {color}
+                            />
+                    </DraggableIcon>
                     {Nink(r.id,'Pr', r.name)}
                 </div>
                     
-                {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
-                {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
-                {Line("ID", r.id)}
-                    {enabled && <div style={{position:'absolute', right:0, top:25}}>
-                        <ICON 
-                            title='Pass' 
-                            iconCode='pass' 
-                            handle={() => evaluatePr(r,'Pass')} 
-                            color='green' 
-                        />
-                        <ICON 
-                            title='Fail' 
-                            iconCode='fail' 
-                            handle={() => evaluatePr(r,'Fail')} 
-                            color='red'
-                        />
-                        <ICON 
-                            title='Skip' 
-                            iconCode='skip' 
-                            handle={() => evaluatePr(r,'Skip')} 
-                            iconSize={26}
-                            color='black' 
-                        />
-                        <ICON 
-                            title='Open' 
-                            iconCode='open-in-new' 
-                            handle={() => evaluatePr(r,'Open')} 
-                            iconSize={18}
-                            btnSx={{marginRight: '10px'}}
-                            color='black'
-                        />
-                        
-                    </div>}
+                {enabled && <div style={{position:'absolute', right:0, top:25}}>
+                    <ICON 
+                        title='Pass' 
+                        iconCode='pass' 
+                        handle={() => evaluatePr(r,'Pass')} 
+                        color='green' 
+                    />
+                    <ICON 
+                        title='Fail' 
+                        iconCode='fail' 
+                        handle={() => evaluatePr(r,'Fail')} 
+                        color='red'
+                    />
+                    <ICON 
+                        title='Skip' 
+                        iconCode='skip' 
+                        handle={() => evaluatePr(r,'Skip')} 
+                        iconSize={26}
+                        color='black' 
+                    />
+                    <ICON 
+                        title='Open' 
+                        iconCode='open-in-new' 
+                        handle={() => evaluatePr(r,'Open')} 
+                        iconSize={18}
+                        btnSx={{marginRight: '10px'}}
+                        color='black'
+                    />
+                    
+                </div>}
             </div>
         );
 
@@ -162,10 +180,31 @@ export const useRowHelpers = () => {
                     width: _2cs.gridDetail.col2.w
                 }}
             >
+                {Line("Status", sRs.filter(sr => sr.code === r.statusC)[0]?.desc)}
                 {Line("Types", r.types?.split(';').map(typeC => sRs.filter(sr => sr.code === typeC)[0]?.desc).join("; "))}
                 {Line("Repeat Type", sRs.filter(sr => sr.code === r.repeatType)[0]?.desc)}
+              
+            </div>
+        );
+    }
+    const SubInfo2 = (r: Pr) => {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    lineHeight: "normal",
+                    justifyContent: "center",
+                    alignItems: "left",
+                    padding: "10px 10px 10px 0",
+                    fontSize: "12px",
+                    width: _2cs.gridDetail.col2.w
+                }}
+            >
+                {Line("Priority", sRs.filter(sr => sr.code === r.prioriC)[0]?.code)}
                 {Line("Time Start", displayCDate(r.timeStart))}
                 {Line("Time End", r.timeEnd ? displayCDate(r.timeEnd) : null)}
+                {/* {Line("ID", r.id)} */}
             </div>
         );
     }
@@ -208,6 +247,7 @@ export const useRowHelpers = () => {
             <div style={{display:'flex', flexDirection:'row', gap: '8px'}}>
                 {Info(r)}
                 {SubInfo(r)}
+                {SubInfo2(r)}
                 {History(r)}
             </div>
         )
@@ -226,13 +266,16 @@ export const useRowHelpers = () => {
             style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px', width: _2cs.gridDetail.col1.w}}
         >
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                {<ICON
-                    type='just-icon'
-                    iconCode='folder'
-                    iconSize={32}
-                    // btnSize=""
-                    color= {color}
-                    />}
+                <DraggableIcon id={r.id}>
+                    <ICON
+                        type='just-icon'
+                        iconCode='folder'
+                        iconSize={32}
+                        // btnSize=""
+                        color= {color}
+                        />
+                </DraggableIcon>
+                    
                 {Nink(r.id, 'Fo', r.name)}
                 {enabled && <ICON
                     title={'Go inside'}
@@ -313,11 +356,13 @@ export const useRowHelpers = () => {
                   position: 'relative',
                 }}>
                     <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
-                        {<ICON
-                            type='just-icon'
-                            iconCode='knowledge'
-                            btnSize= {20}
-                            />}
+                        <DraggableIcon id={r.id}>
+                            <ICON
+                                type='just-icon'
+                                iconCode='knowledge'
+                                btnSize= {20}
+                                />
+                        </DraggableIcon>
                         {Nink(r.id, 'Pr', r.name)}
                     </div>  
                 </div> 
@@ -339,13 +384,15 @@ export const useRowHelpers = () => {
         >
             <div style={{display:'flex', flexDirection:'row', alignItems:'center', gap: '8px'}}>
                 
-                <ICON
-                    type='just-icon'
-                    iconCode='link'
-                    btnSize= {22}
-                    link={r.fink??''}
-                    // title="See it"
-                    />
+                <DraggableIcon id={r.id}>
+                    <ICON
+                        type='just-icon'
+                        iconCode='link'
+                        btnSize= {22}
+                        link={r.fink??''}
+                        // title="See it"
+                        />
+                </DraggableIcon>
                 {Nink(r.id,'Link', r.name)}
                 {enabled && <ICON
                     type='icon-link'

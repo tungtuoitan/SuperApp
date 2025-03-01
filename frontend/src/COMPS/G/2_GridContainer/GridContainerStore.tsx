@@ -30,6 +30,8 @@ export interface GridContainerContextData {
     setDisplayDeletedRows: Dispatch<SetStateAction<boolean>>;
     gridState: GridStatee;
     setGridState: Dispatch<SetStateAction<GridStatee>>;
+    activeId: string | null;
+    setActiveId: Dispatch<SetStateAction<string | null>>;
 };
 
 export const GridContainerContextDefaultValue: GridContainerContextData = {
@@ -59,6 +61,8 @@ export const GridContainerContextDefaultValue: GridContainerContextData = {
     setDisplayDeletedRows: () => { },
     gridState: 'default',
     setGridState: () => { },
+    activeId: null,
+    setActiveId: () => { },
 };
 
 const GridContainerStore = createContext<GridContainerContextData>(GridContainerContextDefaultValue);
@@ -80,6 +84,7 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
     const [currentHoveringRow, setCurrentHoveringRow] = useState<string | null>(null);
     const [displayDeleltedRows, setDisplayDeletedRows] = useState<boolean>(false);
     const [gridState, setGridState] = useState<GridStatee>('default');
+    const [activeId, setActiveId] = useState<string | null>(null);
 
     return (
         <GridContainerStore.Provider
@@ -110,6 +115,8 @@ export const GridContainerProvider: React.FC<React.PropsWithChildren<React.Props
                 setDisplayDeletedRows,
                 gridState,
                 setGridState,
+                activeId,
+                setActiveId,
             }}>
             {children}
         </GridContainerStore.Provider>

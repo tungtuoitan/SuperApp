@@ -5,6 +5,7 @@ import GridContainer from "./2_GridContainer/GridContainer";
 import {useFoStore} from "./0_Fo/FoStore";
 import {useFoHelpers} from "./0_Fo/FoHelpers";
 import {useGridContainerHelpers} from "./2_GridContainer/GridContainerHelpers";
+import DNDContainer from "./2_GridContainer/DNDContainer";
 
 
 
@@ -40,7 +41,7 @@ export default function GContainer() {
                 position: 'relative',
                 outline: 'none',
         }}>
-            <GridContainer/>
+            <DNDContainer/>
             <GFilterDrawer/>
         </div>
     )

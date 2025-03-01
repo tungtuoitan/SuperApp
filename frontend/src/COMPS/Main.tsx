@@ -21,6 +21,7 @@ import {FotailFormsStoreProvider} from "./G/9_Fotail/FotailFormsStore";
 import {ListFoPopupProvider} from "./G/0_Fo/ListFoPopup/PopupStore";
 import MainNav from "./MainNav/MainNav";
 import { RialogProvider} from "./G/10_Rialog/RialogStore";
+import {QridProvider} from "./G/11_Qrid/QridStore";
 import {SourceReviewPopupProvider} from "./G/10_Rialog/PlayOptionPopup/PopupStore";
 
 export const Main = () => {
@@ -60,7 +61,9 @@ export const Main = () => {
                                                                                             <ListFoPopupProvider>
                                                                                                 <RialogProvider>
                                                                                                     <SourceReviewPopupProvider>
+                                                                                                        <QridProvider>
                                                                                                             <MainNav />
+                                                                                                        </QridProvider>
                                                                                                     </SourceReviewPopupProvider>
                                                                                                 </RialogProvider>
                                                                                             </ListFoPopupProvider>

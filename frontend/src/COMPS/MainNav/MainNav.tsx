@@ -26,6 +26,7 @@ import {PRAllTabs} from "../G/1_GAllTabs/GAllTabs";
 import {useHandleShortCut} from "./useHandleShortCut";
 import {useGridContainerStore} from "../G/2_GridContainer/GridContainerStore";
 import {useRialogStore} from "../G/10_Rialog/RialogStore";
+import {useQridHelpers} from "../G/11_Qrid/QridHelpers";
 
 const MainNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -44,6 +45,7 @@ const MainNav: React.FC<
     const location = useLocation()
     const { allPrs, setAllPrs, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
     const {rialog } = useRialogStore();
+    const { openQrid } = useQridHelpers();
 
     useEffect(() => {
         getSRs()
@@ -125,9 +127,13 @@ const MainNav: React.FC<
                         if(rialog)
                             toNextKnowledge();
                         break;
-                    case 'Escape':
+                    case 'Escape':  
                         if(rialog)
                             closeRialog();
+                        break;
+                    case "Tab":
+                        e.preventDefault();
+                        openQrid(allPrs[0]);
                         break;
                     default:
                 }

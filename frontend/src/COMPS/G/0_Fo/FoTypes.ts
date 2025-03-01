@@ -13,6 +13,9 @@ export type Fo =
     desc?: string;
     fink?: string;
     pinIndex?: string;
+
+    children?: Fo[];
+    level?: number;
 };
 
 export type FosResult = {

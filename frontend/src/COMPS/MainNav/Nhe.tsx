@@ -10,7 +10,8 @@ import WeekendIcon from '@mui/icons-material/Weekend';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';import BlockIcon from '@mui/icons-material/Block';
 import SavingsIcon from '@mui/icons-material/Savings';
 import CallMadeIcon from '@mui/icons-material/CallMade';
-import MovingIcon from '@mui/icons-material/Moving';import NearMeIcon from '@mui/icons-material/NearMe';
+import MovingIcon from '@mui/icons-material/Moving';
+import NearMeIcon from '@mui/icons-material/NearMe';
 import {styled} from "@mui/material";import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
@@ -36,6 +37,7 @@ import FestivalIcon from '@mui/icons-material/Festival';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import HourglassFullIcon from '@mui/icons-material/HourglassFull';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
+
 export const classes =  
   {
       grow: {

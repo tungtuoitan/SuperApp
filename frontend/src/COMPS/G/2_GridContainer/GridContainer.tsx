@@ -9,7 +9,6 @@ import {truncateText} from "./2he";
 import {useADiStore} from "../5_Adi/ADiStore";
 import {useEffect} from "react";
 import {RialogContent} from "../10_Rialog/RialogContent";
-import {useRialogHelpers} from "../10_Rialog/RialogHelpers";
 import {useRialogStore} from "../10_Rialog/RialogStore";
 import {sr} from "../../S/TLConstants";
 import {useSnackbar} from "notistack";
