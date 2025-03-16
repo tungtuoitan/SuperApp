@@ -1,9 +1,9 @@
 import { constants } from "../../constants.js";
 import {toSid, paSid} from "./GHelpers.tsx";
 
-export const getPrs = async (searchText) => {
+export const getPrs = async (token, searchText) => {
     const headers = new Headers({
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Accept-Language": constants.getLocaleLanguage(),
     });
 
@@ -32,9 +32,9 @@ export const getPrs = async (searchText) => {
     }
 };
 
-export const iuPr = async (params, token, skip) => {
+export const iuPr = async (token, params, skip) => {
     const headers = new Headers({
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Accept-Language": constants.getLocaleLanguage(),
     });
 
@@ -71,7 +71,12 @@ export const iuPr = async (params, token, skip) => {
     }
 };
 
-export const updateUserProfilePr = async (params) => {
+export const updateUserProfilePr = async (token, params) => {
+    const headers = new Headers({
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": constants.getLocaleLanguage(),
+    });
+
     const { email = "", appC = "", userProfileJson = "" } = params || {};
 
     // Initialize the FormData object
@@ -84,6 +89,7 @@ export const updateUserProfilePr = async (params) => {
 
     const options = {
         method: "POST",
+        headers: headers,
         body: formData, // Send FormData in the body
     };
 
@@ -102,12 +108,12 @@ export const updateUserProfilePr = async (params) => {
     }
 };
 
-export const getUserProfileJson = async (params) => {
+export const getUserProfileJson = async (token, params) => {
     const { email, appC } = params;
     const headers = new Headers();
-    // const bearer = `Bearer ${token}`;
+    const bearer = `Bearer ${token}`;
 
-    // headers.append("Authorization", bearer);
+    headers.append("Authorization", bearer);
 
     const options = {
         method: "GET",
@@ -128,8 +134,12 @@ export const getUserProfileJson = async (params) => {
     }
 };
 
-export const getPrParentIds = async (params) => {
-    const headers = new Headers();
+export const getPrParentIds = async (token, params) => {
+    const headers = new Headers({
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": constants.getLocaleLanguage(),
+    });
+
 
     const options = {
         method: "GET",
@@ -148,9 +158,9 @@ export const getPrParentIds = async (params) => {
     }
 };
 
-export const iuFos = async (params, token, skip) => {
+export const iuFos = async (token, params, skip) => {
     const headers = new Headers({
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Accept-Language": constants.getLocaleLanguage(),
     });
 
@@ -190,9 +200,9 @@ export const iuFos = async (params, token, skip) => {
 };
 
 
-export const getFos = async () => {
+export const getFos = async (token) => {
     const headers = new Headers({
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Accept-Language': constants.getLocaleLanguage(),
     });
   

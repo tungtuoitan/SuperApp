@@ -101,6 +101,12 @@ export const sitemaps = [
         link: '/practice',
         open: true,
     } as SAModule,
+    {
+        id: (sitemapId++).toString(),
+        name: "Login",
+        code: "login",
+        link: "/login",
+    } as SAModule,
     
     
     
@@ -240,6 +246,7 @@ export const allIcons = (props: any) => [
     { code: 'all-knowledge', icon: <SelectAllIcon {...props} /> },
     { code: 'play-review', icon: <PlayArrowIcon {...props} /> },
     { code: 'inprogress-review-later', icon: <HourglassFullIcon {...props} /> },
+    { code: 'login', icon: <LoginIcon {...props} /> },
 
 ];
 

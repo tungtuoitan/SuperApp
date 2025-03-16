@@ -21,6 +21,7 @@ import {Fo} from "../0_Fo/FoTypes";
 import {sr} from "../../S/TLConstants";
 import {GridStatee} from "./2ty";
 import {Kesult} from "../10_Rialog/10ty";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 const ContainerRow = styled('div')({
     display:'flex', flexDirection:'row', width: '100%', height: '100%'
@@ -39,6 +40,7 @@ export const useGridContainerHelpers = () => {
         FolderRow,
         KnowledgeRow,
         JustLinkRow} = useRowHelpers();
+    const { auth } = useAuthStore();
 
 const sortFolders = (folders: Fo[]): Fo[] => {
     // Tạo một map để tra cứu folder theo id
@@ -160,7 +162,7 @@ const sortFolders = (folders: Fo[]): Fo[] => {
         }
     }
     const loadPrs = async () => {
-        await getPrs(searchText??'')
+        await getPrs(auth.userToken, searchText??'')
             .then((prs: Pr2[]) => {
                 let proData = prs
                 // .filter((pr) => pr.activeC == "Act");

@@ -10,6 +10,7 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import {useEtailFormStore} from "./EtailFormsStore";
 import {EtailForm} from "./5ty";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 
 type EtailBarProps = {
@@ -20,6 +21,7 @@ export const EtailBar = (props: EtailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
     const [etails, dispatch] = useEtailFormStore();
     const etail = etails.find(etail => etail.id === props.id) ?? {} as EtailForm;
+    const { auth } = useAuthStore();
 
     const saveEtail = (e: any) => {
         const ev = allEvs.find((ev) => ev.id === props.id);
@@ -41,7 +43,7 @@ export const EtailBar = (props: EtailBarProps) => {
                 evelC: etail.evelC,
                 subType: etail.subType,
             }
-            iuEv(x).then((data: any) => {
+            iuEv(auth.userToken, x).then((data: any) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, {
                         variant: "success",

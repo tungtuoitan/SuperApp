@@ -25,6 +25,7 @@ import {SiconProps} from "./2ty";
 import KnowledgeChart from "./KnowledgeChart";
 import {Kesult} from "../10_Rialog/10ty";
 import DraggableRow from "./DraggableRow";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 export const useRowHelpers = () => {
     const { allPrs, setAllPrs, rowSelectionModel, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow,refreshGrid, setRefreshGrid, searchText, displayDeleltedRows} = useGridContainerStore();
@@ -33,6 +34,7 @@ export const useRowHelpers = () => {
     const { gAllTabIds,setGAllTabIds,curTabIndex, setCurTabIndex} = useGAllTabsStore();
     const { sRs } = useSRsStore();
     const {allFos,setLastFoId, lastFoId} = useFoStore();
+    const { auth } = useAuthStore();
 
     const wCol1 = '420px';
     const wCol2 = '200px';
@@ -62,7 +64,7 @@ export const useRowHelpers = () => {
         }
         pr.pesults.push(newPesult as Pesult)
         const newPr = {...pr, pesults: JSON.stringify(pr?.pesults)}
-        iuPr(newPr)
+        iuPr(auth.userToken, newPr)
         .then((data: PrsResult) => {
             if (data.options.success) {
                 setADia(null)

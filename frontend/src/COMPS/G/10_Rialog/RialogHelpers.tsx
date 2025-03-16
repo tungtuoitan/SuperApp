@@ -12,6 +12,7 @@ import {calculateNextReview, GradeNumb, Kesult, ReviewItem} from "./10ty";
 import {useRialogStore} from "./RialogStore";
 import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {useGridContainerHelpers} from "../2_GridContainer/GridContainerHelpers";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 export const useRialogHelpers = () => {
     const { levelOptions } = useSRsStore();
@@ -21,6 +22,7 @@ export const useRialogHelpers = () => {
     const { loadPrs } = useGridContainerHelpers();
     const curReviewItem = reviewList[curReviewIndex]
 
+    const { auth } = useAuthStore();
 
     const getSelectedOption = (option: SelectField, id: number): IAutoCompleteOptions | null => {
         let result: IAutoCompleteOptions | null = null;
@@ -119,7 +121,7 @@ export const useRialogHelpers = () => {
         setReviewList(newReviewList);
         setCurReviewIndex(prev =>  prev + 1);
 
-        iuPr(newPr)
+        iuPr(auth.userToken, newPr)
         .then((data: PrsResult) => {
             if (data.options.success) {
                 // setAllPrs(allPrs.map(pr => pr.id === newPr.id ? {...data.prs[0], pesults: JSON.parse(data.prs[0].pesults)} : pr))

@@ -13,6 +13,7 @@ import {_0cs} from "./0cs";
 import {useGridContainerStore} from "../2_GridContainer/GridContainerStore";
 import {useSnackbar} from "notistack";
 import {Fo} from "./FoTypes";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 export const TopNav = () => {
     const { setAllFos, allFos, curFoId, lastFoId, setLastFoId, setCurFoId, setOpeningFoIds, openingFoIds } = useFoStore();
@@ -22,9 +23,11 @@ export const TopNav = () => {
     const { allPrs, rowSelectionModel, setRowSelectionModel, refreshGrid, setRefreshGrid, searchText, setGridState} = useGridContainerStore(); 
     const { enqueueSnackbar } = useSnackbar();
     const { gridState } = useGridContainerStore();
+    const { auth } = useAuthStore();
 
 
     useEffect(() => {
+       if (auth.userToken)
         loadFos();
     }, []);
 

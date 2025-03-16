@@ -11,6 +11,7 @@ import {FotailBarProps, FotailForm} from "./9ty";
 import {FosResult} from "../0_Fo/FoTypes";
 import {toSid} from "../GHelpers";
 import {useFoHelpers} from "../0_Fo/FoHelpers";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 export const FotailBar = (props: FotailBarProps) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -19,6 +20,7 @@ export const FotailBar = (props: FotailBarProps) => {
     const fotail = fotails.find((fotail) => fotail.id === props.id) ?? ({} as FotailForm);
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
     const { loadFos } = useFoHelpers();
+    const { auth } = useAuthStore();
 
     const saveFotail = (e: any) => {
         const x: FotailForm = {
@@ -36,7 +38,7 @@ export const FotailBar = (props: FotailBarProps) => {
         };
 
         if(x.id === toSid('Fo', 0)) {
-            iuFos(x).then((data: FosResult) => {
+            iuFos(auth.userToken,x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     dispatch({ type: "REMO", payload: { id: 'Fo-0' } });
@@ -65,7 +67,7 @@ export const FotailBar = (props: FotailBarProps) => {
             })
         }
         else {
-            iuFos(x).then((data: FosResult) => {
+            iuFos(auth.userToken, x).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     const newFotail: FotailForm = {
