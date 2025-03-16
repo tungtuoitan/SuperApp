@@ -26,6 +26,7 @@ export const constants = {
 
     // 4. API Endpoints
     endpoints: {
+        login: "auth/login",
         getEvents: "Ev/GetEvs",
         iuEv: "Ev/IuEv",
         getSRs: "SRs/GetSRs",

@@ -9,10 +9,12 @@ import {pr} from "../../GConstants";
 import {PrOptionGrid} from "../OptionGrid/PrOptionGrid";
 import {useSRsStore} from "../../../S/8_SRs/SRsStore";
 import {srConstants} from "../../../S/8_SRs/SRConstants";
+import {useAuthStore} from "../../../Auth/AuthStore";
 
 export const GFilterDrawer = () => {
     const { onClickHandlerFilterDrawerApplySR, onClickHandlerFilterDrawerResetSR } = useGFilterDrawerEvents();
     const { sRs } = useSRsStore();
+    const {auth} = useAuthStore();
     const { 
         parent,
         setParent,
@@ -96,7 +98,7 @@ export const GFilterDrawer = () => {
     }, [sRs]);
 
     useEffect(() => {
-        getUserProfileJson({
+        getUserProfileJson(auth.userToken,{
             email: 'hoanhtungle@gmail.com',
             appC: pr.applicationCode})
         .then((userProfile: UserProfile) => {

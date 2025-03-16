@@ -23,6 +23,7 @@ import {Cooltip} from "../CommonHelpers/2_CoolTip";
 import {getAllDescendants2} from "../G/2_GridContainer/2he";
 import {useRialogHelpers} from "../G/10_Rialog/RialogHelpers";
 import {useRialogStore} from "../G/10_Rialog/RialogStore";
+import {useAuthStore} from "../Auth/AuthStore";
 
 export const useHandleShortCut = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -34,7 +35,7 @@ export const useHandleShortCut = () => {
     const { allFos, setAllFos, lastFoId } = useFoStore();
     const { rialog, setRialog,reviewList, setReviewList,curReviewIndex, setFeymanList, setReviewStart, reviewStart, firstTime, setFirstTime, usedTime, setUsedTime } = useRialogStore();
     const {getAnswerTime, imDone, getReviewGrade} = useRialogHelpers();
-
+    const {auth} = useAuthStore();
 
     const click = () => {
         if (fevId) {
@@ -56,7 +57,7 @@ export const useHandleShortCut = () => {
             setAllEvs(markEvs(newAllEvs));
             try {
                 await Promise.all(
-                    allDescendants.map((ev) => iuEv(ev))
+                    allDescendants.map((ev) => iuEv(auth.userToken, ev))
                 ).then((data: EvsResult[]) => {
                     const failResult = data.find(
                         (r) => !r.options.success
@@ -221,7 +222,7 @@ export const useHandleShortCut = () => {
             );
             await Promise.all(
                 allDescendants.map((ev) =>
-                    iuEv({
+                    iuEv(auth.userToken, {
                         ...ev,
                         timeStart: cDateToUTCDate(
                             ev.timeStart
@@ -270,8 +271,8 @@ export const useHandleShortCut = () => {
             
                     try {
                         await Promise.all(
-                            [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
-                                ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
+                            [   ...readyPrs.map((pr:any) => iuPr(auth.userToken, pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
+                                ...readyFos.map((fo:any) => iuFos(auth.userToken, fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
                             ])
                         enqueueSnackbar(`Revert ${readyPrs.length+readyFos.length} rows Successfully`, {variant: "success"})
                     }
@@ -332,8 +333,8 @@ export const useHandleShortCut = () => {
         
                     try {
                         await Promise.all(
-                            [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
-                                ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
+                            [   ...readyPrs.map((pr:any) => iuPr(auth.userToken, pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
+                                ...readyFos.map((fo:any) => iuFos(auth.userToken, fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
                             ]
                         )
                         // if there is any fail, it jump to catch imediately
@@ -388,8 +389,8 @@ export const useHandleShortCut = () => {
             
                     try {
                         await Promise.all(
-                            [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
-                                ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
+                            [   ...readyPrs.map((pr:any) => iuPr(auth.userToken, pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
+                                ...readyFos.map((fo:any) => iuFos(auth.userToken,fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
                             ])
                         enqueueSnackbar(`Revert ${readyPrs.length+readyFos.length} rows Successfully`, {variant: "success"})
                     }
@@ -423,8 +424,8 @@ export const useHandleShortCut = () => {
 
         try {
             await Promise.all(
-                [   ...readyPrs.map((pr:any) => iuPr(pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
-                    ...readyFos.map((fo:any) => iuFos(fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
+                [   ...readyPrs.map((pr:any) => iuPr(auth.userToken,pr).then((res:PrsResult) => {return {res: res.options.success, type: g.type.pr}})),
+                    ...readyFos.map((fo:any) => iuFos(auth.userToken,fo).then((res:PrsResult) => {return {res: res.options.success, type: g.type.fo}}))
                 ])
 
             // if there is any fail, it jump to catch imediately

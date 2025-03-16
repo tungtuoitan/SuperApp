@@ -14,6 +14,7 @@ import {FotailForm} from '../9_Fotail/9ty';
 import {useFoHelpers} from '../0_Fo/FoHelpers';
 import {useGridContainerHelpers} from './GridContainerHelpers';
 import {Pr, PrsResult} from '../GTypes';
+import {useAuthStore} from '../../Auth/AuthStore';
 
 export default function DNDContainer() {
     const { allPrs, activeId, setActiveId } = useGridContainerStore();
@@ -21,10 +22,11 @@ export default function DNDContainer() {
     const { enqueueSnackbar } = useSnackbar();
     const { loadFos} = useFoHelpers();
     const { loadPrs } = useGridContainerHelpers();
-
+    const {auth } = useAuthStore();
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id);
     };
+
 
     // Xử lý khi thả
     const handleDragEnd = (event: any) => {
@@ -38,7 +40,7 @@ export default function DNDContainer() {
                 ...fo,
                 parentId: over.id
             }
-            iuFos(updatedFo).then((data: FosResult) => {
+            iuFos(auth.userToken, updatedFo).then((data: FosResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                 } 
@@ -52,7 +54,7 @@ export default function DNDContainer() {
             const pr = allPrs.filter(pr => pr.id === active.id)[0];
             if(!pr) return;
             const updatedPr = {...pr,parentId: over.id, pesults: JSON.stringify(pr.pesults)}
-            iuPr(updatedPr).then((data: PrsResult) => {
+            iuPr(auth.userToken).then((data: PrsResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                 } 

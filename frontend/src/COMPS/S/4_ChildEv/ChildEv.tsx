@@ -16,6 +16,7 @@ import {use4he} from "./4he";
 import {ChildEvProps} from "./4ty";
 import {useChildEvStore} from "./ChildEvStore";
 import {useAllTabsStore} from "../6_AllTabs/TLAllTabsStore";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 
 export const ChildEv = (props: ChildEvProps) => {
@@ -34,6 +35,7 @@ export const ChildEv = (props: ChildEvProps) => {
     const width = RhToPx(
         cDateToGh(childEv.timeEnd as cDate) - cDateToGh(childEv.timeStart as cDate)
     )
+    const { auth } = useAuthStore();
     const tfSelector = helperMUIcss.getTextFieldCSSSelector('childEvName');
     const isEtailOpen = allTabIds.includes(childEv.id);
     const enabledTF = fevId === childEv.id && fevId !== null && childEv.statusC !== sr.status.resolved.c
@@ -100,7 +102,7 @@ export const ChildEv = (props: ChildEvProps) => {
                     }}
                     onBlur={() => {
                         setFocusTFId(null);
-                        iuEv({ ...childEv, name: tfValue, timeStart: cDateToUTCDate(childEv.timeStart), timeEnd: cDateToUTCDate(childEv.timeEnd) })
+                        iuEv(auth.userToken, { ...childEv, name: tfValue, timeStart: cDateToUTCDate(childEv.timeStart), timeEnd: cDateToUTCDate(childEv.timeEnd) })
                             .then((data: EvsResult) => {
                                 if (data.options.success) {
                                     enqueueSnackbar(data.options.message, { variant: "success" });

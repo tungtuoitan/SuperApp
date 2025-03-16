@@ -14,6 +14,7 @@ import {evType, sr, subType} from './TLConstants';
 import {useChildEvStore} from './4_ChildEv/ChildEvStore';
 import {useFloatToolsStore} from './7_FloatTools/FloatToolsStore';
 import FloatTools from './7_FloatTools/FloatTools';
+import {useAuthStore} from '../Auth/AuthStore';
 
 export default function DNDContainer() {
 
@@ -24,6 +25,7 @@ export default function DNDContainer() {
     const { TIList } = useTLBaseBgStore();
     const { enqueueSnackbar } = useSnackbar();
     const { setFevId } = useChildEvStore();
+    const { auth } = useAuthStore();
 
     const handleDragStart = (event: any) => {
         setActiveId(event.active.id);
@@ -103,7 +105,7 @@ export default function DNDContainer() {
             if(newEv) {
                 let newEvs: Ev[] = structuredClone([...allEvs, newEv] as Ev[])
                 setAllEvs(newEvs) // update state, to make the interactive smoother
-                iuEv({ ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
+                iuEv(auth.userToken, { ...newEv, timeStart: cDateToUTCDate(newEv.timeStart), timeEnd: cDateToUTCDate(newEv.timeEnd) })
                     .then((data: EvsResult) => {
                         newEvs = markEvs(newEvs.map(ev => ev.id === 0 ? { ...ev, id: data.evs[0].id } : ev))
                         setAllEvs(newEvs) // update id

@@ -4,6 +4,7 @@ import {usePrFilterStore} from "../PrFilterStore";
 import {updateUserProfilePr} from "../../GAPIs";
 import {pr} from "../../GConstants";
 import {UserProfile} from "../6ty";
+import {useAuthStore} from "../../../Auth/AuthStore";
 
 export const useGFilterDrawerEvents = () => {
     const { setMainOpenFilterDrawer } = useMainFilterDrawerStore();
@@ -67,6 +68,7 @@ export const useGFilterDrawerEvents = () => {
 
     const { setPageSize, setCurrentPage, setRefreshGrid, setLoadingGrid } = useGridContainerStore();
     const { searchText } = useGridContainerStore();
+    const { auth } = useAuthStore();
 
     const onClickHandlerFilterDrawerApplySR = () => {
         // close drawer
@@ -89,7 +91,7 @@ export const useGFilterDrawerEvents = () => {
             isUpdatedTodays: selectedIsUpdatedTodays.join(','),
         }
         // update profile
-        updateUserProfilePr({
+        updateUserProfilePr(auth.userToken, {
             email: 'hoanhtungle@gmail.com',
             appC: pr.applicationCode,
             userProfileJson: JSON.stringify(userProfile)

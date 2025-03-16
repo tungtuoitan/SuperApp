@@ -12,6 +12,7 @@ import {WTLBaseFgContainer} from "./2ui";
 import {use2he} from "./2he";
 import {useFloatToolsStore} from "../7_FloatTools/FloatToolsStore";
 import {_4cs} from "../4_ChildEv/4cs";
+import {useAuthStore} from "../../Auth/AuthStore";
   
 export const TLBaseFg = () => {
     const { setDateReal, TIList } = useTLBaseBgStore();
@@ -21,9 +22,10 @@ export const TLBaseFg = () => {
     const { w$Bg, getLevelCOf } = useTLBaseBgHelpers();
     const { setNodeRef, isOver } = useDroppable({ id: 'TLBaseFg-droppable' });
     const { checkData, beggerEv, getTopsOf5ParentLines } = use2he();
+    const { auth } = useAuthStore();
 
     useEffect(() => {
-        getEvs()
+        getEvs(auth.userToken)
             .then((data: Ev[]) => {
                 const markData = markEvs(data);
                 setAllEvs(markEvs(markData));

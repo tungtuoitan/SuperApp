@@ -23,6 +23,7 @@ import MainNav from "./MainNav/MainNav";
 import { RialogProvider} from "./G/10_Rialog/RialogStore";
 import {QridProvider} from "./G/11_Qrid/QridStore";
 import {SourceReviewPopupProvider} from "./G/10_Rialog/PlayOptionPopup/PopupStore";
+import {AuthProvider} from "./Auth/AuthStore";
 
 export const Main = () => {
     return (
@@ -62,7 +63,9 @@ export const Main = () => {
                                                                                                 <RialogProvider>
                                                                                                     <SourceReviewPopupProvider>
                                                                                                         <QridProvider>
+                                                                                                            <AuthProvider>
                                                                                                             <MainNav />
+                                                                                                            </AuthProvider>
                                                                                                         </QridProvider>
                                                                                                     </SourceReviewPopupProvider>
                                                                                                 </RialogProvider>

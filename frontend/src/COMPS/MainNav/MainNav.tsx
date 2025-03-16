@@ -27,6 +27,8 @@ import {useHandleShortCut} from "./useHandleShortCut";
 import {useGridContainerStore} from "../G/2_GridContainer/GridContainerStore";
 import {useRialogStore} from "../G/10_Rialog/RialogStore";
 import {useQridHelpers} from "../G/11_Qrid/QridHelpers";
+import {AuthContainer} from "../Auth/AuthContainer";
+import {useAuthStore} from "../Auth/AuthStore";
 
 const MainNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
@@ -46,22 +48,29 @@ const MainNav: React.FC<
     const { allPrs, setAllPrs, readyCuttingRows, currentHoveringRow, setCurrentHoveringRow } = useGridContainerStore();
     const {rialog } = useRialogStore();
     const { openQrid } = useQridHelpers();
+    const {auth, setAuth} = useAuthStore();
 
     useEffect(() => {
-        getSRs()
-            .then((srs: SR[]) => {
-                setSRs(srs);
-                const levelOptions = srs.filter(sr => sr.type === 'Cevel');
-                setLevelOptions(levelOptions.map(sr => (
-                    { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
-                )));
-                const repeatTypeOptions = srs.filter(sr => sr.type === 'PrRepeatType');
-                setRepeatTypeOptions(repeatTypeOptions.map(sr => (
-                    { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
-                )));
+        setAuth({ ...auth, userToken: localStorage.getItem('userToken') ?? '' });
 
-            })
-    }, [])
+    },[])
+
+    useEffect(() => {
+        if(auth.userToken)
+            getSRs(auth.userToken)
+                .then((srs: SR[]) => {
+                    setSRs(srs);
+                    const levelOptions = srs.filter(sr => sr.type === 'Cevel');
+                    setLevelOptions(levelOptions.map(sr => (
+                        { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
+                    )));
+                    const repeatTypeOptions = srs.filter(sr => sr.type === 'PrRepeatType');
+                    setRepeatTypeOptions(repeatTypeOptions.map(sr => (
+                        { id: sr.id, code: sr.code.toLowerCase(), desc: sr.desc, active: (sr.active === 1 || sr.active === null) ? true : false } as IAutoCompleteOptions
+                    )));
+
+                })
+    }, [auth])
 
     return (
         <div style={{outline: 'none'}}
@@ -153,26 +162,29 @@ const MainNav: React.FC<
             <TopNav />
             <SideNavRoot
                 className={`side-tabs`}
-            >
-                <Drawer
-                    ref={sideNavigationRef}
-                    variant="permanent"
-                    className={`side-navigation ${ "collapsed"
-                        // (expanded ?? false) === true ? "expanded" : "collapsed"
-                    }`}
-                    style={{
-                        transitionDuration: "500ms",
-                        position: "relative",
-                        whiteSpace: "nowrap",
-                        //width: '227px',
-                        paddingBottom: "40px",
-                        backgroundColor: "#36454f",
-                        zIndex: 1,
-                        display: "flex",
-                    }}
                 >
-                    <SideMenu />
-                </Drawer>
+                {auth.userToken &&
+    
+                    <Drawer
+                        ref={sideNavigationRef}
+                        variant="permanent"
+                        className={`side-navigation ${ "collapsed"
+                            // (expanded ?? false) === true ? "expanded" : "collapsed"
+                        }`}
+                        style={{
+                            transitionDuration: "500ms",
+                            position: "relative",
+                            whiteSpace: "nowrap",
+                            //width: '227px',
+                            paddingBottom: "40px",
+                            backgroundColor: "#36454f",
+                            zIndex: 1,
+                            display: "flex",
+                        }}
+                    >
+                        <SideMenu />
+                    </Drawer>
+                }
                 <BodyWrapper id='bodyWrapper'
                     ref={bodyWrapperRef}
                     style={{
@@ -187,10 +199,9 @@ const MainNav: React.FC<
                         autoHideDuration={3000}
                     >
                         <Routes>
-                            {/* <Route path="/login" Component={LoginContainer} /> */}
-                            {/* <Route path="/signup" Component={LoginContainer} /> */}
-                            <Route path="/schedule" Component={TLAllTabs} />
-                            <Route path="/practice" Component={PRAllTabs} />
+                            {!auth.userToken && <Route path="/" Component={AuthContainer} />}
+                            {auth.userToken &&  <Route path="/schedule" Component={TLAllTabs} />}
+                            {auth.userToken &&  <Route path="/practice" Component={PRAllTabs} />}
                         </Routes>
                     </SnackbarProvider>
                 </BodyWrapper>

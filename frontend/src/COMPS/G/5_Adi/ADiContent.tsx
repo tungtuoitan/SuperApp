@@ -12,11 +12,13 @@ import {useSnackbar} from "notistack";
 import {Pr2, PrsResult} from "../GTypes";
 import ADiTime from "./ADiTime";
 import {toSid} from "../GHelpers";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 export function ADiContent() {
     const { allPrs, setAllPrs } = useGridContainerStore();
     const { aDia, setADia } = useADiStore();
     const { enqueueSnackbar } = useSnackbar();
+    const { auth } = useAuthStore();
 
 
     return (
@@ -39,7 +41,7 @@ export function ADiContent() {
                 pr.pesults.push(aDia?.pesult as Pesult)
                 const newPr: Pr2 = {...pr, pesults: JSON.stringify(pr?.pesults)}
                 
-                iuPr(newPr)
+                iuPr(auth.userToken, newPr)
                 .then((data: PrsResult) => {
                     if (data.options.success) {
                         setADia(null)

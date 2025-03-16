@@ -3,7 +3,7 @@ import { constants } from "../../constants.js";
 
 export const getEvs = async (token, skip) => {
   const headers = new Headers({
-      // Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
       'Accept-Language': constants.getLocaleLanguage(),
       'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
   });
@@ -23,9 +23,9 @@ export const getEvs = async (token, skip) => {
   }
 }
 
-export const iuEv = async (params, token, skip) => {
+export const iuEv = async (token, params, skip) => {
     const headers = new Headers({
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Accept-Language': constants.getLocaleLanguage(),
         'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone 
     });
@@ -57,9 +57,10 @@ export const iuEv = async (params, token, skip) => {
 
 export const getSRs = async (token, skip) => {
     const headers = new Headers({
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Accept-Language': constants.getLocaleLanguage(),
-        'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+
     });
   
     const options = {

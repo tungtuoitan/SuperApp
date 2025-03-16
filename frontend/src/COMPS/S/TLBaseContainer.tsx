@@ -15,6 +15,7 @@ import { zoomLvMax } from "./TLConstants";
 import {useChildEvStore} from "./4_ChildEv/ChildEvStore";
 import {StickLayer} from "./4_ChildEv/4ui";
 import {getAllDescendants} from "./2_TLBaseFg/2he";
+import {useAuthStore} from "../Auth/AuthStore";
 
 const LoadingWrapper = () => (
     <div style={{
@@ -62,6 +63,7 @@ export const TLBaseContainer = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { grabEdge, setGrabEdge } = useChildEvStore();
     const { enqueueSnackbar } = useSnackbar();
+    const { auth } = useAuthStore();
 
 
     // reload scrollLeft
@@ -126,7 +128,7 @@ export const TLBaseContainer = () => {
                             //make sure: allEvs is updated 
                             setTimeout(async() => {
                                 const allDescendants = getAllDescendants(allEvs, id)
-                                await Promise.all(allDescendants.map(ev => iuEv({...ev, timeStart: cDateToUTCDate(ev.timeStart), timeEnd: cDateToUTCDate(ev.timeEnd)})))  
+                                await Promise.all(allDescendants.map(ev => iuEv(auth.userToken,{...ev, timeStart: cDateToUTCDate(ev.timeStart), timeEnd: cDateToUTCDate(ev.timeEnd)})))  
                                 .then((data: EvsResult[])=> {
                                     const failResult = data.find(r => !r.options.success)
                                     if(!failResult) {

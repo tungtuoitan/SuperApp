@@ -12,6 +12,7 @@ import { PrsResult } from "../GTypes";
 import { useGAllTabsStore } from "../1_GAllTabs/GAllTabsStore";
 import {paSid, toSid} from "../GHelpers";
 import {sr} from "../../S/TLConstants";
+import {useAuthStore} from "../../Auth/AuthStore";
 
 type PetailBarProps = {
     id: string ;
@@ -22,7 +23,7 @@ export const PetailBar = (props: PetailBarProps) => {
     const { allPrs, setAllPrs, refreshGrid, setRefreshGrid, searchText } = useGridContainerStore();
     const petail = petails.find((petail) => petail.id === props.id) ?? ({} as PetailForm);
     const { gAllTabIds, setGAllTabIds, curTabIndex, setCurTabIndex } = useGAllTabsStore();
-
+    const { auth } = useAuthStore();
     const savePetail = (e: any) => {
         const x = {
             id: props.id ?? toSid('Pr', 0),
@@ -48,7 +49,7 @@ export const PetailBar = (props: PetailBarProps) => {
         };
 
         if(x.id === toSid('Pr', 0)) {
-            iuPr(x).then((data: PrsResult) => {
+            iuPr(auth.userToken, x).then((data: PrsResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     dispatch({ type: "REMO", payload: { id: toSid('Pr', 0) } });
@@ -82,7 +83,7 @@ export const PetailBar = (props: PetailBarProps) => {
         }
         else {
 
-            iuPr(x).then((data: PrsResult) => {
+            iuPr(auth.userToken, x).then((data: PrsResult) => {
                 if (data.options.success) {
                     enqueueSnackbar(data.options.message, { variant: "success" });
                     const newPetail: PetailForm = {
