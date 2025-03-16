@@ -4,6 +4,7 @@ import {useQridStore} from "./QridStore";
 import {DataGrid} from "@mui/x-data-grid";
 import {useGridContainerHelpers} from "../2_GridContainer/GridContainerHelpers";
 import {useQridHelpers} from "./QridHelpers";
+import {Fo} from "../0_Fo/FoTypes";
 
 export function QridContent() {
     const { allPrs, setAllPrs } = useGridContainerStore();
@@ -24,7 +25,7 @@ export function QridContent() {
             boxShadow: '0 0 10px 0px rgba(0,0,0,0.8)',
         }}>
               <DataGrid
-                rows={getAllGitems('all-folder')}
+                rows={[{id:'Fo-0', name: 'Home', prioriC:'T1', level:0 } as Fo,...getAllGitems('all-folder')]}
                 columns={gridColumns()}
                 rowHeight={20}
                 // loading={refreshGrid}
