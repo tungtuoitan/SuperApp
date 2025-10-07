@@ -1,11 +1,8 @@
-import { WTabsContainer } from "../S/6_AllTabs/6ui";
 import { Button, TextField } from "@mui/material";
-import { helperMUIcss } from "../CommonHelpers/5_MUIcss";
 import { useAuthStore } from "./AuthStore";
 import {login} from "./AuthAPIs.js";
 
 export const AuthContainer = () => {
-    const selector = helperMUIcss.getTextFieldCSSSelector("fink");
     const { auth, setAuth} = useAuthStore();
 
     return (
@@ -46,20 +43,20 @@ export const AuthContainer = () => {
                         height: 30,
                         textAlign: "center",
                         backgroundColor: "white",
-                        [`& ${selector.label1Shrink}`]: {
+                        [`& label[data-shrink="true"]`]: {
                             fontSize: "16px",
                             top: 3,
                         },
-                        [`& ${selector.label1NoShrink}`]: {
+                        [`& label[data-shrink="false"]`]: {
                             fontSize: "16px",
                             top: -9,
                         },
-                        [`& ${selector.input2}`]: {
+                        [`& div input`]: {
                             fontSize: "16px",
                             height: 50,
                             padding: "0px 10px 0 10px",
                         },
-                        [`& ${selector.legend3}`]: {
+                        [`& div fieldset legend`]: {
                             width: "77x",
                         },
                     }}
@@ -78,20 +75,20 @@ export const AuthContainer = () => {
                         marginTop: "30px",
                         textAlign: "center",
                         backgroundColor: "white",
-                        [`& ${selector.label1Shrink}`]: {
+                        [`& label[data-shrink="true"]`]: {
                             fontSize: "16px",
                             top: 3,
                         },
-                        [`& ${selector.label1NoShrink}`]: {
+                        [`& label[data-shrink="false"]`]: {
                             fontSize: "16px",
                             top: -9,
                         },
-                        [`& ${selector.input2}`]: {
+                        [`& div input`]: {
                             fontSize: "16px",
                             height: 50,
                             padding: "0px 10px 0 10px",
                         },
-                        [`& ${selector.legend3}`]: {
+                        [`& div fieldset legend`]: {
                             width: "77x",
                         },
                     }}

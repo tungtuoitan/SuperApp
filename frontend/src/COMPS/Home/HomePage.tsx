@@ -3,14 +3,20 @@ import { useEffect, useState } from "react";
 // import {LoadingLayer} from "../CommonHelpers/LoadingLayer";
 // import {useHomeStore} from "./HomeStore";
 // import {_exchangeCodeForToken} from "../Login/loginApis";
-// import {useLoginStore} from "../Login/LoginStore";
 import NoteGrid from "./NoteGrid";
-import { GridContainer, GridWrapper } from "../ui/containers/GridContainer";
-import { ToolbarContainer } from "../ui/containers/ToolbarContainer";
-import { Grow } from "../styles/commonStyles";
+import { GridContainer, GridWrapper } from "../CommonHelpers/GridContainer";
+import { ToolbarContainer } from "../CommonHelpers/ToolbarContainer";
 import { NoteCreate } from "./toolbars/items/NoteCreate";
 import { NoteSearch } from "./toolbars/items/NoteSearch";
 import { NoteFilter } from "./toolbars/items/NoteFilter";
+import {styled} from "@mui/material";
+
+
+export const Grow = styled('div')({
+    flexGrow: 1,
+    padding: 0,
+    margin: 0,
+});
 
 export default function HomePage() {
     // Temporarily commented out login-related logic
