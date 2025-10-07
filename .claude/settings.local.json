@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Admin/source/Timeline/TLAPI/Controllers/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

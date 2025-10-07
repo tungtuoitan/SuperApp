@@ -37,6 +37,7 @@ import FestivalIcon from '@mui/icons-material/Festival';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import HourglassFullIcon from '@mui/icons-material/HourglassFull';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
+import NoteIcon from '@mui/icons-material/Note';
 
 export const classes =  
   {
@@ -87,100 +88,106 @@ export const classes =
 
 let sitemapId = 1;
 export const sitemaps = [
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Schedule",
+    //     code: "schedule",
+    //     link: "/schedule",
+    // } as SAModule,
+
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Practice",
+    //     code: "practice",
+    //     link: '/practice',
+    //     open: true,
+    // } as SAModule,
     {
         id: (sitemapId++).toString(),
-        name: "Schedule",
-        code: "schedule",
-        link: "/schedule",
+        name: "Notes",
+        code: "notes",
+        link: "/notes",
     } as SAModule,
-    
-    {
-        id: (sitemapId++).toString(),
-        name: "Practice",
-        code: "practice",
-        link: '/practice',
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Login",
-        code: "login",
-        link: "/login",
-    } as SAModule,
-    
-    
-    
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Login",
+    //     code: "login",
+    //     link: "/login",
+    // } as SAModule,
+
+
+
     // -------
-    {
-        id: (sitemapId++).toString(),
-        name: "Playground",
-        code: "playground",
-        link: FinkToProtocol(
-            "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6791-6988&t=BFpnlwVd1qwEyGqt-11"
-        ),
-        open: false,
-        active: false,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Accounts",
-        code: "accounts",
-        link: FinkToProtocol(
-            "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6801-7204&t=BFpnlwVd1qwEyGqt-11"
-        ),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Finance",
-        code: "finance",
-        link: FinkToProtocol(
-            "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6858-6967&t=uJB31J2oksQK9Vcg-11"
-        ),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Self Discipline",
-        code: "self-discipline",
-        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7187-7468&t=VVeIDUNTdR22vWNC-11'),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Health",
-        code: "health",
-        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7228-7274&t=9qoy0iKBEDHQbRwU-11'),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Principle",
-        code: "principle",
-        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7440-2179&t=j7iqDVsFAFmAsQEH-11'),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Grateful List",
-        code: "gratefulList",
-        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7441-2184&t=j7iqDVsFAFmAsQEH-11'),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "Conversation",
-        code: "conversation",
-        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7709-2269&t=r761hHDBBzTxPykI-11'),
-        open: true,
-    } as SAModule,
-    {
-        id: (sitemapId++).toString(),
-        name: "IT",
-        code: "it",
-        link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7709-2629&t=r761hHDBBzTxPykI-11'),
-        open: true,
-    } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Playground",
+    //     code: "playground",
+    //     link: FinkToProtocol(
+    //         "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6791-6988&t=BFpnlwVd1qwEyGqt-11"
+    //     ),
+    //     open: false,
+    //     active: false,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Accounts",
+    //     code: "accounts",
+    //     link: FinkToProtocol(
+    //         "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6801-7204&t=BFpnlwVd1qwEyGqt-11"
+    //     ),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Finance",
+    //     code: "finance",
+    //     link: FinkToProtocol(
+    //         "https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=6858-6967&t=uJB31J2oksQK9Vcg-11"
+    //     ),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Self Discipline",
+    //     code: "self-discipline",
+    //     link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7187-7468&t=VVeIDUNTdR22vWNC-11'),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Health",
+    //     code: "health",
+    //     link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7228-7274&t=9qoy0iKBEDHQbRwU-11'),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Principle",
+    //     code: "principle",
+    //     link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7440-2179&t=j7iqDVsFAFmAsQEH-11'),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Grateful List",
+    //     code: "gratefulList",
+    //     link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7441-2184&t=j7iqDVsFAFmAsQEH-11'),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "Conversation",
+    //     code: "conversation",
+    //     link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7709-2269&t=r761hHDBBzTxPykI-11'),
+    //     open: true,
+    // } as SAModule,
+    // {
+    //     id: (sitemapId++).toString(),
+    //     name: "IT",
+    //     code: "it",
+    //     link: FinkToProtocol('https://www.figma.com/board/DiwrOCIBu6hmWp1i2C6jtJ/every-things?node-id=7709-2629&t=r761hHDBBzTxPykI-11'),
+    //     open: true,
+    // } as SAModule,
 ] as SAModule[];
 
 const Wicon = styled('div')({
@@ -233,6 +240,7 @@ export const allIcons = (props: any) => [
     { code: 'self-discipline', icon: <SelfImprovementIcon {...props} /> },
     { code: 'link', icon: <LinkIcon {...props} /> },
     { code: 'knowledge', icon: <LibraryBooksIcon {...props} /> },
+    { code: 'notes', icon: <NoteIcon {...props} /> },
 
     { code: 'open-in-new', icon: <OpenInNewIcon {...props} /> },
     { code: 'skip', icon: <SkipNextIcon {...props} /> },

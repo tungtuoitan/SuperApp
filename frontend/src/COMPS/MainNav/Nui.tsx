@@ -8,6 +8,7 @@ import {getIcon} from "./Nhe";
 
 export const SideNavRoot = styled("div")({
     flexGrow: 1,
+    // border: "1px solid blue",
     backgroundColor: "#f6f6f6",
     height: "calc(100vh - 64px)",
     // border: '4px solid black',
@@ -73,15 +74,23 @@ export const Wink = styled(Link)({
     alignItems: 'center',
     position: 'relative',
     flexGrow: 1,
-    margin: 0,
-    padding: '0 12px',
-    height: '35px',
+    margin: '0 8px',
+    padding: '8px 12px',
+    height: 'auto',
+    minHeight: '40px',
     color: '#fff',
+    textDecoration: 'none',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    }
 })
 
 
 export interface ISideMenuProps{
     item: SAModule,
+    expanded?: boolean,
 }
 
 export const MenuItemWrapper = styled('div')({
@@ -90,6 +99,7 @@ export const MenuItemWrapper = styled('div')({
     flexDirection: 'column',
     position: 'relative',
     alignItems: 'flex-start',
+    width: '100%',
     '& .close': {
         display: 'none',
         height: 0,
@@ -105,12 +115,12 @@ export const MenuItemWrapper = styled('div')({
         cursor: 'pointer'
     },
     '& .home-link:hover, .single-link:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.87)!important',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)!important',
         cursor: 'pointer',
         color: '#fff',
     },
     '& .single-link.active': {
-        backgroundColor: 'rgba(0, 0, 0, 0.87)!important',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)!important',
     },
 })
 
@@ -134,16 +144,14 @@ export const MenuItemLine = styled('div')({
 })
 
 export const IconWrapper = styled('div')({
-    height: '100%',
-    width: '1.5rem',
-    paddingBottom: '12px',
-    paddingTop: '12px',
+    minWidth: '24px',
+    width: '24px',
+    height: '24px',
     color: '#fff',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-
-
+    justifyContent: 'center',
 })
 
 export const ItemLink = styled('div')({
@@ -159,14 +167,17 @@ export const ItemLink = styled('div')({
 
 export const ItemLabel = styled('span')({
     color: '#fff',
-    fontSize: '1em',
+    fontSize: '0.95rem',
     flexGrow: 1,
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    paddingLeft: '6px',
+    paddingLeft: '12px',
     fontWeight: 400,
     textDecoration: 'none',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
 })
 
 
@@ -174,13 +185,14 @@ export const ItemLabel = styled('span')({
 export const SideMenuWrapper = styled('div')({
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
-    '& .expanded': {
-        transition: 'all .4s ease',
+    height: '100%',
+    backgroundColor: '#36454f',
+    position: 'relative',
+    transition: 'all .4s ease',
+    '&.expanded': {
         width: '200px',
     },
-    '& .collapsed': {
-        transition: 'all .4s ease',
+    '&.collapsed': {
         width: '48px',
     }
 })
@@ -190,24 +202,34 @@ export const SideNavigationWrapper = styled('div')({
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
+    height: '100%',
 })
 
 export const NavigationList = styled('div')({
     flexGrow: 1,
     flexDirection: 'column',
     display: 'flex',
+    paddingTop: '10px',
 })
 
 export const Expander = styled('div')({
-    padding: '0 10px 35px 0',
-    marginLeft: '10px',
-    position: 'absolute',
-    right: '0',
-    bottom: '40px',
+    padding: '10px',
+    position: 'relative',
     color: '#fff',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 'auto',
+    zIndex: 10,
+    pointerEvents: 'auto',
+    '&.expander': {
+        flexDirection: 'row',
+    }
   })
 
-const Grow = styled('div')({
+export const Grow = styled('div')({
     flexGrow: 1,
     padding: 0,
     margin: 0,
@@ -215,6 +237,14 @@ const Grow = styled('div')({
 
 export const ExpanderArrow = styled('div')({
     display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '4px',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    }
 })
 
 
@@ -224,11 +254,14 @@ export const SideMenuItem = (props: ISideMenuProps) => {
     return (
         <MenuItemWrapper
             style={{ marginTop: '5px' }}>
-            <Tooltip title={props.item.name} placement="right">
+            <Tooltip title={props.expanded ? '' : props.item.name} placement="right">
                 <Wink id={props.item.id} className="single-link" to={props.item.link}>
                     <IconWrapper>
                         {getIcon({code: props.item.code, type: 'sidebar'})}
                     </IconWrapper>
+                    {props.expanded && (
+                        <ItemLabel>{props.item.name}</ItemLabel>
+                    )}
                 </Wink>
             </Tooltip>
         </MenuItemWrapper>

@@ -10,7 +10,7 @@ import { WBadge, WTabBar, WTabsContainer} from "./6ui";
 import {a11yProps} from "./6he";
 import {useEtailFormStore} from "../5_Etail/EtailFormsStore";
 import CloseIcon from '@mui/icons-material/Close';
-import {useLocation} from "react-router-dom";
+
 
 export const TLAllTabs = () => {
     const { allEvs, setAllEvs } = useTLBaseFgStore();
@@ -46,12 +46,12 @@ export const TLAllTabs = () => {
 
 
     return (
-        <WTabsContainer id='TLAllTabs'>
+        <WTabsContainer id='TLAllTabs'>xxxxxxxxxxx
             <WTabBar
                 id='tabBar'
                 value={curTabIndex}
                 onChange={(e: any, newTabIndex: SetStateAction<number>) => setCurTabIndex(newTabIndex)}
-                aria-label="tabs">
+                aria-label="tabs">xxxxxxxxx
                 {allTabIds.map((id: number | string, index: number) => {
                     if (id === 'ScheduleID') return <Tab key={index} icon={<CalendarTodayIcon />} {...a11yProps(index)} sx={{
                         height: '48px',

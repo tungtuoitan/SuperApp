@@ -1,5 +1,4 @@
 import { useNavigationStore } from "./NavStore";
-import { Drawer } from "@mui/material";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { SideMenu } from "./SideMenu";
 import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
@@ -34,7 +33,7 @@ const MainNav: React.FC<
     React.PropsWithChildren<React.PropsWithChildren<unknown>>
 > = () => {
     const { click, deleteEv, cutEv, pasteEv, pasteRow, cutRow, deleteRows, toNextKnowledge, closeRialog} = useHandleShortCut();
-    const {sideNavigationRef, bodyWrapperRef } = useNavigationStore();
+    const { bodyWrapperRef, expanded } = useNavigationStore();
     const { allEvs, setAllEvs } = useTLBaseFgStore();
     const { keyboardState, setKeyboardState, TIList, setFirstTimeInit } = useTLBaseBgStore();
     const {fevId,setFevId,cutEvId,setCutEvId,focusTFId,setFocusTFId} = useChildEvStore();
@@ -51,13 +50,9 @@ const MainNav: React.FC<
     const {auth, setAuth} = useAuthStore();
 
     useEffect(() => {
-        setAuth({ ...auth, userToken: localStorage.getItem('userToken') ?? '' });
-
-    },[])
-
-    useEffect(() => {
-        if(auth.userToken)
-            getSRs(auth.userToken)
+        console.log('token',user.token)
+        if(user.token)
+            getSRs(user.token)
                 .then((srs: SR[]) => {
                     setSRs(srs);
                     const levelOptions = srs.filter(sr => sr.type === 'Cevel');
@@ -163,35 +158,11 @@ const MainNav: React.FC<
             <SideNavRoot
                 className={`side-tabs`}
                 >
-                {auth.userToken &&
-    
-                    <Drawer
-                        ref={sideNavigationRef}
-                        variant="permanent"
-                        className={`side-navigation ${ "collapsed"
-                            // (expanded ?? false) === true ? "expanded" : "collapsed"
-                        }`}
-                        style={{
-                            transitionDuration: "500ms",
-                            position: "relative",
-                            whiteSpace: "nowrap",
-                            //width: '227px',
-                            paddingBottom: "40px",
-                            backgroundColor: "#36454f",
-                            zIndex: 1,
-                            display: "flex",
-                        }}
-                    >
-                        <SideMenu />
-                    </Drawer>
-                }
+                <SideMenu />
                 <BodyWrapper id='bodyWrapper'
                     ref={bodyWrapperRef}
                     style={{
-                        // width: expanded
-                        //     ? "calc(100% - 200px)"
-                        //     : "calc(100% - 48px)",
-                        // border: '4px solid blue',
+                        width: expanded ? "calc(100% - 200px)" : "calc(100% - 48px)",
                     }}
                 >
                     <SnackbarProvider
@@ -199,9 +170,17 @@ const MainNav: React.FC<
                         autoHideDuration={3000}
                     >
                         <Routes>
-                            {!auth.userToken && <Route path="/" Component={AuthContainer} />}
-                            {auth.userToken &&  <Route path="/schedule" Component={TLAllTabs} />}
-                            {auth.userToken &&  <Route path="/practice" Component={PRAllTabs} />}
+                            {!user.token && <Route path="/" Component={HomePage} />}
+                            {
+                            // user.token &&
+                            <Route path="/schedule" Component={TLAllTabs} />
+                            }
+                            {
+                            // user.token &&
+                            <Route path="/practice" Component={PRAllTabs} />}
+                            <Route path="/notes" Component={HomePage} />
+                            {/* {!user.token && <Route path="/" Component={LoginPage} />} */}
+                            {!user.token && <Route path="/signup" Component={SignUpPage} />}
                         </Routes>
                     </SnackbarProvider>
                 </BodyWrapper>
