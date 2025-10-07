@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "src/COMPS/TopNav.tsx"  ]
+, "src/Components/TopNav.tsx"  ]
 }
