@@ -23,13 +23,6 @@ export interface IDialogContainer {
     allowDownloadFile?: File
 }
 
-export const ContentWrapper = styled('div')({
-
-})
-
-export const ContentIcon = styled('div')({
-    display: 'flex',
-})
 
 export const ToolbarBox = styled(Box)({
     flexGrow: 1,
@@ -67,17 +60,16 @@ export const DialogContainer = ({ title, open, onClose, onClickClose, dialogId, 
                         <Toolbar variant="dense" sx={{
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{width: 'calc(100% - 48px)'}}>
-                                {typeof title === 'string' && 
+                            <Box sx={{ width: 'calc(100% - 48px)' }}>
+                                {typeof title === 'string' &&
                                     <Typography variant='h5' sx={{
-                                        overflow: 'hidden', 
-                                        whiteSpace: 'nowrap', 
+                                        overflow: 'hidden',
+                                        whiteSpace: 'nowrap',
                                         textOverflow: 'ellipsis'}}>{title}
                                     </Typography>
                                 }
-                            </div>
-                            {/* <Grow /> */}
-                            <ContentIcon>
+                            </Box>
+                            <Box sx={{ display: 'flex' }}>
                                 <Tooltip title="Close" aria-label="close">
                                     <IconButton
                                         edge="start"
@@ -87,14 +79,18 @@ export const DialogContainer = ({ title, open, onClose, onClickClose, dialogId, 
                                         <CloseIcon />
                                     </IconButton>
                                 </Tooltip>
-                            </ContentIcon>
+                            </Box>
                         </Toolbar>
                     </AppBar>
                 </ToolbarBox>}
-            <DialogContent style={dialogcontentStyle ?? { backgroundColor: '#fff', padding: 0, height: '100%', marginTop: '10px' }}>
-                {/* <ContentWrapper> */}
-                    {children}
-                {/* </ContentWrapper> */}
+            <DialogContent sx={{
+                backgroundColor: '#fff',
+                padding: 0,
+                height: '100%',
+                marginTop: '10px',
+                ...dialogcontentStyle
+            }}>
+                {children}
             </DialogContent>
         </Dialog>
     )

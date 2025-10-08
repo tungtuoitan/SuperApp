@@ -1,9 +1,9 @@
-import {NavigationList, SideMenuItem, SideMenuWrapper, Expander, ExpanderArrow, Grow} from "./SideMenuItem";
+import {NavigationList, SideMenuItem, SideMenuWrapper, Expander, ExpanderArrow} from "./SideMenuItem";
 import {sitemaps} from "./AllIcon";
-import {useNavigationStore} from "./NavStore";
+import {useNavigationStore} from "../../contexts/NavigationContext";
 import KeyboardDoubleArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowLeftOutlined';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
-import { Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 
 export const SideMenu = () => {
     const {expanded, setExpanded} = useNavigationStore();
@@ -17,9 +17,9 @@ export const SideMenu = () => {
                 <Tooltip title={expanded ? "Show Less" : "Show More"} placement="right">
                     <ExpanderArrow
                         onClick={() => setExpanded(!expanded)}
-                        style={{ cursor: 'pointer' }}
+                        sx={{ cursor: 'pointer' }}
                     >
-                        <Grow />
+                        <Box sx={{ flexGrow: 1 }} />
                         {expanded ? <KeyboardDoubleArrowLeftOutlinedIcon /> : <KeyboardDoubleArrowRightOutlinedIcon />}
                     </ExpanderArrow>
                 </Tooltip>

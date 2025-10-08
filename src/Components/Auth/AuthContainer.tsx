@@ -1,9 +1,10 @@
 import { Button, TextField } from "@mui/material";
-import { useAuthStore } from "./AuthStore";
-import {login} from "./AuthAPIs.js";
+import { useAuthStore } from "../../contexts/AuthContext";
+import { useAuth } from "../../hooks";
 
 export const AuthContainer = () => {
     const { auth, setAuth} = useAuthStore();
+    const { login, loading, error } = useAuth();
 
     return (
         <div
@@ -93,16 +94,26 @@ export const AuthContainer = () => {
                         },
                     }}
                 />
-                <Button style={{ marginTop: "30px" }} variant="contained" color="primary"
-                    onClick={() => {
-                        login({username: auth.userName, password: auth.password})
-                        .then((res) => {
-                            setAuth({ ...auth, userToken: res.token ?? ''})
-                            localStorage.setItem("userToken", res.token);
-                        })
+                {error && (
+                    <div style={{ color: 'red', marginTop: '10px', fontSize: '14px' }}>
+                        {error}
+                    </div>
+                )}
+                <Button 
+                    style={{ marginTop: "30px" }} 
+                    variant="contained" 
+                    color="primary"
+                    disabled={loading}
+                    onClick={async () => {
+                        try {
+                            await login(auth.userName, auth.password);
+                            // The useAuth hook handles setting the auth context and localStorage
+                        } catch (err) {
+                            console.error('Login failed:', err);
+                        }
                     }}
-                    >
-                    Login
+                >
+                    {loading ? 'Logging in...' : 'Login'}
                 </Button>
             </div>
         </div>

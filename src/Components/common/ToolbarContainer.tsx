@@ -30,11 +30,11 @@ export const ToolbarContainer = ({ children, sxBoxToolbar }: IToolbarContainer) 
     return (
         <ToolbarWrapper sx={sxBoxToolbar}>
             <AppBar
-                style={{ marginTop: '3px', backgroundColor: '#fff', height: '64px' }}
+                sx={{ marginTop: '3px', backgroundColor: '#fff', height: '64px' }}
                 position="static"
                 elevation={2}
                 variant="elevation">
-                <Toolbar style={{
+                <Toolbar sx={{
                     backgroundColor: '#fff',
                     color: '#000',
                     paddingLeft: '18px',

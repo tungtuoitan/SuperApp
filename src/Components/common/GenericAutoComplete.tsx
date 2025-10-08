@@ -5,10 +5,10 @@ export const StyledTextfield = styled(TextField)({
     width: 100,
     margin: 0,
 });
-export const isEmpty = (value: any) => {
+export const isEmpty = (value: unknown): boolean => {
     const type = typeof value;
     if ((value !== null && type === 'object') || type === 'function') {
-        const properties = Object.keys(value);
+        const properties = Object.keys(value as object);
         if (properties.length === 0) {
             return true;
         }
@@ -46,7 +46,7 @@ export interface GenericAutoCompleteProps {
         sx?: SxProps<Theme>
     },
     allOptions: IAutoCompleteOptions[],
-    onChange?: (event: any, newValue: IAutoCompleteOptions | null) => void,
+    onChange?: (event: React.SyntheticEvent, newValue: IAutoCompleteOptions | null) => void,
     style?: CSSProperties,
     disabled?: boolean,
     disableClearable?: boolean,
@@ -99,7 +99,7 @@ export const GenericAutoComplete: FC<GenericAutoCompleteProps> = (props: Generic
             getOptionDisabled={getOptionDisabled}
             getOptionLabel={(option) => option?.desc ?? " "}
             isOptionEqualToValue={(option, value) => option?.desc === value?.desc}
-            onChange={(event: any, newValue: IAutoCompleteOptions | null) => {
+            onChange={(event: React.SyntheticEvent, newValue: IAutoCompleteOptions | null) => {
                 if (onChange) {
                     if (newValue) {
                         setSelectedValue(newValue);

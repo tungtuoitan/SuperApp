@@ -1,136 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import styled from '@mui/material/styles/styled';
+import React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Note } from './NoteTypes';
-import { Chip, Box, CircularProgress, Alert } from '@mui/material';
-import { notesApi } from './NotesApi';
+import { Note } from '../../types';
+import { Chip, Box } from '@mui/material';
+import { useNotes, useDialog } from '../../hooks';
 import NoteDetailDialog from './NoteDetailDialog';
-
-export const NoteGridWrapper = styled('div')({
-//   display: 'flex',
-  height: '100%',
-  border: '1px solid red',
-  flexFlow: 'column',
-  '& .MuiDataGrid-columnsContainer': {
-    lineHeight: '56px!important',
-  }
-});
-
-export const GridContainerWrapper = styled('div')({
-  width: '100%',
-//   border: '1px solid blue',
-  height: '100% !important',
-  backgroundColor: '#fff',
-//   border: 'none!important',
-  '& .MuiDataGrid-root': {
-    border: 'none!important',
-  },
-  '& .MuiDataGrid-row': {
-    height: '50px!important',
-    maxHeight: '50px!important',
-    minHeight: '50px!important',
-    margin: 0,
-    '&:hover': {
-      backgroundColor: '#f5f5f5',
-    }
-  },
-  '& .MuiDataGrid-cell': {
-    height: '50px!important',
-    maxHeight: '50px!important',
-    minHeight: '50px!important',
-    display: 'flex!important',
-    alignItems: 'center!important',
-    justifyContent: 'flex-start!important',
-    // borderBottom: '1px solid #e0e0e0!important',
-    borderWidth: '1px!important',
-  },
-  '& .MuiDataGrid-columnHeaderTitle': {
-    fontWeight: 600,
-  },
-  '& .MuiDataGrid-viewport': {
-    // Remove max-height constraints for better scroll performance
-  },
-  '& .MuiDataGrid-renderingZone': {
-    // Remove max-height constraints for better scroll performance
-  },
-  '& .MuiDataGrid-row.Mui-selected': {
-    backgroundColor: '#fdecea',
-    '&:hover': {
-      backgroundColor: '#f9e6e6',
-    }
-  },
-  '& .MuiDataGrid-columnHeaders': {
-    backgroundColor: '#fafafa',
-    // borderBottom: '1px solid #e0e0e0!important',
-  },
-});
+import { dataGridStyles } from '../../config/theme';
 
 interface NoteGridProps {
   notes?: Note[];
 }
 
-const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
-  const [apiNotes, setApiNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+export function NoteGrid({ notes }: NoteGridProps) {
+  // Use custom hooks for state management
+  const { notes: apiNotes, loading, error, saveNote } = useNotes(!notes ? { getAll: true } : undefined);
+  const { open: dialogOpen, data: selectedNote, openDialog, closeDialog } = useDialog<Note>();
 
-  useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const fetchedNotes = await notesApi.getNotes({ getAll: true });
-        setApiNotes(fetchedNotes);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch notes');
-        console.error('Error fetching notes:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Only fetch from API if no notes are provided as props
-    if (!notes) {
-      fetchNotes();
-    } else {
-      setLoading(false);
-    }
-  }, [notes]);
+  // Use provided notes or fetched notes
+  const displayNotes = notes || apiNotes;
 
   // Sort notes by createdAt date (latest first)
-  const displayNotes = [...((notes || apiNotes) ?? [])].sort((a, b) => {
+  const sortedNotes = [...(displayNotes ?? [])].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
   const handleNoteClick = (note: Note) => {
-    setSelectedNote(note);
-    setDialogOpen(true);
+    openDialog(note);
   };
 
   const handleDialogClose = () => {
-    setDialogOpen(false);
-    setSelectedNote(null);
+    closeDialog();
   };
 
   const handleNoteSave = async (updatedNote: Note) => {
     try {
-      setError(null);
-      const result = await notesApi.iuNote(updatedNote);
-
-      if (result.options?.success) {
-        // Update local state with the saved note
-        if (notes === undefined) {
-          setApiNotes(prev => prev.map(n => n.noteId === updatedNote.noteId ? updatedNote : n));
-        }
-        console.log('Note saved successfully:', result);
-      } else {
-        setError(result.options?.message || 'Failed to save note');
-      }
+      await saveNote(updatedNote);
+      console.log('Note saved successfully:', updatedNote);
+      closeDialog();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save note');
       console.error('Error saving note:', err);
+      // Error is already handled by the useNotes hook
     }
   };
 
@@ -165,17 +73,17 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
       headerName: 'Note Name',
       width: 400,
       renderCell: (params) => (
-        <div
-          style={{
+        <Box
+          sx={{
             cursor: 'pointer',
-            color: '#1976d2',
+            color: 'primary.main',
             textDecoration: 'underline',
             fontWeight: 500
           }}
           onClick={() => handleNoteClick(params.row)}
         >
           {params.value}
-        </div>
+        </Box>
       )
     },
     {
@@ -196,8 +104,8 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
       headerName: 'Description',
       width: 500,
       renderCell: (params) => (
-        <div style={{ 
-          whiteSpace: 'normal', 
+        <Box sx={{
+          whiteSpace: 'normal',
           wordWrap: 'break-word',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -206,7 +114,7 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
           WebkitBoxOrient: 'vertical'
         }}>
           {params.value || 'No description'}
-        </div>
+        </Box>
       )
     },
     {
@@ -214,24 +122,24 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
       headerName: 'Tags',
       width: 200,
       renderCell: (params) => {
-        if (!params.value) return <span style={{ padding: '4px' }}>No tags</span>;
-        
+        if (!params.value) return <Box sx={{ padding: '4px' }}>No tags</Box>;
+
         const tags = params.value.split(',');
         const displayTags = tags.slice(0, 2);
         const remainingCount = tags.length - 2;
-        
+
         return (
-          <Box sx={{ 
-            display: 'flex', 
-            gap: 0.5, 
+          <Box sx={{
+            display: 'flex',
+            gap: '4px',
             flexWrap: 'wrap',
             padding: '4px',
             alignItems: 'center'
           }}>
             {displayTags.map((tag: string, index: number) => (
-              <Chip 
+              <Chip
                 key={`${params.row.noteId}-${index}`}
-                label={`#${tag.trim()}`} 
+                label={`#${tag.trim()}`}
                 size="small"
                 variant="outlined"
                 color="secondary"
@@ -239,7 +147,7 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
               />
             ))}
             {remainingCount > 0 && (
-              <Chip 
+              <Chip
                 label={`+${remainingCount}`}
                 size="small"
                 variant="outlined"
@@ -278,49 +186,64 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
 
   return (
     <>
-        <GridContainerWrapper className="note-grid-container">
-          <DataGrid
-            getRowId={(row) => row.noteId}
-            rows={displayNotes}
-            columns={columns}
-            rowHeight={50}
-            loading={loading}
-            checkboxSelection
-            disableRowSelectionOnClick
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 25,
-                },
+      <Box sx={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'background.paper'
+      }}>
+        <DataGrid
+          getRowId={(row) => row.noteId}
+          rows={sortedNotes}
+          columns={columns}
+          rowHeight={50}
+        //   loading={loading}
+          checkboxSelection
+          disableRowSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 25,
               },
-            }}
-            pageSizeOptions={[25, 50, 100]}
-            density="compact"
-            getRowClassName={(params) =>
-              params.row.isArchived ? "row-archived" : ""
-            }
-            rowBufferPx={250}
-            columnBufferPx={150}
-            disableVirtualization={false}
-            sx={{
-              '& .MuiDataGrid-columnHeader': {
-                height: '52px !important',
-                minHeight: '52px !important',
-                display: 'flex !important',
-                alignItems: 'center !important',
-              },
-              '& .MuiDataGrid-row': {
-                height: '50px !important',
-                minHeight: '50px !important',
-                maxHeight: '50px !important',
-              },
-              '& .MuiDataGrid-cell': {
-                display: 'flex !important',
-                alignItems: 'center !important',
-              }
-            }}
-          />
-        </GridContainerWrapper>
+            },
+          }}
+          pageSizeOptions={[25, 50, 100]}
+          getRowClassName={(params) =>
+            params.row.isArchived ? "row-archived" : ""
+          }
+          rowBufferPx={250}
+          columnBufferPx={150}
+          disableVirtualization={false}
+          sx={{
+            ...dataGridStyles.root,
+            '& .MuiDataGrid-columnHeaders': {
+              borderBottom: '1px solid #e0e0e0 !important',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              height: '52px',
+              minHeight: '52px',
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'white',
+            },
+            '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within': {
+              outline: 'none',
+            },
+            '& .MuiDataGrid-row': {
+              height: '50px',
+              minHeight: '50px',
+              maxHeight: '50px',
+              borderBottom: '1px solid #e0e0e0',
+            },
+            '& .MuiDataGrid-cell': {
+              display: 'flex',
+              alignItems: 'center',
+            },
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontWeight: 600,
+            },
+          }}
+        />
+      </Box>
 
       <NoteDetailDialog
         open={dialogOpen}
@@ -331,5 +254,3 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes }) => {
     </>
   );
 };
-
-export default NoteGrid;

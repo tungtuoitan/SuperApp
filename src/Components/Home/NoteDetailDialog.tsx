@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Note } from './NoteTypes';
+import { Note } from '../../types';
 
 interface NoteDetailDialogProps {
   open: boolean;
@@ -19,7 +19,7 @@ const NoteDetailDialog: React.FC<NoteDetailDialogProps> = ({ open, note, onClose
     }
   }, [note]);
 
-  const handleChange = (field: keyof Note, value: any) => {
+  const handleChange = (field: keyof Note, value: string | number | boolean | Date) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

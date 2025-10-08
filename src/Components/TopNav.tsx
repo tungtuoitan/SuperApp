@@ -3,7 +3,7 @@ import { MouseEvent, useEffect } from "react";
 import {classes} from "./MainNav/AllIcon";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useSnackbar} from "notistack";
-import {useAuthStore} from "./Auth/AuthStore";
+import {useAuthStore} from "../contexts/AuthContext";
 
 export const TopNav = () => {
     const { enqueueSnackbar } = useSnackbar();

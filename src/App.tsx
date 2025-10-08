@@ -1,19 +1,20 @@
 import './App.css';
-import {NavProvider} from './Components/MainNav/NavStore';
+import { NavProvider } from './contexts/NavigationContext';
 import { Main } from './Components/Main';
 
 function App() {
-  
   return (
-    <div className="App" style={{
-      overflow: 'hidden', 
-      height: '100vh',  // <-- This is the key
-      width: '100%', 
-      margin: 0,
-      padding: 0,
-      // border: '10px solid black',
-      overflowX: 'hidden',
-    }}>
+    <div
+      className="App"
+      style={{
+        overflow: 'hidden',
+        height: '100vh',
+        width: '100%',
+        margin: 0,
+        padding: 0,
+        overflowX: 'hidden',
+      }}
+    >
       <NavProvider>
         <Main />
       </NavProvider>

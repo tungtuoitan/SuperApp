@@ -1,4 +1,3 @@
-import React from 'react';
 import { SnackbarKey, useSnackbar } from "notistack";
 import { Box } from '@mui/material';
 

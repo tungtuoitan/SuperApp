@@ -1,37 +1,30 @@
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
 import NoteDetailDialog from "../../NoteDetailDialog";
-import { Note } from "../../NoteTypes";
-import { notesApi } from "../../NotesApi";
+import { Note } from "../../../../types";
+import { useDialog, useNotes } from "../../../../hooks";
 
 export const NoteCreate = () => {
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { saveNote } = useNotes();
+    const { open: dialogOpen, openDialog, closeDialog } = useDialog<Note>();
 
     const handleCreate = () => {
-        setDialogOpen(true);
+        openDialog(newNote);
     };
 
     const handleClose = () => {
-        setDialogOpen(false);
+        closeDialog();
     };
 
     const handleSave = async (note: Note) => {
         try {
-            setError(null);
-            const result = await notesApi.iuNote(note);
-
-            if (result.options?.success) {
-                console.log('Note created successfully:', result);
-                setDialogOpen(false);
-                // Optionally trigger a refresh of the grid here
-            } else {
-                setError(result.options?.message || 'Failed to create note');
-            }
+            await saveNote(note);
+            console.log('Note created successfully:', note);
+            closeDialog();
+            // The saveNote hook will handle updating the global notes state
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to create note');
             console.error('Error creating note:', err);
+            // Error handling is done in the hook
         }
     };
 
