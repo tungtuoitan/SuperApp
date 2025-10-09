@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useNoteStore } from '../../../../store/notes/NoteStore';
 
 /**
  * Note search component for filtering notes by search term.
@@ -18,9 +19,19 @@ import SearchIcon from '@mui/icons-material/Search';
  */
 export function NoteSearch() {
     const [searchTerm, setSearchTerm] = useState("");
+    
+    // Use note store for search state management
+    const {
+        searchText,
+        setSearchText,
+        searchLoading,
+        setSearchLoading,
+        searchInputRef
+    } = useNoteStore();
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
+        setSearchText(event.target.value);
         // TODO: Implement search functionality
         console.log('Search term:', event.target.value);
     };

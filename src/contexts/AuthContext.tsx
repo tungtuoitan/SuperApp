@@ -1,82 +1,76 @@
 /**
  * Authentication Context
- * Global authentication state management for user login/logout,
- * authentication status, and user data across the application
+ * Minimal authentication context that provides basic auth state.
+ * Business logic is handled by AuthStore and useAuthHelpers.
  */
 
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import type { PropsWithChildren } from 'react';
-import type { User } from '../types';
+import { AuthProvider as AuthStoreProvider, useAuthStoreContext } from '../store/auth/AuthStore';
 
 /**
- * Authentication context interface defining the shape of auth state and actions
+ * Authentication context interface defining basic auth state access
  */
 export interface AuthContextValue {
-    auth: User;
-    setAuth: React.Dispatch<React.SetStateAction<User>>;
+    auth: {
+        userName: string;
+        password: string;
+        userToken: string;
+    };
     isAuthenticated: boolean;
-    login: (userName: string, password: string, token: string) => void;
+    setAuth: React.Dispatch<React.SetStateAction<{
+        userName: string;
+        password: string;
+        userToken: string;
+    }>>;
+    loading: boolean;
+    error: string | null;
     logout: () => void;
 }
 
-const DEFAULT_AUTH_STATE: User = {
-    userName: '',
-    password: '',
-    userToken: '',
-};
-
-export const AUTH_CONTEXT_DEFAULT_VALUE: AuthContextValue = {
-    auth: DEFAULT_AUTH_STATE,
-    setAuth: () => {},
-    isAuthenticated: false,
-    login: () => {},
-    logout: () => {},
-};
-
-const AuthContext = createContext<AuthContextValue>(AUTH_CONTEXT_DEFAULT_VALUE);
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 /**
  * Custom hook to access authentication context
  * @throws {Error} When used outside of AuthProvider
- * @returns {AuthContextValue} Authentication context value with state and actions
+ * @returns {AuthContextValue} Authentication context value with state
  */
 export const useAuthStore = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
+    const storeContext = useAuthStoreContext();
+    
+    if (!storeContext) {
         throw new Error('useAuthStore must be used within AuthProvider');
     }
-    return context;
+    
+    return {
+        auth: storeContext.auth,
+        isAuthenticated: storeContext.isAuthenticated,
+        setAuth: storeContext.setAuth,
+        loading: storeContext.loading,
+        error: storeContext.error,
+        logout: () => {
+            // Clear auth state
+            storeContext.setAuth({
+                userName: '',
+                password: '',
+                userToken: '',
+            });
+            storeContext.setIsAuthenticated(false);
+            
+            // Clear any stored token
+            localStorage.removeItem('userToken');
+        },
+    };
 };
 
 /**
- * Authentication provider component that manages auth state for the entire application
- * Provides user authentication status, login/logout functions, and user data management
+ * Authentication provider component that wraps the AuthStore provider
+ * Provides minimal auth context for compatibility with existing code
  */
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [auth, setAuth] = useState<User>(DEFAULT_AUTH_STATE);
-
-    const isAuthenticated = Boolean(auth.userToken);
-
-    const login = (userName: string, password: string, token: string) => {
-        setAuth({ userName, password, userToken: token });
-    };
-
-    const logout = () => {
-        setAuth(DEFAULT_AUTH_STATE);
-        localStorage.removeItem('userToken');
-    };
-
     return (
-        <AuthContext.Provider
-            value={{
-                auth,
-                setAuth,
-                isAuthenticated,
-                login,
-                logout,
-            }}
-        >
+        <AuthStoreProvider>
             {children}
-        </AuthContext.Provider>
+        </AuthStoreProvider>
     );
 };

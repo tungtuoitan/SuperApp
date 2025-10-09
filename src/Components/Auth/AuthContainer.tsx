@@ -1,7 +1,7 @@
 import { Button, TextField, Box, Alert } from '@mui/material';
 
 import { useAuthStore } from '../../contexts/AuthContext';
-import { useAuth } from '../../hooks';
+import { useAuthHelpers } from '../../hooks';
 
 /**
  * Authentication container component.
@@ -18,8 +18,8 @@ import { useAuth } from '../../hooks';
  * @returns The authentication container with login form
  */
 export function AuthContainer() {
-    const { auth, setAuth } = useAuthStore();
-    const { login, loading, error } = useAuth();
+    const { auth, setAuth, loading, error } = useAuthStore();
+    const { login } = useAuthHelpers();
 
     /**
      * Handle input changes for authentication form fields.

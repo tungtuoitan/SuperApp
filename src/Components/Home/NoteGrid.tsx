@@ -3,7 +3,9 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Chip, Box } from '@mui/material';
 
 // 2. Internal hooks
-import { useNotes, useDialog } from '../../hooks';
+import { useDialogHelpers, useNoteHelpers } from '../../hooks';
+import { useNoteStore } from '../../store/notes/NoteStore';
+import { useDialogStore } from '../../store/dialog/DialogStore';
 
 // 3. Internal types
 import type { Note } from '../../types';
@@ -19,7 +21,7 @@ import NoteDetailDialog from './NoteDetailDialog';
  */
 interface NoteGridProps {
     /** Optional array of notes to display. If not provided, notes will be fetched from API */
-    notes?: Note[];
+    notesProp?: Note[];
 }
 
 /**
@@ -40,13 +42,35 @@ interface NoteGridProps {
  * @param props - Component props containing optional notes array
  * @returns Data grid component with note management functionality
  */
-export function NoteGrid({ notes }: NoteGridProps) {
-    // Use custom hooks for state management
-    const { notes: apiNotes, loading, error, createNote, updateNote, deleteNote } = useNotes(!notes ? { getAll: true } : undefined);
-    const { open: dialogOpen, data: selectedNote, openDialog, closeDialog } = useDialog<Note>();
+export function NoteGrid({ notesProp }: NoteGridProps) {
+    // Get state from NoteStore
+    const {
+        notes,
+        loading,
+        error,
+        searchText,
+        setSearchText,
+        loadingMasterGrid,
+        setLoadingMasterGrid,
+        refreshMasterGrid,
+        setRefreshMasterGrid,
+        pageSize,
+        setPageSize,
+        currentPage,
+        setCurrentPage
+    } = useNoteStore();
+    
+    // Get helper functions from useNoteHelpers
+    const { createNote, updateNote, deleteNote } = useNoteHelpers();
+    
+    // Get dialog helper functions
+    const { openDialog, closeDialog } = useDialogHelpers<Note>();
+    
+    // Get dialog state from DialogStore
+    const { open, data } = useDialogStore();
 
     // Use provided notes or fetched notes
-    const displayNotes = notes || apiNotes;
+    const displayNotes = notesProp || notes;
 
     // Sort notes by createdAt date (latest first)
     const sortedNotes = [...(displayNotes ?? [])].sort((a, b) => {
@@ -302,8 +326,8 @@ export function NoteGrid({ notes }: NoteGridProps) {
             </Box>
 
             <NoteDetailDialog
-                open={dialogOpen}
-                note={selectedNote}
+                open={open}
+                note={data}
                 onClose={handleDialogClose}
                 onSave={handleNoteSave}
             />

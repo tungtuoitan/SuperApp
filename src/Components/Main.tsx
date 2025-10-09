@@ -3,6 +3,7 @@ import { SnackbarKey, SnackbarProvider } from 'notistack';
 import { Box } from '@mui/material';
 
 import { AuthProvider } from '../contexts/AuthContext';
+import { NoteProvider } from '../store/notes/NoteStore';
 import { CloseNotiBtn } from './common/CloseNotiBtn';
 import MainNav from './MainNav/MainNav';
 
@@ -39,7 +40,9 @@ export function Main() {
                     autoHideDuration={3000}
                 >
                     <AuthProvider>
-                        <MainNav />
+                        <NoteProvider>
+                            <MainNav />
+                        </NoteProvider>
                     </AuthProvider>
                 </SnackbarProvider>
             </Box>

@@ -35,16 +35,25 @@ src/
 │   └── storage.service.ts  # localStorage wrapper
 │
 ├── hooks/               # Custom React hooks
-│   ├── useAuth.ts       # Authentication logic
-│   ├── useNotes.ts      # Notes data fetching
-│   ├── useDialog.ts     # Dialog state management
-│   ├── useApi.ts        # Generic API calls
-│   └── index.ts         # Hook exports
+│   ├── useAuthHelpers.ts    # Authentication helper functions (no state)
+│   ├── useNoteHelpers.ts    # Notes helper functions (no state)
+│   ├── useDialogHelpers.ts  # Dialog helper functions (no state)
+│   ├── useApiHelpers.ts     # Generic API helper functions (no state)
+│   └── index.ts             # Hook exports
 │
 ├── contexts/            # Global state management
 │   ├── AuthContext.tsx         # Auth state
 │   ├── NavigationContext.tsx   # Navigation state
 │   └── index.ts                # Context exports
+│
+├── store/               # Store-based state management
+│   ├── notes/
+│   │   └── NoteStore.tsx       # Note state management
+│   ├── dialog/
+│   │   └── DialogStore.tsx     # Dialog state management
+│   └── index.ts                # Store exports
+│   │   └── NoteStore.tsx       # Note state management
+│   └── index.ts                # Store exports
 │
 ├── types/               # TypeScript definitions
 │   ├── models.ts        # Domain models
@@ -93,7 +102,7 @@ src/
 | Type | Convention | Example |
 |------|------------|---------|
 | **Components** | PascalCase | `NoteGrid.tsx` |
-| **Hooks** | camelCase with `use` prefix | `useAuth.ts` |
+| **Hooks** | camelCase with `use` prefix | `useAuthHelpers.ts` |
 | **Utils** | camelCase | `formatters.ts` |
 | **Types** | PascalCase for interfaces | `Note`, `User` |
 | **Constants** | UPPER_SNAKE_CASE | `API_BASE_URL` |
@@ -423,10 +432,297 @@ function MyComponent() {
 | Scenario | Use |
 |----------|-----|
 | Global app state (auth, theme) | Context API |
-| Data fetching and caching | Custom Hooks |
+| Business logic functions (CRUD operations) | Helper Hooks with Store |
 | Local component state | `useState` |
 | Complex local state with actions | `useReducer` |
 | Derived state | `useMemo` |
+| Feature-specific complex state management | Store Pattern |
+
+### Store Pattern
+
+**When to Use Store Pattern**:
+- Feature-specific state that needs to be shared across multiple components
+- Complex UI state with multiple related properties (grids, dialogs, forms)
+- State that requires coordination between multiple UI elements
+- When you need centralized state for a specific feature module
+
+**Store Structure**:
+
+```typescript
+// src/store/notes/NoteStore.tsx
+import { SxProps } from "@mui/material";
+import type { GridApi } from "@mui/x-data-grid";
+import { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
+import { Note } from "../../types/models";
+import { DialogProps } from "../../types/common.types";
+
+export interface NoteContextData {
+    noteMasterContainerRef: React.RefObject<HTMLDivElement>;
+
+    // Core notes data moved from useNotes to store
+    notes: Note[];
+    setNotes: Dispatch<SetStateAction<Note[]>>;
+    loading: boolean;
+    setLoading: Dispatch<SetStateAction<boolean>>;
+    error: string | null;
+    setError: Dispatch<SetStateAction<string | null>>;
+    
+    // Note detail management
+    noteDetail: Note;
+    setNoteDetail: Dispatch<SetStateAction<Note>>;
+    noteId: number;
+    setNoteId: Dispatch<SetStateAction<number>>;
+    
+    // Search functionality
+    searchText: string;
+    setSearchText: Dispatch<SetStateAction<string>>;
+    searchLoading: boolean;
+    setSearchLoading: Dispatch<SetStateAction<boolean>>;
+    searchInputRef: React.RefObject<HTMLInputElement>;
+    
+    // Grid management
+    loadingMasterGrid: boolean;
+    setLoadingMasterGrid: Dispatch<SetStateAction<boolean>>;
+    refreshMasterGrid: boolean;
+    setRefreshMasterGrid: Dispatch<SetStateAction<boolean>>;
+    apiRef: React.MutableRefObject<GridApi | null>;
+    
+    // Pagination
+    currentPage: number;
+    setCurrentPage: Dispatch<SetStateAction<number>>;
+    totalRows: number;
+    setTotalRows: Dispatch<SetStateAction<number>>;
+    pageSize: number;
+    setPageSize: Dispatch<SetStateAction<number>>;
+    
+    // Dialog management
+    openView: boolean;
+    setOpenView: Dispatch<SetStateAction<boolean>>;
+    previewDialogPropsNote: DialogProps;
+    setPreviewDialogPropsNote: Dispatch<SetStateAction<DialogProps>>;
+    isPreviewDialogLoadingNote: boolean;
+    setIsPreviewDialogLoadingNote: Dispatch<SetStateAction<boolean>>;
+    noteDetailDialogRef: React.RefObject<HTMLDivElement> | undefined;
+    noteDetailDialogSxProps: SxProps;
+    setNoteDetailDialogSxProps: Dispatch<SetStateAction<SxProps>>;
+}
+
+const noteContextDefaultValue: NoteContextData = {
+    noteMasterContainerRef: { current: null },
+
+    // Core notes data moved from useNotes to store
+    notes: [],
+    setNotes: () => { },
+    loading: false,
+    setLoading: () => { },
+    error: null,
+    setError: () => { },
+    
+    // Note detail management
+    noteDetail: {} as Note,
+    setNoteDetail: () => { },
+    noteId: 0,
+    setNoteId: () => { },
+    
+    // Search functionality
+    searchText: '',
+    setSearchText: () => { },
+    searchLoading: false,
+    setSearchLoading: () => { },
+    searchInputRef: { current: null },
+    
+    // Grid management
+    loadingMasterGrid: false,
+    setLoadingMasterGrid: () => { },
+    refreshMasterGrid: false,
+    setRefreshMasterGrid: () => { },
+    apiRef: { current: null },
+    
+    // Pagination
+    currentPage: 1,
+    setCurrentPage: () => { },
+    totalRows: 0,
+    setTotalRows: () => { },
+    pageSize: 100,
+    setPageSize: () => { },
+    
+    // Dialog management
+    openView: false,
+    setOpenView: () => { },
+    previewDialogPropsNote: {} as DialogProps,
+    setPreviewDialogPropsNote: () => { },
+    isPreviewDialogLoadingNote: false,
+    setIsPreviewDialogLoadingNote: () => { },
+    noteDetailDialogRef: { current: null },
+    noteDetailDialogSxProps: {} as SxProps,
+    setNoteDetailDialogSxProps: () => { },
+}
+
+export const NoteStore = createContext<NoteContextData>(noteContextDefaultValue);
+
+export const useNoteStore = () => useContext(NoteStore);
+
+export const NoteProvider: React.FC<React.PropsWithChildren<React.PropsWithChildren<unknown>>> = ({ children }) => {
+    const noteMasterContainerRef = useRef<HTMLDivElement>(null);
+    
+    const [notes, setNotes] = useState<Note[]>([]);
+    const [noteDetail, setNoteDetail] = useState<Note>({} as Note);
+    const [noteId, setNoteId] = useState<number>(0);
+    const [loadingMasterGrid, setLoadingMasterGrid] = useState<boolean>(false);
+    const [refreshMasterGrid, setRefreshMasterGrid] = useState<boolean>(false);
+    const [searchText, setSearchText] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [totalRows, setTotalRows] = useState<number>(0);
+    const [pageSize, setPageSize] = useState<number>(100);
+    const [searchGridOption, setSearchGridOption] = useState<string>('');
+    const [openView, setOpenView] = useState<boolean>(false);
+    const [previewDialogPropsNote, setPreviewDialogPropsNote] = useState<DialogProps>({} as DialogProps);
+    const [isPreviewDialogLoadingNote, setIsPreviewDialogLoadingNote] = useState<boolean>(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const [searchLoading, setSearchLoading] = useState<boolean>(false);
+    const noteDetailDialogRef = useRef<HTMLDivElement | null>(null);
+    const [noteDetailDialogSxProps, setNoteDetailDialogSxProps] = useState<SxProps>({} as SxProps);
+    const apiRef = useRef<GridApi | null>(null);
+    const [isDownload, setIsDownload] = useState<boolean>(false);
+    const [showDocTypeDownloadOption, setShowDocTypeDownloadOption] = useState<HTMLButtonElement | null>(null);
+    const [selectedDocNoteDownloadTypes, setSelectedDocNoteDownloadTypes] = useState<string[]>([]);
+    
+    return (
+        <NoteStore.Provider
+            value={{
+                noteMasterContainerRef,
+                notes,
+                setNotes,
+                noteId,
+                setNoteId,
+                noteDetail,
+                setNoteDetail,
+                loadingMasterGrid,
+                setLoadingMasterGrid,
+                refreshMasterGrid,
+                setRefreshMasterGrid,
+                searchText,
+                setSearchText,
+                currentPage,
+                setCurrentPage,
+                totalRows,
+                setTotalRows,
+                pageSize,
+                setPageSize,
+                searchGridOption,
+                setSearchGridOption,
+                openView,
+                setOpenView,
+                previewDialogPropsNote,
+                setPreviewDialogPropsNote,
+                isPreviewDialogLoadingNote,
+                setIsPreviewDialogLoadingNote,
+                searchInputRef,
+                searchLoading,
+                setSearchLoading,
+                noteDetailDialogRef,
+                noteDetailDialogSxProps,
+                setNoteDetailDialogSxProps,
+                apiRef,
+                isDownload,
+                setIsDownload,
+                showDocTypeDownloadOption,
+                setShowDocTypeDownloadOption,
+                selectedDocNoteDownloadTypes,
+                setSelectedDocNoteDownloadTypes,
+            }}>
+            {children}
+        </NoteStore.Provider>
+    );
+};
+```
+
+**Usage**:
+```typescript
+// 1. Wrap your app with the provider in Main.tsx
+import { NoteProvider } from '../store/notes/NoteStore';
+
+export function Main() {
+    return (
+        <BrowserRouter>
+            <SnackbarProvider>
+                <AuthProvider>
+                    <NoteProvider>
+                        <MainNav />
+                    </NoteProvider>
+                </AuthProvider>
+            </SnackbarProvider>
+        </BrowserRouter>
+    );
+}
+
+// 2. Use the store in components
+import { useNoteStore } from '../../store/notes/NoteStore';
+
+function NoteGrid() {
+    const {
+        // Core data moved from useNotes to store
+        notes,
+        setNotes,
+        loading,
+        setLoading,
+        error,
+        setError,
+        
+        // Search functionality
+        searchText,
+        setSearchText,
+        searchLoading,
+        setSearchLoading,
+        
+        // Grid management
+        loadingMasterGrid,
+        setLoadingMasterGrid,
+        refreshMasterGrid,
+        setRefreshMasterGrid,
+        
+        // Pagination
+        pageSize,
+        setPageSize,
+        currentPage,
+        setCurrentPage
+    } = useNoteStore();
+
+    return (
+        <div>
+            {/* Use store state in your component */}
+            {loading && <div>Loading...</div>}
+            {error && <div>Error: {error}</div>}
+            {notes.map(note => <div key={note.noteId}>{note.name}</div>)}
+        </div>
+    );
+}
+```
+
+**Store Pattern Guidelines**:
+
+1. **Naming Convention**: 
+   - Store file: `{Feature}Store.tsx` (e.g., `NoteStore.tsx`)
+   - Context: `{Feature}Store` (e.g., `NoteStore`)
+   - Hook: `use{Feature}Store` (e.g., `useNoteStore`)
+   - Provider: `{Feature}Provider` (e.g., `NoteProvider`)
+
+2. **Structure Requirements**:
+   - Interface: `{Feature}ContextData`
+   - Default values: `{feature}ContextDefaultValue`
+   - All state should have getter and setter pairs
+   - Include refs for DOM elements when needed
+   - Include loading and error states
+
+3. **Don't Use Reducers in Store**:
+   - Store pattern uses direct state setters
+   - For complex state logic, create a separate reducer-based store
+   - Keep store pattern simple for UI state management
+
+4. **Provider Placement**:
+   - Wrap providers in `Main.tsx` at the appropriate level
+   - Place store providers inside Context providers (like AuthProvider)
+   - Ensure proper nesting order
 
 ---
 
@@ -440,25 +736,44 @@ function MyComponent() {
 4. **Type Safety**: Always use TypeScript
 5. **Single Responsibility**: One hook, one purpose
 
-### Data Fetching Hook Pattern
+### Helper Functions Hook Pattern
+
+**When to Use Helper Hooks**:
+- When you need functions but not state (state comes from Store)
+- For CRUD operations that interact with APIs
+- When you want to separate business logic from state management
+
+**Helper Hook Rules**:
+- ❌ **No useEffect** - Helpers are pure function definitions only
+- ❌ **No side effects** - Components handle data fetching timing
+- ❌ **No parameters** - Helper hooks should not accept any parameters
+- ✅ **Only function definitions** - Return callable functions
+- ✅ **Use store setters** - Update centralized state
 
 ```typescript
-// src/hooks/useNotes.ts
-import { useState, useEffect } from 'react';
+// src/hooks/useNoteHelpers.ts
 import { notesApi } from '@/services/api';
-import type { Note, GetNotesParams } from '@/types';
+import { useNoteStore } from '@/store/notes/NoteStore';
+import type { Note, GetNotesParams, CreateNoteRequest, UpdateNoteRequest } from '@/types';
 
-export function useNotes(initialParams?: GetNotesParams) {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface UseNoteHelpersReturn {
+    fetchNotes: (params?: GetNotesParams) => Promise<void>;
+    createNote: (request: CreateNoteRequest) => Promise<Note>;
+    updateNote: (id: number, request: UpdateNoteRequest) => Promise<Note>;
+    deleteNote: (id: number) => Promise<void>;
+}
+
+// NO PARAMETERS - Helper hooks should not accept any parameters
+export function useNoteHelpers(): UseNoteHelpersReturn {
+  // Get state setters from NoteStore (no state returned)
+  const { setNotes, setLoading, setError } = useNoteStore();
 
   const fetchNotes = async (params?: GetNotesParams) => {
     setLoading(true);
     setError(null);
     
     try {
-      const data = await notesApi.getNotes(params || initialParams);
+      const data = await notesApi.getNotes(params || { getAll: true });
       setNotes(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch notes');
@@ -467,44 +782,70 @@ export function useNotes(initialParams?: GetNotesParams) {
     }
   };
 
-  const saveNote = async (note: Partial<Note>) => {
+  const createNote = async (request: CreateNoteRequest) => {
     try {
-      const savedNote = await notesApi.createOrUpdateNote(note);
-      setNotes(prev => {
-        const index = prev.findIndex(n => n.noteId === savedNote.noteId);
-        if (index >= 0) {
-          const updated = [...prev];
-          updated[index] = savedNote;
-          return updated;
-        }
-        return [...prev, savedNote];
-      });
-      return savedNote;
+      const newNote = await notesApi.createNote(request);
+      setNotes(prev => [...prev, newNote]);
+      return newNote;
     } catch (err) {
       throw err;
     }
   };
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
+  const updateNote = async (id: number, request: UpdateNoteRequest) => {
+    try {
+      const updatedNote = await notesApi.updateNote(id, request);
+      setNotes(prev => {
+        const index = prev.findIndex(n => n.noteId === id);
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = updatedNote;
+          return updated;
+        }
+        return prev;
+      });
+      return updatedNote;
+    } catch (err) {
+      throw err;
+    }
+  };
 
+  const deleteNote = async (id: number) => {
+    try {
+      await notesApi.deleteNote(id);
+      setNotes(prev => prev.filter(n => n.noteId !== id));
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  // NO useEffect - Components handle data fetching timing
+  
   return {
-    notes,
-    loading,
-    error,
-    refetch: fetchNotes,
-    saveNote,
+    fetchNotes,
+    createNote,
+    updateNote,
+    deleteNote,
   };
 }
 ```
 
 **Usage**:
 ```typescript
-import { useNotes } from '@/hooks';
+import { useNoteHelpers } from '@/hooks';
+import { useNoteStore } from '@/store/notes/NoteStore';
 
 function NotesPage() {
-  const { notes, loading, error, refetch, saveNote } = useNotes();
+  // Get state from store
+  const { notes, loading, error } = useNoteStore();
+  
+  // Get functions from helpers
+  const { fetchNotes, createNote, updateNote, deleteNote } = useNoteHelpers();
+
+  // Component handles data fetching timing
+  useEffect(() => {
+    fetchNotes({ getAll: true });
+  }, []);
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
@@ -514,101 +855,48 @@ function NotesPage() {
       {notes.map(note => (
         <NoteCard key={note.noteId} note={note} />
       ))}
-      <Button onClick={refetch}>Refresh</Button>
+      <Button onClick={() => fetchNotes()}>Refresh</Button>
     </div>
   );
 }
 ```
 
-### Dialog Management Hook Pattern
+### Dialog Management Pattern
+
+**Current Architecture**: Use `useDialogHelpers` + `useDialogStore` + `DialogStore`
 
 ```typescript
-// src/hooks/useDialog.ts
-import { useState } from 'react';
-
-export function useDialog<T = unknown>() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<T | null>(null);
-
-  const open = (dialogData?: T) => {
-    if (dialogData) setData(dialogData);
-    setIsOpen(true);
-  };
-
-  const close = () => {
-    setIsOpen(false);
-    setData(null);
-  };
-
-  return {
-    isOpen,
-    data,
-    open,
-    close,
-  };
-}
-```
-
-**Usage**:
-```typescript
-import { useDialog } from '@/hooks';
+// Get dialog helper functions
+import { useDialogHelpers } from '@/hooks';
+import { useDialogStore } from '@/store/dialog/DialogStore';
 
 function NotesTable() {
-  const noteDialog = useDialog<Note>();
+  // Get helper functions
+  const { openDialog, closeDialog } = useDialogHelpers<Note>();
+  
+  // Get dialog state
+  const { open, data } = useDialogStore();
+
+  const handleNoteClick = (note: Note) => {
+    openDialog(note);
+  };
 
   return (
     <>
       <DataGrid
         rows={notes}
-        onRowClick={(params) => noteDialog.open(params.row)}
+        onRowClick={(params) => handleNoteClick(params.row)}
       />
       
-      <Dialog open={noteDialog.isOpen} onClose={noteDialog.close}>
+      <Dialog open={open} onClose={closeDialog}>
         <DialogContent>
-          {noteDialog.data && (
-            <NoteEditor note={noteDialog.data} />
+          {data && (
+            <NoteEditor note={data} />
           )}
         </DialogContent>
       </Dialog>
     </>
   );
-}
-```
-
-### Generic API Hook Pattern
-
-```typescript
-// src/hooks/useApi.ts
-import { useState } from 'react';
-
-interface UseApiState<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-}
-
-export function useApi<T>() {
-  const [state, setState] = useState<UseApiState<T>>({
-    data: null,
-    loading: false,
-    error: null,
-  });
-
-  const execute = async (apiCall: () => Promise<T>) => {
-    setState({ data: null, loading: true, error: null });
-    
-    try {
-      const result = await apiCall();
-      setState({ data: result, loading: false, error: null });
-      return result;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      setState({ data: null, loading: false, error: errorMessage });
-      throw err;
-    }
-  };
-
-  return { ...state, execute };
 }
 ```
 
@@ -636,20 +924,29 @@ export function useApi<T>() {
 
 ```typescript
 // NoteGrid.container.tsx (Smart)
-import { useNotes, useDialog } from '@/hooks';
+import { useNoteHelpers, useDialogHelpers } from '@/hooks';
+import { useNoteStore } from '@/store/notes/NoteStore';
+import { useDialogStore } from '@/store/dialog/DialogStore';
 import { NoteGridView } from './NoteGrid.view';
 
 export const NoteGrid: React.FC = () => {
-  const { notes, loading, error, saveNote } = useNotes();
-  const noteDialog = useDialog<Note>();
+  // Get state from store
+  const { notes, loading, error } = useNoteStore();
+  
+  // Get functions from helpers
+  const { createNote, updateNote } = useNoteHelpers();
+  const { openDialog, closeDialog } = useDialogHelpers<Note>();
+  
+  // Get dialog state
+  const { open, data } = useDialogStore();
 
   const handleNoteClick = (note: Note) => {
-    noteDialog.open(note);
+    openDialog(note);
   };
 
   const handleSave = async (note: Note) => {
-    await saveNote(note);
-    noteDialog.close();
+    await updateNote(note.noteId, note);
+    closeDialog();
   };
 
   return (
@@ -657,10 +954,10 @@ export const NoteGrid: React.FC = () => {
       notes={notes}
       loading={loading}
       error={error}
-      selectedNote={noteDialog.data}
-      dialogOpen={noteDialog.isOpen}
+      selectedNote={data}
+      dialogOpen={open}
       onNoteClick={handleNoteClick}
-      onDialogClose={noteDialog.close}
+      onDialogClose={closeDialog}
       onNoteSave={handleSave}
     />
   );
@@ -1115,6 +1412,20 @@ const notes = response.data || [];
 
 ## Best Practices
 
+### Documentation Maintenance
+
+**Always update examples when changing rules**:
+When updating any rule, pattern, or guideline in documentation files or instruction files, you must:
+
+1. **Review all examples** in the affected documentation
+2. **Update inconsistent examples** to match the new rule/pattern
+3. **Add new examples** if the rule introduces new concepts
+4. **Remove outdated examples** that contradict the new rule
+
+This ensures documentation remains accurate and prevents confusion between rules and examples.
+
+**Example**: If you change a naming convention from `camelCase` to `PascalCase`, update all code examples throughout the file to use `PascalCase`.
+
 ### Security
 
 **Never commit sensitive data**:
@@ -1248,7 +1559,7 @@ if (canEditContent) { }
 ```
 
 ### Keep files concise:
-- Each file should not exceed 300 lines of code to maintain readability and manageability.
+- Each file should not exceed 400 lines of code to maintain readability and manageability.
 - If a file grows beyond this limit, refactor by splitting into smaller files or modules (e.g., extract utilities, hooks, or sub-components).
 
 ### Error Handling
@@ -1287,10 +1598,21 @@ return <div>{data}</div>;
 ### Pattern 1: Data Fetching
 
 ```typescript
-import { useNotes } from '@/hooks';
+import { useEffect } from 'react';
+import { useNoteHelpers } from '@/hooks';
+import { useNoteStore } from '@/store/notes/NoteStore';
 
 function NotesPage() {
-  const { notes, loading, error, refetch } = useNotes();
+  // Get state from store
+  const { notes, loading, error } = useNoteStore();
+  
+  // Get functions from helpers
+  const { fetchNotes } = useNoteHelpers();
+
+  // Component handles data fetching timing
+  useEffect(() => {
+    fetchNotes({ getAll: true });
+  }, []);
 
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
@@ -1300,7 +1622,7 @@ function NotesPage() {
       {notes.map(note => (
         <NoteCard key={note.noteId} note={note} />
       ))}
-      <Button onClick={refetch}>Refresh</Button>
+      <Button onClick={() => fetchNotes()}>Refresh</Button>
     </div>
   );
 }
@@ -1311,15 +1633,22 @@ function NotesPage() {
 ```typescript
 import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
+import { useAuthHelpers } from '@/hooks';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { login, loading } = useAuth();
+  const { login } = useAuthHelpers();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(username, password);
+    setLoading(true);
+    try {
+      await login(username, password);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -1355,23 +1684,28 @@ function LoginForm() {
 ### Pattern 3: Dialog Management
 
 ```typescript
-import { useDialog } from '@/hooks';
+import { useDialogHelpers } from '@/hooks';
+import { useDialogStore } from '@/store/dialog/DialogStore';
 
 function NotesTable() {
-  const noteDialog = useDialog<Note>();
+  // Get dialog helper functions
+  const { openDialog, closeDialog } = useDialogHelpers<Note>();
+  
+  // Get dialog state
+  const { open, data } = useDialogStore();
 
   return (
     <>
       <DataGrid
         rows={notes}
-        onRowClick={(params) => noteDialog.open(params.row)}
+        onRowClick={(params) => openDialog(params.row)}
       />
       
-      <Dialog open={noteDialog.isOpen} onClose={noteDialog.close}>
+      <Dialog open={open} onClose={closeDialog}>
         <DialogTitle>Edit Note</DialogTitle>
         <DialogContent>
-          {noteDialog.data && (
-            <NoteForm note={noteDialog.data} />
+          {data && (
+            <NoteForm note={data} />
           )}
         </DialogContent>
       </Dialog>
@@ -1601,7 +1935,36 @@ function FormField() {
 
 ## Anti-Patterns (Avoid These)
 
-### ❌ Anti-Pattern 1: Prop Drilling
+### ❌ Anti-Pattern 1: Destructuring with Renaming
+
+**Bad** (Avoid renaming in destructuring):
+```typescript
+// ❌ Don't rename properties in destructuring - it makes code harder to read
+const { open: dialogOpen, data: selectedNote } = useDialogStore();
+const { notes: apiNotes } = useNoteStore();
+const { style: dialogcontentStyle } = dialogContentProps ?? {};
+```
+
+**Good** (Normal destructuring is fine, or use object access):
+```typescript
+// ✅ Normal destructuring without renaming is perfectly fine
+const { openDialog, closeDialog } = useDialogHelpers();
+const { notes, loading, error } = useNoteStore();
+const { user, isAuthenticated } = useAuthContext();
+const { open, data } = useDialogStore();
+
+// ✅ Object access when you need the whole object or many properties
+const dialogStore = useDialogStore(); // when using many properties
+const noteStore = useNoteStore(); // when using many properties
+
+// ✅ Direct property access for simple cases
+const dialogContentStyle = dialogContentProps?.style;
+
+// ✅ Descriptive variable names when needed
+const notesProp = props.notes;
+```
+
+### ❌ Anti-Pattern 2: Prop Drilling
 
 **Bad**:
 ```typescript
@@ -1639,7 +2002,7 @@ function UserMenu() {
 }
 ```
 
-### ❌ Anti-Pattern 2: Massive Components
+### ❌ Anti-Pattern 3: Massive Components
 
 **Bad**:
 ```typescript
@@ -1664,7 +2027,7 @@ function Dashboard() {
 }
 ```
 
-### ❌ Anti-Pattern 3: Inline Event Handlers
+### ❌ Anti-Pattern 4: Inline Event Handlers
 
 **Bad**:
 ```typescript
@@ -1684,7 +2047,7 @@ const handleButtonClick = useCallback(() => {
 </Button>
 ```
 
-### ❌ Anti-Pattern 4: Mutating State Directly
+### ❌ Anti-Pattern 5: Mutating State Directly
 
 **Bad**:
 ```typescript
@@ -1701,7 +2064,7 @@ setNotes(notes);
 setNotes([...notes, newNote]);
 ```
 
-### ❌ Anti-Pattern 5: Multiple API Calls in useEffect
+### ❌ Anti-Pattern 6: Multiple API Calls in useEffect
 
 **Bad**:
 ```typescript
@@ -1741,9 +2104,13 @@ import { Box, Button } from '@mui/material';
 import { useAuthContext } from '@/contexts';
 
 // 3. Internal hooks
-import { useNotes, useDialog } from '@/hooks';
+import { useNoteHelpers, useDialogHelpers } from '@/hooks';
 
-// 4. Internal services
+// 4. Internal stores
+import { useNoteStore } from '@/store/notes/NoteStore';
+import { useDialogStore } from '@/store/dialog/DialogStore';
+
+// 5. Internal services
 import { notesApi } from '@/services/api';
 
 // 5. Internal types
@@ -1807,18 +2174,16 @@ describe('MyComponent', () => {
 
 ```typescript
 import { renderHook, waitFor } from '@testing-library/react';
-import { useNotes } from './useNotes';
+import { useNoteHelpers } from './useNoteHelpers';
 
-describe('useNotes', () => {
-  it('fetches notes on mount', async () => {
-    const { result } = renderHook(() => useNotes());
+describe('useNoteHelpers', () => {
+  it('provides CRUD functions', async () => {
+    const { result } = renderHook(() => useNoteHelpers());
 
-    expect(result.current.loading).toBe(true);
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-      expect(result.current.notes).toHaveLength(5);
-    });
+    expect(result.current.createNote).toBeDefined();
+    expect(result.current.updateNote).toBeDefined();
+    expect(result.current.deleteNote).toBeDefined();
+    expect(result.current.fetchNotes).toBeDefined();
   });
 });
 ```
@@ -1851,7 +2216,11 @@ describe('notesApi', () => {
 import { useAuthContext, useNavigationContext } from '@/contexts';
 
 // Hooks
-import { useAuth, useNotes, useDialog, useApi } from '@/hooks';
+import { useAuthHelpers, useNoteHelpers, useDialogHelpers, useApiHelpers } from '@/hooks';
+
+// Stores
+import { useNoteStore } from '@/store/notes/NoteStore';
+import { useDialogStore } from '@/store/dialog/DialogStore';
 
 // API Services
 import { authApi, notesApi } from '@/services/api';
@@ -1891,16 +2260,27 @@ export const MyComponent: FC<Props> = ({ title }) => {
 };
 ```
 
-**Custom Hook**:
+**Custom Helper Hook**:
 ```typescript
-export function useMyHook() {
-  const [state, setState] = useState(null);
-  
-  useEffect(() => {
-    // Effect logic
-  }, []);
-  
-  return { state, setState };
+import { useNoteStore } from '@/store/notes/NoteStore';
+import { notesApi } from '@/services/api';
+
+export function useNoteHelpers() {
+  const { setNotes, setLoading, setError } = useNoteStore();
+
+  const fetchNotes = async (params = { getAll: true }) => {
+    setLoading(true);
+    try {
+      const data = await notesApi.getNotes(params);
+      setNotes(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { fetchNotes };
 }
 ```
 

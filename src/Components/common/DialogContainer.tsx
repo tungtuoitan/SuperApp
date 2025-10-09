@@ -117,7 +117,7 @@ export function DialogContainer({
     toolbar, 
     allowDownloadFile 
 }: IDialogContainer) {
-    const { style: dialogcontentStyle } = dialogContentProps ?? {};
+    const dialogContentStyle = dialogContentProps?.style;
     const theme = useTheme();
     const responsiveFullscreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -177,7 +177,7 @@ export function DialogContainer({
                     padding: 0,
                     height: '100%',
                     marginTop: '10px',
-                    ...dialogcontentStyle
+                    ...dialogContentStyle
                 }}
             >
                 {children}

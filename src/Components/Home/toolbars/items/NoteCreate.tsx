@@ -1,7 +1,9 @@
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
-import { useDialog, useNotes } from '../../../../hooks';
+import { useNoteHelpers } from '../../../../hooks';
+import { useDialog } from '../../../../hooks/useDialog.old';
+import { useNoteStore } from '../../../../store/notes/NoteStore';
 import { Note } from '../../../../types';
 import NoteDetailDialog from '../../NoteDetailDialog';
 
@@ -21,15 +23,21 @@ import NoteDetailDialog from '../../NoteDetailDialog';
  * @returns Button component that opens note creation dialog
  */
 export function NoteCreate() {
-    const { createNote } = useNotes();
-    const { open: dialogOpen, openDialog, closeDialog } = useDialog<Note>();
+    const { createNote } = useNoteHelpers();
+    const dialog = useDialog<Note>();
+    
+    // Use note store for state management
+    const {
+        setRefreshMasterGrid,
+        setLoadingMasterGrid
+    } = useNoteStore();
 
     const handleCreate = () => {
-        openDialog(newNote);
+        dialog.openDialog(newNote);
     };
 
     const handleClose = () => {
-        closeDialog();
+        dialog.closeDialog();
     };
 
     const handleSave = async (note: Note) => {
@@ -42,7 +50,7 @@ export function NoteCreate() {
                 createdBy: note.createdBy,
             });
             console.log('Note created successfully:', note);
-            closeDialog();
+            dialog.closeDialog();
             // The createNote hook will handle updating the global notes state
         } catch (err) {
             console.error('Error creating note:', err);
@@ -78,7 +86,7 @@ export function NoteCreate() {
             </Button>
 
             <NoteDetailDialog
-                open={dialogOpen}
+                open={dialog.open}
                 note={newNote}
                 onClose={handleClose}
                 onSave={handleSave}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Menu, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { useNoteStore } from '../../../../store/notes/NoteStore';
 
 /**
  * Note filter component for applying filters to the note list.
@@ -29,6 +30,13 @@ export function NoteFilter() {
         research: false,
         bug: false,
     });
+    
+    // Use note store for filter state management
+    const {
+        searchText,
+        setSearchText,
+        setRefreshMasterGrid
+    } = useNoteStore();
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);

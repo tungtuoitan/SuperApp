@@ -1052,6 +1052,20 @@ const notes = response.data || [];
 
 ## Best Practices
 
+### Documentation Maintenance
+
+**Always update examples when changing rules**:
+When updating any rule, pattern, or guideline in documentation files or instruction files, you must:
+
+1. **Review all examples** in the affected documentation
+2. **Update inconsistent examples** to match the new rule/pattern
+3. **Add new examples** if the rule introduces new concepts
+4. **Remove outdated examples** that contradict the new rule
+
+This ensures documentation remains accurate and prevents confusion between rules and examples.
+
+**Example**: If you change a naming convention from `camelCase` to `PascalCase`, update all code examples throughout the file to use `PascalCase`.
+
 ### Security
 
 **Never commit sensitive data**:

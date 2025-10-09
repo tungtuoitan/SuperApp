@@ -1,36 +1,42 @@
 /**
- * useNotes Hook
- * Custom hook for managing notes data fetching, state management,
- * and CRUD operations with optimistic updates and local state synchronization
+ * useNoteHelpers Hook
+ * Custom hook for managing notes CRUD operations.
+ * This hook provides only functions and does not return state.
+ * State should be accessed directly from NoteStore using useNoteStore().
+ * No side effects - pure function definitions only.
+ * 
+ * RULES:
+ * - No useEffect
+ * - No parameters in hook function
+ * - Only function definitions
+ * - Use store setters for state updates
  */
 
-import { useState, useEffect } from 'react';
-
 import { notesApi } from '../services/api';
+import { useNoteStore } from '../store/notes/NoteStore';
 import type { Note, GetNotesParams, CreateNoteRequest, UpdateNoteRequest } from '../types';
 
 /**
- * Return type for useNotes hook
+ * Return type for useNoteHelpers hook - only functions, no state
  */
-interface UseNotesReturn {
-    notes: Note[];
-    loading: boolean;
-    error: string | null;
-    refetch: (params?: GetNotesParams) => Promise<void>;
+interface UseNoteHelpersReturn {
+    fetchNotes: (params?: GetNotesParams) => Promise<void>;
     createNote: (request: CreateNoteRequest) => Promise<Note>;
     updateNote: (id: number, request: UpdateNoteRequest) => Promise<Note>;
     deleteNote: (id: number) => Promise<void>;
 }
 
 /**
- * Custom hook for notes management
- * @param initialParams Optional initial parameters for fetching notes
- * @returns Object containing notes data, loading state, error state, and CRUD operations
+ * Custom hook for notes helper functions
+ * @returns Object containing only CRUD operation functions
  */
-export const useNotes = (initialParams?: GetNotesParams): UseNotesReturn => {
-    const [notes, setNotes] = useState<Note[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+export const useNoteHelpers = (): UseNoteHelpersReturn => {
+    // Get state setters from NoteStore
+    const {
+        setNotes,
+        setLoading,
+        setError
+    } = useNoteStore();
 
     /**
      * Fetch notes from API with optional parameters
@@ -40,7 +46,7 @@ export const useNotes = (initialParams?: GetNotesParams): UseNotesReturn => {
         try {
             setLoading(true);
             setError(null);
-            const fetchedNotes = await notesApi.getNotes(params || initialParams || { getAll: true });
+            const fetchedNotes = await notesApi.getNotes(params || { getAll: true });
             setNotes(fetchedNotes);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to fetch notes');
@@ -59,7 +65,7 @@ export const useNotes = (initialParams?: GetNotesParams): UseNotesReturn => {
         try {
             const newNote = await notesApi.createNote(request);
 
-            // Add new note to local state (optimistic update)
+            // Add new note to store state (optimistic update)
             setNotes(prev => [...prev, newNote]);
 
             return newNote;
@@ -79,7 +85,7 @@ export const useNotes = (initialParams?: GetNotesParams): UseNotesReturn => {
         try {
             const updatedNote = await notesApi.updateNote(id, request);
 
-            // Update local state (optimistic update)
+            // Update store state (optimistic update)
             setNotes(prev => {
                 const index = prev.findIndex(n => n.noteId === id);
                 if (index >= 0) {
@@ -105,7 +111,7 @@ export const useNotes = (initialParams?: GetNotesParams): UseNotesReturn => {
         try {
             await notesApi.deleteNote(id);
 
-            // Remove note from local state (optimistic update)
+            // Remove note from store state (optimistic update)
             setNotes(prev => prev.filter(n => n.noteId !== id));
         } catch (err) {
             console.error('Error deleting note:', err);
@@ -113,16 +119,8 @@ export const useNotes = (initialParams?: GetNotesParams): UseNotesReturn => {
         }
     };
 
-    // Load notes on hook initialization
-    useEffect(() => {
-        fetchNotes();
-    }, []);
-
     return {
-        notes,
-        loading,
-        error,
-        refetch: fetchNotes,
+        fetchNotes,
         createNote,
         updateNote,
         deleteNote,
