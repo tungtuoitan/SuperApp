@@ -1,8 +1,25 @@
-import { Button, Menu, MenuItem, Checkbox, FormControlLabel } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { useState } from "react";
+import { useState } from 'react';
+import { Button, Menu, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
-export const NoteFilter = () => {
+/**
+ * Note filter component for applying filters to the note list.
+ * 
+ * This component provides a dropdown menu with filter options including:
+ * - Status filters (active/archived)
+ * - Type filters (meeting, brainstorm, research, bug)
+ * - Multiple selection support with checkboxes
+ * - Visual feedback with filter icon and button
+ * 
+ * The component maintains filter state locally and provides
+ * an interface for users to customize which notes are displayed.
+ * 
+ * TODO: Implement actual filtering functionality to apply
+ * selected filters to the note list display.
+ * 
+ * @returns Filter button with dropdown menu for note filtering
+ */
+export function NoteFilter() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [filters, setFilters] = useState({
         active: true,

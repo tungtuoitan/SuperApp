@@ -1,6 +1,15 @@
-import { SxProps, Theme, styled } from "@mui/material";
-import { CSSProperties, LegacyRef, ReactNode } from "react";
+import { CSSProperties, LegacyRef, ReactNode } from 'react';
+import { SxProps, Theme, styled } from '@mui/material';
 
+/**
+ * Styled root container component for grid layouts.
+ * 
+ * Provides a full-width, full-height container with:
+ * - Vertical flex layout
+ * - Light gray background
+ * - Proper overflow handling
+ * - Responsive design support
+ */
 export const ContainerRoot = styled('div')({
     width: '100%',
     height: '100%',
@@ -11,34 +20,66 @@ export const ContainerRoot = styled('div')({
     overflowY: 'hidden',
 });
 
+/**
+ * Styled wrapper component for grid content.
+ * 
+ * Provides a flexible content area with:
+ * - Flex-grow behavior to fill available space
+ * - Consistent margin spacing
+ * - Auto overflow handling
+ * - Column flex direction for stacking content
+ */
 export const GridWrapper = styled('div')({
     flex: 1,
     margin: '20px 20px 0',
     overflow: 'auto',
     display: 'flex',
     flexDirection: 'column',
-    // border: '1px solid green',
 });
 
+/**
+ * Props interface for the GridContainer component.
+ */
 export interface IGridContainer {
+    /** Child components to render within the container */
     children: ReactNode;
-    sx?: SxProps<Theme> | undefined;
-    style?: CSSProperties | undefined;
-    ref?: LegacyRef<HTMLDivElement> | undefined;
+    /** Optional MUI sx prop for additional styling */
+    sx?: SxProps<Theme>;
+    /** Optional inline styles */
+    style?: CSSProperties;
+    /** Optional ref for accessing the DOM element */
+    ref?: LegacyRef<HTMLDivElement>;
 }
 
-export const GridContainer = ({
+/**
+ * Grid container component for consistent page layouts.
+ * 
+ * This component provides a standardized container for grid-based layouts
+ * with proper spacing, overflow handling, and responsive behavior.
+ * 
+ * Features:
+ * - Full viewport coverage
+ * - Consistent background and spacing
+ * - Flexible content area
+ * - Support for MUI sx props and inline styles
+ * - Forward ref support
+ * 
+ * @param props - Component props including children and styling options
+ * @returns Styled container component for grid layouts
+ */
+export function GridContainer({
     children,
     sx,
     style,
     ref,
-}: IGridContainer) => {
+}: IGridContainer) {
     return (
         <ContainerRoot
-            ref={ref ?? undefined}
-            sx={sx ?? undefined}
-            style={style ?? undefined}>
+            ref={ref}
+            sx={sx}
+            style={style}
+        >
             {children}
         </ContainerRoot>
     );
-};
+}

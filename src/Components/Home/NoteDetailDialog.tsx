@@ -1,15 +1,39 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+
 import { Note } from '../../types';
 
+/**
+ * Props interface for the NoteDetailDialog component.
+ */
 interface NoteDetailDialogProps {
-  open: boolean;
-  note: Note | null;
-  onClose: () => void;
-  onSave?: (note: Note) => void;
+    /** Whether the dialog is open */
+    open: boolean;
+    /** Note to display/edit, null when creating new note */
+    note: Note | null;
+    /** Function called when dialog should be closed */
+    onClose: () => void;
+    /** Optional function called when note should be saved */
+    onSave?: (note: Note) => void;
 }
 
+/**
+ * Note detail dialog component for viewing and editing notes.
+ * 
+ * This component provides a modal dialog interface for:
+ * - Viewing note details
+ * - Editing existing notes
+ * - Creating new notes
+ * - Form validation and state management
+ * - Responsive layout with proper spacing
+ * 
+ * The dialog includes form fields for all note properties and handles
+ * both create and update operations through the onSave callback.
+ * 
+ * @param props - Component props including dialog state and callbacks
+ * @returns Modal dialog component for note editing
+ */
 const NoteDetailDialog: React.FC<NoteDetailDialogProps> = ({ open, note, onClose, onSave }) => {
   const [formData, setFormData] = React.useState<Partial<Note>>({});
 

@@ -1,48 +1,79 @@
 /**
  * Common Utility Types
+ * Reusable type definitions for props, components, and shared interfaces
  */
 
-import { SxProps, Theme } from '@mui/material';
-import { CSSProperties, ReactNode } from 'react';
+import type { SxProps, Theme } from '@mui/material';
+import type { CSSProperties, ReactNode } from 'react';
 
-// Component Props
+/**
+ * Component Props
+ */
+
+/**
+ * Base properties common to most components
+ * Provides standard styling and structure props
+ */
 export interface BaseComponentProps {
-  children?: ReactNode;
-  sx?: SxProps<Theme>;
-  style?: CSSProperties;
-  className?: string;
+    children?: ReactNode;
+    sx?: SxProps<Theme>;
+    style?: CSSProperties;
+    className?: string;
 }
 
+/**
+ * Props for dialog/modal components
+ * Extends base props with dialog-specific functionality
+ */
 export interface DialogProps extends BaseComponentProps {
-  open: boolean;
-  onClose: () => void;
-  title?: string | ReactNode;
+    open: boolean;
+    onClose: () => void;
+    title?: string | ReactNode;
 }
 
+/**
+ * Props for toolbar components
+ * Used in grid headers and action bars
+ */
 export interface ToolbarProps {
-  children: ReactNode;
-  sxBoxToolbar?: SxProps<Theme>;
+    children: ReactNode;
+    sxBoxToolbar?: SxProps<Theme>;
 }
 
+/**
+ * Props for grid container components
+ * Wrapper for data display grids with ref support
+ */
 export interface GridContainerProps extends BaseComponentProps {
-  ref?: React.Ref<HTMLDivElement>;
+    ref?: React.Ref<HTMLDivElement>;
 }
 
-// Icon types
-export type IconType =
-  | 'accounts'
-  | 'conversation'
-  | 'finance'
-  | 'folder'
-  | 'gratefulList'
-  | 'home'
-  | 'link'
-  | 'library'
-  | 'notes'
-  | 'sidebar';
+/**
+ * Icon Types
+ */
 
+/**
+ * Available icon types for the application
+ * Used to identify different icon categories in the icon system
+ */
+export type IconType =
+    | 'accounts'
+    | 'conversation'
+    | 'finance'
+    | 'folder'
+    | 'gratefulList'
+    | 'home'
+    | 'link'
+    | 'library'
+    | 'notes'
+    | 'sidebar';
+
+/**
+ * Props for icon components
+ * Generic icon configuration with type and additional props
+ */
 export interface IconProps {
-  code: string;
-  type?: IconType;
-  props?: any;
+    code: string;
+    type?: IconType;
+    props?: any;
 }

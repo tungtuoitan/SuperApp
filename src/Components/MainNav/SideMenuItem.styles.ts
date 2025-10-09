@@ -1,10 +1,19 @@
 /**
- * SideMenuItem Styled Components
- * Phase 6: Separated styles from component logic
+ * Styled components for side navigation menu items.
+ * 
+ * This module contains all styled components used in the side navigation
+ * system, including:
+ * - Main navigation root container
+ * - Menu item wrappers and links
+ * - Expansion and collapse animations
+ * - Hover and active state styling
+ * 
+ * The styles implement a collapsible sidebar with smooth transitions
+ * and consistent theming throughout the navigation interface.
  */
 
-import { styled } from "@mui/material";
-import { Link } from "react-router-dom";
+import { styled } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export const SideNavRoot = styled("div")({
   flexGrow: 1,
@@ -18,11 +27,11 @@ export const SideNavRoot = styled("div")({
     transitionDuration: "500ms",
     width: "200px",
     "& div.expander": {
-      flexDirection: "row-reverse",
+      flexDirection: "row",
     },
   },
   "& .collapsed": {
-    transitionDuration: "500ms",
+    transitionDuration: "500ms !important",
     width: "48px",
     "& div.expander": {
       flexDirection: "row",
@@ -61,19 +70,26 @@ export const BodyWrapper = styled("div")({
 
 export const Wink = styled(Link)({
   display: 'flex',
+  width: '100%',
   flexDirection: 'row',
   alignItems: 'center',
   position: 'relative',
   flexGrow: 1,
-  margin: '0 8px',
-  padding: '8px 12px',
+//   margin: '0 8px',
+  padding: '2px 10px',
   height: 'auto',
-  minHeight: '40px',
+  minHeight: '36px',
   color: '#fff',
   textDecoration: 'none',
   borderRadius: '4px',
   transition: 'background-color 0.2s ease',
   '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  '&:active': {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  '&.selected': {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   }
 });

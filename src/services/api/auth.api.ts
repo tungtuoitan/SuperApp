@@ -1,43 +1,48 @@
 /**
  * Authentication API Service
+ * Handles user authentication, login, and token management operations
  */
 
 import { apiClient } from './apiClient';
 import { API_ENDPOINTS } from '../../config/api.config';
-import { LoginRequest, LoginResponse, ExchangeTokenResponse } from '../../types';
 import { getLocaleLanguage } from '../../utils/locale';
+import type { LoginRequest, LoginResponse, ExchangeTokenResponse } from '../../types';
 
 export const authApi = {
-  /**
-   * Login with username and password
-   */
-  async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const formData = new FormData();
-    formData.append('username', credentials.username);
-    formData.append('password', credentials.password);
+    /**
+     * Login with username and password
+     * @param credentials User login credentials (username and password)
+     * @returns Promise resolving to login response with token and user data
+     */
+    async login(credentials: LoginRequest): Promise<LoginResponse> {
+        const formData = new FormData();
+        formData.append('username', credentials.username);
+        formData.append('password', credentials.password);
 
-    const headers = {
-      'Accept-Language': getLocaleLanguage(),
-    };
+        const headers = {
+            'Accept-Language': getLocaleLanguage(),
+        };
 
-    const response = await apiClient.post<LoginResponse>(
-      API_ENDPOINTS.auth.login,
-      formData,
-      headers
-    );
+        const response = await apiClient.post<LoginResponse>(
+            API_ENDPOINTS.auth.login,
+            formData,
+            headers
+        );
 
-    return response;
-  },
+        return response;
+    },
 
-  /**
-   * Exchange authorization code for token
-   */
-  async exchangeCodeForToken(code: string): Promise<ExchangeTokenResponse> {
-    const response = await apiClient.post<ExchangeTokenResponse>(
-      API_ENDPOINTS.auth.exchangeToken,
-      { code }
-    );
+    /**
+     * Exchange authorization code for token
+     * @param code Authorization code from OAuth provider
+     * @returns Promise resolving to token exchange response
+     */
+    async exchangeCodeForToken(code: string): Promise<ExchangeTokenResponse> {
+        const response = await apiClient.post<ExchangeTokenResponse>(
+            API_ENDPOINTS.auth.exchangeToken,
+            { code }
+        );
 
-    return response;
-  },
+        return response;
+    },
 };

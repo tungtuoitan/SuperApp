@@ -1,54 +1,64 @@
 
-import { SAModule } from "./SAModule";
-import WindowIcon from '@mui/icons-material/Window';
-import LoginIcon from '@mui/icons-material/Login';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import FolderIcon from '@mui/icons-material/Folder';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import WeekendIcon from '@mui/icons-material/Weekend';
-import FolderSharedIcon from '@mui/icons-material/FolderShared';import BlockIcon from '@mui/icons-material/Block';
-import SavingsIcon from '@mui/icons-material/Savings';
-import CallMadeIcon from '@mui/icons-material/CallMade';
-import MovingIcon from '@mui/icons-material/Moving';
-import NearMeIcon from '@mui/icons-material/NearMe';
-import {styled} from "@mui/material";import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import SmsIcon from '@mui/icons-material/Sms';
-import CodeIcon from '@mui/icons-material/Code';
-import {Height} from "@mui/icons-material";
-import HomeIcon from '@mui/icons-material/Home';
-import LinkIcon from '@mui/icons-material/Link';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import HelpIcon from '@mui/icons-material/Help';
+import { styled } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
-import SpaIcon from '@mui/icons-material/Spa';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
-import FestivalIcon from '@mui/icons-material/Festival';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import BlockIcon from '@mui/icons-material/Block';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CodeIcon from '@mui/icons-material/Code';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import FolderIcon from '@mui/icons-material/Folder';
+import HelpIcon from '@mui/icons-material/Help';
+import HomeIcon from '@mui/icons-material/Home';
 import HourglassFullIcon from '@mui/icons-material/HourglassFull';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import LinkIcon from '@mui/icons-material/Link';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import LoginIcon from '@mui/icons-material/Login';
+import NearMeIcon from '@mui/icons-material/NearMe';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SavingsIcon from '@mui/icons-material/Savings';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
-import NoteIcon from '@mui/icons-material/Note';
+import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SmsIcon from '@mui/icons-material/Sms';
+import SpaIcon from '@mui/icons-material/Spa';
+import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import WeekendIcon from '@mui/icons-material/Weekend';
 
-export const classes =  
-  {
-      grow: {
-          flexGrow: 1,
-      },
-      root: {
-          flexGrow: 1,
-          backgroundColor: '#fff!important',
-          zIndex:10000000000,
-          height: '54px'
-      },
+import { SAModule } from './SAModule';
+
+/**
+ * Application icon management and navigation configuration.
+ * 
+ * This module provides:
+ * - Icon mappings for navigation items
+ * - Style classes for navigation components
+ * - Site map configuration with navigation modules
+ * - Icon rendering utilities for different contexts
+ * 
+ * The module centralizes all icon-related functionality and provides
+ * a consistent interface for displaying icons throughout the application.
+ */
+
+/**
+ * Common style classes used across navigation components.
+ * These styles are shared between various navigation elements.
+ */
+export const classes = {
+    grow: {
+        flexGrow: 1,
+    },
+    root: {
+        flexGrow: 1,
+        backgroundColor: '#fff!important',
+        zIndex: 10000000000,
+        height: '54px'
+    },
       appBar: {
         backgroundColor: '#fff!important',
         position: 'sticky',
@@ -190,33 +200,46 @@ export const sitemaps = [
     // } as SAModule,
 ] as SAModule[];
 
+/**
+ * Styled wrapper component for icons.
+ * Provides consistent centering and alignment for icon display.
+ */
 const Wicon = styled('div')({
-    display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center', position:'relative', 
+    display: 'flex', 
+    flexDirection: 'row', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    position: 'relative', 
 });
 
+/**
+ * Props interface for the getIcon function.
+ */
 type getIconProps = {
-    code: string | null,
-    type?: 'sidebar'|'folder'|'custom',
-    props?: any
+    /** Icon code identifier, null if no icon */
+    code: string | null;
+    /** Context type for icon rendering */
+    type?: 'sidebar' | 'folder' | 'custom';
+    /** Additional props to pass to the icon component */
+    props?: any;
 }
 
-export const getIcon = (_props: getIconProps) => {
-    if(!_props.code) return null;
+/**
+ * Get an icon component based on code and type.
+ * 
+ * This function retrieves the appropriate icon component for display
+ * in different contexts (sidebar, folder, custom) with consistent styling.
+ * 
+ * @param _props - Icon properties including code, type, and additional props
+ * @returns Styled icon component or null if not found
+ */
+export function getIcon(_props: getIconProps) {
+    if (!_props.code) return null;
 
     switch(_props.type){
         case 'sidebar': 
             return <Wicon>{
-                allIcons({sx: { fontSize:20, color: 'gray', '&:hover': { color: 'white' } }})
-                .find(x => x.code === _props.code)?.icon ?? null}
-            </Wicon>
-        case 'folder': 
-            return <Wicon>{
-                allIcons({sx: { fontSize:20, color: 'gray' }})
-                .find(x => x.code === _props.code)?.icon ?? null}
-            </Wicon>
-        case 'custom':
-            return <Wicon>{
-                allIcons(_props.props)
+                allIcons({sx: { fontSize:20, color: 'white' }})
                 .find(x => x.code === _props.code)?.icon ?? null}
             </Wicon>
         default:
@@ -240,7 +263,7 @@ export const allIcons = (props: any) => [
     { code: 'self-discipline', icon: <SelfImprovementIcon {...props} /> },
     { code: 'link', icon: <LinkIcon {...props} /> },
     { code: 'knowledge', icon: <LibraryBooksIcon {...props} /> },
-    { code: 'notes', icon: <NoteIcon {...props} /> },
+    { code: 'notes', icon: <EditNoteIcon {...props} /> },
 
     { code: 'open-in-new', icon: <OpenInNewIcon {...props} /> },
     { code: 'skip', icon: <SkipNextIcon {...props} /> },

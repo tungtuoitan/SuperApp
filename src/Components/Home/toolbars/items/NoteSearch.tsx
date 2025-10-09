@@ -1,8 +1,22 @@
-import { TextField, InputAdornment } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useState } from 'react';
+import { TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
-export const NoteSearch = () => {
+/**
+ * Note search component for filtering notes by search term.
+ * 
+ * This component provides a search input field with:
+ * - Search icon for visual clarity
+ * - Real-time input handling
+ * - Placeholder text for user guidance
+ * - Compact size suitable for toolbar placement
+ * 
+ * TODO: Implement actual search functionality to filter notes
+ * based on the search term across note properties.
+ * 
+ * @returns Search input component for note filtering
+ */
+export function NoteSearch() {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

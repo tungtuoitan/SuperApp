@@ -1,11 +1,30 @@
-import { CSSProperties, FC, useEffect, useState } from "react"
-import { Autocomplete, AutocompleteClasses, Box, styled, SxProps, TextField, Theme } from "@mui/material"
+import { CSSProperties, FC, useEffect, useState } from 'react';
+import { 
+    Autocomplete, 
+    AutocompleteClasses, 
+    Box,
+    styled, 
+    SxProps, 
+    TextField, 
+    Theme 
+} from '@mui/material';
 
+/**
+ * Styled TextField component for autocomplete inputs.
+ * Provides consistent styling for text input fields.
+ */
 export const StyledTextfield = styled(TextField)({
     width: 100,
     margin: 0,
 });
-export const isEmpty = (value: unknown): boolean => {
+
+/**
+ * Utility function to check if a value is empty.
+ * 
+ * @param value - Value to check for emptiness
+ * @returns True if value is empty, false otherwise
+ */
+export function isEmpty(value: unknown): boolean {
     const type = typeof value;
     if ((value !== null && type === 'object') || type === 'function') {
         const properties = Object.keys(value as object);
@@ -16,44 +35,93 @@ export const isEmpty = (value: unknown): boolean => {
     return !value;
 }
 
-
+/**
+ * Interface for autocomplete option items.
+ * Defines the structure for selectable options in the autocomplete component.
+ */
 export interface IAutoCompleteOptions {
+    /** Unique identifier for the option */
     id: number;
+    /** Code or key for the option */
     code: string;
+    /** Display description for the option */
     desc: string;
-
+    /** Whether the option is active/enabled */
     active?: boolean;
+    /** Optional type categorization */
     type?: string;
+    /** Extended description for the option */
     longDesc?: string;
+    /** Hierarchical level for nested options */
     level?: number;
 }
+/**
+ * Props interface for the GenericAutoComplete component.
+ */
 export interface GenericAutoCompleteProps {
-    id?: string,
-    multiple?: boolean,
-    hidden?: boolean,
-    size?: "small" | "medium",
-    classes?: Partial<AutocompleteClasses>,
-    value: IAutoCompleteOptions | null | undefined,
-    sx?: SxProps<Theme>,
+    /** Optional unique identifier for the component */
+    id?: string;
+    /** Whether multiple selections are allowed */
+    multiple?: boolean;
+    /** Whether the component should be hidden */
+    hidden?: boolean;
+    /** Size variant for the component */
+    size?: 'small' | 'medium';
+    /** CSS classes for styling customization */
+    classes?: Partial<AutocompleteClasses>;
+    /** Currently selected value */
+    value: IAutoCompleteOptions | null | undefined;
+    /** MUI sx prop for styling */
+    sx?: SxProps<Theme>;
+    /** Input field properties */
     inputProps: {
-        name: string,
-        label: string,
-        required?: boolean,
-        error?: boolean,
-        sx?: SxProps<Theme>,
-    },
+        /** Input field name */
+        name: string;
+        /** Input field label */
+        label: string;
+        /** Whether the field is required */
+        required?: boolean;
+        /** Whether the field has an error state */
+        error?: boolean;
+        /** MUI sx prop for input styling */
+        sx?: SxProps<Theme>;
+    };
+    /** Props for rendering option items */
     renderOptionProps?: {
-        sx?: SxProps<Theme>
-    },
-    allOptions: IAutoCompleteOptions[],
-    onChange?: (event: React.SyntheticEvent, newValue: IAutoCompleteOptions | null) => void,
-    style?: CSSProperties,
-    disabled?: boolean,
-    disableClearable?: boolean,
-    getOptionDisabled?: (option: IAutoCompleteOptions) => boolean,
+        /** MUI sx prop for option styling */
+        sx?: SxProps<Theme>;
+    };
+    /** Array of all available options */
+    allOptions: IAutoCompleteOptions[];
+    /** Callback function when selection changes */
+    onChange?: (event: React.SyntheticEvent, newValue: IAutoCompleteOptions | null) => void;
+    /** Optional inline styles */
+    style?: CSSProperties;
+    /** Whether the component is disabled */
+    disabled?: boolean;
+    /** Whether the clear button is disabled */
+    disableClearable?: boolean;
+    /** Function to determine if an option should be disabled */
+    getOptionDisabled?: (option: IAutoCompleteOptions) => boolean;
 }
 
-export const GenericAutoComplete: FC<GenericAutoCompleteProps> = (props: GenericAutoCompleteProps) => {
+/**
+ * Generic autocomplete component for consistent option selection.
+ * 
+ * This component provides a reusable autocomplete interface with:
+ * - Configurable option data structure
+ * - Support for single selection
+ * - Customizable styling and behavior
+ * - Built-in error states and validation
+ * - Accessible design with proper ARIA attributes
+ * 
+ * The component automatically handles option filtering and selection
+ * state management based on the provided options and value.
+ * 
+ * @param props - Component props for autocomplete configuration
+ * @returns Configured autocomplete component
+ */
+export function GenericAutoComplete(props: GenericAutoCompleteProps) {
     const { id, allOptions, size, classes, onChange, inputProps, value, sx, style, disabled, renderOptionProps, disableClearable, hidden, getOptionDisabled } = props;
     const [selectedValue, setSelectedValue] = useState<IAutoCompleteOptions>({} as IAutoCompleteOptions);
 

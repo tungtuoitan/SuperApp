@@ -1,26 +1,37 @@
 {
-  "compilerOptions": {
-    "target": "es2015",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
-  },
-  "include": [
-    "src"
-, "src/Components/TopNav.tsx"  ]
+    "compilerOptions": {
+        "target": "es2015",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "baseUrl": "src",
+        "paths": {
+            "@/config/*": ["config/*"],
+            "@/services/*": ["services/*"],
+            "@/hooks/*": ["hooks/*"],
+            "@/contexts/*": ["contexts/*"],
+            "@/types/*": ["types/*"],
+            "@/utils/*": ["utils/*"],
+            "@/components/*": ["Components/*"],
+            "@/styles/*": ["styles/*"]
+        }
+    },
+    "include": [
+        "src"
+    ]
 }

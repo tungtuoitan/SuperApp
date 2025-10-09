@@ -2,64 +2,82 @@
  * API Configuration
  * Centralized API endpoints and base URL configuration
  *
- * Phase 7: Security improved - no hardcoded production IPs
- * Use .env.local for production URLs (gitignored)
+ * Security Features:
+ * - No hardcoded production IPs
+ * - Environment variable based configuration
+ * - Secure HTTPS defaults
+ * - Use .env.local for production URLs (gitignored)
  */
 
+/**
+ * Get the base URL for API requests
+ * Prioritizes environment variable, then provides secure fallbacks
+ * @returns Base URL for all API requests
+ */
 const getBaseUrl = (): string => {
-  // Always use environment variable
-  // For production, set REACT_APP_API_URL in .env.local (gitignored)
-  if (process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
-  }
+    // Always use environment variable
+    // For production, set REACT_APP_API_URL in .env.local (gitignored)
+    if (process.env.REACT_APP_API_URL) {
+        return process.env.REACT_APP_API_URL;
+    }
 
-  // Safe development fallback
-  if (window.location.hostname === 'localhost') {
+    // Safe development fallback
+    if (window.location.hostname === 'localhost') {
+        return 'https://localhost:5000';
+    }
+
+    // Default to HTTPS for security
+    console.warn('REACT_APP_API_URL not set. Using default HTTPS endpoint.');
     return 'https://localhost:5000';
-  }
-
-  // Default to HTTPS for security
-  console.warn('REACT_APP_API_URL not set. Using default HTTPS endpoint.');
-  return 'https://localhost:5000';
 };
 
+/**
+ * Base API configuration
+ * Contains base URL, timeout, and default headers for all API requests
+ */
 export const API_CONFIG = {
-  baseURL: getBaseUrl(),
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: getBaseUrl(),
+    timeout: 30000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 } as const;
 
+/**
+ * Centralized API endpoints configuration
+ * All API endpoints organized by feature/domain for easy maintenance
+ */
 export const API_ENDPOINTS = {
-  auth: {
-    login: '/auth/login',
-    exchangeToken: '/auth/exchangeAuthorizationCodeForToken',
-  },
-  notes: {
-    getAll: '/Notes/GetNotes',
-    createOrUpdate: '/Notes/IuNote',
-  },
-  events: {
-    getAll: '/Ev/GetEvs',
-    createOrUpdate: '/Ev/IuEv',
-  },
-  srs: {
-    getAll: '/SRs/GetSRs',
-  },
-  prs: {
-    getAll: '/Pr/GetPrs',
-    createOrUpdate: '/Pr/IuPr',
-  },
-  folders: {
-    getAll: '/Fo/GetFos',
-    createOrUpdate: '/Fo/IuFos',
-  },
-  userProfile: {
-    get: '/UserProfile/GetUserProfileJson',
-    createOrUpdate: '/UserProfile/IuUserProfile',
-  },
-  filters: {
-    getPrParentIds: '/PrFilter/GetPrParentIds',
-  },
+    auth: {
+        login: '/auth/login',
+        exchangeToken: '/auth/exchangeAuthorizationCodeForToken',
+    },
+    notes: {
+        getAll: '/api/Notes',
+        create: '/api/Notes',
+        update: '/api/Notes',
+        delete: '/api/Notes',
+    },
+    events: {
+        getAll: '/Ev/GetEvs',
+        createOrUpdate: '/Ev/IuEv',
+    },
+    srs: {
+        getAll: '/SRs/GetSRs',
+    },
+    prs: {
+        getAll: '/Pr/GetPrs',
+        createOrUpdate: '/Pr/IuPr',
+    },
+    folders: {
+        getAll: '/Fo/GetFos',
+        createOrUpdate: '/Fo/IuFos',
+    },
+    userProfile: {
+        get: '/UserProfile/GetUserProfileJson',
+        createOrUpdate: '/UserProfile/IuUserProfile',
+    },
+    filters: {
+        getPrParentIds: '/PrFilter/GetPrParentIds',
+    },
 } as const;

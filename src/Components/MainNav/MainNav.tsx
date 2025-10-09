@@ -1,28 +1,43 @@
-import { useNavigationStore } from "../../contexts/NavigationContext";
-import { Route, Routes } from "react-router-dom";
-import { SideMenu } from "./SideMenu";
-import { BodyWrapper, SideNavRoot } from "./SideMenuItem";
-import HomePage from "../Home/HomePage";
-import { TopNav } from "../TopNav";
+import { Route, Routes } from 'react-router-dom';
+import { Box } from '@mui/material';
 
-const MainNav: React.FC<
-    React.PropsWithChildren<React.PropsWithChildren<unknown>>
-> = () => {
+import { useNavigationStore } from '../../contexts/NavigationContext';
+import { TopNav } from '../TopNav';
+import HomePage from '../Home/HomePage';
+import { SideMenu } from './SideMenu';
+import { BodyWrapper, SideNavRoot } from './SideMenuItem.styles';
+
+/**
+ * Main navigation component.
+ * 
+ * This component provides the primary navigation structure for the application,
+ * including:
+ * - Top navigation bar
+ * - Collapsible side navigation menu
+ * - Main content area with routing
+ * - Responsive layout that adjusts based on sidebar expansion state
+ * 
+ * The component manages the layout between the sidebar and main content area,
+ * dynamically adjusting widths based on the navigation expansion state.
+ * 
+ * @returns The main navigation layout component
+ */
+function MainNav() {
     const { bodyWrapperRef, expanded } = useNavigationStore();
 
     return (
-        <div style={{outline: 'none'}}
-        tabIndex={0} // to enable onKeyDown
+        <Box
+            sx={{ outline: 'none' }}
+            tabIndex={0} // Enable keyboard navigation
         >
             <TopNav />
-            <SideNavRoot
-                className={`side-tabs`}
-                >
+            <SideNavRoot className="side-tabs">
                 <SideMenu />
-                <BodyWrapper id='bodyWrapper'
+                <BodyWrapper 
+                    id="bodyWrapper"
                     ref={bodyWrapperRef}
                     sx={{
-                        width: expanded ? "calc(100% - 200px)" : "calc(100% - 48px)",
+                        width: expanded ? 'calc(100% - 200px)' : 'calc(100% - 48px)',
                     }}
                 >
                     <Routes>
@@ -31,8 +46,8 @@ const MainNav: React.FC<
                     </Routes>
                 </BodyWrapper>
             </SideNavRoot>
-        </div>
+        </Box>
     );
-};
+}
 
 export default MainNav;
