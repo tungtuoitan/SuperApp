@@ -40,14 +40,18 @@ export function isEmpty(value: unknown): boolean {
  * Defines the structure for selectable options in the autocomplete component.
  */
 export interface IAutoCompleteOptions {
-    /** Unique identifier for the option */
-    id: number;
+    /** Unique identifier for the option (can be number or string) */
+    id: number | string;
     /** Code or key for the option */
-    code: string;
+    code?: string;
     /** Display description for the option */
-    desc: string;
+    desc?: string;
+    /** Display label for the option (alternative to desc) */
+    label?: string;
     /** Whether the option is active/enabled */
     active?: boolean;
+    /** Alternative property name for active state */
+    isActive?: boolean;
     /** Optional type categorization */
     type?: string;
     /** Extended description for the option */
@@ -165,8 +169,8 @@ export function GenericAutoComplete(props: GenericAutoCompleteProps) {
                 },
             }}
             getOptionDisabled={getOptionDisabled}
-            getOptionLabel={(option) => option?.desc ?? " "}
-            isOptionEqualToValue={(option, value) => option?.desc === value?.desc}
+            getOptionLabel={(option) => option?.label || option?.desc || " "}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
             onChange={(event: React.SyntheticEvent, newValue: IAutoCompleteOptions | null) => {
                 if (onChange) {
                     if (newValue) {
@@ -176,11 +180,12 @@ export function GenericAutoComplete(props: GenericAutoCompleteProps) {
                 }
             }}
             renderOption={(props, option) => {
-                if (typeof (option.active) !== undefined && option.active === false) {
+                if ((typeof (option.active) !== 'undefined' && option.active === false) || 
+                    (typeof (option.isActive) !== 'undefined' && option.isActive === false)) {
                     props['aria-disabled'] = true;
                 }
                 return <Box component="li" {...props} {...renderOptionProps} >
-                    <span style={{ marginRight: '20px' }}>{option?.desc}</span>{option.longDesc}
+                    <span style={{ marginRight: '20px' }}>{option?.label || option?.desc}</span>{option.longDesc}
                 </Box>
             }}
             renderInput={(params) => (

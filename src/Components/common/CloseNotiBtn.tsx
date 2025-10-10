@@ -1,55 +1,38 @@
-import { SnackbarKey, useSnackbar } from 'notistack';
-import { Box } from '@mui/material';
+import React from 'react';
+import { IconButton } from '@mui/material';
+import { Close } from '@mui/icons-material';
+import { SnackbarKey } from 'notistack';
 
-/**
- * Props interface for the CloseNotiBtn component.
- */
-interface CloseNotiProps {
-    /** Unique identifier for the snackbar notification */
-    id: SnackbarKey;
+export interface CloseNotiBtnProps {
+    /** Snackbar key from notistack */
+    snackbarKey: SnackbarKey;
+    /** Close snackbar function */
+    closeSnackbar: (key: SnackbarKey) => void;
 }
 
 /**
- * Close notification button component.
+ * Custom close button for notistack snackbars
  * 
- * This component provides a transparent overlay button that allows users
- * to dismiss snackbar notifications by clicking anywhere on the notification.
- * It integrates with the notistack library for notification management.
- * 
- * Features:
- * - Full overlay coverage of the notification area
- * - Hover effects for better user feedback
- * - Seamless integration with notistack
- * - Accessible click target
- * 
- * @param props - Component props containing the snackbar ID
- * @returns Transparent overlay button for closing notifications
+ * @example
+ * ```tsx
+ * <SnackbarProvider 
+ *   action={(key) => (
+ *     <CloseNotiBtn snackbarKey={key} closeSnackbar={closeSnackbar} />
+ *   )}
+ * >
+ * ```
  */
-export function CloseNotiBtn({ id }: CloseNotiProps) {
-    const { closeSnackbar } = useSnackbar();
-
-    /**
-     * Handle notification close action.
-     * Closes the snackbar with the provided ID.
-     */
-    const handleClose = () => {
-        closeSnackbar(id);
-    };
-
+export function CloseNotiBtn({ snackbarKey, closeSnackbar }: CloseNotiBtnProps) {
     return (
-        <Box 
-            sx={{
-                '&:hover': { 
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)' 
-                },
-                position: 'absolute',
-                left: '0',
-                top: '0',
-                width: '100%',
-                height: '100%',
-                cursor: 'pointer',
-            }}
-            onClick={handleClose}
-        />
+        <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => closeSnackbar(snackbarKey)}
+        >
+            <Close fontSize="small" />
+        </IconButton>
     );
 }
+
+export default CloseNotiBtn;

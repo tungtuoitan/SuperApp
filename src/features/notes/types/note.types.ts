@@ -3,13 +3,26 @@
  * Domain models and DTOs for the notes feature
  */
 
+// Note types
+export type NoteType = 'meeting' | 'brainstorm' | 'research' | 'bug' | 'task' | 'idea';
+
+// Available note types
+export const NOTE_TYPES: readonly NoteType[] = [
+    'meeting',
+    'brainstorm', 
+    'research',
+    'bug',
+    'task',
+    'idea'
+] as const;
+
 // Domain Model (what we use in the app)
 export interface Note {
     noteId: number;
     name: string;
     description?: string;
-    tags?: string;
-    type?: string;
+    tags?: string[];
+    type?: NoteType;
     createdBy?: string;
     createdAt: Date;
     updatedAt?: Date;
@@ -21,8 +34,8 @@ export interface NoteDTO {
     noteId: number;
     name: string;
     description?: string;
-    tags?: string;
-    type?: string;
+    tags?: string[];
+    type?: NoteType;
     createdBy?: string;
     createdAt: string; // ISO string
     updatedAt?: string; // ISO string
@@ -33,15 +46,15 @@ export interface NoteDTO {
 export interface CreateNoteDTO {
     name: string;
     description?: string;
-    tags?: string;
-    type?: string;
+    tags?: string[];
+    type?: NoteType;
 }
 
 export interface UpdateNoteDTO {
     name?: string;
     description?: string;
-    tags?: string;
-    type?: string;
+    tags?: string[];
+    type?: NoteType;
     isArchived?: boolean;
 }
 
@@ -51,7 +64,7 @@ export interface GetNotesParams {
     pageSize?: number;
     searchText?: string;
     getAll?: boolean;
-    type?: string;
+    type?: NoteType;
     isArchived?: boolean;
 }
 

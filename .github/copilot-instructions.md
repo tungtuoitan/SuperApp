@@ -6,6 +6,12 @@
 
 ---
 
+## ⚠️ IMPORTANT PROJECT RULES
+
+**🚫 DO NOT MODIFY PORTAL FILES**: All files in the `portal/` directory are for reference only. Do not update, edit, or modify any files in the portal project. Only work with files in the `SuperApp/` directory.
+
+---
+
 ## 📚 Quick Navigation
 
 This is the **main instruction file**. For detailed information, see:
@@ -131,6 +137,10 @@ src/
 │
 ├── shared/                # Shared across features
 │   ├── components/        # Reusable UI components
+│   │   ├── ui/            # Pure UI components (Button, Input, TagAutoComplete, etc.)
+│   │   ├── feedback/      # Error boundaries, alerts, notifications
+│   │   ├── containers/    # Layout containers and wrappers
+│   │   └── styles/        # Shared styled components
 │   ├── hooks/             # Reusable hooks
 │   ├── services/          # Shared services
 │   └── types/             # Shared types
@@ -364,6 +374,24 @@ function NotesPageContent() {
 ---
 
 ## 🎨 Component Patterns
+
+### Component Organization
+
+**🎯 Component Placement Rules:**
+
+```
+shared/components/ui/           # Pure UI components (Button, Input, Autocomplete)
+shared/components/feedback/     # Error boundaries, alerts, notifications
+shared/components/containers/   # Layout containers and wrappers
+shared/components/styles/       # Shared styled components
+features/[name]/components/     # Feature-specific components
+```
+
+**Examples:**
+- `shared/components/ui/GenericAutoComplete.tsx` - Reusable autocomplete component
+- `shared/components/ui/DialogContainer.tsx` - Modal/dialog wrapper
+- `shared/components/containers/GridContainer.tsx` - Data grid layouts
+- `features/notes/components/NoteCard.tsx` - Domain-specific note card
 
 ### Component Structure
 

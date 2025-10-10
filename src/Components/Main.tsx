@@ -1,10 +1,9 @@
 import { BrowserRouter } from 'react-router-dom';
-import { SnackbarKey, SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from 'notistack';
 import { Box } from '@mui/material';
 
 import { AuthProvider } from '../contexts/AuthContext';
 import { NoteUIProvider } from '../features/notes';
-import { CloseNotiBtn } from './common/CloseNotiBtn';
 import MainNav from './MainNav/MainNav';
 import {DialogProvider} from 'store';
 
@@ -36,10 +35,7 @@ export function Main() {
                     overflowX: 'hidden',
                 }}
             >
-                <SnackbarProvider 
-                    action={(id: SnackbarKey) => <CloseNotiBtn id={id} />} 
-                    autoHideDuration={3000}
-                >
+                <SnackbarProvider autoHideDuration={3000}>
                     <AuthProvider>
                         <NoteUIProvider>
                             <DialogProvider>

@@ -116,9 +116,15 @@ export function NoteGrid() {
             headerName: 'Tags',
             width: 200,
             renderCell: (params) => {
-                if (!params.value) return <Box sx={{ padding: '4px' }}>No tags</Box>;
+                if (!params.value || (Array.isArray(params.value) && params.value.length === 0)) {
+                    return <Box sx={{ padding: '4px' }}>No tags</Box>;
+                }
 
-                const tags = params.value.split(',');
+                // Handle both array and string format for backward compatibility
+                const tags = Array.isArray(params.value) 
+                    ? params.value 
+                    : params.value.split(',');
+                
                 const displayTags = tags.slice(0, 2);
                 const remainingCount = tags.length - 2;
 
@@ -166,7 +172,8 @@ export function NoteGrid() {
         {
             field: 'isArchived',
             headerName: 'Status',
-            width: 100,
+            flex: 1,
+            minWidth: 100,
             renderCell: (params) => (
                 <Chip 
                     label={params.value ? 'Archived' : 'Active'} 
@@ -207,6 +214,7 @@ export function NoteGrid() {
                 getRowClassName={(params) =>
                     params.row.isArchived ? "row-archived" : ""
                 }
+                checkboxSelection
                 rowBufferPx={250}
                 columnBufferPx={150}
                 disableVirtualization={false}
@@ -234,6 +242,7 @@ export function NoteGrid() {
                     '& .MuiDataGrid-cell': {
                         display: 'flex',
                         alignItems: 'center',
+                        lineHeight: '22px',
                     },
                     '& .MuiDataGrid-columnHeaderTitle': {
                         fontWeight: 600,
