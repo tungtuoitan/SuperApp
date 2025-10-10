@@ -6,6 +6,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { NoteProvider } from '../store/notes/NoteStore';
 import { CloseNotiBtn } from './common/CloseNotiBtn';
 import MainNav from './MainNav/MainNav';
+import {DialogProvider} from 'store';
 
 /**
  * Main application layout component.
@@ -41,7 +42,9 @@ export function Main() {
                 >
                     <AuthProvider>
                         <NoteProvider>
-                            <MainNav />
+                            <DialogProvider>
+                                <MainNav />
+                            </DialogProvider>
                         </NoteProvider>
                     </AuthProvider>
                 </SnackbarProvider>

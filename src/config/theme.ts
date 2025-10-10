@@ -116,10 +116,10 @@ export const theme = createTheme({
  */
 export const dataGridStyles = {
     root: {
-        border: 'none',
         '& .MuiDataGrid-columnHeader': {
             height: '52px',
             backgroundColor: '#fafafa',
+            border: '1px solid red',
         },
         '& .MuiDataGrid-row': {
             height: '50px',
