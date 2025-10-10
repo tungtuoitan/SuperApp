@@ -14,8 +14,11 @@ This is the **main instruction file**. For detailed information, see:
 - **[STATE_MANAGEMENT.md](../docs/STATE_MANAGEMENT.md)** - React Query, Context, and state patterns
 - **[API_LAYER.md](../docs/API_LAYER.md)** - API client, services, and error handling
 - **[COMPONENT_PATTERNS.md](../docs/COMPONENT_PATTERNS.md)** - Component architecture and best practices
+- **[DESIGN_SYSTEM.md](../docs/DESIGN_SYSTEM.md)** - Design tokens, colors, typography, and UI standards
 - **[STYLING_GUIDE.md](../docs/STYLING_GUIDE.md)** - MUI styling patterns and conventions
 - **[TYPE_SAFETY.md](../docs/TYPE_SAFETY.md)** - TypeScript patterns and type definitions
+- **[ERROR_HANDLING.md](../docs/ERROR_HANDLING.md)** - Error boundaries, API errors, and user feedback
+- **[DATA_TYPES.md](../docs/DATA_TYPES.md)** - Cross-stack type consistency and data transformation
 - **[TESTING_GUIDE.md](../docs/TESTING_GUIDE.md)** - Testing strategies and examples
 - **[COMMON_PATTERNS.md](../docs/COMMON_PATTERNS.md)** - Reusable patterns and recipes
 - **[ANTI_PATTERNS.md](../docs/ANTI_PATTERNS.md)** - What NOT to do
@@ -69,6 +72,25 @@ const { data: notes, isLoading } = useQuery({
 });
 ```
 
+### 5. **Design System Consistency**
+```typescript
+// ❌ Hardcoded values
+<Box sx={{ 
+    padding: '16px',
+    backgroundColor: '#1976D2',
+    borderRadius: '8px',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+}}>
+
+// ✅ Design system tokens
+<Box sx={{ 
+    padding: 'spacing.4',
+    backgroundColor: 'primary.main',
+    borderRadius: 'borderRadius.md',
+    boxShadow: 'shadows.sm',
+}}>
+```
+
 ---
 
 ## 🏗️ Architecture Overview
@@ -82,12 +104,14 @@ Component → React Query Hook → Service → API Client → Backend
 
 ### State Philosophy
 
-| State Type | Solution | Example |
-|------------|----------|---------|
-| **Server State** | React Query | Notes list, user profile |
-| **Global UI State** | Context | Auth, theme, navigation |
-| **Feature UI State** | Context (per feature) | Note filters, dialog state |
-| **Local State** | useState | Form inputs, toggles |
+| State Type | Solution | Location | Example |
+|------------|----------|----------|---------|
+| **Server State** | React Query | Feature hooks | Notes list, user profile |
+| **Global UI State** | Context | Main.tsx | Auth, theme, navigation |
+| **Feature UI State** | Context | Main.tsx (centralized) | Note filters, dialog state |
+| **Local State** | useState | Component level | Form inputs, toggles |
+
+**🎯 Provider Centralization Rule**: All Context providers should be defined in `Main.tsx` to enable cross-feature data sharing and maintain a single source of truth.
 
 See [STATE_MANAGEMENT.md](../docs/STATE_MANAGEMENT.md) for details.
 
@@ -114,7 +138,16 @@ src/
 ├── lib/                   # Third-party setup
 │   ├── react-query.ts     # React Query config
 │   ├── api-client.ts      # Axios/Fetch setup
-│   └── theme.ts           # MUI theme
+│   └── theme/             # Design system & MUI theme
+│       ├── index.ts       # Main theme export
+│       ├── colors.ts      # Color tokens
+│       ├── typography.ts  # Typography scale
+│       ├── spacing.ts     # Spacing tokens
+│       ├── shadows.ts     # Shadow tokens
+│       ├── borderRadius.ts # Border radius tokens
+│       ├── breakpoints.ts # Responsive breakpoints
+│       ├── zIndex.ts      # Z-index scale
+│       └── transitions.ts # Animation tokens
 │
 └── config/                # Configuration
     ├── env.ts             # Environment variables
@@ -278,6 +311,56 @@ export function useNoteUI() {
 }
 ```
 
+### Centralized Provider Pattern
+
+All Context providers MUST be centralized in `Main.tsx` to enable cross-feature data sharing:
+
+```typescript
+// Main.tsx - Centralized Provider Setup
+function Main() {
+    return (
+        <BrowserRouter>
+            <SnackbarProvider autoHideDuration={3000}>
+                <AuthProvider>
+                    <NoteUIProvider>
+                        <DialogProvider>
+                            <MainNav />
+                        </DialogProvider>
+                    </NoteUIProvider>
+                </AuthProvider>
+            </SnackbarProvider>
+        </BrowserRouter>
+    );
+}
+```
+
+**Benefits of Centralized Providers:**
+- **Cross-Feature Sharing**: Any component can access any context
+- **Single Source of Truth**: All app state in one place
+- **Easier Debugging**: Clear provider hierarchy
+- **Consistent Access**: No need to wrap individual pages
+
+**Page Implementation (No Provider Wrapping):**
+
+```typescript
+// pages/NotesPage.tsx - Direct context usage
+export function NotesPage() {
+    return (
+        <ErrorBoundary>
+            <NotesPageContent />
+        </ErrorBoundary>
+    );
+}
+
+function NotesPageContent() {
+    // Direct access to centralized contexts
+    const { filters, selectedNote } = useNoteUI();
+    const { data: notes } = useNotes();
+    
+    return <NoteGrid notes={notes} />;
+}
+```
+
 ---
 
 ## 🎨 Component Patterns
@@ -287,6 +370,7 @@ export function useNoteUI() {
 ```typescript
 // features/notes/components/NoteCard/NoteCard.tsx
 import { Card, Typography } from '@mui/material';
+import { spacing, shadows, transitions } from '@/lib/theme';
 import type { Note } from '../../types/note.types';
 
 interface NoteCardProps {
@@ -299,13 +383,19 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
         <Card 
             onClick={() => onClick?.(note)}
             sx={{ 
-                padding: '16px',
+                padding: spacing[6],
                 cursor: onClick ? 'pointer' : 'default',
-                '&:hover': onClick ? { boxShadow: 2 } : undefined,
+                transition: transitions.common.standard,
+                '&:hover': onClick ? { 
+                    boxShadow: shadows.cardHover,
+                    transform: 'translateY(-2px)',
+                } : undefined,
             }}
         >
-            <Typography variant="h6">{note.name}</Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="h6" sx={{ color: 'text.primary' }}>
+                {note.name}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {note.description}
             </Typography>
         </Card>
@@ -481,6 +571,10 @@ function createNote(data: CreateNoteDTO): Promise<Note> {
 }
 ```
 
+**For comprehensive error handling strategies, see [ERROR_HANDLING.md](../docs/ERROR_HANDLING.md)**
+
+**For data type consistency across the stack, see [DATA_TYPES.md](../docs/DATA_TYPES.md)**
+
 ---
 
 ## 🚫 Anti-Patterns (What NOT to Do)
@@ -569,6 +663,8 @@ See each guide for templates:
 - Component template: [COMPONENT_PATTERNS.md](../docs/COMPONENT_PATTERNS.md)
 - Hook template: [STATE_MANAGEMENT.md](../docs/STATE_MANAGEMENT.md)
 - Service template: [API_LAYER.md](../docs/API_LAYER.md)
+- Error handling template: [ERROR_HANDLING.md](../docs/ERROR_HANDLING.md)
+- Type transformation template: [DATA_TYPES.md](../docs/DATA_TYPES.md)
 
 ---
 
@@ -580,8 +676,11 @@ See each guide for templates:
 | Work with server data | [STATE_MANAGEMENT.md](../docs/STATE_MANAGEMENT.md) |
 | Create API calls | [API_LAYER.md](../docs/API_LAYER.md) |
 | Build components | [COMPONENT_PATTERNS.md](../docs/COMPONENT_PATTERNS.md) |
+| Use design tokens and colors | [DESIGN_SYSTEM.md](../docs/DESIGN_SYSTEM.md) |
 | Style components | [STYLING_GUIDE.md](../docs/STYLING_GUIDE.md) |
 | Add TypeScript types | [TYPE_SAFETY.md](../docs/TYPE_SAFETY.md) |
+| Handle errors gracefully | [ERROR_HANDLING.md](../docs/ERROR_HANDLING.md) |
+| Manage data transformations | [DATA_TYPES.md](../docs/DATA_TYPES.md) |
 | Write tests | [TESTING_GUIDE.md](../docs/TESTING_GUIDE.md) |
 | Find examples | [COMMON_PATTERNS.md](../docs/COMMON_PATTERNS.md) |
 | Avoid mistakes | [ANTI_PATTERNS.md](../docs/ANTI_PATTERNS.md) |
@@ -601,14 +700,17 @@ See each guide for templates:
 **Week 2: Deep Dive**
 1. Read [API_LAYER.md](../docs/API_LAYER.md)
 2. Read [COMPONENT_PATTERNS.md](../docs/COMPONENT_PATTERNS.md)
-3. Read [COMMON_PATTERNS.md](../docs/COMMON_PATTERNS.md)
-4. Practice: Add CRUD operations to your feature
+3. Read [DESIGN_SYSTEM.md](../docs/DESIGN_SYSTEM.md)
+4. Read [COMMON_PATTERNS.md](../docs/COMMON_PATTERNS.md)
+5. Practice: Add CRUD operations to your feature
 
 **Week 3: Polish**
 1. Read [STYLING_GUIDE.md](../docs/STYLING_GUIDE.md)
 2. Read [TYPE_SAFETY.md](../docs/TYPE_SAFETY.md)
-3. Read [ANTI_PATTERNS.md](../docs/ANTI_PATTERNS.md)
-4. Practice: Refactor existing component
+3. Read [ERROR_HANDLING.md](../docs/ERROR_HANDLING.md)
+4. Read [DATA_TYPES.md](../docs/DATA_TYPES.md)
+5. Read [ANTI_PATTERNS.md](../docs/ANTI_PATTERNS.md)
+6. Practice: Refactor existing component
 
 **Week 4: Professional**
 1. Read [TESTING_GUIDE.md](../docs/TESTING_GUIDE.md)

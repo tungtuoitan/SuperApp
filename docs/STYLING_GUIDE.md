@@ -1,6 +1,8 @@
 # 🎨 STYLING GUIDE - Material-UI Styling Patterns
 
 > **Philosophy**: Use the right tool for the job. Consistency over cleverness.
+> 
+> **🔗 Related**: See [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) for design tokens, colors, typography, and UI standards.
 
 ---
 
@@ -21,194 +23,62 @@
 
 ### Theme Setup
 
-```typescript
-// lib/theme.ts
-import { createTheme } from '@mui/material/styles'
+The MUI theme is configured using our design system tokens. See the complete configuration in [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md).
 
-// Extend theme types for custom properties
-declare module '@mui/material/styles' {
-    interface Palette {
-        sidebar: Palette['primary']
-        neutral: Palette['primary']
-    }
-    
-    interface PaletteOptions {
-        sidebar?: PaletteOptions['primary']
-        neutral?: PaletteOptions['primary']
-    }
-}
+### Using Design Tokens
+
+```typescript
+// lib/theme/index.ts
+import { createTheme } from '@mui/material/styles'
+import { colors, semanticColors } from './colors'
+import { typography, fonts, fontWeights } from './typography'
+import { spacing } from './spacing'
+import { shadows } from './shadows'
+import { borderRadius } from './borderRadius'
 
 export const theme = createTheme({
-    // Color palette
     palette: {
-        mode: 'light',
-        primary: {
-            main: '#1976d2',
-            light: '#42a5f5',
-            dark: '#1565c0',
-            contrastText: '#fff',
-        },
-        secondary: {
-            main: '#9c27b0',
-            light: '#ba68c8',
-            dark: '#7b1fa2',
-            contrastText: '#fff',
-        },
-        error: {
-            main: '#d32f2f',
-        },
-        warning: {
-            main: '#ed6c02',
-        },
-        info: {
-            main: '#0288d1',
-        },
-        success: {
-            main: '#2e7d32',
-        },
-        // Custom colors
-        sidebar: {
-            main: '#36454f',
-            light: '#4a5a6a',
-            dark: '#2a3840',
-            contrastText: '#fff',
-        },
-        neutral: {
-            main: '#64748B',
-            light: '#94A3B8',
-            dark: '#475569',
-            contrastText: '#fff',
-        },
-        // Background
-        background: {
-            default: '#f5f5f5',
-            paper: '#ffffff',
-        },
-        // Text
-        text: {
-            primary: '#1a1a1a',
-            secondary: '#666666',
-            disabled: '#999999',
-        },
-        // Divider
-        divider: '#e0e0e0',
+        primary: { main: colors.primary[500] },
+        secondary: { main: colors.secondary[500] },
+        error: { main: colors.error[500] },
+        warning: { main: colors.warning[500] },
+        info: { main: colors.info[500] },
+        success: { main: colors.success[500] },
+        text: semanticColors.text,
+        background: semanticColors.background,
+        divider: semanticColors.divider,
+        action: semanticColors.action,
     },
-
-    // Typography
     typography: {
-        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-        fontSize: 14,
-        
-        h1: {
-            fontSize: '2.5rem',
-            fontWeight: 500,
-            lineHeight: 1.2,
-        },
-        h2: {
-            fontSize: '2rem',
-            fontWeight: 500,
-            lineHeight: 1.3,
-        },
-        h3: {
-            fontSize: '1.75rem',
-            fontWeight: 500,
-            lineHeight: 1.4,
-        },
-        h4: {
-            fontSize: '1.5rem',
-            fontWeight: 500,
-            lineHeight: 1.4,
-        },
-        h5: {
-            fontSize: '1.25rem',
-            fontWeight: 500,
-            lineHeight: 1.5,
-        },
-        h6: {
-            fontSize: '1rem',
-            fontWeight: 500,
-            lineHeight: 1.6,
-        },
-        body1: {
-            fontSize: '1rem',
-            lineHeight: 1.5,
-        },
-        body2: {
-            fontSize: '0.875rem',
-            lineHeight: 1.43,
-        },
-        button: {
-            textTransform: 'none', // Disable uppercase
-            fontWeight: 500,
-        },
-        caption: {
-            fontSize: '0.75rem',
-            lineHeight: 1.66,
-        },
+        fontFamily: fonts.primary,
+        ...typography,
     },
-
-    // Spacing (8px base)
-    spacing: 8, // 1 = 8px, 2 = 16px, 3 = 24px, etc.
-
-    // Shape (border radius)
+    spacing: 8, // Base spacing unit (8px)
     shape: {
-        borderRadius: 8,
+        borderRadius: parseInt(borderRadius.md), // 8px
     },
-
-    // Shadows
-    shadows: [
-        'none',
-        '0px 2px 4px rgba(0,0,0,0.1)',
-        '0px 4px 8px rgba(0,0,0,0.1)',
-        '0px 8px 16px rgba(0,0,0,0.1)',
-        // ... rest of default shadows
-    ] as any,
-
-    // Component overrides
-    components: {
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    textTransform: 'none',
-                    borderRadius: '8px',
-                    padding: '8px 16px',
-                },
-                containedPrimary: {
-                    boxShadow: 'none',
-                    '&:hover': {
-                        boxShadow: '0px 2px 4px rgba(0,0,0,0.2)',
-                    },
-                },
-            },
-            defaultProps: {
-                disableElevation: true,
-            },
-        },
-        
-        MuiCard: {
-            styleOverrides: {
-                root: {
-                    borderRadius: '12px',
-                    boxShadow: '0px 2px 8px rgba(0,0,0,0.08)',
-                },
-            },
-        },
-        
-        MuiTextField: {
-            defaultProps: {
-                variant: 'outlined',
-            },
-        },
-        
-        MuiPaper: {
-            styleOverrides: {
-                root: {
-                    borderRadius: '8px',
-                },
-            },
-        },
-    },
+    // See DESIGN_SYSTEM.md for complete configuration
 })
+```
+
+```typescript
+import { spacing, colors, shadows, borderRadius } from '@/lib/theme'
+
+// ✅ GOOD: Using design tokens
+<Card sx={{
+    padding: spacing[6],          // 24px
+    backgroundColor: colors.primary[50],
+    boxShadow: shadows.sm,
+    borderRadius: borderRadius.lg,
+}} />
+
+// ❌ BAD: Hardcoded values  
+<Card sx={{
+    padding: '24px',
+    backgroundColor: '#E3F2FD',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+    borderRadius: '12px',
+}} />
 ```
 
 ### Theme Provider Setup

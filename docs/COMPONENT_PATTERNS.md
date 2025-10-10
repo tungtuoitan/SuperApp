@@ -1,6 +1,8 @@
 # 🧩 COMPONENT PATTERNS - Building Blocks
 
 > **Philosophy**: Components should be simple, predictable, and composable.
+> 
+> **🔗 Related**: See [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) for design tokens and styling standards.
 
 ---
 
@@ -39,14 +41,17 @@ Shared Components (Reusable UI)
 import { NoteUIProvider } from '@/features/notes'
 import { NoteGrid, NoteFilters, NoteDialog } from '@/features/notes'
 
+import { Box } from '@mui/material'
+import { spacing } from '@/lib/theme'
+
 export function NotesPage() {
     return (
         <NoteUIProvider>
-            <div style={{ padding: '24px' }}>
+            <Box sx={{ padding: spacing[6] }}> {/* 24px */}
                 <NoteFilters />
                 <NoteGrid />
                 <NoteDialog />
-            </div>
+            </Box>
         </NoteUIProvider>
     )
 }
@@ -72,13 +77,19 @@ import { Box } from '@mui/material'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 
+import { spacing } from '@/lib/theme'
+
 export function DashboardLayout() {
     return (
         <Box sx={{ display: 'flex', height: '100vh' }}>
             <Sidebar />
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <Header />
-                <Box sx={{ flex: 1, overflow: 'auto', padding: '24px' }}>
+                <Box sx={{ 
+                    flex: 1, 
+                    overflow: 'auto', 
+                    padding: spacing[6] // 24px
+                }}>
                     <Outlet /> {/* Child routes render here */}
                 </Box>
             </Box>
@@ -233,7 +244,157 @@ function NoteGrid() {
 
 ---
 
-## 🎨 Component Patterns
+## 🎨 Design System Integration
+
+### Using Design Tokens in Components
+
+Components should always use design system tokens instead of hardcoded values:
+
+```typescript
+// ❌ BAD: Hardcoded values
+import { Card, Typography, Box } from '@mui/material'
+
+function ProductCard({ product }: { product: Product }) {
+    return (
+        <Card sx={{
+            padding: '24px',
+            margin: '16px',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            backgroundColor: '#ffffff',
+        }}>
+            <Typography sx={{ fontSize: '20px', color: '#1a1a1a' }}>
+                {product.name}
+            </Typography>
+        </Card>
+    )
+}
+
+// ✅ GOOD: Using design tokens
+import { Card, Typography, Box } from '@mui/material'
+import { spacing, borderRadius, shadows, colors } from '@/lib/theme'
+
+function ProductCard({ product }: { product: Product }) {
+    return (
+        <Card sx={{
+            padding: spacing[6],           // 24px
+            margin: spacing[4],            // 16px  
+            borderRadius: borderRadius.lg, // 12px
+            boxShadow: shadows.sm,
+            backgroundColor: 'background.paper', // Uses theme colors
+        }}>
+            <Typography 
+                variant="h5" 
+                sx={{ color: 'text.primary' }} // Semantic color
+            >
+                {product.name}
+            </Typography>
+        </Card>
+    )
+}
+```
+
+### Responsive Design with Breakpoints
+
+```typescript
+import { Box } from '@mui/material'
+import { spacing, breakpoints } from '@/lib/theme'
+
+function ResponsiveGrid({ children }: { children: React.ReactNode }) {
+    return (
+        <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+                xs: '1fr',                    // Mobile: 1 column
+                sm: 'repeat(2, 1fr)',        // Tablet: 2 columns  
+                lg: 'repeat(3, 1fr)',        // Desktop: 3 columns
+            },
+            gap: {
+                xs: spacing[4],               // Mobile: 16px gap
+                md: spacing[6],               // Desktop: 24px gap
+            },
+            padding: {
+                xs: spacing[4],               // Mobile: 16px padding
+                md: spacing[8],               // Desktop: 32px padding
+            },
+        }}>
+            {children}
+        </Box>
+    )
+}
+```
+
+### Consistent Animation and Transitions
+
+```typescript
+import { Button } from '@mui/material'
+import { transitions, shadows } from '@/lib/theme'
+
+function AnimatedButton({ children, ...props }: ButtonProps) {
+    return (
+        <Button
+            sx={{
+                transition: transitions.common.standard,  // 300ms ease
+                '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: shadows.lg,
+                },
+                '&:active': {
+                    transform: 'translateY(0)',
+                    transition: transitions.common.short,  // 200ms for faster feedback
+                },
+            }}
+            {...props}
+        >
+            {children}
+        </Button>
+    )
+}
+```
+
+### Color Usage Guidelines
+
+```typescript
+import { Alert, Chip } from '@mui/material'
+import { colors } from '@/lib/theme'
+
+// ✅ GOOD: Use semantic colors from theme
+function StatusChip({ status }: { status: 'success' | 'warning' | 'error' }) {
+    return (
+        <Chip 
+            label={status}
+            color={status} // Uses theme colors automatically
+        />
+    )
+}
+
+// ✅ GOOD: Use design system colors when needed
+function CustomIndicator({ type }: { type: 'online' | 'offline' }) {
+    return (
+        <Box sx={{
+            width: '12px',
+            height: '12px', 
+            borderRadius: '50%',
+            backgroundColor: type === 'online' ? colors.success[500] : colors.neutral[400],
+        }} />
+    )
+}
+
+// ✅ GOOD: Use semantic text colors
+function MessageText({ message }: { message: string }) {
+    return (
+        <Typography sx={{ 
+            color: 'text.secondary', // Automatically adjusts for light/dark mode
+        }}>
+            {message}
+        </Typography>
+    )
+}
+```
+
+---
+
+## 🧩 Component Patterns
 
 ### Pattern 1: Simple Functional Component
 
@@ -842,9 +1003,11 @@ function NoteCard() {
     return <Button style={buttonStyle}>Click</Button>
 }
 
-// ✅ BETTER: Use sx prop (if using MUI)
+// ✅ BETTER: Use sx prop with design tokens
+import { spacing } from '@/lib/theme'
+
 function NoteCard() {
-    return <Button sx={{ padding: '16px', margin: '8px' }}>Click</Button>
+    return <Button sx={{ padding: spacing[4], margin: spacing[2] }}>Click</Button>
 }
 ```
 

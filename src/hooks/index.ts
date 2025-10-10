@@ -1,15 +1,18 @@
 /**
  * Hooks Index
- * Exports new pattern: Helper hooks (business logic) work with Store pattern (state management)
+ * 
+ * ✅ MODERN ARCHITECTURE:
+ * - For server state: Use React Query hooks from '@/features/[feature]/hooks'
+ * - For UI state: Use Context providers from '@/features/[feature]/store'
+ * 
+ * Example:
+ * import { useNotes, useCreateNote } from '@/features/notes'
  */
 
-// New Helper Hooks - Provide functions only, use Store for state
+// Auth helpers (still needed for authentication flow)
 export * from './useAuthHelpers';
-export * from './useDialogHelpers';
-export * from './useApiHelpers';
-export * from './useNoteHelpers';
 
-// Old hooks renamed to *.old.ts for reference
+// Reference implementations (kept for historical purposes)
 // export * from './useAuth.old';
 // export * from './useDialog.old';
 // export * from './useApi.old';

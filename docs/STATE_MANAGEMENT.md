@@ -380,6 +380,10 @@ export function useAuth() {
 
 ## 🎨 Feature Context (Feature UI State)
 
+### Centralized Provider Pattern
+
+**🎯 IMPORTANT**: All Context providers (including feature contexts) should be centralized in `Main.tsx` to enable cross-feature data sharing and maintain a single source of truth.
+
 ### Pattern for Feature-Specific UI State
 
 ```typescript
@@ -461,15 +465,51 @@ export function useNoteUI() {
 }
 ```
 
-### Usage in Page
+### Centralized Provider Setup
+
+All providers must be centralized in `Main.tsx`:
 
 ```typescript
-// pages/NotesPage.tsx
-import { NoteUIProvider } from '@/features/notes'
+// Main.tsx - Centralized Provider Setup
+function Main() {
+    return (
+        <BrowserRouter>
+            <SnackbarProvider autoHideDuration={3000}>
+                <AuthProvider>
+                    <NoteUIProvider>
+                        <DialogProvider>
+                            <MainNav />
+                        </DialogProvider>
+                    </NoteUIProvider>
+                </AuthProvider>
+            </SnackbarProvider>
+        </BrowserRouter>
+    );
+}
+```
 
-export function NotesPageContent() {
-    const { filters, page, pageSize } = useNoteUI()
-    const { data: notes, isLoading } = useNotes({ ...filters, page, pageSize })
+**Benefits of Centralized Providers:**
+- **Cross-Feature Sharing**: Any component can access any context
+- **Single Source of Truth**: All app state in one place
+- **Easier Debugging**: Clear provider hierarchy
+- **Consistent Access**: No need to wrap individual pages
+
+### Page Implementation (No Provider Wrapping)
+
+```typescript
+// pages/NotesPage.tsx - Direct context usage
+export function NotesPage() {
+    return (
+        <ErrorBoundary>
+            <NotesPageContent />
+        </ErrorBoundary>
+    );
+}
+
+function NotesPageContent() {
+    // Direct access to centralized contexts
+    const { filters, page, pageSize } = useNoteUI();
+    const { data: notes, isLoading } = useNotes({ ...filters, page, pageSize });
     
     return (
         <div>
@@ -478,7 +518,7 @@ export function NotesPageContent() {
             <NotePagination />
             <NoteDialog />
         </div>
-    )
+    );
 }
 ```
 

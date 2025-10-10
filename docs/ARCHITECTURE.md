@@ -752,45 +752,66 @@ features/notes/
 
 ## 🎪 Provider Hierarchy
 
-### App Provider Structure
+### Centralized Provider Structure (Required Pattern)
+
+**🎯 RULE**: All Context providers MUST be centralized in `Main.tsx` for cross-feature data sharing.
 
 ```typescript
-// main.tsx or App.tsx
-import { QueryClientProvider } from '@tanstack/react-query'
-import { ThemeProvider } from '@mui/material'
-import { AuthProvider } from '@/shared/store/AuthContext'
-import { queryClient } from '@/lib/react-query'
-import { theme } from '@/lib/theme'
+// Main.tsx - Centralized Provider Setup
+import { BrowserRouter } from 'react-router-dom'
+import { SnackbarProvider } from 'notistack'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { NoteUIProvider } from '@/features/notes'
+import { DialogProvider } from '@/store'
 
-function App() {
+function Main() {
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={theme}>
+        <BrowserRouter>
+            <SnackbarProvider autoHideDuration={3000}>
                 <AuthProvider>
-                    {/* Feature providers wrap their feature pages */}
-                    <Routes />
+                    <NoteUIProvider>
+                        <DialogProvider>
+                            <MainNav />
+                        </DialogProvider>
+                    </NoteUIProvider>
                 </AuthProvider>
-            </ThemeProvider>
-        </QueryClientProvider>
+            </SnackbarProvider>
+        </BrowserRouter>
     )
 }
 ```
 
-### Feature Provider Usage
+### Page Implementation (No Provider Wrapping)
 
 ```typescript
-// pages/NotesPage.tsx
-import { NoteUIProvider } from '@/features/notes'
-
+// pages/NotesPage.tsx - Direct context usage
 export function NotesPage() {
     return (
-        <NoteUIProvider>
-            <NoteGrid />
+        <ErrorBoundary>
+            <NotesPageContent />
+        </ErrorBoundary>
+    )
+}
+
+function NotesPageContent() {
+    // Direct access to centralized contexts
+    const { filters, selectedNote } = useNoteUI()
+    const { data: notes } = useNotes()
+    
+    return (
+        <div>
+            <NoteGrid notes={notes} />
             <NoteDialog />
-        </NoteUIProvider>
+        </div>
     )
 }
 ```
+
+**Benefits:**
+- Cross-feature data sharing
+- Single source of truth
+- Easier debugging
+- No provider conflicts
 
 ---
 
