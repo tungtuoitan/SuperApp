@@ -4,10 +4,10 @@
  * and token exchange. Uses AuthStore for state management.
  */
 
-import { authApi } from '../services/api';
-import { useAuthStoreContext } from '../store/auth/AuthStore';
-import { storageService, STORAGE_KEYS } from '../services/storage.service';
-import type { LoginRequest, ExchangeTokenResponse } from '../types';
+import { authApi } from '@/services/api';
+import { useAuthStoreContext } from '@/store/auth/AuthStore';
+import { storageService, STORAGE_KEYS } from '@/services/storage.service';
+import type { LoginRequest, ExchangeTokenResponse } from '@/types/index';
 
 interface UseAuthHelpersReturn {
     login: (username: string, password: string) => Promise<void>;

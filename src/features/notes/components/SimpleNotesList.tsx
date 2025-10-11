@@ -6,7 +6,7 @@
 import React from 'react';
 import { Box, Card, Typography, CircularProgress, Alert } from '@mui/material';
 import { useNotes } from '../hooks/useNotes';
-import { Button } from '../../../shared/components/ui/Button';
+import { Button } from '@/shared/components/ui/Button';
 import type { Note } from '../types/note.types';
 
 export function SimpleNotesList() {

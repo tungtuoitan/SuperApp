@@ -8,9 +8,9 @@ import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { Box, Chip, Typography, Alert } from '@mui/material';
 import { useNotes } from '../hooks/useNotes';
 import { useNoteUI } from '../store/NoteUIContext';
-import { Spinner } from '../../../shared/components/ui/Spinner';
-import type { Note } from '../../../types';
-import { dataGridStyles } from '../../../config/theme';
+import { Spinner } from '@/shared/components/ui/Spinner';
+import type { Note } from '@/features/notes/types/note.types';
+import { dataGridStyles } from '@/config/theme';
 
 /**
  * NoteGrid component following new architecture

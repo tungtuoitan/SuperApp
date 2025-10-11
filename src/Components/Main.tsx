@@ -2,10 +2,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { Box } from '@mui/material';
 
-import { AuthProvider } from '../contexts/AuthContext';
-import { NoteUIProvider } from '../features/notes';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { NoteUIProvider } from '@/features/notes';
 import MainNav from './MainNav/MainNav';
-import {DialogProvider} from 'store';
+import {DialogProvider} from '@/store/index';
 
 /**
  * Main application layout component.

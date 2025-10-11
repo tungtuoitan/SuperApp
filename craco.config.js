@@ -1,7 +1,23 @@
-import path from 'path';
+const path = require('path');
 
-export default {
+module.exports = {
   webpack: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      '@/config': path.resolve(__dirname, 'src/config'),
+      '@/services': path.resolve(__dirname, 'src/services'),
+      '@/hooks': path.resolve(__dirname, 'src/hooks'),
+      '@/contexts': path.resolve(__dirname, 'src/contexts'),
+      '@/types': path.resolve(__dirname, 'src/types'),
+      '@/utils': path.resolve(__dirname, 'src/utils'),
+      '@/components': path.resolve(__dirname, 'src/Components'),
+      '@/shared': path.resolve(__dirname, 'src/shared'),
+      '@/lib': path.resolve(__dirname, 'src/lib'),
+      '@/features': path.resolve(__dirname, 'src/features'),
+      '@/pages': path.resolve(__dirname, 'src/pages'),
+      '@/store': path.resolve(__dirname, 'src/store'),
+      '@/styles': path.resolve(__dirname, 'src/styles'),
+    },
     configure: (webpackConfig, { env, paths }) => {
       // Fix source-map-loader issues with MUI
       if (env === 'development') {

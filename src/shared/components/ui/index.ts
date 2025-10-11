@@ -5,7 +5,7 @@
 
 export { Button } from './Button';
 export { Spinner } from './Spinner';
-export { TagAutoComplete, type TagAutoCompleteProps } from './TagAutoComplete';
+export { GenericTagAutoComplete, type GenericTagAutoCompleteProps } from './TagAutoComplete';
 
 // Migrated from Components/common
 export { 
@@ -15,6 +15,11 @@ export {
     StyledTextfield,
     isEmpty
 } from './GenericAutoComplete';
+
+export { 
+    GenericTextField, 
+    type GenericTextFieldProps 
+} from './GenericTextField';
 
 export { 
     DialogContainer, 

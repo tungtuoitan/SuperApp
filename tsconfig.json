@@ -28,6 +28,11 @@
             "@/types/*": ["types/*"],
             "@/utils/*": ["utils/*"],
             "@/components/*": ["Components/*"],
+            "@/shared/*": ["shared/*"],
+            "@/lib/*": ["lib/*"],
+            "@/features/*": ["features/*"],
+            "@/pages/*": ["pages/*"],
+            "@/store/*": ["store/*"],
             "@/styles/*": ["styles/*"]
         }
     },

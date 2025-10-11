@@ -1,5 +1,5 @@
 import { SxProps, Theme, styled } from "@mui/material";
-import { ToolbarContainer } from '../../../../shared/components/containers/ToolbarContainer';
+import { ToolbarContainer } from '@/shared/components/containers/ToolbarContainer';
 import { CSSProperties } from "@mui/styles";
 import { LegacyRef } from "react";
 

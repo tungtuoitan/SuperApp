@@ -137,7 +137,7 @@ src/
 │
 ├── shared/                # Shared across features
 │   ├── components/        # Reusable UI components
-│   │   ├── ui/            # Pure UI components (Button, Input, TagAutoComplete, etc.)
+│   │   ├── ui/            # Pure UI components (Button, Input, GenericTagAutoComplete, etc.)
 │   │   ├── feedback/      # Error boundaries, alerts, notifications
 │   │   ├── containers/    # Layout containers and wrappers
 │   │   └── styles/        # Shared styled components
@@ -501,7 +501,7 @@ import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Box, Button } from '@mui/material'
 
-// 3. Internal - absolute imports
+// 3. Internal - absolute imports (ALWAYS use @ aliases)
 import { noteService } from '@/features/notes/services/noteService'
 import { useAuth } from '@/shared/store/AuthContext'
 import type { Note } from '@/features/notes/types/note.types'
@@ -509,6 +509,29 @@ import type { Note } from '@/features/notes/types/note.types'
 // 4. Relative imports
 import { NoteCard } from './NoteCard'
 import type { NoteCardProps } from './NoteCard.types'
+```
+
+### Import Path Rules
+
+**🎯 MANDATORY: Always use @ aliases for internal imports**
+
+```typescript
+// ❌ Never use relative paths for shared/features
+import { Button } from '../../../shared/components/ui/Button'
+import { useAuth } from '../../../shared/store/AuthContext'
+import { noteService } from '../../services/noteService'
+
+// ✅ Always use @ aliases for clean, maintainable imports
+import { Button } from '@/shared/components/ui/Button'
+import { useAuth } from '@/shared/store/AuthContext'
+import { noteService } from '@/features/notes/services/noteService'
+```
+
+**Exception**: Only use relative imports for files in the same directory:
+```typescript
+// ✅ Same directory relative imports are OK
+import { NoteCard } from './NoteCard'
+import { validateNote } from './NoteCard.utils'
 ```
 
 ---
@@ -650,6 +673,20 @@ const { open: dialogOpen, data: noteData } = useDialog()
 
 // ✅ Clear naming
 const { isOpen, selectedNote } = useNoteDialog()
+```
+
+### 4. **Don't Use Relative Paths for Shared/Features**
+
+```typescript
+// ❌ Hard to maintain relative paths
+import { Button } from '../../../shared/components/ui/Button'
+import { ErrorAlert } from '../../shared/components/feedback/ErrorAlert'
+import { noteService } from '../services/noteService'
+
+// ✅ Always use @ aliases for internal imports
+import { Button } from '@/shared/components/ui/Button'
+import { ErrorAlert } from '@/shared/components/feedback/ErrorAlert'
+import { noteService } from '@/features/notes/services/noteService'
 ```
 
 See [ANTI_PATTERNS.md](../docs/ANTI_PATTERNS.md) for complete list.

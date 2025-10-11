@@ -4,7 +4,7 @@
  */
 
 import { apiClient } from './apiClient';
-import { API_ENDPOINTS } from '../../config/api.config';
+import { API_ENDPOINTS } from '@/config/api.config';
 import type { 
     Note, 
     GetNotesParams, 
@@ -12,7 +12,7 @@ import type {
     UpdateNoteRequest, 
     NoteResponse,
     NoteCreateUpdateResponse 
-} from '../../types';
+} from '@/types/index';
 
 /**
  * Transform API response to domain model

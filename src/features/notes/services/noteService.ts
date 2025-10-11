@@ -3,7 +3,7 @@
  * Handles all note-related business logic and API communication
  */
 
-import { apiClient } from '../../../lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import type { 
     Note, 
     NoteDTO,

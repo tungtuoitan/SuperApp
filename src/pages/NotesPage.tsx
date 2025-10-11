@@ -4,15 +4,15 @@
  */
 
 import { Box } from '@mui/material';
-import { ErrorBoundary } from '../shared/components/feedback/ErrorBoundary';
-import { GridContainer } from '../shared/components/ui/GridContainer';
-import { ToolbarContainer } from '../shared/components/containers/ToolbarContainer';
-import { NoteGrid } from '../features/notes';
-import { NoteDetailDialog } from '../features/notes/components/dialogs/NoteDetailDialog';
-import { NoteCreate } from '../features/notes/components/toolbars/items/NoteCreate';
-import { NoteSearch } from '../features/notes/components/toolbars/items/NoteSearch';
-import { NoteFilter } from '../features/notes/components/toolbars/items/NoteFilter';
-import { Grow } from '../shared/components/styles/commonStyles';
+import { ErrorBoundary } from '@/shared/components/feedback/ErrorBoundary';
+import { GridContainer } from '@/shared/components/ui/GridContainer';
+import { ToolbarContainer } from '@/shared/components/containers/ToolbarContainer';
+import { NoteGrid } from '@/features/notes';
+import { NoteDetailDialog } from '@/features/notes/components/dialogs/NoteDetailDialog';
+import { NoteCreate } from '@/features/notes/components/toolbars/items/NoteCreate';
+import { NoteSearch } from '@/features/notes/components/toolbars/items/NoteSearch';
+import { NoteFilter } from '@/features/notes/components/toolbars/items/NoteFilter';
+import { Grow } from '@/shared/components/styles/commonStyles';
 
 /**
  * Notes page with proper error boundary

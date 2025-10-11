@@ -9,7 +9,7 @@ import { HTMLAttributes } from 'react';
 import { IAutoCompleteOptions } from './GenericAutoComplete';
 import { AutoCompleteOption } from './AutoCompleteOption';
 
-export interface TagAutoCompleteProps {
+export interface GenericTagAutoCompleteProps {
     /** Array of available tag options */
     options: IAutoCompleteOptions[];
     /** Currently selected tags as comma-separated string */
@@ -35,7 +35,7 @@ export interface TagAutoCompleteProps {
  * 
  * @example
  * ```tsx
- * <TagAutoComplete
+ * <GenericTagAutoComplete
  *   options={tagsOptions}
  *   value={currentTags}
  *   onChange={(newTags) => setTags(newTags)}
@@ -45,7 +45,7 @@ export interface TagAutoCompleteProps {
  * />
  * ```
  */
-export function TagAutoComplete({
+export function GenericTagAutoComplete({
     options,
     value,
     onChange,
@@ -55,7 +55,7 @@ export function TagAutoComplete({
     sx = { marginTop: '15px' },
     size = 'small',
     'data-testid': testId,
-}: TagAutoCompleteProps) {
+}: GenericTagAutoCompleteProps) {
     
     // Convert comma-separated string to array of selected options
     const selectedOptions = value 
@@ -118,4 +118,4 @@ export function TagAutoComplete({
     );
 }
 
-export default TagAutoComplete;
+export default GenericTagAutoComplete;

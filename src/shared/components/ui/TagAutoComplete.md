@@ -1,4 +1,4 @@
-# TagAutoComplete Component
+# GenericTagAutoComplete Component
 
 A reusable multi-select autocomplete component for tags that handles comma-separated string values and automatically filters out already selected options.
 
@@ -18,7 +18,7 @@ A reusable multi-select autocomplete component for tags that handles comma-separ
 ### Basic Usage
 
 ```tsx
-import { TagAutoComplete } from '@/shared/components/ui';
+import { GenericTagAutoComplete } from '@/shared/components/ui';
 
 function MyComponent() {
     const [selectedTags, setSelectedTags] = useState<string>('');
@@ -30,7 +30,7 @@ function MyComponent() {
     ];
 
     return (
-        <TagAutoComplete
+        <GenericTagAutoComplete
             options={tagOptions}
             value={selectedTags}
             onChange={setSelectedTags}
@@ -44,7 +44,7 @@ function MyComponent() {
 ### With Form Integration
 
 ```tsx
-import { TagAutoComplete } from '@/shared/components/ui';
+import { GenericTagAutoComplete } from '@/shared/components/ui';
 import { useFormik } from 'formik';
 
 function FormExample() {
@@ -60,7 +60,7 @@ function FormExample() {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={tagOptions}
                 value={formik.values.tags}
                 onChange={(newTags) => formik.setFieldValue('tags', newTags)}
@@ -83,7 +83,7 @@ function StyleForm() {
     const { tagsOptions } = useStyleMilestoneStore();
 
     return (
-        <TagAutoComplete
+        <GenericTagAutoComplete
             options={tagsOptions}
             value={styleDetailInput.tags}
             onChange={(newTags) => setStyleDetailInput({ isDirty: true, tags: newTags })}
@@ -149,7 +149,7 @@ The component automatically:
 The component uses Material-UI's default styling with minimal customization:
 
 ```tsx
-<TagAutoComplete
+<GenericTagAutoComplete
     options={options}
     onChange={onChange}
     sx={{ marginTop: '15px' }} // Default
@@ -160,7 +160,7 @@ The component uses Material-UI's default styling with minimal customization:
 You can override styles using the `sx` prop:
 
 ```tsx
-<TagAutoComplete
+<GenericTagAutoComplete
     options={options}
     onChange={onChange}
     sx={{
@@ -182,7 +182,7 @@ You can override styles using the `sx` prop:
 ```typescript
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TagAutoComplete } from './TagAutoComplete';
+import { GenericTagAutoComplete } from './TagAutoComplete';
 
 test('selects and deselects tags', async () => {
     const mockOnChange = jest.fn();
@@ -192,7 +192,7 @@ test('selects and deselects tags', async () => {
     ];
 
     render(
-        <TagAutoComplete
+        <GenericTagAutoComplete
             options={options}
             onChange={mockOnChange}
             data-testid="tag-autocomplete"
@@ -216,7 +216,7 @@ test('integrates with form state', () => {
     const mockSetTags = jest.fn();
     
     render(
-        <TagAutoComplete
+        <GenericTagAutoComplete
             options={tagOptions}
             value="1,2"
             onChange={mockSetTags}
@@ -258,7 +258,7 @@ const tagsArray = tags ? tags.split(',') : [];
 const tagsString = tagsArray.join(',');
 
 // Using with the component
-<TagAutoComplete
+<GenericTagAutoComplete
     options={options}
     value={tagsArray.join(',')}
     onChange={(newTags) => {
@@ -285,7 +285,7 @@ function TagsWithLoading() {
     if (isLoading) return <Skeleton variant="rectangular" height={56} />;
     
     return (
-        <TagAutoComplete
+        <GenericTagAutoComplete
             options={options || []}
             value={selectedTags}
             onChange={setSelectedTags}
@@ -322,7 +322,7 @@ If you're migrating from the original inline Autocomplete:
 
 ### After
 ```typescript
-<TagAutoComplete
+<GenericTagAutoComplete
     options={tagsOptions}
     value={styleDetailInput.tags}
     onChange={(newTags) => setStyleDetailInput({ isDirty: true, tags: newTags })}
@@ -351,11 +351,11 @@ If you're migrating from the original inline Autocomplete:
 
 ```typescript
 // Add debug logging
-<TagAutoComplete
+<GenericTagAutoComplete
     options={options}
     value={value}
     onChange={(newValue) => {
-        console.log('TagAutoComplete onChange:', newValue);
+        console.log('GenericTagAutoComplete onChange:', newValue);
         onChange(newValue);
     }}
 />

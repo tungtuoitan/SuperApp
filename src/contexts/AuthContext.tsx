@@ -6,7 +6,7 @@
 
 import React, { createContext, useContext } from 'react';
 import type { PropsWithChildren } from 'react';
-import { AuthProvider as AuthStoreProvider, useAuthStoreContext } from '../store/auth/AuthStore';
+import { AuthProvider as AuthStoreProvider, useAuthStoreContext } from '@/store/auth/AuthStore';
 
 /**
  * Authentication context interface defining basic auth state access

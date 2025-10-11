@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { 
     Autocomplete, 
     AutocompleteClasses, 
@@ -69,8 +69,8 @@ export interface GenericAutoCompleteProps {
     multiple?: boolean;
     /** Whether the component should be hidden */
     hidden?: boolean;
-    /** Size variant for the component */
-    size?: 'small' | 'medium';
+    /** Size variant for the component (default: 'small') */
+    size?: 'tiny' | 'small';
     /** CSS classes for styling customization */
     classes?: Partial<AutocompleteClasses>;
     /** Currently selected value */
@@ -126,34 +126,29 @@ export interface GenericAutoCompleteProps {
  * @returns Configured autocomplete component
  */
 export function GenericAutoComplete(props: GenericAutoCompleteProps) {
-    const { id, allOptions, size, classes, onChange, inputProps, value, sx, style, disabled, renderOptionProps, disableClearable, hidden, getOptionDisabled } = props;
+    const { id, allOptions, size = 'small', classes, onChange, inputProps, value, sx, style, disabled, renderOptionProps, disableClearable, hidden, getOptionDisabled } = props;
     const [selectedValue, setSelectedValue] = useState<IAutoCompleteOptions>({} as IAutoCompleteOptions);
 
     useEffect(() => {
         if (!isEmpty(value) && !isEmpty(allOptions)) {
             var _filteredOption = allOptions.filter(x => x.id === value?.id);
-            if (value?.id == 0) {
+            if (value?.id === 0) {
                 setSelectedValue({} as IAutoCompleteOptions);
             }
             if (_filteredOption.length > 0) {
                 setSelectedValue(_filteredOption[0]);
             }
         }
-    }, [value]);
-    return (
-        <Autocomplete
-            id={id}
-            disabled={disabled}
-            options={allOptions}
-            disableClearable={disableClearable}
-            size={size}
-            fullWidth={true}
-            classes={classes}
-            value={selectedValue}
-            hidden={hidden}
-            style={style}
-            sx={{
-                ...sx,
+    }, [value, allOptions]);
+    // Define styles based on size prop
+    const getStyles = () => {
+        const baseStyles = {
+            ...sx,
+        };
+
+        if (size === 'tiny') {
+            return {
+                ...baseStyles,
                 '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
                     paddingTop: '3px!important',
                     paddingBottom: '4px!important',
@@ -167,7 +162,52 @@ export function GenericAutoComplete(props: GenericAutoCompleteProps) {
                 '& .MuiInputLabel-outlined': {
                     marginTop: '-2px'
                 },
-            }}
+                '& .MuiInputBase-input, .MuiFormLabel-root': {
+                    fontSize: '12px!important',
+                },
+                '& .MuiAutocomplete-option': {
+                    fontSize: '12px!important',
+                },
+            };
+        } else {
+            // Small size - keep current styling
+            return {
+                ...baseStyles,
+                '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
+                    paddingTop: '3px!important',
+                    paddingBottom: '4px!important',
+                    '& .MuiAutocomplete-input ': {
+                        padding: '2.5px 4px 2.5px 6px!important'
+                    }
+                },
+                '& .MuiTextField-root': {
+                    margin: '0!important'
+                },
+                '& .MuiInputLabel-outlined': {
+                    marginTop: '-2px'
+                },
+            };
+        }
+    };
+
+    // Map our custom size to MUI's accepted size values
+    const getMuiSize = (): 'small' | 'medium' => {
+        return size === 'tiny' ? 'small' : 'medium';
+    };
+
+    return (
+        <Autocomplete
+            id={id}
+            disabled={disabled}
+            options={allOptions}
+            disableClearable={disableClearable}
+            size={getMuiSize()}
+            fullWidth={true}
+            classes={classes}
+            value={selectedValue}
+            hidden={hidden}
+            style={style}
+            sx={getStyles()}
             getOptionDisabled={getOptionDisabled}
             getOptionLabel={(option) => option?.label || option?.desc || " "}
             isOptionEqualToValue={(option, value) => option?.id === value?.id}
@@ -184,7 +224,18 @@ export function GenericAutoComplete(props: GenericAutoCompleteProps) {
                     (typeof (option.isActive) !== 'undefined' && option.isActive === false)) {
                     props['aria-disabled'] = true;
                 }
-                return <Box component="li" {...props} {...renderOptionProps} >
+                
+                // Apply font size based on size prop for options
+                const optionStyles = size === 'tiny' ? { fontSize: '12px' } : {};
+                const mergedRenderOptionProps = {
+                    ...renderOptionProps,
+                    sx: {
+                        ...optionStyles,
+                        ...renderOptionProps?.sx,
+                    }
+                };
+                
+                return <Box component="li" {...props} {...mergedRenderOptionProps} >
                     <span style={{ marginRight: '20px' }}>{option?.label || option?.desc}</span>{option.longDesc}
                 </Box>
             }}

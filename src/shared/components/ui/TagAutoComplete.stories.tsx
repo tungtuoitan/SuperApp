@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { TagAutoComplete } from './TagAutoComplete';
-import { IAutoCompleteOptions } from './GenericAutoComplete';
+import type { Meta, StoryObj } from '@storybook/react-webpack5'
+import { GenericTagAutoComplete } from './TagAutoComplete'
+import { IAutoCompleteOptions } from './GenericAutoComplete'
 
 // Sample data for stories
 const sampleTags: IAutoCompleteOptions[] = [
@@ -14,9 +14,9 @@ const sampleTags: IAutoCompleteOptions[] = [
     { id: '8', label: 'Security', isActive: true },
 ];
 
-const meta: Meta<typeof TagAutoComplete> = {
-    title: 'Shared/UI/TagAutoComplete',
-    component: TagAutoComplete,
+const meta: Meta<typeof GenericTagAutoComplete> = {
+    title: 'Shared/UI/GenericTagAutoComplete',
+    component: GenericTagAutoComplete,
     parameters: {
         layout: 'padded',
         docs: {
@@ -59,7 +59,7 @@ const meta: Meta<typeof TagAutoComplete> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof TagAutoComplete>;
+type Story = StoryObj<typeof GenericTagAutoComplete>;
 
 // Default story
 export const Default: Story = {

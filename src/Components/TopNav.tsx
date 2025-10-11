@@ -3,7 +3,7 @@ import { AppBar, Breadcrumbs, Toolbar, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSnackbar } from 'notistack';
 
-import { useAuthStore } from '../contexts/AuthContext';
+import { useAuthStore } from '@/contexts/AuthContext';
 import { classes } from './MainNav/AllIcon';
 
 /**

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { vi, describe, beforeEach, it, expect } from 'vitest';
-import { TagAutoComplete } from './TagAutoComplete';
+import { GenericTagAutoComplete } from './TagAutoComplete';
 import { IAutoCompleteOptions } from './GenericAutoComplete';
 
 const mockOptions: IAutoCompleteOptions[] = [
@@ -13,7 +13,7 @@ const mockOptions: IAutoCompleteOptions[] = [
     { id: '4', label: 'Tag 4', isActive: true },
 ];
 
-describe('TagAutoComplete', () => {
+describe('GenericTagAutoComplete', () => {
     const mockOnChange = vi.fn();
 
     beforeEach(() => {
@@ -22,7 +22,7 @@ describe('TagAutoComplete', () => {
 
     it('renders with default props', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 onChange={mockOnChange}
             />
@@ -33,7 +33,7 @@ describe('TagAutoComplete', () => {
 
     it('renders with custom label and placeholder', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 onChange={mockOnChange}
                 label="Custom Tags"
@@ -47,7 +47,7 @@ describe('TagAutoComplete', () => {
 
     it('shows selected tags based on value prop', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 value="1,2"
                 onChange={mockOnChange}
@@ -61,7 +61,7 @@ describe('TagAutoComplete', () => {
 
     it('excludes selected options from available options', async () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 value="1"
                 onChange={mockOnChange}
@@ -82,7 +82,7 @@ describe('TagAutoComplete', () => {
 
     it('calls onChange with comma-separated string when tags are selected', async () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 onChange={mockOnChange}
             />
@@ -99,7 +99,7 @@ describe('TagAutoComplete', () => {
 
     it('calls onChange with empty string when all tags are removed', async () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 value="1"
                 onChange={mockOnChange}
@@ -115,7 +115,7 @@ describe('TagAutoComplete', () => {
 
     it('is disabled when disabled prop is true', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 onChange={mockOnChange}
                 disabled={true}
@@ -128,7 +128,7 @@ describe('TagAutoComplete', () => {
 
     it('handles empty options array', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={[]}
                 onChange={mockOnChange}
             />
@@ -139,7 +139,7 @@ describe('TagAutoComplete', () => {
 
     it('handles null value prop', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 value={null}
                 onChange={mockOnChange}
@@ -153,7 +153,7 @@ describe('TagAutoComplete', () => {
         const customSx = { marginTop: '20px', backgroundColor: 'red' };
 
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 onChange={mockOnChange}
                 sx={customSx}
@@ -166,7 +166,7 @@ describe('TagAutoComplete', () => {
 
     it('supports test id prop', () => {
         render(
-            <TagAutoComplete
+            <GenericTagAutoComplete
                 options={mockOptions}
                 onChange={mockOnChange}
                 data-testid="tag-autocomplete"

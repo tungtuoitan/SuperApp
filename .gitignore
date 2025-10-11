@@ -34,3 +34,5 @@ package-lock.json
 react-context-devtool
 
 node_modules/
+*storybook.log
+storybook-static
