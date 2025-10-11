@@ -9,24 +9,6 @@ import { styled, Box, Typography, Grid2, TextField } from '@mui/material';
 import { useNoteUI } from '../../store/NoteUIContext';
 import { Note, NOTE_TYPES, NoteType } from '../../types/note.types';
 import {GenericAutoComplete, GenericTagAutoComplete, GenericTextField, IAutoCompleteOptions} from '@/shared/components';
-import { 
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    AppBar,
-    Toolbar,
-    Backdrop,
-    CircularProgress,
-    Button,
-    Chip,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import UnarchiveIcon from '@mui/icons-material/Unarchive';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { NoteContentToolbar } from './NoteContentToolbar';
 
 const NoteDetailWrapper = styled('div')({
     display: 'flex',
@@ -145,7 +127,7 @@ export function NoteDetailDialogContent() {
                             {/* ID */}
                             <GenericTextField
                                 label="ID"
-                                value={selectedNote?.noteId ? `#${selectedNote.noteId}` : 'New Note'}
+                                value={selectedNote?.noteId ? `${selectedNote.noteId}` : '0'}
                                 disabled
                                 sx={{ mb: '16px' }}
                                 size="small"
@@ -281,86 +263,8 @@ export function NoteDetailDialogContent() {
                     }}>
                         <Box sx={{ padding: '16px' }}>
                             <b className='title-container'>
-                                ACTIONS
+                                TAG TREE
                             </b>
-                            
-                            {/* Quick Actions */}
-                            <Box sx={{ mb: '24px' }}>
-                                <Button
-                                    fullWidth
-                                    variant="outlined"
-                                    startIcon={<ContentCopyIcon />}
-                                    sx={{ mb: '8px' }}
-                                    onClick={handleDuplicate}
-                                >
-                                    Duplicate Note
-                                </Button>
-                                
-                                <Button
-                                    fullWidth
-                                    variant="outlined"
-                                    startIcon={selectedNote?.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}
-                                    sx={{ mb: '8px' }}
-                                    onClick={handleArchive}
-                                >
-                                    {selectedNote?.isArchived ? 'Unarchive' : 'Archive'}
-                                </Button>
-                                
-                                <Button
-                                    fullWidth
-                                    variant="outlined"
-                                    color="error"
-                                    startIcon={<DeleteIcon />}
-                                    onClick={handleDelete}
-                                >
-                                    Delete Note
-                                </Button>
-                            </Box>
-
-                            {/* Status */}
-                            <Box sx={{ mb: '24px' }}>
-                                <Typography variant="subtitle2" sx={{ mb: '8px' }}>
-                                    Status
-                                </Typography>
-                                <Chip
-                                    label={selectedNote?.isArchived ? 'Archived' : 'Active'}
-                                    color={selectedNote?.isArchived ? 'default' : 'success'}
-                                    size="small"
-                                />
-                            </Box>
-
-                            {/* Metadata */}
-                            <Box>
-                                <Typography variant="subtitle2" sx={{ mb: '8px' }}>
-                                    Metadata
-                                </Typography>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            ID:
-                                        </Typography>
-                                        <Typography variant="body2">
-                                            {selectedNote?.noteId || 'N/A'}
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Type:
-                                        </Typography>
-                                        <Typography variant="body2">
-                                            {selectedNote?.type ? selectedNote.type.charAt(0).toUpperCase() + selectedNote.type.slice(1) : 'None'}
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Tags:
-                                        </Typography>
-                                        <Typography variant="body2">
-                                            {selectedNote?.tags?.length || 0}
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                            </Box>
                         </Box>
                     </div>
                 </Grid2>

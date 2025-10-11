@@ -23,6 +23,10 @@ class NoteService {
     private transformNote(dto: NoteDTO): Note {
         return {
             ...dto,
+            // Transform tags string to array if needed
+            tags: typeof dto.tags === 'string' 
+                ? (dto.tags as string).split(',').filter(tag => tag.trim() !== '') 
+                : dto.tags,
             createdAt: new Date(dto.createdAt),
             updatedAt: dto.updatedAt ? new Date(dto.updatedAt) : undefined,
         };
@@ -100,7 +104,13 @@ class NoteService {
      */
     async createNote(data: CreateNoteDTO): Promise<Note> {
         try {
-            const response = await apiClient.post<NoteResponse>(this.basePath, data);
+            // Transform tags array to comma-separated string for API
+            const apiData = {
+                ...data,
+                tags: data.tags ? data.tags.join(',') : undefined
+            };
+
+            const response = await apiClient.post<NoteResponse>(this.basePath, apiData);
             
             const noteDTO = response.data || response;
             
@@ -120,7 +130,13 @@ class NoteService {
      */
     async updateNote(id: number, data: UpdateNoteDTO): Promise<Note> {
         try {
-            const response = await apiClient.put<NoteResponse>(`${this.basePath}/${id}`, data);
+            // Transform tags array to comma-separated string for API
+            const apiData = {
+                ...data,
+                tags: data.tags ? data.tags.join(',') : undefined
+            };
+
+            const response = await apiClient.put<NoteResponse>(`${this.basePath}/${id}`, apiData);
             
             const noteDTO = response.data || response;
             
@@ -166,6 +182,20 @@ class NoteService {
      */
     async searchNotes(searchText: string): Promise<Note[]> {
         return this.getNotes({ searchText });
+    }
+
+    /**
+     * Delete multiple notes
+     */
+    async deleteNotes(ids: number[]): Promise<void> {
+        try {
+            await apiClient.delete(`${this.basePath}/bulk`, {
+                data: { noteIds: ids }
+            });
+        } catch (error) {
+            console.error('Failed to delete notes:', error);
+            throw error;
+        }
     }
 }
 

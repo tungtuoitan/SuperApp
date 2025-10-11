@@ -4,9 +4,10 @@
  */
 
 import React, { useMemo } from 'react';
-import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams, GridRowSelectionModel } from '@mui/x-data-grid';
 import { Box, Chip, Typography, Alert } from '@mui/material';
 import { useNotes } from '../hooks/useNotes';
+import { useNoteUI } from '../store/NoteUIContext';
 import { Spinner } from '@/shared/components/ui/Spinner';
 import type { Note } from '@/features/notes/types/note.types';
 import { dataGridStyles } from '@/config/theme';
@@ -25,6 +26,14 @@ interface NoteGridProps {
 export const NoteGrid = React.memo(function NoteGrid({ onNoteClick }: NoteGridProps) {
     // ✅ React Query for server state only
     const { data: notes, isLoading, error } = useNotes();
+
+    // ✅ Get row selection state from context
+    const { selectedRowIds, setSelectedRowIds } = useNoteUI();
+
+    // Handle row selection change
+    const handleRowSelectionChange = (newSelection: GridRowSelectionModel) => {
+        setSelectedRowIds(newSelection as number[]);
+    };
 
     // Helper functions matching old component
     const formatDate = (date: Date): string => {
@@ -216,6 +225,8 @@ export const NoteGrid = React.memo(function NoteGrid({ onNoteClick }: NoteGridPr
                     params.row.isArchived ? "row-archived" : ""
                 }
                 checkboxSelection
+                rowSelectionModel={selectedRowIds}
+                onRowSelectionModelChange={handleRowSelectionChange}
                 rowBufferPx={250}
                 columnBufferPx={150}
                 disableVirtualization={false}

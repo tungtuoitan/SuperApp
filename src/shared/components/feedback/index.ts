@@ -4,3 +4,4 @@
  */
 
 export { ErrorBoundary } from './ErrorBoundary';
+export { ConfirmationPopover } from './ConfirmationPopover';

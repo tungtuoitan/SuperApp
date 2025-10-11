@@ -90,6 +90,7 @@ export function NoteDetailDialog() {
                     }
                 }
             }}>
+                {/* Note Detail Dialog Header */}
                 <AppBar 
                     position="static" 
                     elevation={2}

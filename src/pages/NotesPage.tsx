@@ -12,6 +12,7 @@ import { NoteDetailDialog } from '@/features/notes/components/dialogs/NoteDetail
 import { NoteCreate } from '@/features/notes/components/toolbars/items/NoteCreate';
 import { NoteSearch } from '@/features/notes/components/toolbars/items/NoteSearch';
 import { NoteFilter } from '@/features/notes/components/toolbars/items/NoteFilter';
+import { NoteDeleteSelected } from '@/features/notes/components/toolbars/items/NoteDeleteSelected';
 import { Grow } from '@/shared/components/styles/commonStyles';
 import { useNoteUI } from '@/features/notes/store/NoteUIContext';
 import {useCallback} from 'react';
@@ -51,6 +52,7 @@ function NotesPageContent() {
                     <NoteCreate />
                     <Grow />
                     <NoteSearch />
+                    <NoteDeleteSelected />
                     <NoteFilter />
                 </ToolbarContainer>
             </Box>

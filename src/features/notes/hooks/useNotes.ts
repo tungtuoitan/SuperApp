@@ -49,8 +49,8 @@ export function useCreateNote() {
     return useMutation({
         mutationFn: (data: CreateNoteDTO) => noteService.createNote(data),
         onSuccess: () => {
-            // Invalidate and refetch notes list
-            queryClient.invalidateQueries({ queryKey: noteKeys.lists() });
+            // Invalidate all note queries to refetch
+            queryClient.invalidateQueries({ queryKey: noteKeys.all });
         },
     });
 }
@@ -68,8 +68,8 @@ export function useUpdateNote() {
             // Update the specific note in cache
             queryClient.setQueryData(noteKeys.detail(id), updatedNote);
             
-            // Invalidate lists to refetch
-            queryClient.invalidateQueries({ queryKey: noteKeys.lists() });
+            // Invalidate all note lists to refetch (including the main grid)
+            queryClient.invalidateQueries({ queryKey: noteKeys.all });
         },
     });
 }
@@ -86,8 +86,8 @@ export function useDeleteNote() {
             // Remove note from cache
             queryClient.removeQueries({ queryKey: noteKeys.detail(id) });
             
-            // Invalidate lists to refetch
-            queryClient.invalidateQueries({ queryKey: noteKeys.lists() });
+            // Invalidate all note queries to refetch
+            queryClient.invalidateQueries({ queryKey: noteKeys.all });
         },
     });
 }
@@ -104,8 +104,8 @@ export function useArchiveNote() {
             // Update the specific note in cache
             queryClient.setQueryData(noteKeys.detail(id), updatedNote);
             
-            // Invalidate lists to refetch
-            queryClient.invalidateQueries({ queryKey: noteKeys.lists() });
+            // Invalidate all note queries to refetch
+            queryClient.invalidateQueries({ queryKey: noteKeys.all });
         },
     });
 }
@@ -122,8 +122,8 @@ export function useUnarchiveNote() {
             // Update the specific note in cache
             queryClient.setQueryData(noteKeys.detail(id), updatedNote);
             
-            // Invalidate lists to refetch
-            queryClient.invalidateQueries({ queryKey: noteKeys.lists() });
+            // Invalidate all note queries to refetch
+            queryClient.invalidateQueries({ queryKey: noteKeys.all });
         },
     });
 }
@@ -137,5 +137,20 @@ export function useSearchNotes(searchText: string, enabled = true) {
         queryFn: () => noteService.searchNotes(searchText),
         enabled: enabled && !!searchText && searchText.length > 2,
         staleTime: 1 * 60 * 1000, // 1 minute for search results
+    });
+}
+
+/**
+ * Hook to delete multiple notes
+ */
+export function useDeleteNotes() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (ids: number[]) => noteService.deleteNotes(ids),
+        onSuccess: () => {
+            // Invalidate all note queries to refetch
+            queryClient.invalidateQueries({ queryKey: noteKeys.all });
+        },
     });
 }

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Read(//c/Users/Admin/source/Timeline/TLAPI/Controllers/**)"
+      "Read(//c/Users/Admin/source/Timeline/TLAPI/Controllers/**)",
+      "Read(//mnt/c/Users/Admin/source/SuperApp-backend/SuperAppAPI/Controllers/**)",
+      "Read(//mnt/c/Users/Admin/source/SuperApp-backend/**)"
     ],
     "deny": [],
     "ask": []

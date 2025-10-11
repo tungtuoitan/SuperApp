@@ -10,7 +10,9 @@ export const NoteFilter = () => {
         <Badge badgeContent={0} color="primary">
             <Tooltip title="Filter" aria-label="filter">
                 <IconButton
-                    onClick={(e) => {}}
+                    sx={{
+                            color: 'rgba(0, 0, 0, 0.54)',
+                        }}
                 >
                     <Badge badgeContent={0} color="primary">
                         <TuneOutlinedIcon />

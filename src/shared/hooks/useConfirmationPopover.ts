@@ -1,0 +1,154 @@
+/**
+ * useConfirmationPopover Hook
+ * Custom hook for managing confirmation popover state
+ * Following SuperApp architecture patterns
+ */
+
+import { useState } from 'react';
+
+export interface UseConfirmationPopoverOptions {
+    /** Text for the confirm button */
+    confirmText?: string;
+    /** Text for the cancel button */
+    cancelText?: string;
+    /** Color for the confirm button */
+    confirmColor?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+    /** Color for the cancel button */
+    cancelColor?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+    /** Variant for buttons */
+    buttonVariant?: 'text' | 'outlined' | 'contained';
+    /** Custom width for the popover */
+    width?: string;
+    /** Z-index for the popover */
+    zIndex?: number;
+}
+
+export interface ConfirmationPopoverState {
+    /** Whether the popover is open */
+    isOpen: boolean;
+    /** Element to anchor the popover to */
+    anchorEl: HTMLElement | null;
+    /** Message to display in the popover */
+    message: string;
+    /** Callback when confirmed */
+    onConfirm: (() => void) | null;
+}
+
+/**
+ * Hook for managing confirmation popover state
+ * 
+ * @param options - Configuration options for the popover
+ * @returns Object with state and control functions
+ * 
+ * @example
+ * ```tsx
+ * import { ConfirmationPopover } from '@/shared/components/feedback/ConfirmationPopover';
+ * 
+ * function MyComponent() {
+ *     const confirmation = useConfirmationPopover({
+ *         confirmText: 'Delete',
+ *         confirmColor: 'error',
+ *         buttonVariant: 'contained'
+ *     });
+ * 
+ *     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+ *         confirmation.show({
+ *             event,
+ *             message: 'Are you sure you want to delete this note?',
+ *             onConfirm: () => {
+ *                 deleteNote();
+ *             }
+ *         });
+ *     };
+ * 
+ *     return (
+ *         <>
+ *             <Button onClick={handleDeleteClick}>Delete</Button>
+ *             <ConfirmationPopover {...confirmation.getPopoverProps()} />
+ *         </>
+ *     );
+ * }
+ * ```
+ */
+export function useConfirmationPopover(options: UseConfirmationPopoverOptions = {}) {
+    const [state, setState] = useState<ConfirmationPopoverState>({
+        isOpen: false,
+        anchorEl: null,
+        message: '',
+        onConfirm: null,
+    });
+
+    const show = (params: {
+        event: React.MouseEvent<HTMLElement>;
+        message: string;
+        onConfirm: () => void;
+    }) => {
+        setState({
+            isOpen: true,
+            anchorEl: params.event.currentTarget,
+            message: params.message,
+            onConfirm: params.onConfirm,
+        });
+    };
+
+    const hide = () => {
+        setState(prev => ({
+            ...prev,
+            isOpen: false,
+        }));
+    };
+
+    const handleConfirm = () => {
+        if (state.onConfirm) {
+            state.onConfirm();
+        }
+        hide();
+    };
+
+    const handleCancel = () => {
+        hide();
+    };
+
+    // Clear anchor element after animation completes
+    const handleClose = () => {
+        setTimeout(() => {
+            setState(prev => ({
+                ...prev,
+                anchorEl: null,
+                message: '',
+                onConfirm: null,
+            }));
+        }, 200);
+    };
+
+    const getPopoverProps = () => {
+        return {
+            open: state.isOpen,
+            anchorEl: state.anchorEl,
+            message: state.message,
+            onConfirm: handleConfirm,
+            onCancel: handleCancel,
+            onClose: handleClose,
+            confirmText: options.confirmText,
+            cancelText: options.cancelText,
+            confirmColor: options.confirmColor,
+            cancelColor: options.cancelColor,
+            buttonVariant: options.buttonVariant,
+            width: options.width,
+            zIndex: options.zIndex || 10000, // Higher than Dialog z-index
+        };
+    };
+
+    return {
+        /** Current state of the confirmation popover */
+        state,
+        /** Show the confirmation popover */
+        show,
+        /** Hide the confirmation popover */
+        hide,
+        /** Get props for the confirmation popover component */
+        getPopoverProps,
+        /** Whether the popover is currently open */
+        isOpen: state.isOpen,
+    };
+}

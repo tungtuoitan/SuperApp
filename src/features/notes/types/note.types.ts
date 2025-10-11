@@ -34,7 +34,7 @@ export interface NoteDTO {
     noteId: number;
     name: string;
     description?: string;
-    tags?: string[];
+    tags?: string[] | string; // Can be array or comma-separated string
     type?: NoteType;
     createdBy?: string;
     createdAt: string; // ISO string
