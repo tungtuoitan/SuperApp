@@ -98,7 +98,25 @@ export function GenericTagAutoComplete({
                 multiple
                 disabled={disabled}
                 size={size}
-                sx={sx}
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '4px !important',
+                    },
+                    '& .MuiSvgIcon-root': {
+                        color: '#9e9e9e', // Default gray color for dropdown arrow
+                    },
+                    '& .MuiChip-root': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.08)', // Gray background for tag chips
+                        color: '#000000DE', // White text for contrast
+                        '& .MuiChip-deleteIcon': {
+                            color: 'rgba(0, 0, 0, 0.15)', // White delete icon
+                            '&:hover': {
+                                color: '#fff', // Slightly lighter on hover
+                            }
+                        }
+                    },
+                    ...sx
+                }}
                 options={availableOptions}
                 value={selectedOptions}
                 onChange={handleChange}

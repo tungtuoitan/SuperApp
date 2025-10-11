@@ -5,8 +5,28 @@
  */
 
 import React from 'react';
-import { Grid, styled, Box, Typography } from '@mui/material';
+import { styled, Box, Typography, Grid2, TextField } from '@mui/material';
 import { useNoteUI } from '../../store/NoteUIContext';
+import { Note, NOTE_TYPES, NoteType } from '../../types/note.types';
+import {GenericAutoComplete, GenericTagAutoComplete, GenericTextField, IAutoCompleteOptions} from '@/shared/components';
+import { 
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    AppBar,
+    Toolbar,
+    Backdrop,
+    CircularProgress,
+    Button,
+    Chip,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { NoteContentToolbar } from './NoteContentToolbar';
 
 const NoteDetailWrapper = styled('div')({
     display: 'flex',
@@ -22,6 +42,12 @@ const NoteDetailWrapper = styled('div')({
         [`& .MuiPaper-root.MuiPaper-elevation`]: {
             marginBottom: 0,
         }
+    },
+    [`& .title-container`]: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        height: '30px',
+        marginBottom: '16px',
     }
 });
 
@@ -33,62 +59,312 @@ const NoteDetailWrapper = styled('div')({
  * - Right: Actions/metadata
  */
 export function NoteDetailDialogContent() {
-    const { selectedNote } = useNoteUI();
-
-    if (!selectedNote) {
-        return null;
-    }
+    const { selectedNote, isDialogOpen, closeDialog, updateSelectedNote } = useNoteUI();
+        const [loading, setLoading] = React.useState(false);
+    
+        // Create options for type autocomplete
+        const typeOptions: IAutoCompleteOptions[] = NOTE_TYPES.map((type) => ({
+            id: type,
+            label: type.charAt(0).toUpperCase() + type.slice(1),
+            desc: type.charAt(0).toUpperCase() + type.slice(1),
+            active: true,
+        }));
+    
+        // Create current type value for autocomplete
+        const currentTypeValue = selectedNote?.type 
+            ? typeOptions.find(option => option.id === selectedNote.type) || null
+            : null;
+    
+        // Mock tag options (in real app, this would come from a service)
+        const tagOptions: IAutoCompleteOptions[] = [
+            { id: 'urgent', label: 'Urgent', desc: 'Urgent', active: true },
+            { id: 'important', label: 'Important', desc: 'Important', active: true },
+            { id: 'work', label: 'Work', desc: 'Work', active: true },
+            { id: 'personal', label: 'Personal', desc: 'Personal', active: true },
+            { id: 'project', label: 'Project', desc: 'Project', active: true },
+            { id: 'follow-up', label: 'Follow-up', desc: 'Follow-up', active: true },
+        ];
+    
+        // Convert tags array to comma-separated string for TagAutoComplete
+        const currentTagsValue = selectedNote?.tags?.join(',') || '';
+    
+        // Handlers for form interactions
+        const handleFieldChange = (field: keyof Note, value: any) => {
+            updateSelectedNote({ [field]: value });
+            console.log(`Field ${field} changed to:`, value);
+        };
+    
+        const handleTypeChange = (event: React.SyntheticEvent, newValue: IAutoCompleteOptions | null) => {
+            const typeValue = newValue?.id as NoteType;
+            handleFieldChange('type', typeValue);
+        };
+    
+        const handleTagsChange = (tagsString: string) => {
+            // Convert comma-separated string back to tags array
+            const tagsArray = tagsString ? tagsString.split(',') : [];
+            handleFieldChange('tags', tagsArray);
+        };
+    
+        const handleDuplicate = () => {
+            // TODO: Implement duplicate logic
+            console.log('Duplicating note');
+        };
+    
+        const handleArchive = () => {
+            // TODO: Implement archive logic
+            console.log('Toggling archive status');
+        };
+    
+        const handleDelete = () => {
+            // TODO: Implement delete logic
+            console.log('Deleting note');
+        };
+    
+        if (!selectedNote) {
+            return null;
+        }
+    
+        const isCreateMode = selectedNote.noteId === 0;
 
     return (
         <NoteDetailWrapper>
-            <Grid container spacing={1}>
+            <Grid2 container spacing={1}>
                 {/* Left Column - Form Fields */}
-                <Grid item xs={12} sm={12} md={6} lg={4}>
+                <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 4 }}>
                     <div style={{ 
                         height: 'calc(100vh - 160px)', 
                         background: '#fff', 
                         padding: '12px 24px 0 24px', 
-                        overflowY: 'auto' 
+                        overflowY: 'auto'
                     }}>
                         <Box sx={{ padding: '16px 0' }}>
-                            <Typography variant="h6" sx={{ mb: 2 }}>
-                                Note Details - Form will be here
-                            </Typography>
+                            <b className='title-container'>
+                                NOTE DETAILS
+                            </b>
+                            
+                            {/* ID */}
+                            <GenericTextField
+                                label="ID"
+                                value={selectedNote?.noteId ? `#${selectedNote.noteId}` : 'New Note'}
+                                disabled
+                                sx={{ mb: '16px' }}
+                                size="small"
+                            />
+
+                            {/* Note Name */}
+                            <GenericTextField
+                                label="Note Name"
+                                value={selectedNote?.name || ''}
+                                onChange={(e) => handleFieldChange('name', e.target.value)}
+                                sx={{ mb: '16px' }}
+                                size="small"
+                            />
+
+                            {/* Note Type */}
+                            <GenericAutoComplete
+                                value={currentTypeValue}
+                                onChange={handleTypeChange}
+                                allOptions={typeOptions}
+                                inputProps={{
+                                    name: 'type',
+                                    label: 'Type',
+                                    required: false,
+                                }}
+                                sx={{ mb: '16px' }}
+                            />
+
+                            {/* Status */}
+                            <GenericAutoComplete
+                                value={selectedNote?.isArchived ? { id: 'archived', label: 'Archived', desc: 'Archived', active: true } : { id: 'active', label: 'Active', desc: 'Active', active: true }}
+                                onChange={(event, newValue) => handleFieldChange('isArchived', newValue?.id === 'archived')}
+                                allOptions={[
+                                    { id: 'active', label: 'Active', desc: 'Active', active: true },
+                                    { id: 'archived', label: 'Archived', desc: 'Archived', active: true },
+                                ]}
+                                inputProps={{
+                                    name: 'status',
+                                    label: 'Status',
+                                    required: false,
+                                }}
+                                sx={{ mb: '16px' }}
+                            />
+
+                            {/* Tags */}
+                            <GenericTagAutoComplete
+                                options={tagOptions}
+                                value={currentTagsValue}
+                                onChange={handleTagsChange}
+                                label="Tags"
+                                placeholder="+ Add Tag"
+                                sx={{ mb: '16px' }}
+                                size="small"
+                                data-testid="note-tags"
+                            />
+
+                            {/* Created/Updated Info */}
+                            <Box sx={{ mt: '24px', pt: '16px' }}>
+                                <b className='title-container'>
+                                    INFORMATION
+                                </b>
+                                
+                                <GenericTextField
+                                    label="Created"
+                                    value={selectedNote?.createdAt ? selectedNote.createdAt.toLocaleDateString() : 'N/A'}
+                                    disabled
+                                    sx={{ mb: '16px' }}
+                                    size="small"
+                                />
+                                
+                                <GenericTextField
+                                    label="Updated"
+                                    value={selectedNote?.updatedAt ? selectedNote.updatedAt.toLocaleDateString() : 'N/A'}
+                                    disabled
+                                    sx={{ mb: '16px' }}
+                                    size="small"
+                                />
+                                
+                                <GenericTextField
+                                    label="Created by"
+                                    value={selectedNote?.createdBy || 'Unknown'}
+                                    disabled
+                                    size="small"
+                                />
+                            </Box>
                         </Box>
                     </div>
-                </Grid>
+                </Grid2>
 
                 {/* Center Column - Content */}
-                <Grid item xs={12} sm={12} md={6} lg={4}>
+                <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 4 }}>
                     <div style={{ 
                         height: 'calc(100vh - 160px)', 
                         background: '#fff', 
                         padding: '12px 24px 0 24px', 
-                        overflowY: 'auto' 
+                        overflowY: 'auto'
                     }}>
-                        <Box sx={{ padding: '16px 0' }}>
-                            <Typography variant="h6" sx={{ mb: 2 }}>
-                                Note Content - Editor will be here
-                            </Typography>
+                        <Box sx={{ padding: '16px 0', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <b className='title-container'>
+                                CONTENT
+                            </b>
+                            
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={25}
+                                label="Description"
+                                value={selectedNote?.description || ''}
+                                onChange={(e) => handleFieldChange('description', e.target.value)}
+                                variant="outlined"
+                                sx={{ 
+                                    flex: 1,
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: '4px !important',
+                                        height: '100%',
+                                        alignItems: 'flex-start'
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        height: '100% !important',
+                                        overflow: 'auto !important'
+                                    }
+                                }}
+                            />
                         </Box>
                     </div>
-                </Grid>
+                </Grid2>
 
                 {/* Right Column - Actions & Metadata */}
-                <Grid item xs={12} sm={12} md={6} lg={4}>
+                <Grid2 size={{ xs: 12, sm: 12, md: 6, lg: 4 }}>
                     <div style={{ 
                         height: 'calc(100vh - 170px)', 
                         background: '#fff', 
                         padding: '12px 0 0 0' 
                     }}>
                         <Box sx={{ padding: '16px' }}>
-                            <Typography variant="h6" sx={{ mb: 2 }}>
-                                Actions & Info - Panel will be here
-                            </Typography>
+                            <b className='title-container'>
+                                ACTIONS
+                            </b>
+                            
+                            {/* Quick Actions */}
+                            <Box sx={{ mb: '24px' }}>
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    startIcon={<ContentCopyIcon />}
+                                    sx={{ mb: '8px' }}
+                                    onClick={handleDuplicate}
+                                >
+                                    Duplicate Note
+                                </Button>
+                                
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    startIcon={selectedNote?.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}
+                                    sx={{ mb: '8px' }}
+                                    onClick={handleArchive}
+                                >
+                                    {selectedNote?.isArchived ? 'Unarchive' : 'Archive'}
+                                </Button>
+                                
+                                <Button
+                                    fullWidth
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={<DeleteIcon />}
+                                    onClick={handleDelete}
+                                >
+                                    Delete Note
+                                </Button>
+                            </Box>
+
+                            {/* Status */}
+                            <Box sx={{ mb: '24px' }}>
+                                <Typography variant="subtitle2" sx={{ mb: '8px' }}>
+                                    Status
+                                </Typography>
+                                <Chip
+                                    label={selectedNote?.isArchived ? 'Archived' : 'Active'}
+                                    color={selectedNote?.isArchived ? 'default' : 'success'}
+                                    size="small"
+                                />
+                            </Box>
+
+                            {/* Metadata */}
+                            <Box>
+                                <Typography variant="subtitle2" sx={{ mb: '8px' }}>
+                                    Metadata
+                                </Typography>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            ID:
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            {selectedNote?.noteId || 'N/A'}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Type:
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            {selectedNote?.type ? selectedNote.type.charAt(0).toUpperCase() + selectedNote.type.slice(1) : 'None'}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Tags:
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            {selectedNote?.tags?.length || 0}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
                         </Box>
                     </div>
-                </Grid>
-            </Grid>
+                </Grid2>
+            </Grid2>
         </NoteDetailWrapper>
     );
 }

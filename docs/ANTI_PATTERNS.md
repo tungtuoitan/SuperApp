@@ -800,6 +800,40 @@ it('fetches data', async () => {
 
 ---
 
+### ❌ Anti-Pattern 21: Unnecessary Context Subscriptions
+
+```typescript
+// ❌ BAD: Component subscribes to entire context
+function NoteGrid() {
+    const { openDialog, searchText, selectedNote, isDialogOpen } = useNoteUI()
+    // This component re-renders every time ANY context value changes
+    // Including when user types in dialog, changes pagination, etc.
+    
+    return <DataGrid rows={notes} onRowClick={openDialog} />
+}
+
+// ✅ GOOD: Pass callbacks as props to avoid subscriptions
+function NotesPage() {
+    const { openDialog } = useNoteUI() // Only page subscribes
+    return <NoteGrid onNoteClick={openDialog} />
+}
+
+function NoteGrid({ onNoteClick }: { onNoteClick?: (note: Note) => void }) {
+    const { data: notes } = useNotes() // Only React Query subscription
+    // Only re-renders when notes data changes, not on dialog state changes
+    
+    return <DataGrid rows={notes} onRowClick={onNoteClick} />
+}
+```
+
+**Why it's bad:**
+- Unnecessary re-renders on every context change
+- Poor performance, especially with large lists
+- Components become tightly coupled to context
+- Hard to optimize with React.memo
+
+---
+
 ## 📝 Quick Reference: Common Anti-Patterns
 
 | Anti-Pattern | Why Bad | Solution |
@@ -815,6 +849,7 @@ it('fetches data', async () => {
 | Not handling errors | Silent failures | Try/catch, error boundaries |
 | Inline styles | Hard to maintain | Use sx or styled() |
 | Testing implementation | Brittle tests | Test behavior |
+| Unnecessary context subscriptions | Performance issues | Pass props instead |
 
 ---
 

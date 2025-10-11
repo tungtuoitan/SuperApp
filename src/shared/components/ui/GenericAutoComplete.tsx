@@ -14,7 +14,6 @@ import {
  * Provides consistent styling for text input fields.
  */
 export const StyledTextfield = styled(TextField)({
-    width: 100,
     margin: 0,
 });
 
@@ -70,7 +69,7 @@ export interface GenericAutoCompleteProps {
     /** Whether the component should be hidden */
     hidden?: boolean;
     /** Size variant for the component (default: 'small') */
-    size?: 'tiny' | 'small';
+    size?: 'small' | 'tiny';
     /** CSS classes for styling customization */
     classes?: Partial<AutocompleteClasses>;
     /** Currently selected value */
@@ -115,9 +114,14 @@ export interface GenericAutoCompleteProps {
  * This component provides a reusable autocomplete interface with:
  * - Configurable option data structure
  * - Support for single selection
+ * - Two size variants: 'small' (default) and 'tiny'
  * - Customizable styling and behavior
  * - Built-in error states and validation
  * - Accessible design with proper ARIA attributes
+ * 
+ * Size variants:
+ * - 'small': Standard size similar to TagAutoComplete (default)
+ * - 'tiny': Compact size with 12px font for dense layouts
  * 
  * The component automatically handles option filtering and selection
  * state management based on the provided options and value.
@@ -140,59 +144,43 @@ export function GenericAutoComplete(props: GenericAutoCompleteProps) {
             }
         }
     }, [value, allOptions]);
-    // Define styles based on size prop
+    // Define styles based on size prop, similar to GenericTextField
     const getStyles = () => {
         const baseStyles = {
+            '& .MuiOutlinedInput-root': {
+                borderRadius: '4px !important',
+            },
+            '& .MuiSvgIcon-root': {
+                color: '#9e9e9e', // Default gray color for dropdown arrow
+            },
             ...sx,
         };
 
         if (size === 'tiny') {
             return {
                 ...baseStyles,
-                '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
-                    paddingTop: '3px!important',
-                    paddingBottom: '4px!important',
-                    '& .MuiAutocomplete-input ': {
-                        padding: '2.5px 4px 2.5px 6px!important'
-                    }
-                },
-                '& .MuiTextField-root': {
-                    margin: '0!important'
-                },
-                '& .MuiInputLabel-outlined': {
-                    marginTop: '-2px'
-                },
-                '& .MuiInputBase-input, .MuiFormLabel-root': {
+                '& .MuiInputBase-input': {
                     fontSize: '12px!important',
+                    paddingTop: '6px',
+                    paddingBottom: '6px',
+                },
+                '& .MuiFormLabel-root': {
+                    fontSize: '12px!important',
+                },
+                '& .MuiInputBase-root.MuiOutlinedInput-root': {
+                    fontSize: '12px!important',
+                    borderRadius: '4px',
                 },
                 '& .MuiAutocomplete-option': {
                     fontSize: '12px!important',
                 },
             };
         } else {
-            // Small size - keep current styling
+            // Small size - standard styling (matches TagAutoComplete)
             return {
                 ...baseStyles,
-                '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
-                    paddingTop: '3px!important',
-                    paddingBottom: '4px!important',
-                    '& .MuiAutocomplete-input ': {
-                        padding: '2.5px 4px 2.5px 6px!important'
-                    }
-                },
-                '& .MuiTextField-root': {
-                    margin: '0!important'
-                },
-                '& .MuiInputLabel-outlined': {
-                    marginTop: '-2px'
-                },
             };
         }
-    };
-
-    // Map our custom size to MUI's accepted size values
-    const getMuiSize = (): 'small' | 'medium' => {
-        return size === 'tiny' ? 'small' : 'medium';
     };
 
     return (
@@ -201,7 +189,7 @@ export function GenericAutoComplete(props: GenericAutoCompleteProps) {
             disabled={disabled}
             options={allOptions}
             disableClearable={disableClearable}
-            size={getMuiSize()}
+            size="small"
             fullWidth={true}
             classes={classes}
             value={selectedValue}

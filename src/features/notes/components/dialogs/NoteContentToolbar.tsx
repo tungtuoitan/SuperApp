@@ -178,9 +178,18 @@ export function NoteContentToolbar() {
                 }}>
                     <Typography 
                         variant="h6" 
-                        style={{ display: 'flex', color: 'black' }}
+                        className="MuiTypography-root MuiTypography-h6"
+                        style={{ 
+                            display: 'flex', 
+                            color: '#000000',
+                            fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                            fontSize: '20px',
+                            fontWeight: 400,
+                            lineHeight: 1.6,
+                            letterSpacing: '0.0075em'
+                        }}
                     >
-                        {`Note ID: ${selectedNote?.noteId || 'New'}`}
+                        {`NOTE ID: ${selectedNote?.noteId || '0'}`}
                         {selectedNote && selectedNote.noteId !== 0 && (
                             <div style={{ display: 'flex' }}>
                                 <IconButton 

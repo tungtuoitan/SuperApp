@@ -33,6 +33,9 @@ export const GenericTextField = forwardRef<HTMLDivElement, GenericTextFieldProps
         const getStyles = (): SxProps<Theme> => {
             const baseStyles: SxProps<Theme> = {
                 width: '100%',
+                '& .MuiOutlinedInput-root': {
+                    borderRadius: '4px',
+                },
                 ...sx,
             };
 
@@ -49,6 +52,7 @@ export const GenericTextField = forwardRef<HTMLDivElement, GenericTextFieldProps
                     },
                     '& .MuiInputBase-root.MuiOutlinedInput-root': {
                         fontSize: '12px!important',
+                        borderRadius: '4px',
                     },
                 };
             } else {

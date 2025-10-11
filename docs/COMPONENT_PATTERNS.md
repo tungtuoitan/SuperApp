@@ -22,7 +22,155 @@ Shared Components (Reusable UI)
 
 ---
 
-## 🎯 Component Types
+## �️ Component Classification
+
+### Component Types by Data Flow
+
+We distinguish between two main types of components based on their relationship with data and state:
+
+#### 🖼️ Presentational Components
+
+**Purpose**: Display server data without modification capabilities
+
+**Characteristics**:
+- **Read-only data display**: Only receive and display server data
+- **No direct context access**: Don't use UI state/functions from context directly
+- **Props-based**: All UI interactions passed as props from parent
+- **Performance optimized**: Use `React.memo`, `useMemo`, `useCallback`
+- **Pure presentation**: Focus solely on rendering data
+
+**Example**: `NoteGrid`
+
+```typescript
+// ✅ GOOD: Presentational component
+interface NoteGridProps {
+    onNoteClick?: (note: Note) => void; // UI interaction passed as prop
+}
+
+export const NoteGrid = React.memo(function NoteGrid({ onNoteClick }: NoteGridProps) {
+    // ✅ Only React Query for server state
+    const { data: notes, isLoading } = useNotes();
+    
+    // ✅ No context subscriptions - avoids unnecessary re-renders
+    // ✅ Memoized derived state
+    const sortedNotes = useMemo(() => {
+        if (!notes) return [];
+        return [...notes].sort((a, b) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+    }, [notes]);
+
+    // ✅ Memoized columns
+    const columns = useMemo(() => [
+        // Column definitions...
+    ], [onNoteClick]);
+
+    return <DataGrid rows={sortedNotes} columns={columns} loading={isLoading} />;
+});
+
+// ✅ Parent passes UI interactions as props
+function NotesPage() {
+    const { openDialog } = useNoteUI(); // Context access at page level
+    
+    const handleNoteClick = useCallback((note: Note) => {
+        openDialog(note);
+    }, [openDialog]);
+    
+    return <NoteGrid onNoteClick={handleNoteClick} />;
+}
+```
+
+**Benefits**:
+- High performance (no unnecessary re-renders)
+- Easy to test and reason about
+- Reusable across different contexts
+- Clear separation of concerns
+
+---
+
+#### ⚡ Interactive Components
+
+**Purpose**: Handle data updates and complex UI interactions
+
+**Characteristics**:
+- **Data modification**: Can create, update, delete server data
+- **Context integration**: Access UI state and functions from context
+- **Form handling**: Manage form state and validation
+- **Complex interactions**: Handle dialogs, confirmations, multi-step flows
+
+**Example**: `NoteDetailDialog`
+
+```typescript
+// ✅ GOOD: Interactive component
+export function NoteDetailDialog() {
+    // ✅ Context access for UI state and interactions
+    const { selectedNote, isDialogOpen, closeDialog, updateSelectedNote } = useNoteUI();
+    
+    // ✅ Server data mutations
+    const updateNote = useUpdateNote();
+    const deleteNote = useDeleteNote();
+    
+    // ✅ Form state management
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: selectedNote
+    });
+    
+    const handleSave = async (data: UpdateNoteDTO) => {
+        try {
+            const updatedNote = await updateNote.mutateAsync({ 
+                id: selectedNote.noteId, 
+                data 
+            });
+            updateSelectedNote(updatedNote); // Update context
+            toast.success('Note updated!');
+        } catch (error) {
+            toast.error('Failed to update note');
+        }
+    };
+    
+    return (
+        <Dialog open={isDialogOpen} onClose={closeDialog}>
+            <form onSubmit={handleSubmit(handleSave)}>
+                {/* Form fields... */}
+                <Button type="submit">Save</Button>
+            </form>
+        </Dialog>
+    );
+}
+```
+
+**Benefits**:
+- Handles complex user interactions
+- Manages data mutations
+- Integrates with app-wide state
+- Provides rich user experience
+
+---
+
+### 📋 Component Classification Guidelines
+
+| Aspect | Presentational | Interactive |
+|--------|---------------|-------------|
+| **Data Access** | React Query only | React Query + Context |
+| **Data Flow** | Read-only display | Read + Write |
+| **Context Usage** | None (props only) | Full context access |
+| **Performance** | `React.memo` + `useMemo` | Standard optimization |
+| **Props** | UI callbacks passed down | Minimal props |
+| **Examples** | `NoteGrid`, `UserList` | `NoteDialog`, `CreateForm` |
+| **Testing** | Easy (pure functions) | Complex (mocked context) |
+
+**Decision Tree**:
+```
+Does component modify data?
+├─ No → Can users interact with it?
+│   ├─ No → Pure Display Component
+│   └─ Yes → Presentational Component (pass interactions as props)
+└─ Yes → Interactive Component (use context)
+```
+
+---
+
+## �🎯 Component Types
 
 ### 1. Page Components
 
@@ -395,6 +543,8 @@ function MessageText({ message }: { message: string }) {
 ---
 
 ## 🧩 Component Patterns
+
+> **📝 Note**: Before implementing components, refer to [Component Classification](#🏗️-component-classification) to determine whether your component should be **Presentational** (display-only with props) or **Interactive** (data-modifying with context access).
 
 ### Pattern 1: Simple Functional Component
 
@@ -1013,7 +1163,33 @@ function NoteCard() {
 
 ---
 
-### 3. **Index as Key**
+### 3. **Unnecessary Context Subscriptions**
+
+```typescript
+// ❌ BAD: Component subscribes to context it doesn't need
+function DataTable() {
+    const { openDialog, searchText, filters } = useAppUI()
+    // Re-renders when searchText or filters change, even though it only needs openDialog
+    
+    return <Table onRowClick={openDialog} />
+}
+
+// ✅ GOOD: Pass callback as prop to avoid subscription
+function PageComponent() {
+    const { openDialog } = useAppUI() // Only parent subscribes
+    return <DataTable onRowClick={openDialog} />
+}
+
+function DataTable({ onRowClick }: { onRowClick?: (item: Item) => void }) {
+    const { data } = useItems() // Only subscribes to relevant data
+    
+    return <Table onRowClick={onRowClick} />
+}
+```
+
+---
+
+### 4. **Index as Key**
 
 ```typescript
 // ❌ BAD: Using index as key

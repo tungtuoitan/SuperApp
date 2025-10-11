@@ -20,6 +20,7 @@ export const noteKeys = {
  * Hook to fetch notes list
  */
 export function useNotes(params?: GetNotesParams) {
+    console.log('useNotes called with params')
     return useQuery({
         queryKey: noteKeys.list(params),
         queryFn: () => noteService.getNotes(params),

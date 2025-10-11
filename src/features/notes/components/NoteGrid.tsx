@@ -7,24 +7,24 @@ import React, { useMemo } from 'react';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { Box, Chip, Typography, Alert } from '@mui/material';
 import { useNotes } from '../hooks/useNotes';
-import { useNoteUI } from '../store/NoteUIContext';
 import { Spinner } from '@/shared/components/ui/Spinner';
 import type { Note } from '@/features/notes/types/note.types';
 import { dataGridStyles } from '@/config/theme';
 
+interface NoteGridProps {
+    onNoteClick?: (note: Note) => void;
+}
+
 /**
  * NoteGrid component following new architecture
  * - Uses React Query for server state (useNotes)
- * - Uses NoteUI context for UI state only
+ * - Receives onNoteClick prop to avoid unnecessary re-renders
  * - Clean separation of concerns
- * - No anti-patterns (no massive context, no manual fetching)
+ * - Performance optimized (no context subscription, memoized)
  */
-export function NoteGrid() {
-    // ✅ NEW: React Query for server state
+export const NoteGrid = React.memo(function NoteGrid({ onNoteClick }: NoteGridProps) {
+    // ✅ React Query for server state only
     const { data: notes, isLoading, error } = useNotes();
-    
-    // ✅ NEW: UI-only context for dialog state
-    const { openDialog } = useNoteUI();
 
     // Helper functions matching old component
     const formatDate = (date: Date): string => {
@@ -35,6 +35,7 @@ export function NoteGrid() {
         }).format(date);
     };
 
+    console.log('rendering NoteGrid with notes:');
     const getTypeColor = (type?: string): 'primary' | 'warning' | 'info' | 'error' | 'default' => {
         const colors: Record<string, 'primary' | 'warning' | 'info' | 'error' | 'default'> = {
             'Meeting': 'primary',
@@ -69,12 +70,12 @@ export function NoteGrid() {
             renderCell: (params) => (
                 <Box
                     sx={{
-                        cursor: 'pointer',
+                        cursor: onNoteClick ? 'pointer' : 'default',
                         color: 'primary.main',
-                        textDecoration: 'underline',
+                        textDecoration: onNoteClick ? 'underline' : 'none',
                         fontWeight: 500
                     }}
-                    onClick={() => openDialog(params.row)}
+                    onClick={() => onNoteClick?.(params.row)}
                 >
                     {params.value}
                 </Box>
@@ -183,7 +184,7 @@ export function NoteGrid() {
                 />
             )
         }
-    ], [openDialog]);
+    ], [onNoteClick]);
 
     // Handle error state
     if (error) {
@@ -251,4 +252,4 @@ export function NoteGrid() {
             />
         </Box>
     );
-}
+});

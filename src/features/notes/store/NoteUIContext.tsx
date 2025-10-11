@@ -4,7 +4,7 @@
  * Server state is handled by React Query hooks
  */
 
-import React, { createContext, useContext, useState, useRef } from 'react';
+import React, { createContext, useContext, useState, useRef, useCallback } from 'react';
 import type { GridApi } from '@mui/x-data-grid';
 import type { SxProps } from '@mui/material';
 import type { Note } from '../types/note.types';
@@ -20,6 +20,7 @@ interface NoteUIContextValue {
     isDialogOpen: boolean;
     openDialog: (note: Note) => void;
     closeDialog: () => void;
+    updateSelectedNote: (updatedNote: Partial<Note>) => void;
 
     // Search UI state
     searchText: string;
@@ -85,14 +86,20 @@ export function NoteUIProvider({ children }: { children: React.ReactNode }) {
         loading: false,
     });
 
-    const openDialog = (note: Note) => {
+    const openDialog = useCallback((note: Note) => {
         setSelectedNote(note);
         setIsDialogOpen(true);
-    };
+    }, []);
 
     const closeDialog = () => {
         setIsDialogOpen(false);
         setTimeout(() => setSelectedNote(null), 200); // After animation
+    };
+
+    const updateSelectedNote = (updatedNote: Partial<Note>) => {
+        if (selectedNote) {
+            setSelectedNote(prev => prev ? { ...prev, ...updatedNote } : null);
+        }
     };
 
     const value = {
@@ -101,6 +108,7 @@ export function NoteUIProvider({ children }: { children: React.ReactNode }) {
         isDialogOpen,
         openDialog,
         closeDialog,
+        updateSelectedNote,
 
         // Search UI state
         searchText,

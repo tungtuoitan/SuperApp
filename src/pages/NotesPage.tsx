@@ -13,6 +13,9 @@ import { NoteCreate } from '@/features/notes/components/toolbars/items/NoteCreat
 import { NoteSearch } from '@/features/notes/components/toolbars/items/NoteSearch';
 import { NoteFilter } from '@/features/notes/components/toolbars/items/NoteFilter';
 import { Grow } from '@/shared/components/styles/commonStyles';
+import { useNoteUI } from '@/features/notes/store/NoteUIContext';
+import {useCallback} from 'react';
+import { Note } from '@/features/notes/types/note.types';
 
 /**
  * Notes page with proper error boundary
@@ -32,8 +35,14 @@ export function NotesPage() {
 /**
  * Internal content component with toolbar and grid layout
  * Uses common GridContainer with fixed toolbar height and flexible grid area
+ * Performance optimized: Only subscribes to context at this level to pass openDialog prop
  */
 function NotesPageContent() {
+    
+    // ✅ Get openDialog from context at page level to pass as prop
+    const { openDialog } = useNoteUI();
+
+    
     return (
         <div style={{ height: '100%', width: '100%' }}>
             {/* Toolbar with fixed height */}
@@ -56,7 +65,7 @@ function NotesPageContent() {
                 flexDirection: 'column',
                 backgroundColor: 'background.paper',
             }}>
-                <NoteGrid />
+                <NoteGrid onNoteClick={openDialog} />
                 <NoteDetailDialog />
             </Box>
         </div>
